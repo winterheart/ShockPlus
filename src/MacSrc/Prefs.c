@@ -550,7 +550,7 @@ HOTKEYLOOKUP HotKeyLookup[] = {
     {"\"arm_grenade\"", DEMO_CONTEXT, arm_grenade_hotkey, 0, 0, ALT('\''), 0},
     {"\"use_drug\"", DEMO_CONTEXT, use_drug_hotkey, 0, 0, ALT(';'), 0},
     {"\"hud_color\"", DEMO_CONTEXT, hud_color_bank_cycle, 0, 0, ALT('h'), 0},
-    {"\"showhelp\"", DEMO_CONTEXT, olh_overlay_func, (intptr_t)&olh_overlay_on, 0, ALT('o'), 0},    
+    {"\"showhelp\"", DEMO_CONTEXT, olh_overlay_func, (intptr_t)&olh_overlay_on, 0, ALT('o'), 0},
     {"\"bio scan\"", DEMO_CONTEXT, hw_hotkey_callback, 5, 0, 49, 0},
     {"\"fullscreen\"", DEMO_CONTEXT, hw_hotkey_callback, 10, 0, 50, 0},
     {"\"360 view\"", DEMO_CONTEXT, hw_hotkey_callback, 2, 0, 51, 0},
