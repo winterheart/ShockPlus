@@ -7,21 +7,16 @@ if(POLICY CMP0072)
 	cmake_policy(SET CMP0072 NEW)
 endif()
 
-#set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
-#set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS ON)
-set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS OFF)
-set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
-
 # Required for stdbool.h
 set(CMAKE_C_STANDARD 99)
-# For nullptr in C++
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+# For <filesystem> in C++17
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # FIXME why this is required?
 add_definitions(-D__STDC_LIMIT_MACROS)
 
-option(ENABLE_EXAMPLES "Enable example applications" OFF)
 option(ENABLE_DEBUG_BLIT "Enable debugging blitter" OFF)
 option(ENABLE_OPENGL "Enable OpenGL support" ON)
 option(ENABLE_SOUND "Enable sound support (requires SDL2_mixer)" ON)
@@ -291,80 +286,6 @@ include_directories(
 	src/MusicSrc
 	${CMAKE_BINARY_DIR}/src/GameSrc/Headers
 )
-
-if(ENABLE_EXAMPLES)
-
-add_executable(playmov
-	src/Libraries/AFILE/Tests/playmov.c
-)
-add_executable(movinfo
-	src/Libraries/AFILE/Tests/movinfo.c
-)
-
-target_link_libraries(playmov
-	AFILE_LIB
-	FIX_LIB
-	${SDL2_LIBRARIES}
-	${SDL2_MIXER_LIBRARIES}
-)
-
-target_link_libraries(movinfo
-	AFILE_LIB
-	FIX_LIB
-)
-
-add_executable(TestSimpleMain
-	src/Libraries/2D/TestSource/SimpleMain.c
-)
-
-target_link_libraries(TestSimpleMain
-	2D_LIB
-	GR_LIB
-	3D_LIB
-	RES_LIB
-	FIX_LIB
-	LG_LIB
-	${SDL2_LIBRARIES}
-)
-
-add_executable(BoxTest
-	src/Libraries/3D/Tests/BoxTest.c
-)
-
-target_link_libraries(BoxTest
-	2D_LIB
-	GR_LIB
-	3D_LIB
-	RES_LIB
-	FIX_LIB
-	LG_LIB
-	${SDL2_LIBRARIES}
-)
-
-add_executable(BitmapTest
-	src/Libraries/3D/Tests/BitmapTest.c
-)
-
-target_link_libraries(BitmapTest
-	2D_LIB
-	GR_LIB
-	3D_LIB
-	RES_LIB
-	FIX_LIB
-	LG_LIB
-	${SDL2_LIBRARIES}
-)
-
-add_executable(FixTest
-	src/Libraries/FIX/Tests/FixTest/fixtest.c
-)
-
-target_link_libraries(FixTest
-	FIX_LIB
-	LG_LIB
-)
-
-endif()
 
 # Include magic header file, set struct packing size
 add_definitions(
