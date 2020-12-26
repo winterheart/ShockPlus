@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int main(int argc, char **argv);
 
 void InitSDL();
-void SetSDLPalette(int index, int count, uchar *pal);
+extern "C" void SetSDLPalette(int index, int count, uchar *pal);
 void SDLDraw();
 void CaptureMouse(bool capture);
 bool CheckArgument(char *name);

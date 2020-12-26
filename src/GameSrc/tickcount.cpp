@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2015-2018 Night Dive Studios, LLC.
+Copyright (C) 2019 Shockolate Project
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include <fixpp.h>
-//	This seems silly now, but later it will all make sense, sensei...
-//	=================================================================
-int32_t make_pelvis(Q init_state[6][3], Q params[10]);
-void pelvis_set_control(int32_t pelvis, Q forward, Q turn, Q sidestep, Q lean, Q jump, int32_t crouch);
-bool EDMS_pelvis_is_climbing();
-void EDMS_lean_o_meter(physics_handle ph, fix &lean, fix &crouch);
+
+#include "tickcount.h"
+
+// number of ticks since system start (1 Tick is about 1/60 second)
+uint32_t TickCount(void) {
+    return ((SDL_GetTicks() * 100) / 357); // 280 per second;
+}

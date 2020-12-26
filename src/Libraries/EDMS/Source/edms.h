@@ -199,7 +199,6 @@ void EDMS_get_pelvic_viewpoint(physics_handle ph, State *s);
 void EDMS_get_pelvis_parameters(physics_handle ph, Pelvis *p);
 void EDMS_set_pelvis_parameters(physics_handle ph, Pelvis *p);
 fix EDMS_get_pelvis_damage(physics_handle ph, fix delta_t);
-bool EDMS_pelvis_is_climbing(void);
 
 //	Death...
 //	--------
@@ -234,7 +233,7 @@ void EDMS_control_biped(physics_handle ph, fix forward, fix side_rotate, int32_t
 void EDMS_set_biped_parameters(physics_handle ph, Biped *b);
 
 // Access to the Dirac basis matrix (used by frsetup).
-fix *EDMS_Dirac_basis(void);
+//fix *EDMS_Dirac_basis(void);
 
 //	"Faster than light" objects... Objects that move over their entire trajectory in a frame or two...
 //	--------------------------------------------------------------------------------------------------

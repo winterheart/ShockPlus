@@ -27,18 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------
 //  TYPES & DEFINES
 //-----------------
-typedef struct {
-    int pieceID;    //  Indexes an array of XMIDI_info structs.  Specifies which piece to play.
-    int priority;   // Priority of this request.
-    int loops;      // Number of loops. -1 => until deliberately stopped.
-    uint rel_vol;   // Specifies at what relative volume to play it at. (percent)
-    uint ramp_time; // Specifies the time to ramp in to the specified rel_vol, or ramp out to 0.
-    int pan;        // Note that this pan value affects all channels.
-    uchar channel_prioritize;
-    char crossfade; // 0 - don't crossfade,  <0 - crossfade out, >0 - crossfade in.
-    char ramp;      // 0 - don't ramp,       <0 - ramp out       >0 - ramp in
-    uchar pad;
-} mlimbs_request_info;
 
 #define MLIMBS_MAX_SEQUENCES 8
 #define MLIMBS_MAX_CHANNELS 8

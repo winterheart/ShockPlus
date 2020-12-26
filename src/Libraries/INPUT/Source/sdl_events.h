@@ -22,6 +22,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Ingest SDL events into internal Event system
 void pump_events(void);
+
+void get_mouselook_vel(int *vx, int *vy);
 void set_mouse_chaos(short dx, short dy);
+void middleize_mouse(void);
 
 #endif

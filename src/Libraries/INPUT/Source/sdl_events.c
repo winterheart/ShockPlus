@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg.h"
 #include "kb.h"
 #include "mouse.h"
+#include "sdl_events.h"
 #include <stdlib.h>
 #include <SDL.h>
 #include <OpenGL.h>
@@ -371,8 +372,6 @@ void SetMouseXY(int mx, int my) {
 
     SDL_ShowCursor((!focus || (!inside && !MouseCaptured)) ? SDL_ENABLE : SDL_DISABLE);
 }
-
-void get_mouselook_vel(int *vx, int *vy);
 
 extern bool TriggerRelMouseMode;
 

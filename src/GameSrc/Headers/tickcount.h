@@ -25,6 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/Toolbox/Toolbox-80.html
 // number of ticks since system start (1 Tick is about 1/60 second)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 uint32_t TickCount(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // TICKCOUNT_H_

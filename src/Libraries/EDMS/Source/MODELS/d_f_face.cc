@@ -63,10 +63,6 @@ static Q size = .3;
 //      ===========================================
 static Q old_state[7], new_state[7];
 
-//	We need to link to c...
-//	=======================
-extern "C" {
-
 //	Here are the bridge routines to the models...
 //	=============================================
 
@@ -323,4 +319,3 @@ void render_localize(Q &X, Q &Y, Q &Z, int32_t object) {
     Z = x * (2 * (-e0 * e2 + e1 * e3)) + y * (2 * (e2 * e3 + e0 * e1)) + z * (e0 * e0 - e1 * e1 - e2 * e2 + e3 * e3);
 }
 
-} // End of Extern "C"...

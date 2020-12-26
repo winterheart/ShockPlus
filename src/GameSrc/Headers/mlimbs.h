@@ -93,7 +93,7 @@ struct mlimbs_playing_info {
     char crossfade_status; // <= 0 - no fade, >= 10 & <= 16, next channel to fade in or fade out.
 };
 
-extern volatile struct mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1];
+extern struct mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1];
 
 extern char mlimbs_status; // could make this one bitfield of status, on/off, enable/not, so on
 extern uchar mlimbs_on;

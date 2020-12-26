@@ -63,7 +63,7 @@ void (**mac_device_table[])() = {
 // Mac specific device routines
 //========================================================================
 
-extern intptr_t *gScreenAddress;
+extern void *gScreenAddress;
 
 //------------------------------------------------------------------------
 // init the graphics mode, set up function tables and screen base address
@@ -83,7 +83,6 @@ void mac_set_mode(void) {
 
 uchar backup_pal[768];
 void mac_set_pal(int start, int n, uint8_t *pal_data) {
-    extern void SetSDLPalette(int index, int count, uchar *pal);
 
     // HAX: Only update when given a whole palette!
     if (start == 0 && n == 256) {

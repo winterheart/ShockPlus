@@ -158,4 +158,6 @@ errtype mouse_constrain_xy(short xl, short yl, short xh, short yh);
 // Sets mouse handedness (true for left-handed)
 // errtype mouse_set_lefty(uchar lefty);
 
+void MousePollProc(void);
+
 #endif // _MOUSE_H

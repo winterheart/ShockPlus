@@ -770,9 +770,6 @@ int32_t make_pelvis(Q init_state[6][3], Q params[10]) {
 //	==========================================
 //	So there.
 
-//      For mark...
-//      -----------
-extern "C" {
 
 bool EDMS_pelvis_is_climbing()
 {
@@ -801,4 +798,3 @@ void EDMS_lean_o_meter(physics_handle ph, fix &lean, fix &crouch) {
 }
 
 #pragma require_prototypes on
-}
