@@ -162,6 +162,7 @@ static MusicDevice *createNullMidiDevice() {
 //------------------------------------------------------------------------------
 // ADLMIDI player for OPL3
 
+#ifdef USE_LIBADLMIDI
 #include "adlmidi.h"
 
 typedef struct AdlMidiDevice {
@@ -330,6 +331,8 @@ static MusicDevice *createAdlMidiDevice() {
     adev->dev.musicType = MUSICTYPE_SBLASTER;
     return &adev->dev;
 }
+
+#endif // #ifdef USE_LIBADLMIDI
 
 //------------------------------------------------------------------------------
 // Native OS MIDI
@@ -1196,9 +1199,11 @@ MusicDevice *CreateMusicDevice(MusicType type) {
     case Music_None:
         dev = createNullMidiDevice();
         break;
+#ifdef USE_LIBADLMIDI
     case Music_AdlMidi:
         dev = createAdlMidiDevice();
         break;
+#endif
     case Music_Native:
         dev = createNativeMidiDevice();
         break;

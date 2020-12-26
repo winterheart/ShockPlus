@@ -722,11 +722,13 @@ void InitDecXMI(void) {
     int musicrate = 48000;
 
     switch (gShockPrefs.soMidiBackend) {
+#ifdef USE_LIBADLMIDI
     case OPT_SEQ_ADLMIDI: // adlmidi
     {
         INFO("Creating ADLMIDI device");
         musicdev = CreateMusicDevice(Music_AdlMidi);
     } break;
+#endif
     case OPT_SEQ_NativeMI: // native midi
     {
         INFO("Creating native MIDI device");
@@ -778,9 +780,11 @@ void ReloadDecXMI(void) {
         case Music_None:
             deviceTypeMatch = 0;
             break;
+#ifdef USE_LIBADLMIDI
         case Music_AdlMidi:
             deviceTypeMatch = (gShockPrefs.soMidiBackend == 0);
             break;
+#endif
         case Music_Native:
             deviceTypeMatch = (gShockPrefs.soMidiBackend == 1);
             break;

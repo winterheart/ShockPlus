@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tickcount.h"
 #include "tools.h"
 
-#include "adlmidi.h"
 #include "Xmi.h"
 
 #ifdef AUDIOLOGS

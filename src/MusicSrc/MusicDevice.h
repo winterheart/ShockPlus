@@ -4,7 +4,9 @@ typedef struct MusicDevice MusicDevice;
 
 typedef enum MusicType {
     Music_None,
+#ifdef USE_LIBADLMIDI
     Music_AdlMidi,
+#endif
     Music_Native,
 #ifdef USE_FLUIDSYNTH
     Music_FluidSynth

@@ -20,6 +20,7 @@ add_definitions(-D__STDC_LIMIT_MACROS)
 option(ENABLE_DEBUG_BLIT "Enable debugging blitter" OFF)
 option(ENABLE_OPENGL "Enable OpenGL support" ON)
 option(ENABLE_SOUND "Enable sound support (requires SDL2_mixer)" ON)
+option(ENABLE_LIBADLMIDI "Enable libADLMIDI support" OFF)
 # Tristate Fluidsynth
 set(ENABLE_FLUIDSYNTH "LITE" CACHE STRING "Enable FluidSynth MIDI support (ON/LITE/OFF, default LITE)")
 set_property(CACHE ENABLE_FLUIDSYNTH PROPERTY STRINGS "ON" "LITE" "OFF")
@@ -60,6 +61,27 @@ if(ENABLE_SOUND)
 	list(APPEND SHOCK_INCLUDES ${SDL2_MIXER_INCLUDE_DIRS})
 	list(APPEND SHOCK_LIBRARIES ${SDL2_MIXER_LIBRARIES})
 endif(ENABLE_SOUND)
+
+if(ENABLE_LIBADLMIDI)
+	include(FetchContent)
+	FetchContent_Declare(
+		libadlmidi
+		GIT_REPOSITORY https://github.com/Wohlstand/libADLMIDI.git
+		GIT_SHALLOW ON
+		GIT_TAG 723abef3094572c76c98cfb0f9e1eccc61af0d4c # 26.11.2020
+	)
+	FetchContent_GetProperties(libadlmidi)
+	if(NOT libadlmidi_POPULATED)
+		message(STATUS "Populating libADLMIDI...")
+		FetchContent_Populate(libadlmidi)
+		message(STATUS ${libadlmidi_SOURCE_DIR} ${libadlmidi_BINARY_DIR})
+		add_subdirectory(${libadlmidi_SOURCE_DIR} ${libadlmidi_BINARY_DIR})
+		message(STATUS "Done.")
+	endif()
+	include_directories(BEFORE SYSTEM ${libadlmidi_SOURCE_DIR}/include ${libadlmidi_BINARY_DIR}/include)
+	add_definitions("-DUSE_LIBADLMIDI")
+	list(APPEND SHOCK_LIBRARIES ADLMIDI_static)
+endif(ENABLE_LIBADLMIDI)
 
 if(ENABLE_FLUIDSYNTH STREQUAL "LITE")
 	include(FetchContent)
@@ -293,10 +315,9 @@ add_definitions(
 )
 
 add_executable(shockplus
+	${GAME_SRC}
 	${MAC_SRC}
 )
-
-add_library(GAME_LIB ${GAME_SRC})
 
 # MINGW additional linker options
 if(MINGW)
@@ -309,23 +330,29 @@ endif(MINGW)
 target_link_libraries(shockplus
 	${WINDOWS_LIBRARIES} # Set it before any linker options! Beware WinMain@16 error!!
 	${SHOCK_LIBRARIES}
-	GAME_LIB
-	UI_LIB
-	2D_LIB
-	LG_LIB
-	GR_LIB
-	3D_LIB
-	RND_LIB
-	AFILE_LIB
-	DSTRUCT_LIB
-	FIX_LIB
-	INPUT_LIB
-	PALETTE_LIB
-	RES_LIB
-	VOX_LIB
-	EDMS_LIB
-	FIXPP_LIB
-	ADLMIDI_LIB
+
+	2D
+	3D
+	AFILE
+	DSTRUCT
+	EDMS
+	FIX
+	FIXPP
+	INPUT
+	LG
+	PALETTE
+	RND
+	RES
+	UI
+	VOX
+
+
+
+
+
+
+
+#	ADLMIDI_LIB
 )
 
 # Turn on address sanitizing if wanted
