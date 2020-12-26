@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hkeyfunc.h"
 #include "mainloop.h"
 #include "setup.h"
-#include "shockolate_version.h"
+#include "shock_version.h"
 #include "status.h"
 #include "version.h"
 
@@ -192,7 +192,7 @@ void InitSDL() {
 
     // Open our window!
     char window_title[128];
-    sprintf(window_title, "System Shock - %s", SHOCKOLATE_VERSION);
+    sprintf(window_title, "%s", SHOCK_VERSION);
 
     window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, grd_cap->w, grd_cap->h,
                               SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(shockolate VERSION 0.7.8)
+project(ShockPlus VERSION 0.8.0)
 
 # Prefer new GLVND library interface
 if(POLICY CMP0072)
@@ -123,8 +123,8 @@ if(GIT_FOUND)
 endif(GIT_FOUND)
 
 message(STATUS "Version is ${PROJECT_VERSION}${PROJECT_REVERSION_STRING}")
-configure_file("${CMAKE_SOURCE_DIR}/src/GameSrc/Headers/shockolate_version.h.in"
-	"${CMAKE_BINARY_DIR}/src/GameSrc/Headers/shockolate_version.h" )
+configure_file("${CMAKE_SOURCE_DIR}/src/GameSrc/Headers/shock_version.h.in"
+	"${CMAKE_BINARY_DIR}/src/GameSrc/Headers/shock_version.h" )
 
 # Sources configuration
 add_subdirectory(src/Libraries/)
@@ -292,7 +292,7 @@ add_definitions(
 	-include precompiled.h
 )
 
-add_executable(systemshock
+add_executable(shockplus
 	${MAC_SRC}
 )
 
@@ -306,7 +306,7 @@ if(MINGW)
 	endif(ENABLE_WIN_CONSOLE)
 endif(MINGW)
 
-target_link_libraries(systemshock
+target_link_libraries(shockplus
 	${WINDOWS_LIBRARIES} # Set it before any linker options! Beware WinMain@16 error!!
 	${SHOCK_LIBRARIES}
 	GAME_LIB
@@ -331,4 +331,4 @@ target_link_libraries(systemshock
 # Turn on address sanitizing if wanted
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/externals/sanitizers/cmake" ${CMAKE_MODULE_PATH})
 find_package(Sanitizers)
-add_sanitizers(systemshock)
+add_sanitizers(shockplus)

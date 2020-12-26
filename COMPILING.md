@@ -1,5 +1,5 @@
-Compiling Shockolate
-====================
+Compiling ShockPlus
+===================
 
 Prerequisites: 
 * CMake 3.11
@@ -15,7 +15,7 @@ The following CMake options are supported in the build process:
 
 ## Linux
 
-Here example for Ubuntu. Since Shockolate requires decent multimedia libraries, you need add multimedia repository:
+Here example for Ubuntu. Since ShockPlus requires decent multimedia libraries, you need add multimedia repository:
 
 ```
 sudo add-apt-repository -y ppa:savoury1/multimedia
@@ -26,14 +26,14 @@ sudo apt-get install -y cmake libglu1-mesa-dev libgl1-mesa-dev libsdl2-dev libsd
 Now you ready for building.
 
 ```
-mkdir systemshock_build
-cd systemshock_build
-cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENGL=ON -DENABLE_SOUND=ON <path to Shockolate sources>
+mkdir ShockPlus_build
+cd ShockPlus_build
+cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENGL=ON -DENABLE_SOUND=ON <path to ShockPlus sources>
 make -j2
-cp -r <path to Shockolate sources>/shaders . ; mkdir res
+cp -r <path to ShockPlus sources>/shaders . ; mkdir res
 ```
 
-After compilation you'll see systemshock executable in `systemshock_build` directory. 
+After compilation you'll see `shockplus` executable in `ShockPlus_build` directory.
 
 ## macOS
 
@@ -47,14 +47,14 @@ brew install sdl2_mixer
 Now you ready for building.
 
 ```
-mkdir systemshock_build
-cd systemshock_build
-cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENGL=ON -DENABLE_SOUND=ON <path to Shockolate sources>
+mkdir ShockPlus_build
+cd ShockPlus_build
+cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENGL=ON -DENABLE_SOUND=ON <path to ShockPlus sources>
 make -j2
-cp -r <path to Shockolate sources>/shaders . ; mkdir res
+cp -r <path to ShockPlus sources>/shaders . ; mkdir res
 ```
 
-After compilation you'll see systemshock executable in `systemshock_build` directory. 
+After compilation you'll see shockplus executable in `ShockPlus_build` directory.
 
 ## Windows
 
@@ -74,18 +74,18 @@ Install dependencies:
 pacman -Sy --noconfirm mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer
 ```
 
-Now you ready to go. Let's assume that sources resides in `C:\project\systemshock`, then inside MinGW shell it would be
-`/c/project/systemshock`
+Now you ready to go. Let's assume that sources resides in `C:\project\ShockPlus`, then inside MinGW shell it would be
+`/c/project/ShockPlus`
 
 ```
-mkdir systemshock_build
-cd systemshock_build
+mkdir ShockPlus_build
+cd ShockPlus_build
 cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/mingw64/bin/pkg-config.exe -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++.exe -DENABLE_SOUND=ON -DENABLE_OPENGL=ON /c/project/systemshock
 cmake --build . -j 2
-cp -r /c/project/systemshock/shader . ; mkdir res
+cp -r /c/project/ShockPlus/shader . ; mkdir res
 ```
 
-After compilation you'll see systemshock.exe executable in `systemshock_build` directory.
+After compilation you'll see `shockplus.exe` executable in `ShockPlus_build` directory.
 
 Importunately, currently MinGW build requires some DLLs from environment, there quick hack for it:
 
@@ -102,9 +102,9 @@ pacman -Syu --noconfirm     # Close shell and open again
 pacman -Syu --noconfirm     # Second run
 pacman -Sy --noconfirm mingw-w64-i686-toolchain mingw-w64-i686-cmake mingw-w64-i686-ninja
 pacman -Sy --noconfirm mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_mixer
-mkdir systemshock_build
-cd systemshock_build
-cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/mingw32/bin/pkg-config.exe -DCMAKE_C_COMPILER=i686-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++.exe -DENABLE_SOUND=ON -DENABLE_OPENGL=ON /c/project/systemshock
+mkdir ShockPlus_build
+cd ShockPlus_build
+cmake -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DPKG_CONFIG_EXECUTABLE=/mingw32/bin/pkg-config.exe -DCMAKE_C_COMPILER=i686-w64-mingw32-gcc.exe -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++.exe -DENABLE_SOUND=ON -DENABLE_OPENGL=ON /c/project/ShockPlus
 cmake --build . -j 2
-cp -r /c/project/systemshock/shader . ; mkdir res
+cp -r /c/project/ShockPlus/shader . ; mkdir res
 ```

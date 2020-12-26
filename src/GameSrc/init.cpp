@@ -63,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dynmem.h"
 #include "vitals.h"
 #include "view360.h"
-#include "shockolate_version.h" // for system shock version number
+#include "shock_version.h" // for system shock version number
 
 extern "C" {
 #include "sdl_events.h"
@@ -851,7 +851,7 @@ void byebyemessage(void) {
 #ifdef DEMO
         printf("Thanks for playing the System Shock CD Demo %s.\n", SYSTEM_SHOCK_VERSION);
 #else
-        printf("Thanks for playing System Shock %s.\n", SHOCKOLATE_VERSION);
+        printf("Thanks for playing System Shock %s.\n", SHOCK_VERSION);
 #endif
     else
         printf("Our system has been shocked!!!\b But remember to Salt The Fries\n");

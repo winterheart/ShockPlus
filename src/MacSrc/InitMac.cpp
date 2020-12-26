@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitMac.h"
 #include "Shock.h"
 #include "ShockBitmap.h"
-#include "shockolate_version.h"
+#include "shock_version.h"
 
 //  Globals
 
@@ -42,7 +42,7 @@ uint32_t gShockTicks;
 uint32_t *tmd_ticks;
 
 void InitMac(void) {
-    INFO("Starting %s", SHOCKOLATE_VERSION);
+    INFO("Starting %s", SHOCK_VERSION);
     InstallShockTimers(); // needed for the tick pointer
 }
 
