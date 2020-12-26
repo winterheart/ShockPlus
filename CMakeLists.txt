@@ -285,25 +285,8 @@ set(GAME_SRC
 )
 
 include_directories(
-	src/Libraries/2D/Source
-	src/Libraries/3D/Source
-	src/Libraries/AFILE/Source
-	src/Libraries/DSTRUCT/Source
-	src/Libraries/EDMS/Source
-	src/Libraries/FIXPP/Source
-	src/Libraries/INPUT/Source
-	src/Libraries/PALETTE/Source
-	src/Libraries/RES/Source
-	src/Libraries/UI/Source
-	src/Libraries/RND/Source
-	src/Libraries/VOX/Source
-	src/Libraries/FIX/Source
-	src/Libraries/SND/Source
-	src/Libraries/H
-	src/Libraries/LG/Source
-	src/Libraries/LG/Source/LOG/src
-	src/Libraries/adlmidi/include
 	src/GameSrc/Headers
+	src/Libraries/SND/Source
 	src/MacSrc
 	src/MusicSrc
 	${CMAKE_BINARY_DIR}/src/GameSrc/Headers
@@ -330,7 +313,6 @@ endif(MINGW)
 target_link_libraries(shockplus
 	${WINDOWS_LIBRARIES} # Set it before any linker options! Beware WinMain@16 error!!
 	${SHOCK_LIBRARIES}
-
 	2D
 	3D
 	AFILE
@@ -345,14 +327,6 @@ target_link_libraries(shockplus
 	RES
 	UI
 	VOX
-
-
-
-
-
-
-
-#	ADLMIDI_LIB
 )
 
 # Turn on address sanitizing if wanted
