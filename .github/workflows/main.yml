@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         config:
-          - { os: ubuntu-latest, c: "clang", cxx: "clang++" }
+#          - { os: ubuntu-latest, c: "clang", cxx: "clang++" }
           - { os: ubuntu-latest, c: "gcc", cxx: "g++" }
     runs-on: ${{ matrix.config.os }}
     steps:
