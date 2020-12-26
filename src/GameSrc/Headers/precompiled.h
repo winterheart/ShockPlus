@@ -37,8 +37,6 @@ extern "C" {
 
 #include "rnd.h"
 
-#include "lgsndx.h"
-
 #include "event.h"
 #include "hotkey.h"
 #include "region.h"
