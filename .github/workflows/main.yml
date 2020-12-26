@@ -1,0 +1,28 @@
+name: build
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - { os: ubuntu-latest, c: "clang", cxx: "clang++" }
+          - { os: ubuntu-latest, c: "gcc", cxx: "g++" }
+    runs-on: ${{ matrix.config.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies (Linux)
+        if: matrix.config.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install libglu1-mesa-dev libsdl2-dev
+      - name: Build with ${{ matrix.config.os }} / ${{ matrix.config.c }} / ${{ matrix.config.cxx }}
+        env:
+          CC: ${{ matrix.config.c }}
+          CXX: ${{ matrix.config.cxx }}
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_SOUND=OFF -DENABLE_OPENGL=ON -DENABLE_FLUIDSYNTH=OFF
+          cmake --build build -j2
+
