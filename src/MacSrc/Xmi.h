@@ -1,3 +1,5 @@
+#include <SDL_mixer.h>
+
 #define NUM_THREADS 8
 
 #define THREAD_INIT 0

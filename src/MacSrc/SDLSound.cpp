@@ -1,12 +1,10 @@
-#include "Xmi.h"
-#include "MusicDevice.h"
-
-static snd_digi_parms digi_parms_by_channel[SND_MAX_SAMPLES];
-
-#ifdef USE_SDL_MIXER
-
 #include <SDL_mixer.h>
 
+#include "Xmi.h"
+#include "MusicDevice.h"
+#include "lgsndx.h"
+
+static snd_digi_parms digi_parms_by_channel[SND_MAX_SAMPLES];
 static Mix_Chunk *samples_by_channel[SND_MAX_SAMPLES];
 
 extern SDL_AudioStream *cutscene_audiostream;
@@ -174,22 +172,6 @@ int MacTuneLoadTheme(char *theme_base, int themeID) {
 }
 
 void MacTuneKillCurrentTheme(void) { StopTheMusic(); }
-
-#else
-
-// Sound stubs that do nothing, when SDL Mixer is not found
-
-int snd_start_digital(void) { return OK; }
-int snd_sample_play(int snd_ref, int len, uchar *smp, struct snd_digi_parms *dprm) { return OK; }
-void snd_end_sample(int hnd_id) {}
-void snd_kill_all_samples(void) {}
-int MacTuneLoadTheme(char *theme_base, int themeID) { return OK; }
-void MacTuneKillCurrentTheme(void) {}
-snd_digi_parms *snd_sample_parms(int hnd_id) { return &digi_parms_by_channel[0]; }
-bool snd_sample_playing(int hnd_id) { return false; }
-void snd_sample_reload_parms(snd_digi_parms *sdp) {}
-
-#endif
 
 // Unimplemented sound stubs
 
