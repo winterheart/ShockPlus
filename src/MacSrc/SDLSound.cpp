@@ -181,7 +181,6 @@ void MacTuneKillCurrentTheme(void) { StopTheMusic(); }
 
 int snd_start_digital(void) { return OK; }
 int snd_sample_play(int snd_ref, int len, uchar *smp, struct snd_digi_parms *dprm) { return OK; }
-int snd_alog_play(int snd_ref, int len, uchar *smp, struct snd_digi_parms *dprm) { return OK; }
 void snd_end_sample(int hnd_id) {}
 void snd_kill_all_samples(void) {}
 int MacTuneLoadTheme(char *theme_base, int themeID) { return OK; }
