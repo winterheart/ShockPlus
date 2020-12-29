@@ -286,7 +286,21 @@ set(GAME_SRC
 
 include_directories(
 	src/GameSrc/Headers
+	src/Libraries/2D/Source
+	src/Libraries/3D/Source
+	src/Libraries/DSTRUCT/Source
+	src/Libraries/EDMS/Source
+	src/Libraries/FIX/Source
+	src/Libraries/H
+	src/Libraries/INPUT/Source
+	src/Libraries/LG/Source
+	src/Libraries/LG/Source/LOG/src
+	src/Libraries/PALETTE/Source
+	src/Libraries/RES/Source
+	src/Libraries/RND/Source
 	src/Libraries/SND/Source
+	src/Libraries/UI/Source
+	src/Libraries/VOX/Source
 	src/MacSrc
 	src/MusicSrc
 	${CMAKE_BINARY_DIR}/src/GameSrc/Headers
