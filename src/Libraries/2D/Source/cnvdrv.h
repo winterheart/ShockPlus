@@ -41,10 +41,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __CNVDRV_H
 #define __CNVDRV_H
 extern void (*flat8_canvas_table[])();
-extern void (*flat8d_canvas_table[])();
-extern void (*modex_canvas_table[])();
-extern void (*bank8_canvas_table[])();
-extern void (*bank24_canvas_table[])();
-extern void (*span_canvas_table[])();
-extern void (*gen_canvas_table[])();
 #endif
