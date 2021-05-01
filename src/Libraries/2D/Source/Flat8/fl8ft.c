@@ -1634,4 +1634,5 @@ void (*flat8_function_table[GRD_FILL_TYPES][GRD_FUNCS * REAL_BMT_TYPES])() = {
      gr_null, gr_null, gr_null, gr_null, gr_null,
 
      gr_null, /* Perspective -vscan */
-     gr_null, gr_null, gr_null, gr_null, gr_null}};
+     gr_null, gr_null, gr_null, gr_null, gr_null}
+};

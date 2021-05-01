@@ -39,4 +39,4 @@ uchar gr_free_blend(void);
 /* tab_cnt is how many blend steps, note cnt<=0 is equivalent to calling
    free blend */
 uchar gr_init_blend(int log_blend_levels);
-#endif /* !__BLNFCN */
+#endif /* __BLNFCN_H */

@@ -71,7 +71,7 @@ set(2D_SRC
 	Source/Gen/genvrect.c
 	Source/Gen/genslin.c
 	Source/Flat8/fl8vlin.c
-	Source/Flat8/FL8OPL.c
+	Source/Flat8/fl8opl.c
 	Source/Flat8/fl8cply.c
 	Source/Flat8/fl8clin.c
 	Source/Flat8/fl8lp.c
@@ -91,7 +91,7 @@ set(2D_SRC
 	Source/Flat8/fl8row.c
 	Source/Flat8/fl8ft.c
 	Source/Flat8/fl8rsd8.c
-	Source/Flat8/Fl8F.c
+	Source/Flat8/fl8f.c
 	Source/Flat8/fl8bldbl.c
 	Source/Flat8/fl8clear.c
 	Source/Flat8/fl8p.c

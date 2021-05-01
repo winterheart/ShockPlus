@@ -128,7 +128,7 @@ void gri_flat8_uline_ns(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
 #include "fl8lin.h"
 }
 
-    /* clut */
+/* clut */
 
 #undef flat8_pixel_fill_init
 #define flat8_pixel_fill_init           \
@@ -140,7 +140,7 @@ void gri_flat8_uline_clut(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
 #include "fl8lin.h"
 }
 
-    /* xor */
+/* xor */
 
 #undef flat8_pixel_fill_xf
 #define flat8_pixel_fill_xf                    \
@@ -167,7 +167,7 @@ void gri_flat8_uline_xor(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
 #include "fl8lin.h"
 }
 
-    /* blend -- maybe we should just swallow the function call */
+/* blend -- maybe we should just swallow the function call */
 
 #define QMASK 0x3fc7f8ff
 /* convert red in a glomped rgb to a fixed point */

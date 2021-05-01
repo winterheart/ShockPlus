@@ -66,8 +66,7 @@ int gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
 
     do {
         fix dx = tli->right.x - tli->left.x;
-        if (dx > 0)
-        {
+        if (dx > 0) {
 
 #if InvDiv
             inv = fix_div(fix_make(1, 0) << 8, dx);
@@ -91,49 +90,51 @@ int gri_lit_floor_umap_loop(grs_tmap_loop_info *tli) {
             int x = fix_cint(tli->right.x) - fix_cint(tli->left.x);
 
             switch (tli->bm.hlog) {
-                case GRL_OPAQUE:
-                    for (; x > 0; x--) {
-                        int k = t_vtab[fix_fint(v)] + fix_fint(u);
-                        *(p_dest++) = g_ltab[t_bits[k] + fix_light(i)];
-                        // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],x,t_y);
-                    }
+            case GRL_OPAQUE:
+                for (; x > 0; x--) {
+                    int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                    *(p_dest++) = g_ltab[t_bits[k] + fix_light(i)];
+                    // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],x,t_y);
+                }
                 break;
 
-                case GRL_TRANS:
-                    for (; x > 0; x--) {
-                        int k = t_vtab[fix_fint(v)] + fix_fint(u);
-                        k = t_bits[k];
-                        if (k != 0) *p_dest = g_ltab[k + fix_light(i)];
-                        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
-                        p_dest++;
-                        u += du;
-                        v += dv;
-                        i += di;
-                    }
+            case GRL_TRANS:
+                for (; x > 0; x--) {
+                    int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                    k = t_bits[k];
+                    if (k != 0)
+                        *p_dest = g_ltab[k + fix_light(i)];
+                    // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
+                    p_dest++;
+                    u += du;
+                    v += dv;
+                    i += di;
+                }
                 break;
 
-                case GRL_OPAQUE|GRL_LOG2:
-                    for (; x > 0; x--) {
-                        int k = ((fix_fint(v)<<t_wlog)+fix_fint(u))&t_mask;
-                        *(p_dest++) = g_ltab[t_bits[k]+fix_light(i)];
-                        // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],x,t_y);
-                        u += du;
-                        v += dv;
-                        i += di;
-                    }
+            case GRL_OPAQUE | GRL_LOG2:
+                for (; x > 0; x--) {
+                    int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                    *(p_dest++) = g_ltab[t_bits[k] + fix_light(i)];
+                    // gr_fill_upixel(g_ltab[t_bits[k]+fix_light(i)],x,t_y);
+                    u += du;
+                    v += dv;
+                    i += di;
+                }
                 break;
 
-                case GRL_TRANS | GRL_LOG2:
-                    for (; x > 0; x--) {
-                        int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
-                        k = t_bits[k];
-                        if (k != 0) *p_dest = g_ltab[k + fix_light(i)];
-                        // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
-                        p_dest++;
-                        u += du;
-                        v += dv;
-                        i += di;
-                    }
+            case GRL_TRANS | GRL_LOG2:
+                for (; x > 0; x--) {
+                    int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                    k = t_bits[k];
+                    if (k != 0)
+                        *p_dest = g_ltab[k + fix_light(i)];
+                    // gr_fill_upixel(g_ltab[k+fix_light(i)],x,t_y);
+                    p_dest++;
+                    u += du;
+                    v += dv;
+                    i += di;
+                }
                 break;
             }
         }

@@ -151,4 +151,4 @@ do {                            \
 #define gr_cget_fclip_r(c) ((c)->gc.clip.f.right)
 #define gr_cget_fclip_b(c) ((c)->gc.clip.f.bot)
 
-#endif /* !__CTXMAC */
+#endif /* __CTXMAC_H */

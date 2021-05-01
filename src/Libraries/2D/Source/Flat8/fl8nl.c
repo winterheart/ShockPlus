@@ -41,143 +41,157 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // prototypes
 int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli);
 
-int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli)
-{
-  fix u = tli->left.u, du = tli->right.u - u;
-  fix v = tli->left.v, dv = tli->right.v - v;
-  int32_t *t_vtab = tli->vtab;
-  uchar *t_bits = tli->bm.bits;
-  uchar *t_clut = tli->clut;
-  uint32_t t_mask = tli->mask;
-  uchar t_wlog = tli->bm.wlog;
-  uchar temp_pix;
+int gri_tluc8_lin_umap_loop(grs_tmap_loop_info *tli) {
+    fix u = tli->left.u, du = tli->right.u - u;
+    fix v = tli->left.v, dv = tli->right.v - v;
+    int32_t *t_vtab = tli->vtab;
+    uchar *t_bits = tli->bm.bits;
+    uchar *t_clut = tli->clut;
+    uint32_t t_mask = tli->mask;
+    uchar t_wlog = tli->bm.wlog;
+    uchar temp_pix;
 
-  while (tli->n)
-  {
-    fix dx = tli->right.x - tli->left.x;
-    if (dx <= 0) return TRUE; //might divide by zero below; punt this tmap
+    while (tli->n) {
+        fix dx = tli->right.x - tli->left.x;
+        if (dx <= 0)
+            return TRUE; // might divide by zero below; punt this tmap
 
-    uchar *p       = tli->d + fix_cint(tli->left.x);
-    uchar *p_final = tli->d + fix_cint(tli->right.x);
+        uchar *p = tli->d + fix_cint(tli->left.x);
+        uchar *p_final = tli->d + fix_cint(tli->right.x);
 
-    du = fix_div(du, dx);
-    dv = fix_div(dv, dx);
+        du = fix_div(du, dx);
+        dv = fix_div(dv, dx);
 
-    switch (tli->bm.hlog)
-    {
-      case GRL_OPAQUE:
-        for (; p < p_final; p++)
-        {
-          int k = t_vtab[fix_fint(v)] + fix_fint(u);
-          k = t_bits[k];
-          if (tluc8tab[k] != NULL) *p = tluc8tab[k][*p]; else *p = k;
-          u += du;
-          v += dv;
+        switch (tli->bm.hlog) {
+        case GRL_OPAQUE:
+            for (; p < p_final; p++) {
+                int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                k = t_bits[k];
+                if (tluc8tab[k] != NULL)
+                    *p = tluc8tab[k][*p];
+                else
+                    *p = k;
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_TRANS:
+            for (; p < p_final; p++) {
+                int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                k = t_bits[k];
+                if (k != 0) {
+                    if (tluc8tab[k] != NULL)
+                        *p = tluc8tab[k][*p];
+                    else
+                        *p = k;
+                }
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_OPAQUE | GRL_LOG2:
+            for (; p < p_final; p++) {
+                int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                k = t_bits[k];
+                if (tluc8tab[k] != NULL)
+                    *p = tluc8tab[k][*p];
+                else
+                    *p = k;
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_TRANS | GRL_LOG2:
+            for (; p < p_final; p++) {
+                int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                k = t_bits[k];
+                if (k != 0) {
+                    if (tluc8tab[k] != NULL)
+                        *p = tluc8tab[k][*p];
+                    else
+                        *p = k;
+                }
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_OPAQUE | GRL_CLUT:
+            for (; p < p_final; p++) {
+                int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                k = t_bits[k];
+                if (tluc8tab[k] != NULL)
+                    *p = t_clut[tluc8tab[k][*p]];
+                else
+                    *p = t_clut[k];
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_TRANS | GRL_CLUT:
+            for (; p < p_final; p++) {
+                int k = t_vtab[fix_fint(v)] + fix_fint(u);
+                k = t_bits[k];
+                if (k != 0) {
+                    if (tluc8tab[k] != NULL)
+                        *p = t_clut[tluc8tab[k][*p]];
+                    else
+                        *p = t_clut[k];
+                }
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_OPAQUE | GRL_LOG2 | GRL_CLUT:
+            for (; p < p_final; p++) {
+                int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                k = t_bits[k];
+                if (tluc8tab[k] != NULL)
+                    *p = t_clut[tluc8tab[k][*p]];
+                else
+                    *p = t_clut[k];
+                u += du;
+                v += dv;
+            }
+            break;
+
+        case GRL_TRANS | GRL_LOG2 | GRL_CLUT:
+            for (; p < p_final; p++) {
+                int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
+                k = t_bits[k];
+                if (k != 0) {
+                    if (tluc8tab[k] != NULL)
+                        *p = t_clut[tluc8tab[k][*p]];
+                    else
+                        *p = t_clut[k];
+                }
+                u += du;
+                v += dv;
+            }
+            break;
         }
-      break;
 
-      case GRL_TRANS:
-        for (; p < p_final; p++)
-        {
-          int k = t_vtab[fix_fint(v)] + fix_fint(u);
-          k = t_bits[k];
-          if (k != 0) {
-            if (tluc8tab[k] != NULL) *p = tluc8tab[k][*p]; else *p = k;
-          }
-          u += du;
-          v += dv;
-        }
-      break;
+        u = (tli->left.u += tli->left.du);
+        tli->right.u += tli->right.du;
+        du = tli->right.u - u;
 
-      case GRL_OPAQUE | GRL_LOG2:
-        for (; p < p_final; p++)
-        {
-          int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
-          k = t_bits[k];
-          if (tluc8tab[k] != NULL) *p = tluc8tab[k][*p]; else *p = k;
-          u += du;
-          v += dv;
-        }
-      break;
+        v = (tli->left.v += tli->left.dv);
+        tli->right.v += tli->right.dv;
+        dv = tli->right.v - v;
 
-      case GRL_TRANS | GRL_LOG2:
-        for (; p < p_final; p++)
-        {
-          int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
-          k = t_bits[k];
-          if (k != 0) {
-            if (tluc8tab[k] != NULL) *p = tluc8tab[k][*p]; else *p = k;
-          }
-          u += du;
-          v += dv;
-        }
-      break;
+        tli->left.x += tli->left.dx;
+        tli->right.x += tli->right.dx;
 
-      case GRL_OPAQUE | GRL_CLUT:
-        for (; p < p_final; p++)
-        {
-          int k = t_vtab[fix_fint(v)] + fix_fint(u);
-          k = t_bits[k];
-          if (tluc8tab[k] != NULL) *p = t_clut[tluc8tab[k][*p]]; else *p = t_clut[k];
-          u += du;
-          v += dv;
-        }
-      break;
-
-      case GRL_TRANS | GRL_CLUT:
-        for (; p < p_final; p++)
-        {
-          int k = t_vtab[fix_fint(v)] + fix_fint(u);
-          k = t_bits[k];
-          if (k != 0) {
-            if (tluc8tab[k] != NULL) *p = t_clut[tluc8tab[k][*p]]; else *p = t_clut[k];
-          }
-          u += du;
-          v += dv;
-        }
-      break;
-
-      case GRL_OPAQUE | GRL_LOG2 | GRL_CLUT:
-        for (; p < p_final; p++)
-        {
-          int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
-          k = t_bits[k];
-          if (tluc8tab[k] != NULL) *p = t_clut[tluc8tab[k][*p]]; else *p = t_clut[k];
-          u += du;
-          v += dv;
-        }
-      break;
-
-      case GRL_TRANS | GRL_LOG2 | GRL_CLUT:
-        for (; p < p_final; p++)
-        {
-          int k = ((fix_fint(v) << t_wlog) + fix_fint(u)) & t_mask;
-          k = t_bits[k];
-          if (k != 0) {
-            if (tluc8tab[k] != NULL) *p = t_clut[tluc8tab[k][*p]]; else *p = t_clut[k];
-          }
-          u += du;
-          v += dv;
-        }
-      break;
+        tli->d += grd_bm.row;
+        tli->n--;
     }
 
-    u = (tli->left.u += tli->left.du);
-    tli->right.u += tli->right.du;
-    du = tli->right.u - u;
-
-    v = (tli->left.v += tli->left.dv);
-    tli->right.v += tli->right.dv;
-    dv = tli->right.v - v;
-
-    tli->left.x += tli->left.dx;
-    tli->right.x += tli->right.dx;
-
-    tli->d += grd_bm.row;
-    tli->n --;
-  }
-
-  return FALSE; //tmap OK
+    return FALSE; // tmap OK
 }
 
 void gri_tluc8_trans_lin_umap_init(grs_tmap_loop_info *tli) {

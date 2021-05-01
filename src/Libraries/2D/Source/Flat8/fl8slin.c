@@ -82,7 +82,7 @@ void gri_flat8_usline_xor(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
 #include "fl8slin.h"
 }
 
-    /* punt */
+/* punt */
 
 #undef macro_plot_i
 #define macro_plot_i(x, p, i) \

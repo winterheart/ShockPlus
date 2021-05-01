@@ -39,13 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // prototypes
 int gri_lin_umap_loop(grs_tmap_loop_info *tli);
 
-/*extern "C"
-{
-int Handle_LinClut_Loop_PPC(fix u, fix v, fix du, fix dv, fix dx,
-                                                                                                                grs_tmap_loop_info
-*tli, uchar *start_pdest, uchar *t_bits, int32_t gr_row, uchar *t_clut, uchar	t_wlog, uint32_t t_mask);
-}*/
-
 int Handle_LinClut_Loop_C(fix u, fix v, fix du, fix dv, fix dx, grs_tmap_loop_info *tli, uchar *start_pdest,
                           uchar *t_bits, int32_t gr_row, uchar *t_clut, uchar t_wlog, uint32_t t_mask) {
     register int x, k;

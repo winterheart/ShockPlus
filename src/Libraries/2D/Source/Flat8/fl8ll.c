@@ -39,18 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int gri_lit_lin_umap_loop(grs_tmap_loop_info *tli);
 
-// PPC specific optimized routines
-/*extern "C"
-{
-int Handle_Lit_Lin_Loop_PPC(fix u, fix v, fix du, fix dv, fix dx,
-                                                                                                                grs_tmap_loop_info
-*tli, uchar *start_pdest, uchar *t_bits, long gr_row, fix i, fix di, uchar *g_ltab, uchar	t_wlog, ulong	t_mask);
-
-int Handle_TLit_Lin_Loop2_PPC(fix u, fix v, fix du, fix dv, fix dx,
-                                                                                                                        grs_tmap_loop_info *tli, uchar *start_pdest, uchar *t_bits, long gr_row,
-                                                                                                                        fix i, fix di, uchar *g_ltab, uchar	t_wlog, ulong	t_mask);
-}*/
-
 int Handle_Lit_Lin_Loop_C(fix u, fix v, fix du, fix dv, fix dx, grs_tmap_loop_info *tli, uchar *start_pdest,
                           uchar *t_bits, long gr_row, fix i, fix di, uchar *g_ltab, uchar t_wlog, ulong t_mask) {
     int x, t_xl, t_xr, inv;

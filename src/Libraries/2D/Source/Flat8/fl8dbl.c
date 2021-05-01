@@ -125,52 +125,52 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst) {
 
     return;
 
-/* // WH - unused code
-    dst->row <<= 1;
-    flat8_flat8_smooth_h_double_ubitmap(src, dst);
+    /* // WH - unused code
+        dst->row <<= 1;
+        flat8_flat8_smooth_h_double_ubitmap(src, dst);
 
-    dst->row = tempW = dst->row >> 1;
-    dstPtr = dst->bits;
+        dst->row = tempW = dst->row >> 1;
+        dstPtr = dst->bits;
 
-    tempH = src->h - 1;
-    temp = src->w << 1;
-    dstPtr += temp;
-    temp = -temp;
-
-    shvd_read_row1 = dstPtr;
-    dstPtr += tempW;
-    shvd_write = dstPtr - 1;
-    dstPtr += tempW;
-    shvd_read_row2 = dstPtr;
-    shvd_read_blend = grd_half_blend;
-    savetemp = temp;
-
-    do {
-        do {
-            tempc = shvd_read_row1[temp];
-            tempc |= ((ushort)shvd_read_row2[temp]) << 8;
-            temp++;
-
-            shvd_write[temp] = shvd_read_blend[tempc];
-        } while (temp != 0);
-
-        if (--tempH == 0)
-            break;
+        tempH = src->h - 1;
+        temp = src->w << 1;
+        dstPtr += temp;
+        temp = -temp;
 
         shvd_read_row1 = dstPtr;
         dstPtr += tempW;
         shvd_write = dstPtr - 1;
         dstPtr += tempW;
         shvd_read_row2 = dstPtr;
-        temp = savetemp;
-    } while (true);
+        shvd_read_blend = grd_half_blend;
+        savetemp = temp;
 
-    // do last row
-    srcPtr = dstPtr + savetemp;
-    dstPtr += tempW + savetemp;
-    savetemp = -savetemp;
+        do {
+            do {
+                tempc = shvd_read_row1[temp];
+                tempc |= ((ushort)shvd_read_row2[temp]) << 8;
+                temp++;
 
-    for (; savetemp > 0; savetemp--)
-        *(dstPtr++) = *(srcPtr++);
-*/
+                shvd_write[temp] = shvd_read_blend[tempc];
+            } while (temp != 0);
+
+            if (--tempH == 0)
+                break;
+
+            shvd_read_row1 = dstPtr;
+            dstPtr += tempW;
+            shvd_write = dstPtr - 1;
+            dstPtr += tempW;
+            shvd_read_row2 = dstPtr;
+            temp = savetemp;
+        } while (true);
+
+        // do last row
+        srcPtr = dstPtr + savetemp;
+        dstPtr += tempW + savetemp;
+        savetemp = -savetemp;
+
+        for (; savetemp > 0; savetemp--)
+            *(dstPtr++) = *(srcPtr++);
+    */
 }
