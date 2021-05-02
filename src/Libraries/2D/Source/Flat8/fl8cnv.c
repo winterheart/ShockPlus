@@ -307,7 +307,7 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                                // DOUBLE_H_DEVICE_BITMAP
     gr_null,                                // DOUBLE_H_MONO_UBITMAP
     gr_null,                                // DOUBLE_H_MONO_BITMAP
-    (ptr_type)flat8_flat8_h_double_ubitmap, // DOUBLE_H_FLAT8_UBITMAP
+    (ptr_type)gr_not_imp,                   // DOUBLE_H_FLAT8_UBITMAP // WH: was flat8_flat8_h_double_ubitmap
     gr_null,                                // DOUBLE_H_FLAT8_BITMAP
     gr_null,                                // DOUBLE_H_FLAT24_UBITMAP
     gr_null,                                // DOUBLE_H_FLAT24_BITMAP

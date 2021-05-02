@@ -235,7 +235,6 @@ extern short flat8_calc_row(short w);
 extern grs_bitmap *flat8_sub_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
 
 /* bitmap doubling routines. */
-extern void flat8_flat8_h_double_ubitmap(grs_bitmap *bm);
 extern void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dst);
 extern void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst);
 

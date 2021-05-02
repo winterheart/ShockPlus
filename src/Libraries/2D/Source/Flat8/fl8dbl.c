@@ -25,8 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Bitmap doubling primitives.
 //
 
-#include <stdbool.h>
-
 #include "blndat.h"
 #include "grs.h"
 #include "lg.h"
@@ -35,31 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // PowerPC routines
 // ------------------------------------------------------------------------
 // ========================================================================
-void flat8_flat8_h_double_ubitmap(grs_bitmap *bm) {
-    DEBUG("%s: call mark", __FUNCTION__);
-    /* 	int		h,v,endh,endv;
-            uchar *src=bm->bits, *dst=grd_bm.bits;
-            long	srcAdd,dstAdd;
-            uchar	temp;
-
-            srcAdd = bm->row-bm->w;
-            dstAdd = grd_bm.row - (bm->w<<1);
-            endh = bm->w;
-            endv = bm->h;
-
-            for (v=0; v<endv; v++)
-             {
-                    for (h=0; h<endh; h++)
-                     {
-                            temp = *(src++);
-                            *(dst++) = temp;
-                            *(dst++) = temp;
-                     }
-
-                    src+=srcAdd;
-                    dst+=dstAdd;
-             }*/
-}
 
 // ========================================================================
 void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb) {
@@ -102,10 +75,7 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb) {
 // ========================================================================
 // src = eax, dest = edx
 void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst) {
-    int tempH, tempW, temp, savetemp;
     uchar *srcPtr, *dstPtr;
-    uchar *shvd_read_row1, *shvd_write, *shvd_read_row2, *shvd_read_blend;
-    ushort tempc;
 
     dstPtr = dst->bits;
     srcPtr = src->bits;
@@ -122,55 +92,4 @@ void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst) {
         }
         dstPtr += src->w * 2;
     }
-
-    return;
-
-    /* // WH - unused code
-        dst->row <<= 1;
-        flat8_flat8_smooth_h_double_ubitmap(src, dst);
-
-        dst->row = tempW = dst->row >> 1;
-        dstPtr = dst->bits;
-
-        tempH = src->h - 1;
-        temp = src->w << 1;
-        dstPtr += temp;
-        temp = -temp;
-
-        shvd_read_row1 = dstPtr;
-        dstPtr += tempW;
-        shvd_write = dstPtr - 1;
-        dstPtr += tempW;
-        shvd_read_row2 = dstPtr;
-        shvd_read_blend = grd_half_blend;
-        savetemp = temp;
-
-        do {
-            do {
-                tempc = shvd_read_row1[temp];
-                tempc |= ((ushort)shvd_read_row2[temp]) << 8;
-                temp++;
-
-                shvd_write[temp] = shvd_read_blend[tempc];
-            } while (temp != 0);
-
-            if (--tempH == 0)
-                break;
-
-            shvd_read_row1 = dstPtr;
-            dstPtr += tempW;
-            shvd_write = dstPtr - 1;
-            dstPtr += tempW;
-            shvd_read_row2 = dstPtr;
-            temp = savetemp;
-        } while (true);
-
-        // do last row
-        srcPtr = dstPtr + savetemp;
-        dstPtr += tempW + savetemp;
-        savetemp = -savetemp;
-
-        for (; savetemp > 0; savetemp--)
-            *(dstPtr++) = *(srcPtr++);
-    */
 }

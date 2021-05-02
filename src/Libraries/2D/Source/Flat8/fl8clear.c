@@ -86,25 +86,6 @@ void flat8_clear(long color) {
     while (h--) {
         // MLA - inlined this code
         memset(p, color, w);
-        /*{
-                     firstbytes = fb,middoubles = md,lastbytes = lb;
-                           dst = p;
-
-                           if (middoubles)
-                            {
-                                   // first get to a 4 byte boundary
-                                   while (firstbytes--) *(dst++) = color;
-                                   dst_doub = (double *) dst;
-
-                                   // now do doubles
-                                   while (middoubles--) *(dst_doub++) = doub_vl;
-                                   dst = (uchar *) dst_doub;
-                            }
-
-                           // do remaining bytes
-                           while (lastbytes--) *(dst++) = color;
-        }*/
-
         p += row;
     }
 }

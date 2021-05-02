@@ -50,11 +50,6 @@ extern int gri_poly_loop(grs_tmap_loop_info *ti);
 
 // internal prototypes
 int gri_scale_umap_loop_PPC(grs_tmap_loop_info *tli);
-int gri_scale_umap_loop_68K(grs_tmap_loop_info *tli);
-
-// This file contains the scalers for both 68K and PowerPC
-// First the routines that are generic to both, then the PowerPC routines, then
-// 68K
 
 // ------------------------------------------------------------------------
 // Generic (68K & PowerPC) routines
