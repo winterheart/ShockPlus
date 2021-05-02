@@ -41,8 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plytyp.h"
 #include "tabdat.h"
 
-#define gr_upoly ((void (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_UPOLY])
 #define gr_poly ((int (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_POLY])
-#define gr_tluc8_upoly ((void (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_TLUC8_UPOLY])
-#define gr_tluc8_poly ((int (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_TLUC8_POLY])
+
 #endif /* !__GRPLY_H */

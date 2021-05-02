@@ -58,20 +58,4 @@ extern grs_drvcap *grd_cap;
 extern grs_drvcap grd_mode_cap;
 extern int grd_mode;
 
-/* support old-syle dr_ naming for now. */
-#define grd_scr_canv grd_screen_canvas
-#define grd_vis_canv grd_visible_canvas
-#define dr_screen grd_screen
-#define dr_canvas grd_canvas
-#define dr_scr_canv grd_screen_canvas
-#define dr_vis_canv grd_visible_canvas
-
-#define dr_bm       grd_bm
-#define dr_gc       grd_gc
-#define dr_ytab     grd_ytab
-#define dr_int_clip grd_int_clip
-#define dr_fix_clip grd_fix_clip
-#define dr_clip     grd_clip
-#define driver_func grd_driver_func
-
 #endif /* !__GRD_H */

@@ -29,7 +29,6 @@ set(2D_SRC
 	Source/vtab.c
 	Source/MacDev.c
 	Source/GR/grilin.c
-	Source/GR/grmalloc.c
 	Source/GR/grnull.c
 	Source/GR/gruilin.c
 	Source/GR/grd.c
@@ -146,7 +145,6 @@ set(2D_SRC
 	Source/string/strwrap.c
 	Source/GR/grd.c
 	Source/GR/grilin.c
-	Source/GR/grmalloc.c
 	Source/GR/grnull.c
 	Source/GR/gruilin.c
 	)

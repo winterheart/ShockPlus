@@ -59,24 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ((int (*)(grs_bitmap * _bm, short _x, short _y, uchar *_cl)) \
          grd_canvas_table[CLUT_DRAW_DEVICE_BITMAP + 2 * ((bm)->type)])(bm, x, y, cl)
 
-#define gr_mono_clut_ubitmap \
-    ((void (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_MONO_UBITMAP])
-#define gr_mono_clut_bitmap \
-    ((int (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_MONO_BITMAP])
 #define gr_flat8_clut_ubitmap \
     ((void (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_FLAT8_UBITMAP])
-#define gr_flat8_clut_bitmap \
-    ((int (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_FLAT8_BITMAP])
-#define gr_flat24_clut_ubitmap \
-    ((void (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_FLAT24_UBITMAP])
-#define gr_flat24_clut_bitmap \
-    ((int (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_FLAT24_BITMAP])
-#define gr_rsd8_clut_ubitmap \
-    ((void (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_RSD8_UBITMAP])
-#define gr_rsd8_clut_bitmap \
-    ((int (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_RSD8_BITMAP])
-#define gr_tluc8_clut_ubitmap \
-    ((void (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_TLUC8_UBITMAP])
-#define gr_tluc8_clut_bitmap \
-    ((int (*)(grs_bitmap * bm, short x, short y, uchar *cl)) grd_canvas_table[CLUT_DRAW_TLUC8_BITMAP])
-#endif /* !__GRDBM_H */
+
+#endif /* __GRCBM_H */

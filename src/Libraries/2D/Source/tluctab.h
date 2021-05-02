@@ -51,7 +51,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "fix.h"
 #include "grs.h"
-#include "grmalloc.h"
 #include "tlucdat.h"
 
 extern uchar *gr_init_translucency_table(uchar *p, fix opacity, fix purity, grs_rgb color);

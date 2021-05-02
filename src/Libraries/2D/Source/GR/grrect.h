@@ -77,6 +77,5 @@ extern int gen_vline(short x0, short y0, short y1);
 
 #define gr_urect ((void (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_URECT])
 #define gr_rect ((int (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_RECT])
-#define gr_ubox ((void (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_UBOX])
 #define gr_box ((int (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_BOX])
 #endif /* !__GRRECT_H */

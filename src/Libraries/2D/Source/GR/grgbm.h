@@ -45,12 +45,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_get_bitmap(bm, x, y) \
     ((int (*)(grs_bitmap * _bm, short _x, short _y)) grd_canvas_table[GET_DEVICE_BITMAP + 2 * ((bm)->type)])(bm, x, y)
 
-#define gr_get_mono_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[GET_MONO_UBITMAP])
-#define gr_get_mono_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[GET_MONO_BITMAP])
-#define gr_get_flat8_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[GET_FLAT8_UBITMAP])
-#define gr_get_flat8_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[GET_FLAT8_BITMAP])
-#define gr_get_rsd8_ubitmap                    \
-   ((void (*)(grs_bitmap *bm,short x,short y)) \
-   grd_canvas_table[GET_RSD8_UBITMAP]
-#define gr_get_rsd8_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[GET_RSD8_BITMAP])
 #endif /* !__GRGBM_H */

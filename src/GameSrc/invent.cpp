@@ -2487,12 +2487,12 @@ LGRegion *create_invent_region(LGRegion *root, LGRegion **pbuttons, LGRegion **p
 	RefUnlock(REF_IMG_bmBlankInventoryPanel);
 
         // init the canvas
-        gr_init_sub_canvas(grd_scr_canv, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
+        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
                            INVENTORY_PANEL_HEIGHT);
         gr_init_canvas(&inv_fullscrn_canvas, inv_backgnd.bits, BMT_FLAT8, INVENTORY_PANEL_WIDTH,
                        INVENTORY_PANEL_HEIGHT);
         gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, INV_FULL_WD, INV_FULL_HT);
-        gr_init_sub_canvas(grd_scr_canv, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y, INVENTORY_PANEL_WIDTH,
+        gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y, INVENTORY_PANEL_WIDTH,
                            grd_cap->h - BUTTON_PANEL_Y);
 
         uchar *p = (uchar *)malloc(292 * 10);                        // This canvas holds an off-screen image of the
@@ -2509,7 +2509,7 @@ LGRegion *create_invent_region(LGRegion *root, LGRegion **pbuttons, LGRegion **p
 
 errtype inventory_update_screen_mode() {
     if (convert_use_mode) {
-        gr_init_sub_canvas(grd_scr_canv, &inv_norm_canvas, SCONV_X(INVENTORY_PANEL_X), SCONV_Y(INVENTORY_PANEL_Y),
+        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, SCONV_X(INVENTORY_PANEL_X), SCONV_Y(INVENTORY_PANEL_Y),
                            SCONV_X(INVENTORY_PANEL_WIDTH), SCONV_Y(INVENTORY_PANEL_HEIGHT));
         if (full_game_3d) {
             gr_init_canvas(&inv_fullscrn_canvas, inv_backgnd.bits, BMT_FLAT8, SCONV_X(INVENTORY_PANEL_WIDTH),
@@ -2519,20 +2519,20 @@ errtype inventory_update_screen_mode() {
                            SCONV_Y(INV_FULL_HT));
             // gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, 290, SCONV_Y(INV_FULL_HT));
         } else {
-            gr_init_sub_canvas(grd_scr_canv, &inv_gamepage_canvas, SCONV_X(INVENTORY_PANEL_X), SCONV_Y(BUTTON_PANEL_Y),
+            gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, SCONV_X(INVENTORY_PANEL_X), SCONV_Y(BUTTON_PANEL_Y),
                                SCONV_X(INVENTORY_PANEL_WIDTH), SCONV_Y(10));
             gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, SCONV_X(INV_FULL_WD),
                            SCONV_Y(INV_FULL_HT));
         }
     } else {
-        gr_init_sub_canvas(grd_scr_canv, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
+        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
                            INVENTORY_PANEL_HEIGHT);
         if (full_game_3d) {
             gr_init_canvas(&inv_fullscrn_canvas, inv_backgnd.bits, BMT_FLAT8, INVENTORY_PANEL_WIDTH,
                            INVENTORY_PANEL_HEIGHT);
             gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, INV_FULL_WD, INV_FULL_HT);
         } else {
-            gr_init_sub_canvas(grd_scr_canv, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y,
+            gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y,
                                INVENTORY_PANEL_WIDTH, grd_cap->h - BUTTON_PANEL_Y);
             gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, INVENTORY_PANEL_WIDTH,
                            INVENTORY_PANEL_HEIGHT);

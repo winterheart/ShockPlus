@@ -60,9 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_flat8_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_FLAT8_UBITMAP])
 #define gr_flat8_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_FLAT8_BITMAP])
 #define gr_flat24_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_FLAT24_UBITMAP])
-#define gr_flat24_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_FLAT24_BITMAP])
-#define gr_rsd8_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_RSD8_UBITMAP])
 #define gr_rsd8_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_RSD8_BITMAP])
 #define gr_tluc8_ubitmap ((void (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_TLUC8_UBITMAP])
-#define gr_tluc8_bitmap ((int (*)(grs_bitmap * bm, short x, short y)) grd_canvas_table[DRAW_TLUC8_BITMAP])
 #endif /* !__GRDBM_H */

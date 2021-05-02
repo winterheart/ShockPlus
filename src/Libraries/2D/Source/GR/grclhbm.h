@@ -38,17 +38,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __GRCLHBM_H
 #include "icanvas.h"
 
-#define gr_clut_hflip_ubitmap(bm,x,y,cl) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y,uchar *_cl)) \
-   grd_canvas_table[CLUT_HFLIP_DEVICE_UBITMAP+2*((bm)->type)])(bm,x,y,cl)
-#define gr_clut_hflip_bitmap(bm,x,y,cl) \
-   ((void (*)(grs_bitmap *_bm,short _x,short _y,uchar *_cl)) \
-   grd_canvas_table[CLUT_HFLIP_DEVICE_BITMAP+2*((bm)->type)])(bm,x,y,cl)
 
 #define gr_clut_hflip_flat8_ubitmap \
    ((void (*)(grs_bitmap *bm,short x,short y,uchar *cl)) \
    grd_canvas_table[CLUT_HFLIP_FLAT8_UBITMAP])
-#define gr_clut_hflip_flat8_bitmap \
-   ((void (*)(grs_bitmap *bm,short x,short y,uchar *cl)) \
-   grd_canvas_table[CLUT_HFLIP_FLAT8_BITMAP])
+
 #endif /* !__GRCLHBM_H */

@@ -398,7 +398,7 @@ errtype ui_init_cursors(void)
    LastCursor = NULL;
    MouseLock = 0;
 
-   gr_init_sub_canvas(grd_scr_canv,&DefaultCursorCanvas,0,0,grd_cap->w,grd_cap->h);
+   gr_init_sub_canvas(grd_screen_canvas,&DefaultCursorCanvas,0,0,grd_cap->w,grd_cap->h);
    gr_cset_cliprect(&DefaultCursorCanvas,
       0,0,grd_cap->w,grd_cap->h);
    err = mouse_set_callback(cursor_draw_callback,NULL,&uiCursorCallbackId);
@@ -419,7 +419,7 @@ errtype uiUpdateScreenSize(LGPoint size)
    if (size.y == UI_DETECT_SCREEN_SIZE.y)
       h = grd_screen_canvas->bm.h;
 
-   gr_init_sub_canvas(grd_scr_canv,&DefaultCursorCanvas,0,0,w,h);
+   gr_init_sub_canvas(grd_screen_canvas,&DefaultCursorCanvas,0,0,w,h);
    gr_cset_cliprect(&DefaultCursorCanvas,0,0,w,h);
 //   mouse_set_screensize(w,h);
 //   mouse_constrain_xy(0,0,w,h);

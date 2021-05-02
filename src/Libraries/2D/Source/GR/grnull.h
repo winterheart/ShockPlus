@@ -37,6 +37,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern void gr_null (void);
 extern void gr_not_imp (void);
-extern void gr_not_imp_test (void);
 
 #endif /* !__GRNULL_H */

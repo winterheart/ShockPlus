@@ -32,13 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "clpltyp.h"
 
 #define grd_uline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_LINE]))
-#define grd_uiline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_ILINE]))
 #define grd_uhline_fill ((grt_uline_fill_xy)(grd_uline_fill_vector[GR_HLINE]))
 #define grd_uvline_fill ((grt_uline_fill_xy)(grd_uline_fill_vector[GR_VLINE]))
 #define grd_usline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_SLINE]))
 #define grd_ucline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_CLINE]))
 #define grd_wire_poly_uline_fill ((grt_wire_poly_uline)(grd_uline_fill_vector[GR_WIRE_POLY_LINE]))
-#define grd_wire_poly_usline_fill ((grt_wire_poly_usline)(grd_uline_fill_vector[GR_WIRE_POLY_SLINE]))
 #define grd_wire_poly_ucline_fill ((grt_wire_poly_ucline)(grd_uline_fill_vector[GR_WIRE_POLY_CLINE]))
 
 /* these should become table definitions */
@@ -49,8 +47,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define grd_vline_clip_fill ((grt_line_clip_fill_xy)(grd_line_clip_fill_vector[GR_VLINE]))
 #define grd_sline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_SLINE]))
 #define grd_cline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_CLINE]))
-#define grd_wire_poly_line_clip_fill ((grt_wire_poly_uline)(grd_line_clip_fill_vector[GR_WIRE_POLY_LINE]))
-#define grd_wire_poly_sline_clip_fill ((grt_wire_poly_usline)(grd_line_clip_fill_vector[GR_WIRE_POLY_SLINE]))
-#define grd_wire_poly_cline_clip_fill ((grt_wire_poly_ucline)(grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE]))
 
 #endif
