@@ -49,7 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "grgbm.h"
 #include "grpix.h"
-#include "grstate.h"
 
 /* clipped flat8 bitmap capture.  reads from the current canvas at (x,y)
    into bm, clipping against the canvas.  any section of the destination

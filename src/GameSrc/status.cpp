@@ -31,9 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // and second, the upper right hand healthy/suit-energy measuring
 // bar graphs
 
-#include <math.h>
-
-#include "grstate.h"
 #include "status.h"
 #include "player.h"
 #include "tools.h"
@@ -559,9 +556,6 @@ void status_bio_update(void) {
     gr_set_canvas(&bio_canvas);
     curr_blk = bio_data;
 
-#ifdef SVGA_SUPPORT
-    gr_push_state();
-#endif
     for (i = 0; i < NUM_BIO_TRACKS; i++, curr_blk++) {
         if (curr_blk->free == FALSE) {
             // We must check to see if this track should be drawn now,
@@ -637,9 +631,6 @@ void status_bio_update(void) {
         }
     }
 
-#ifdef SVGA_SUPPORT
-    gr_pop_state();
-#endif
     gr_set_canvas(old_canvas);
     MouseLock--;
 #endif
