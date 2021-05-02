@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 #include "hkeyfunc.h"
 #include "mainloop.h"
+#include "rgb.h"
 #include "setup.h"
 #include "shock_version.h"
 #include "status.h"

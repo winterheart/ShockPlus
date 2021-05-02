@@ -45,6 +45,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __RGB_H
 #define __RGB_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif // !defined(__cplusplus)
+
 #include "grs.h"
 
 #define RGB_OK (0)
@@ -74,5 +78,9 @@ int gr_init_ipal(void);
 
 /* Destroy the current inverse palette, freeing memory */
 int gr_free_ipal(void);
+
+#if defined(__cplusplus)
+}
+#endif // !defined(__cplusplus)
 
 #endif /* !__RGB_H */

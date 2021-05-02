@@ -374,18 +374,6 @@ typedef struct {
 enum { GR_LOW_PER_DETAIL, GR_MEDIUM_PER_DETAIL, GR_HIGH_PER_DETAIL, GR_NUM_PER_DETAIL_LEVELS };
 extern void gr_set_per_detail_level(int detail_level);
 
-#define RGB_OK (0)
-#define RGB_OUT_OF_MEMORY (-1)
-#define RGB_CANT_DEALLOCATE (-2)
-#define RGB_IPAL_NOT_ALLOCATED (-3)
-#define gr_index_rgb(r, g, b) (((r) >> 19) & 0x1f) | (((g) >> 14) & 0x3e0) | (((b) >> 9) & 0x7c00)
-#define gr_index_lrgb(t) ((((t) >> 3) & 0x1f) | (((t) >> 6) & 0x3e0) | (((t) >> 9) & 0x7c00))
-#define gr_bind_rgb(r, g, b) (((r) << 2) | ((g) << 13) | ((b) << 24))
-#define gr_index_brgb(c) ((((c) >> 5) & 0x1f) | (((c) >> 11) & 0x3e0) | (((c) >> 17) & 0x7c00))
-extern void gr_split_rgb(grs_rgb c, uchar *r, uchar *g, uchar *b);
-int gr_alloc_ipal(void);
-int gr_init_ipal(void);
-int gr_free_ipal(void);
 #define gr_get_light_tab() (grd_screen->ltab)
 #define gr_set_light_tab(p) (grd_screen->ltab = (p))
 #define gr_get_clut() (grd_screen->clut)

@@ -66,6 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "shock_version.h" // for system shock version number
 
 extern "C" {
+#include "rgb.h"
 #include "sdl_events.h"
 }
 

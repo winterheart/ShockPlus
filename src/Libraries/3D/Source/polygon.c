@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 #include "GlobalV.h"
 #include "lg.h"
+#include "rgb.h"
 #include "OpenGL.h"
 
 // prototypes
