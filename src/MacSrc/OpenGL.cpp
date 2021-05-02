@@ -20,6 +20,7 @@
 #include <SDL_opengl.h>
 #endif
 
+#include "clip.h"
 #include "mainloop.h"
 #include "map.h"
 #include "frintern.h"

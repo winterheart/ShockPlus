@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ShockBitmap.h"
 #include "Prefs.h"
 
+#include "mode.h"
+
 #include "amap.h"
 #include "biohelp.h"
 #include "fullscrn.h"

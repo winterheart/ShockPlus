@@ -66,6 +66,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef __CLIP_H
 #define __CLIP_H
+
+#if defined(__cplusplus)
+extern "C" {
+#endif // !defined(__cplusplus)
+
+#include "fix.h"
+#include "grs.h"
+
 /* prototypes for analytic clippers. */
 extern int gr_clip_int_line(short *x0, short *y0, short *x1, short *y1);
 extern int gr_clip_fix_line(long *x0, long *y0, long *x1, long *y1);
@@ -84,5 +92,9 @@ extern int gr_clip_flat24_bitmap(grs_bitmap *bm, short *x, short *y);
 #define CLIP_RIGHT   4
 #define CLIP_BOT     8
 #define CLIP_ALL     16
+
+#if defined(__cplusplus)
+}
+#endif // !defined(__cplusplus)
 
 #endif /* !__CLIP_H */

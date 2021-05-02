@@ -125,6 +125,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
+#include "clip.h"
 #include "GlobalV.h"
 #include "lg.h"
 
