@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffq.h"
 #include "mfdgames.h"
 #include "softdef.h"
-
+#include "str.h"
 #include "sfxlist.h"
 #include "musicai.h"
 #include "gamestrn.h"

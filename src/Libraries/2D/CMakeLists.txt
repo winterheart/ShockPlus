@@ -3,7 +3,6 @@ set(2D_SRC
 	Source/bitmap.c
 	Source/blend.c
 	Source/canvas.c
-	Source/close.c
 	Source/cnvtab.c
 	Source/context.c
 	Source/detect.c
@@ -19,7 +18,6 @@ set(2D_SRC
 	Source/rgb.c
 	Source/screen.c
 	Source/sscrn.c
-	Source/StateStk.c
 	Source/svgainit.c
 	Source/tempbm.c
 	Source/temptm.c

@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "grd.h"
 #include "detect.h"
-#include "state.h"
 #include "memall.h"
 #include "tmpalloc.h"
 
@@ -57,7 +56,8 @@ int gri_init(void) {
     err = gr_detect(&grd_info);
     if (err != 0)
         return err;
-    gr_push_video_state(1);
+    // WH: does nothing
+    //gr_push_video_state(1);
     grd_active = 1;
     // init_inverse_table();
 

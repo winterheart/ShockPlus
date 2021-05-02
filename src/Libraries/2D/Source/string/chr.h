@@ -32,11 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  *
  */
+#ifndef __CHR_H
+#define __CHR_H
 
 /* soft characters for line wrapped text. */
-#ifndef CHAR_SOFTCR
-#define CHAR_SOFTCR 1
-#endif
-#ifndef CHAR_SOFTSP
-#define CHAR_SOFTSP 2
-#endif
+#define CHAR_SOFTCR 0x01 // soft carriage return (wrapped text)
+#define CHAR_SOFTSP 0x02 // soft space (wrapped text)
+
+#endif // __CHR_H

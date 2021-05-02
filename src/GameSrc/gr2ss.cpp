@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frintern.h"
 #include "frprotox.h"
 #include "gamescr.h"
-
+#include "str.h"
 
 #ifdef STEREO_SUPPORT
 #include <i6dvideo.h>

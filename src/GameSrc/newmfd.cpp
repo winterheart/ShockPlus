@@ -54,6 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cit2d.h"
 #include "popups.h"
 #include "statics.h"
+#include "str.h"
 #include "gr2ss.h"
 
 #include "cybstrng.h"

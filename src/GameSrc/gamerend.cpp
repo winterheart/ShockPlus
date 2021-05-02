@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "game_screen.h"
 #include "player.h"
 #include "shodan.h"
+#include "str.h"
 #include "bark.h"
 #include "cit2d.h"
 #include "damage.h"

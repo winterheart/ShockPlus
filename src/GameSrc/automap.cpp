@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 #include "gamestrn.h"
 #include "sfxlist.h"
+#include "str.h"
 #include "musicai.h"
 
 #include "mfdart.h"

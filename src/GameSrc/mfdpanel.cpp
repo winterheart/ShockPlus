@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "objsim.h"
 #include "objgame.h"
-
+#include "str.h"
 #include "colors.h"
 #include "fullscrn.h"
 

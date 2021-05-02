@@ -46,6 +46,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  */
 
+#ifndef __STR_H
+#define __STR_H
+
+#if defined(__cplusplus)
+extern "C" {
+#endif // !defined(__cplusplus)
+
 /* prototypes for non-table driven string handling routines. */
 extern void gr_font_string_size(grs_font *font, char *string, short *width, short *height);
 extern short gr_font_string_width(grs_font *font, char *string);
@@ -53,3 +60,16 @@ extern short gr_font_char_width(grs_font *f, char c);
 extern void gr_font_char_size(grs_font *font, char c, short *width, short *height);
 extern int gr_font_string_wrap(grs_font *pfont, char *ps, short width);
 extern void gr_font_string_unwrap(char *s);
+
+// macros
+#define gr_string_size(s, w, h) gr_font_string_size((grs_font *)gr_get_font(), s, w, h)
+#define gr_string_width(s) gr_font_string_width((grs_font *)gr_get_font(), s)
+#define gr_char_width(c) gr_font_char_width((grs_font *)gr_get_font(), c)
+#define gr_char_size(c, w, h) gr_font_char_size((grs_font *)gr_get_font(), c, w, h)
+#define gr_string_wrap(string, width) gr_font_string_wrap((grs_font *)gr_get_font(), string, width)
+
+#if defined(__cplusplus)
+}
+#endif // !defined(__cplusplus)
+
+#endif // __STR_H

@@ -62,6 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "rcolors.h"
 #include "refstuf.h"
+#include "str.h"
 #include "tilename.h"
 
 #define FMK_INT_XX (FMK_INT_NW || FMK_INT_SW || FMK_INT_EW || FMK_INT_WW)

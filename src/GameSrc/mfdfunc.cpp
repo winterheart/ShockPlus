@@ -82,6 +82,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdfunc.h"
 #include "mfdgames.h"
 #include "shodan.h"
+#include "str.h"
 
 #define MFD_SHIELD_FUNC 19
 

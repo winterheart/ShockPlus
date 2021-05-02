@@ -74,6 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "colors.h"
 #include "gamescr.h"
 #include "cybstrng.h"
+#include "str.h"
 #include "tools.h"
 #include "fullscrn.h"
 #include "gr2ss.h"

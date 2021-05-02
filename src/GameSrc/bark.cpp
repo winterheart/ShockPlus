@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdart.h"
 #include "gamescr.h"
 #include "shodan.h"
+#include "str.h"
 #include "fullscrn.h"
 #include "cit2d.h"
 #include "audiolog.h"

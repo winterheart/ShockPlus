@@ -76,6 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "pathfind.h"
 #include "cyber.h"
 #include "sfxlist.h"
+#include "str.h"
 #include "ai.h"
 #include "cybrnd.h"
 #include "trigger.h"

@@ -51,14 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabdat.h"
 
 /* here are the definitions for all the table driven function. */
-#define gr_init_device(info) \
-    (grd_device_table[GRT_INIT_DEVICE] ? ((int (*)(grs_sys_info * _info)) grd_device_table[GRT_INIT_DEVICE])(info) : 0)
-#define gr_close_device(info)                                                                                        \
-    (grd_device_table[GRT_CLOSE_DEVICE] ? ((int (*)(grs_sys_info * _info)) grd_device_table[GRT_CLOSE_DEVICE])(info) \
-                                        : 0)
 #define gr_set_screen_mode ((int (*)(int mode, int clear))grd_device_table[GRT_SET_MODE])
-#define gr_set_state ((int (*)(void *buf, int clear))grd_device_table[GRT_SET_STATE])
-#define gr_get_state ((int (*)(void *buf, int flags))grd_device_table[GRT_GET_STATE])
 #define gr_set_screen_pal ((void (*)(int start, int n, uchar *pal_data))grd_device_table[GRT_SET_PAL])
 
 #endif /* !__GRDEV_H */

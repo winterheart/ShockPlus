@@ -47,6 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "otrip.h"
 #include "player.h"
 #include "rcolors.h"
+#include "str.h"
 #include "wares.h"
 
 // octant-wise, that is...

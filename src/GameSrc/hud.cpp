@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "faketime.h"
 #include "fullscrn.h"
 #include "olhext.h"
+#include "str.h"
 #include "cit2d.h"
 #include "damage.h"
 

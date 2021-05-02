@@ -45,8 +45,8 @@ void (**mac_device_table[])() = {
     (ptr_type)gr_null,       // close device
     (ptr_type)mac_set_mode,  // set mode
     (ptr_type)gr_null,       // get mode
-    (ptr_type)mac_set_state, // set state
-    (ptr_type)mac_get_state, // get state
+    (ptr_type)gr_null,       // set state
+    (ptr_type)gr_null,       // get state
     (ptr_type)gr_null,       // was mac_stat_htrace
     (ptr_type)gr_null,       // was mac_stat_vtrace
     (ptr_type)mac_set_pal,   // set palette
@@ -98,13 +98,3 @@ void mac_set_pal(int start, int n, uint8_t *pal_data) {
 void mac_get_pal(int start, int n, uint8_t *pal_data) {
     memmove(pal_data, &backup_pal, sizeof(uchar) * 768);
 }
-
-// set and get state don't currently do anything, since its not apparent
-// any of the stuff from the VGA driver (text mode, palette stuff) is necessary
-// (if the game uses these calls to remember palettes between changes we may need
-// to implement something here
-//------------------------------------------------------------------------
-int mac_set_state(void *buf, int clear) { return (0); }
-
-//------------------------------------------------------------------------
-int mac_get_state(void *buf, int flags) { return (0); }

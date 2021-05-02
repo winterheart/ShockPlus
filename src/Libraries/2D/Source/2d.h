@@ -45,7 +45,6 @@ extern grs_sys_info grd_info;
 extern grs_drvcap *grd_cap;
 extern grs_drvcap grd_mode_cap;
 extern int grd_mode;
-#define grd_scr_canv grd_screen_canvas
 
 extern grs_screen *grd_screen;
 extern uchar grd_default_pal[];
@@ -58,7 +57,7 @@ extern grs_canvas *grd_visible_canvas;
 extern grs_canvas *grd_canvas;
 #define grd_bm (grd_canvas->bm)
 #define grd_gc (grd_canvas->gc)
-#define grd_ytab (grd_canvas->ytab)
+
 #define grd_int_clip (grd_gc.clip.i)
 #define grd_fix_clip (grd_gc.clip.f)
 #define grd_clip (grd_int_clip)
@@ -73,7 +72,7 @@ enum { BMT_DEVICE, BMT_MONO, BMT_FLAT8, BMT_FLAT24, BMT_RSD8, BMT_TLUC8, BMT_SPA
 extern void gr_init_bitmap(grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, short h);
 extern void gr_init_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, short x, short y, short w, short h);
 extern grs_bitmap *gr_alloc_bitmap(uchar type, ushort flags, short w, short h);
-#define gr_init_sub_bm gr_init_sub_bitmap
+
 enum {
     GRC_PIXEL,
 #define GRC_LINE GRC_PIXEL
@@ -166,7 +165,7 @@ typedef void (*grt_uline_fill_xy)(short, short, short, long, long);
 typedef void (*grt_wire_poly_uline)(long, long, grs_vertex *, grs_vertex *);
 typedef void (*grt_wire_poly_ucline)(long, long, grs_vertex *, grs_vertex *);
 typedef grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
-#define grt_wire_poly_usline grt_wire_poly_ucline;
+
 extern grt_uline_fill *grd_uline_fill_vector;
 extern grt_uline_fill_table *grd_uline_fill_table;
 extern grt_uline_fill_table *grd_uline_fill_table_list[];
@@ -177,7 +176,6 @@ extern grt_function_table *grd_function_table_list[];
 extern grt_function_table *grd_function_fill_table;
 
 extern int gr_init(void);
-extern int gr_close(void);
 
 extern grs_context grd_defgc;
 extern void gr_set_canvas(grs_canvas *c);
@@ -206,16 +204,11 @@ extern void gr_init_sub_canvas(grs_canvas *sc, grs_canvas *dc, short x, short y,
 #define gr_set_fix_cliprect(l, t, r, b)                                                                  \
     grd_fix_clip.sten = NULL, grd_fix_clip.left = (l), grd_fix_clip.top = (t), grd_fix_clip.right = (r), \
     grd_fix_clip.bot = (b)
-#define gr_set_clipmask(t, b, mask) \
-    grd_clip.top = (t), grd_clip.bot = (b), grd_clip.sten = (mask), gr_set_canvas(grd_canvas)
 #define gr_set_fcolor(color) (grd_canvas->gc.fcolor = color)
 #define gr_get_fcolor() (grd_canvas->gc.fcolor)
-#define gr_set_bcolor(color) (grd_canvas->gc.bcolor = color)
-#define gr_get_bcolor() (grd_canvas->gc.bcolor)
+
 #define gr_set_font(fnt) (grd_canvas->gc.font = fnt)
 #define gr_get_font() (grd_canvas->gc.font)
-#define gr_set_text_attr(attr) (grd_canvas->gc.text_attr = attr)
-#define gr_get_text_attr() (grd_canvas->gc.text_attr)
 
 // gri_set_fill_globals implementation is in PixFill.C
 extern void gri_set_fill_globals(long *fill_type_ptr, long fill_type, void (***function_table_ptr)(),
@@ -308,19 +301,6 @@ extern grt_line_clip_fill *grd_line_clip_fill_vector;
 extern int gr_int_line(short x0, short y0, short x1, short y1);
 
 #define gr_ucpoly ((void (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_UCPOLY])
-#define gr_cpoly ((int (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_CPOLY])
-#define gr_init_device(info) \
-    (grd_device_table[GRT_INIT_DEVICE] ? ((int (*)(grs_sys_info * _info)) grd_device_table[GRT_INIT_DEVICE])(info) : 0)
-#define gr_close_device(info)                                                                                        \
-    (grd_device_table[GRT_CLOSE_DEVICE] ? ((int (*)(grs_sys_info * _info)) grd_device_table[GRT_CLOSE_DEVICE])(info) \
-                                        : 0)
-#define gr_set_screen_mode ((int (*)(int mode, int clear))grd_device_table[GRT_SET_MODE])
-#define gr_get_screen_mode ((int (*)(void))grd_device_table[GRT_GET_MODE])
-#define gr_set_state ((int (*)(void *buf, int clear))grd_device_table[GRT_SET_STATE])
-#define gr_get_state ((int (*)(void *buf, int flags))grd_device_table[GRT_GET_STATE])
-#define gr_stat_htrace ((int (*)(void))grd_device_table[GRT_STAT_HTRACE])
-#define gr_stat_vtrace ((int (*)(void))grd_device_table[GRT_STAT_VTRACE])
-#define gr_set_screen_pal ((void (*)(int start, int n, uchar *pal_data))grd_device_table[GRT_SET_PAL])
 
 #define gr_set_upixel24 ((void (*)(long color, short x, short y))grd_pixel_table[SET_UPIXEL24])
 
@@ -328,10 +308,8 @@ extern int gr_int_line(short x0, short y0, short x1, short y1);
 #define gr_set_pixel ((int (*)(long color, short x, short y))grd_pixel_table[SET_PIXEL8])
 extern int gen_fill_pixel(long color, short x, short y);
 #define gr_set_upixel_interrupt ((void (*)(long color, short x, short y))grd_pixel_table[SET_UPIXEL8_INTERRUPT])
-#define gr_set_pixel_interrupt ((int (*)(long color, short x, short y))grd_pixel_table[SET_PIXEL8_INTERRUPT])
 #define gr_fill_upixel ((void (*)(long color, short x, short y))grd_function_table[GRC_PIXEL])
 #define gr_fill_pixel gen_fill_pixel
-#define gr_get_upixel ((long (*)(short x, short y))grd_pixel_table[GET_UPIXEL8])
 #define gr_get_pixel ((long (*)(short x, short y))grd_pixel_table[GET_PIXEL8])
 #define gr_poly ((int (*)(long c, int n, grs_vertex **vpl))grd_canvas_table[FIX_POLY])
 #define gr_per_map(bm, n, vpl)                              \
@@ -363,12 +341,9 @@ extern int gen_vline(short x0, short y0, short y1);
 #define gr_vline gen_vline
 #define gr_urect ((void (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_URECT])
 #define gr_rect ((int (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_RECT])
-#define gr_ubox ((void (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_UBOX])
 #define gr_box ((int (*)(short x0, short y0, short x1, short y1))grd_canvas_table[DRAW_BOX])
 #define gr_fix_line gen_fix_line
 extern int gen_fix_line(fix x0, fix y0, fix x1, fix y1);
-extern int gen_fix_cline(fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rgb c1);
-extern int gen_fix_sline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
 
 #define gr_scale_ubitmap(bm, x, y, w, h)                                  \
     ((void (*)(grs_bitmap * _bm, short _x, short _y, short _w, short _h)) \
@@ -379,9 +354,6 @@ extern int gen_fix_sline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
 #define gr_clut_scale_ubitmap(bm, x, y, w, h, cl)                                    \
     ((int (*)(grs_bitmap * _bm, short _x, short _y, short _w, short _h, uchar *_cl)) \
          grd_canvas_table[CLUT_SCALE_DEVICE_UBITMAP + 2 * ((bm)->type)])(bm, x, y, w, h, cl)
-#define gr_clut_scale_bitmap(bm, x, y, w, h, cl)                                     \
-    ((int (*)(grs_bitmap * _bm, short _x, short _y, short _w, short _h, uchar *_cl)) \
-         grd_canvas_table[CLUT_SCALE_DEVICE_BITMAP + 2 * ((bm)->type)])(bm, x, y, w, h, cl)
 
 #define gr_string(s, x, y) \
     (((int (*)(grs_font *, char *, short, short))grd_canvas_table[DRAW_STRING]))((grs_font *)gr_get_font(), s, x, y)
@@ -391,26 +363,6 @@ extern int gen_fix_sline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
 #define gr_char(s, x, y) \
     (((int (*)(grs_font *, char, short, short))grd_canvas_table[DRAW_CHAR]))((grs_font *)gr_get_font(), s, x, y)
 
-enum {
-    GRT_INIT_DEVICE,
-    GRT_CLOSE_DEVICE,
-    GRT_SET_MODE,
-    GRT_GET_MODE,
-    GRT_SET_STATE,
-    GRT_GET_STATE,
-    GRT_STAT_HTRACE,
-    GRT_STAT_VTRACE,
-    GRT_SET_PAL,
-    GRT_GET_PAL,
-    GRT_SET_WIDTH,
-    GRT_GET_WIDTH,
-    GRT_SET_FOCUS,
-    GRT_GET_FOCUS,
-    GRT_CANVAS_TABLE,
-    GRT_SPAN_TABLE,
-    GRD_DEVICE_FUNCS
-};
-
 extern void gr_set_pal(int start, int n, uchar *pal_data);
 extern void gr_set_gamma_pal(int start, int n, fix gamma);
 extern void gr_get_pal(int start, int n, uchar *pal_data);
@@ -418,11 +370,10 @@ typedef struct {
     ubyte ltol, wftol;
     fix cltol;
 } gr_per_detail_level;
+
 enum { GR_LOW_PER_DETAIL, GR_MEDIUM_PER_DETAIL, GR_HIGH_PER_DETAIL, GR_NUM_PER_DETAIL_LEVELS };
-extern void gr_set_per_tol(ubyte linear_tol, ubyte wall_floor_tol);
-extern void gr_set_clut_lit_tol(fix clut_lit_tol);
 extern void gr_set_per_detail_level(int detail_level);
-extern void gr_set_per_detail_level_param(int linear_tol, int wall_floor_tol, fix clut_lit_tol, int detail_level);
+
 #define RGB_OK (0)
 #define RGB_OUT_OF_MEMORY (-1)
 #define RGB_CANT_DEALLOCATE (-2)
@@ -438,18 +389,6 @@ int gr_free_ipal(void);
 #define gr_get_light_tab() (grd_screen->ltab)
 #define gr_set_light_tab(p) (grd_screen->ltab = (p))
 #define gr_get_clut() (grd_screen->clut)
-
-extern void gr_font_string_size(grs_font *font, char *string, short *width, short *height);
-extern short gr_font_string_width(grs_font *font, char *string);
-extern short gr_font_char_width(grs_font *font, char c);
-extern void gr_font_char_size(grs_font *font, char c, short *width, short *height);
-extern int gr_font_string_wrap(grs_font *pfont, char *ps, short width);
-extern void gr_font_string_unwrap(char *s);
-#define gr_string_size(s, w, h) gr_font_string_size((grs_font *)gr_get_font(), s, w, h)
-#define gr_string_width(s) gr_font_string_width((grs_font *)gr_get_font(), s)
-#define gr_char_width(c) gr_font_char_width((grs_font *)gr_get_font(), c)
-#define gr_char_size(c, w, h) gr_font_char_size((grs_font *)gr_get_font(), c, w, h)
-#define gr_string_wrap(string, width) gr_font_string_wrap((grs_font *)gr_get_font(), string, width)
 
 typedef struct {
     grs_vertex val;

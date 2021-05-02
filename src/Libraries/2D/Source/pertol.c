@@ -75,21 +75,8 @@ gr_per_detail_level gr_per_detail_list[GR_NUM_PER_DETAIL_LEVELS] = {
     {3, 4, 2 * FIX_UNIT},
     {5, 5, 0}};
 
-void gr_set_per_tol(ubyte ltol, ubyte wftol) {
-    flat8_per_ltol = (ltol & 7);
-    flat8_per_wftol = (wftol & 7);
-}
-
-void gr_set_clut_lit_tol(fix cltol) { gr_clut_lit_tol = cltol; }
-
 void gr_set_per_detail_level(int level) {
     flat8_per_ltol = gr_per_detail_list[level].ltol;
     flat8_per_wftol = gr_per_detail_list[level].wftol;
     gr_clut_lit_tol = gr_per_detail_list[level].cltol;
-}
-
-void gr_set_per_detail_level_param(int ltol, int wftol, fix cltol, int level) {
-    gr_per_detail_list[level].ltol = ltol & 7;
-    gr_per_detail_list[level].wftol = wftol & 7;
-    gr_per_detail_list[level].cltol = cltol;
 }

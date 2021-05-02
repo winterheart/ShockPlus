@@ -53,6 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 #include "player.h"
 #include "popups.h"
+#include "str.h"
 #include "olhext.h"
 #include "Xmi.h"
 #include "Prefs.h"

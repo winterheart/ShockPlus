@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h"
 #include "objuse.h"
 #include "objbit.h"
+#include "str.h"
 #include "fullscrn.h"
 #include "gr2ss.h"
 

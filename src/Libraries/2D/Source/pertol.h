@@ -47,10 +47,6 @@ enum {
    GR_NUM_PER_DETAIL_LEVELS
 };
 
-extern void gr_set_per_tol(ubyte linear_tol, ubyte wall_floor_tol);
-extern void gr_set_clut_lit_tol(fix clut_lit_tol);
 extern void gr_set_per_detail_level(int detail_level);
-extern void gr_set_per_detail_level_param
-   (int linear_tol, int wall_floor_tol, fix clut_lit_tol, int detail_level);
 
 #endif

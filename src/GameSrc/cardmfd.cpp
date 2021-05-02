@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdfunc.h"
 #include "objsim.h"
 #include "gamestrn.h"
+#include "str.h"
 #include "tools.h"
 #include "objprop.h"
 #include "colors.h"

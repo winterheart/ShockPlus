@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "canvchek.h"
 #include "palfx.h"
 #include "player.h"
+#include "str.h"
 #include "faketime.h"
 #include "cit2d.h"
 

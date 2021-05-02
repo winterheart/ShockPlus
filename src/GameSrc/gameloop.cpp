@@ -53,6 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 #include "game_screen.h"
 #include "sndcall.h"
+#include "str.h"
 
 // ----------
 // GLOBALS

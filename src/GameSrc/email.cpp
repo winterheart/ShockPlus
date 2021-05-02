@@ -53,6 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "invpages.h"
 #include "shodan.h"
 #include "sfxlist.h"
+#include "str.h"
 #include "musicai.h"
 #include "faketime.h"
 #include "popups.h"

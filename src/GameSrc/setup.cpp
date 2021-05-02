@@ -71,12 +71,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "faketime.h"
 
 extern "C" {
-#include "2d.h"
 #include "sdl_events.h"
 };
 
 #include "splash.h"
 #include "splshpal.h"
+#include "str.h"
 #include "tickcount.h"
 #include "MacTune.h"
 #include "Shock.h"

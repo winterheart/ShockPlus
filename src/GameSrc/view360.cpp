@@ -51,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "otrip.h"
 #include "cybstrng.h"
 #include "gamescr.h"
+#include "str.h"
 
 #include "OpenGL.h"
 
