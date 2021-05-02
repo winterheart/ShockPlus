@@ -68,64 +68,6 @@ void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti) {
         h_umap(bm, n, vpl, ti);
         return;
     }
-    //¥¥¥ÊMLA - doesnt' ever appear to use this
-    /*
-       if ((bm->type==BMT_FLAT8)&&grd_enable_quad_blend) {
-          int u_min=vpl[0]->u;
-          int u_max=u_min;
-          int v_min=vpl[0]->v;
-          int v_max=v_min;
-          int x_min=vpl[0]->x;
-          int x_max=x_min;
-          int y_min=vpl[0]->y;
-          int y_max=y_min;
-          int i,canvas_delta;
-
-          for (i=1;i<n;i++) {
-             if (vpl[i]->u>u_max) u_max=vpl[i]->u;
-             if (vpl[i]->u<u_min) u_min=vpl[i]->u;
-             if (vpl[i]->v>v_max) v_max=vpl[i]->v;
-             if (vpl[i]->v<v_min) v_min=vpl[i]->v;
-          }
-
-          for (i=1;i<n;i++) {
-             if (vpl[i]->y>y_max) y_max=vpl[i]->y;
-             if (vpl[i]->y<y_min) y_min=vpl[i]->y;
-             if (vpl[i]->x>x_max) x_max=vpl[i]->x;
-             if (vpl[i]->x<x_min) x_min=vpl[i]->x;
-          }
-          if (x_max-x_min>y_max-y_min)
-             canvas_delta=x_max-x_min;
-          else
-             canvas_delta=y_max-y_min;
-          if (canvas_delta>30*FIX_UNIT) {
-             if ((fix_int(u_max)-fix_int(u_min)<4)&&
-                 (fix_int(v_max)-fix_int(v_min)<4)) {
-                extern void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, int u, int v);
-                int u=fix_int(u_min);
-                int v=fix_int(v_min);
-                grs_bitmap tbm;
-
-                if (u+4>=bm->w) u=bm->w-4;
-                if (v+4>=bm->h) v=bm->h-4;
-                tbm.type=BMT_FLAT8;
-                tbm.flags=bm->flags;
-                gri_flat8_hv_quadruple_sub_bitmap(bm, &tbm, u, v);
-                for (i=0;i<n;i++) {
-                   vpl[i]->u = ((vpl[i]->u-fix_make(u,0))<<2)+8*FIX_UNIT;
-                   vpl[i]->v = ((vpl[i]->v-fix_make(v,0))<<2)+8*FIX_UNIT;
-                }
-                per_umap(&tbm, n, vpl, ti);
-                for (i=0;i<n;i++) {
-                   vpl[i]->u = ((vpl[i]->u-8*FIX_UNIT)>>2)+fix_make(u,0);
-                   vpl[i]->v = ((vpl[i]->v-8*FIX_UNIT)>>2)+fix_make(v,0);
-                }
-                return;
-             }
-          }
-       }
-    */
-
     percode = gri_per_umap_setup(n, vpl, &ps);
 
     /* should be set by init func, but just in case...*/
@@ -165,5 +107,4 @@ void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti) {
         break;
     }
     bm->bits = save_bits;
-    return;
 }

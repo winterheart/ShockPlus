@@ -38,5 +38,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __VALLOC_H
 extern uchar grd_valloc_mode;
 extern uchar *our_valloc (short w, short h);
-extern void vfree (uchar *p);
+
 #endif /* !__VALLOC_H */

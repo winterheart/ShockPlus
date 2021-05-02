@@ -130,7 +130,7 @@ void bitmap_cursor_drawfunc(int cmd, LGRegion* r, LGCursor* c, LGPoint pos)
 
 		case CURSOR_DRAW:
 			// Get saveunder
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+                        gr_init_bitmap(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
 			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
 			// Blit over the save under
 			GR_BITMAP(bm,pos.x,pos.y);
@@ -140,7 +140,7 @@ void bitmap_cursor_drawfunc(int cmd, LGRegion* r, LGCursor* c, LGPoint pos)
 		case CURSOR_DRAW_HFLIP:
 			pos.x -= bm->w-1;
 			// Get saveunder
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+                        gr_init_bitmap(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
 //			GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
 			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
 //			GR_HFLIP_BITMAP_IN_PLACE(&SaveUnder.bm);
@@ -151,7 +151,7 @@ void bitmap_cursor_drawfunc(int cmd, LGRegion* r, LGCursor* c, LGPoint pos)
 			break;
 		
 		case 3:	// Scale cursor down half-size.
-			gr_init_bm(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
+                        gr_init_bitmap(&SaveUnder.bm,SaveUnder.bm.bits,BMT_SAVEUNDER,0,bm->w,bm->h);
 			GR_GET_BITMAP(&SaveUnder.bm,pos.x,pos.y);
 			gr_scale_bitmap(bm, pos.x, pos.y, (bm->w >> 1), (bm->h >> 1));
 			doubleUndraw = TRUE;

@@ -184,7 +184,7 @@ errtype play_vmail_intro(uchar use_texture_buffer)
    p = useBuffer+bsize-(w*h);
    vmail_background = (grs_bitmap *) (p - sizeof(grs_bitmap));
 
-   gr_init_bm(vmail_background, p, BMT_FLAT8, 0, w,h);
+    gr_init_bitmap(vmail_background, p, BMT_FLAT8, 0, w,h);
    uiHideMouse(NULL);
 #ifdef SVGA_SUPPORT
    if (convert_use_mode)

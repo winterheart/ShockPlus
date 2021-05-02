@@ -99,7 +99,6 @@ set(2D_SRC
 	Source/Flat8/fl8ns.c
 	Source/Flat8/fl8lnop.c
 	Source/Flat8/fl8dbl.c
-	Source/Flat8/fl8clin.h
 	Source/Flat8/fl8cnv.c
 	Source/Flat8/fl8slin.c
 	Source/Flat8/fl8lin.c

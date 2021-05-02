@@ -143,7 +143,7 @@ static grs_bitmap tmap_bitmaps[NUM_TEXTURE_SIZES];
 void setup_tmap_bitmaps(void) {
     int i;
     for (i = 0; i < 4; i++)
-        gr_init_bm(&tmap_bitmaps[i], NULL, BMT_FLAT8, 0, tmap_sizes[i], tmap_sizes[i]);
+        gr_init_bitmap(&tmap_bitmaps[i], NULL, BMT_FLAT8, 0, tmap_sizes[i], tmap_sizes[i]);
 }
 
 grs_bitmap *get_texture_map(int idx, int sz) {

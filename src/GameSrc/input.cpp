@@ -3332,7 +3332,7 @@ void push_cursor_object(short obj) {
     if (convert_use_mode != 0) {
         grs_canvas temp_canv;
         // Get a new bigger bitmap
-        gr_init_bm(&svga_cursor_bmp, svga_cursor_bits, BMT_FLAT8, BMF_TRANS,
+        gr_init_bitmap(&svga_cursor_bmp, svga_cursor_bits, BMT_FLAT8, BMF_TRANS,
                    lg_min(MODE_SCONV_X(bmp->w, 2), SVGA_CURSOR_WIDTH),
                    lg_min(MODE_SCONV_Y(bmp->h, 2), SVGA_CURSOR_HEIGHT));
         gr_make_canvas(&svga_cursor_bmp, &temp_canv);

@@ -448,55 +448,6 @@ void init_all(void) {
     init_done = TRUE;
 }
 
-/*
-//-----------------------------------------------------------
-//  Draw a splash screen in its associated color table.
-//-----------------------------------------------------------
-void DrawSplashScreen(short id, Boolean fadeIn) {
-    byte pal_id;
-    uchar savep[768];
-    grs_bitmap bits;
-    // CTabHandle		ctab;
-    extern void finish_pal_effect(byte id);
-    extern byte palfx_start_fade_up(uchar * new_pal);
-
-    // gr_clear(0xFF);
-
-    // First, clear the screen and load in the color table for this picture.
-    // gr_clear(0xFF);
-    ctab = GetCTable(id);														// Get the pict's
-CLUT if (ctab)
-    {
-            BlockMove((**(ctab)).ctTable, (**(gMainColorHand)).ctTable, 256 * sizeof(ColorSpec));
-            SetEntries(0, 255, (**(gMainColorHand)).ctTable);
-            ResetCTSeed();
-            DisposCTable(ctab);
-
-#ifdef DO_FADES
-            if (fadeIn)																	// Get it in a form for
-palette fade
-            {
-                    mac_get_pal(0, 256, savep);
-                    gr_set_pal(0, 256, savep);
-            }
-#endif
-            LoadPictShockBitmap(&gMainOffScreen, id);
-
-#ifdef DO_FADES
-            if (fadeIn)
-                    pal_id = palfx_start_fade_up(savep);
-#endif
-            gr_init_bm(&bits, (uchar *)gMainOffScreen.Address, BMT_FLAT8, 0, 640, 480);
-            gr_bitmap(&bits, 0, 0);
-
-#ifdef DO_FADES
-            if (fadeIn)
-                    finish_pal_effect(pal_id);
-#endif
-    }
-}
-*/
-
 void PreloadGameResources(void) {
     // Images
     ResLock(RES_gamescrGfx);

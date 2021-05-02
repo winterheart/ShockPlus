@@ -81,7 +81,7 @@ extern int32_t gScreenRowbytes;
 /* initialize a new bitmap structure. set bits, type, flags, w, and h from
    arguments. set align to 0 and calculate row from width depending on what
    type of bitmap. */
-void gr_init_bm(grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, short h) {
+void gr_init_bitmap(grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, short h) {
     int row = 0;
     int v;
 
@@ -125,7 +125,7 @@ void gr_init_bm(grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, sho
 /* set up a new bitmap structure to be a subsection of an existing bitmap.
    sbm is source bm, dbm destination. (0,0) of dbm maps to (x,y) of sbm,
    and dbm is w x h in size. */
-void gr_init_sub_bm(grs_bitmap *sbm, grs_bitmap *dbm, short x, short y, short w, short h) {
+void gr_init_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, short x, short y, short w, short h) {
     *dbm = *sbm; // memcpy (dbm, sbm, sizeof (*sbm));
     dbm->w = w;
     dbm->h = h;

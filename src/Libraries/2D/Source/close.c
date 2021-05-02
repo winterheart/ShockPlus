@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grd.h"
 #include "grdev.h"
 #include "state.h"
-#include "status_2D.h"
+#include "status_2d.h"
 
 /* shut down 2d system.  call device-dependent shutdown routine and
    restore video state. */

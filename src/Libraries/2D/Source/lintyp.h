@@ -62,8 +62,6 @@ typedef void (*grt_wire_poly_ucline)(long, long, grs_vertex *, grs_vertex *);
 
 typedef grt_uline_fill grt_uline_fill_table[GRD_FILL_TYPES][GRD_LINE_TYPES];
 
-#define grt_wire_poly_usline grt_wire_poly_ucline;
-
 extern grt_uline_fill *grd_uline_fill_vector;
 
 #endif

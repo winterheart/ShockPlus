@@ -91,7 +91,7 @@ void make_popup_cursor(LGCursor *c, grs_bitmap *bm, char *s, uint tmplt, uchar a
     } else {
         bptr = bits;
     }
-    gr_init_bm(bm, bptr, BMT_FLAT8, BMF_TRANS, sw, sh);
+    gr_init_bitmap(bm, bptr, BMT_FLAT8, BMF_TRANS, sw, sh);
     gr_make_canvas(bm, &gc);
     gr_push_canvas(&gc);
 
@@ -154,7 +154,7 @@ void make_email_cursor(LGCursor *c, grs_bitmap *bm, uchar page, bool init) {
     ss_point_convert(&w, &h, FALSE);
 #endif
     if (init)
-        gr_init_bm(bm, NULL, BMT_FLAT8, BMF_TRANS, w, h);
+        gr_init_bitmap(bm, NULL, BMT_FLAT8, BMF_TRANS, w, h);
     sprintf(s, "%s %d", get_string(REF_STR_WordPage, NULL, BUF_SIZ), page);
     MouseLock++;
     if (sizeof(cursor_buf) < w * h)

@@ -96,14 +96,14 @@ grs_canvas *gr_pop_canvas(void) {
 void gr_init_canvas(grs_canvas *c, uchar *p, int type, short w, short h) {
 #ifdef GR_DOUBLE_CANVAS
     if (type == BMT_FLAT8_DOUBLE) {
-        gr_init_bm(&c->bm, p, BMT_FLAT8, 0, w, h);
+        gr_init_bitmap(&c->bm, p, BMT_FLAT8, 0, w, h);
         gr_init_gc(c);
         gr_cset_fix_cliprect(c, 0, 0, fix_make((w >> 1), 0), fix_make(h, 0));
         c->bm.type = BMT_FLAT8_DOUBLE;
     } else
 #endif
     {
-        gr_init_bm(&c->bm, p, type, 0, w, h);
+        gr_init_bitmap(&c->bm, p, type, 0, w, h);
         gr_init_gc(c);
         gr_cset_fix_cliprect(c, 0, 0, fix_make(w, 0), fix_make(h, 0));
     }
@@ -114,7 +114,7 @@ void gr_init_canvas(grs_canvas *c, uchar *p, int type, short w, short h) {
 #pragma global_optimizer reset
 
 void gr_init_sub_canvas(grs_canvas *sc, grs_canvas *dc, short x, short y, short w, short h) {
-    gr_init_sub_bm(&sc->bm, &dc->bm, x, y, w, h);
+    gr_init_sub_bitmap(&sc->bm, &dc->bm, x, y, w, h);
     gr_init_gc(dc);
     gr_cset_fix_cliprect(dc, 0, 0, fix_make(w, 0), fix_make(h, 0));
     dc->ytab = NULL;

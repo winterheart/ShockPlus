@@ -31,8 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rgb.h"
 #include "scrdat.h"
 
-// prototypes
-static int _redloop();
 
 /* Static Globals for his and her pleasure */
 static int bcenter, gcenter, rcenter;
@@ -44,11 +42,12 @@ static int gstride, rstride;
 static long x, xsqr, colormax;
 static int cindex;
 
+// prototypes
 static void inv_cmap_2(int colors, uchar *colormap[3], int bits, ulong *dist_buf, uchar *rgbmap);
-int redloop();
-static int _greenloop(int restart);
-static int _blueloop(int restart);
-static void _maxfill(ulong *buffer);
+static int redloop();
+static int greenloop(int restart);
+static int blueloop(int restart);
+static void maxfill(ulong *buffer);
 
 /* The routines in this file operate on grs_rgb color values.  The color
    values are encoded so that each r,g, and b has 8 bits of integer, 2
@@ -139,7 +138,7 @@ static void inv_cmap_2(int colors, uchar *colormap[3], int bits, ulong *dist_buf
     gstride = colormax;
     rstride = colormax * colormax;
 
-    _maxfill(dist_buf);
+    maxfill(dist_buf);
 
     for (cindex = 0; cindex < colors; cindex++) {
         /* The initial position is the cell containing the colormap
@@ -162,12 +161,12 @@ static void inv_cmap_2(int colors, uchar *colormap[3], int bits, ulong *dist_buf
         cdp = dist_buf + rcenter * rstride + gcenter * gstride + bcenter;
         crgbp = rgbmap + rcenter * rstride + gcenter * gstride + bcenter;
 
-        _redloop();
+        redloop();
     }
 }
 
 /* redloop -- loop up and down from red center. */
-static int _redloop() {
+static int redloop() {
     int detect, r, first;
     long txsqr = xsqr + xsqr;
     static long rxx;
@@ -177,7 +176,7 @@ static int _redloop() {
     /* Basic loop up */
     for (r = rcenter, rdist = cdist, rxx = crinc, rdp = cdp, rrgbp = crgbp, first = 1; r < colormax;
          r++, rdp += rstride, rrgbp += rstride, rdist += rxx, rxx += txsqr, first = 0) {
-        if (_greenloop(first))
+        if (greenloop(first))
             detect = 1;
         else if (detect)
             break;
@@ -187,7 +186,7 @@ static int _redloop() {
     for (r = rcenter - 1, rxx = crinc - txsqr, rdist = cdist - rxx, rdp = cdp - rstride, rrgbp = crgbp - rstride,
         first = 1;
          r >= 0; r--, rdp -= rstride, rrgbp -= rstride, rxx -= txsqr, rdist -= rxx, first = 0) {
-        if (_greenloop(first))
+        if (greenloop(first))
             detect = 1;
         else if (detect)
             break;
@@ -197,7 +196,7 @@ static int _redloop() {
 }
 
 /* greenloop -- loop up and down from green center. */
-static int _greenloop(int restart) {
+static int greenloop(int restart) {
     int detect, g, first;
     long txsqr = xsqr + xsqr;
     static int here, min, max;
@@ -226,7 +225,7 @@ static int _greenloop(int restart) {
     for (g = here, gcdist = gdist = rdist, gxx = ginc, gcdp = gdp = rdp, gcrgbp = grgbp = rrgbp, first = 1; g <= max;
          g++, gdp += gstride, gcdp += gstride, grgbp += gstride, gcrgbp += gstride, gdist += gxx, gcdist += gxx,
         gxx += txsqr, first = 0) {
-        if (_blueloop(first)) {
+        if (blueloop(first)) {
             if (!detect) {
                 /* remember here and associated data! */
                 if (g > here) {
@@ -250,7 +249,7 @@ static int _greenloop(int restart) {
         gcrgbp = grgbp = rrgbp - gstride, first = 1;
          g >= min; g--, gdp -= gstride, gcdp -= gstride, grgbp -= gstride, gcrgbp -= gstride, gxx -= txsqr,
         gdist -= gxx, gcdist -= gxx, first = 0) {
-        if (_blueloop(first)) {
+        if (blueloop(first)) {
             if (!detect) {
                 /* remember here! */
                 here = g;
@@ -286,7 +285,7 @@ static int _greenloop(int restart) {
 }
 
 /* blueloop -- loop up and down from blue center. */
-static int _blueloop(int restart) {
+static int blueloop(int restart) {
     int detect;
     /* These are all registers on a Sun 3. Your mileage may differ. */
     ulong *dp;
@@ -402,7 +401,7 @@ static int _blueloop(int restart) {
 }
 
 /* Fill a buffer with the largest unsigned long. */
-static void _maxfill(ulong *buffer) {
+static void maxfill(ulong *buffer) {
     ulong maxv = (long)-1;
     long i;
     ulong *bp;

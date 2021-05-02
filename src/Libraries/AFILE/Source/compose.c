@@ -198,7 +198,7 @@ int32_t ComposeFlat8Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew, grs_bitmap *p
 
     //	Init rsd8 bitmap
 
-    gr_init_bm(pbmDiff, pbmDiff->bits, BMT_RSD8, BMF_TRANS, pcompose->w, pcompose->h);
+    gr_init_bitmap(pbmDiff, pbmDiff->bits, BMT_RSD8, BMF_TRANS, pcompose->w, pcompose->h);
     pbmDiff->row = pbmDiff->w;
 
     //	Try rsd compression

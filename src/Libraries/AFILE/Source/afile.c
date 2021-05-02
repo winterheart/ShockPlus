@@ -218,7 +218,7 @@ int32_t AfileReadFullFrame(Afile *paf, grs_bitmap *pbm, fix *ptime) {
     }
 
     // Copy current compose buffer to caller
-    gr_init_bm(pbm, pbm->bits, paf->bmCompose.type, 0, paf->v.width, paf->v.height);
+    gr_init_bitmap(pbm, pbm->bits, paf->bmCompose.type, 0, paf->v.width, paf->v.height);
     memcpy(pbm->bits, paf->bmCompose.bits, paf->frameLen);
 
     // Return length

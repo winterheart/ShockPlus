@@ -129,7 +129,7 @@ ActAnim *AnimPlayRegion(Ref animRef, LGRegion *region, LGPoint loc, char unknown
     grs_bitmap bm;
     uchar *bptr = (uchar *)malloc(head->size.x * head->size.y * 2);
 
-    gr_init_bm(&bm, bptr, BMT_FLAT8, BMF_TRANS, head->size.x, head->size.y);
+    gr_init_bitmap(&bm, bptr, BMT_FLAT8, BMF_TRANS, head->size.x, head->size.y);
     gr_make_canvas(&bm, &current_anim.cnv);
     gr_push_canvas(&current_anim.cnv);
     gr_clear(0);

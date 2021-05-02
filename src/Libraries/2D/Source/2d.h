@@ -73,9 +73,7 @@ enum { BMT_DEVICE, BMT_MONO, BMT_FLAT8, BMT_FLAT24, BMT_RSD8, BMT_TLUC8, BMT_SPA
 extern void gr_init_bitmap(grs_bitmap *bm, uchar *p, uchar type, ushort flags, short w, short h);
 extern void gr_init_sub_bitmap(grs_bitmap *sbm, grs_bitmap *dbm, short x, short y, short w, short h);
 extern grs_bitmap *gr_alloc_bitmap(uchar type, ushort flags, short w, short h);
-#define gr_init_bm gr_init_bitmap
 #define gr_init_sub_bm gr_init_sub_bitmap
-#define gr_alloc_bm gr_alloc_bitmap
 enum {
     GRC_PIXEL,
 #define GRC_LINE GRC_PIXEL
@@ -266,13 +264,11 @@ typedef int (*grt_line_clip_fill_v)(long, long, grs_vertex *, grs_vertex *);
 typedef int (*grt_line_clip_fill_xy)(short, short, short, long, long);
 extern grt_line_clip_fill *grd_line_clip_fill_vector;
 #define grd_uline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_LINE]))
-#define grd_uiline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_ILINE]))
 #define grd_uhline_fill ((grt_uline_fill_xy)(grd_uline_fill_vector[GR_HLINE]))
 #define grd_uvline_fill ((grt_uline_fill_xy)(grd_uline_fill_vector[GR_VLINE]))
 #define grd_usline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_SLINE]))
 #define grd_ucline_fill ((grt_uline_fill_v)(grd_uline_fill_vector[GR_CLINE]))
 #define grd_wire_poly_uline_fill ((grt_wire_poly_uline)(grd_uline_fill_vector[GR_WIRE_POLY_LINE]))
-#define grd_wire_poly_usline_fill ((grt_wire_poly_usline)(grd_uline_fill_vector[GR_WIRE_POLY_SLINE]))
 #define grd_wire_poly_ucline_fill ((grt_wire_poly_ucline)(grd_uline_fill_vector[GR_WIRE_POLY_CLINE]))
 #define grd_line_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_LINE]))
 #define grd_iline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_ILINE]))
@@ -280,9 +276,6 @@ extern grt_line_clip_fill *grd_line_clip_fill_vector;
 #define grd_vline_clip_fill ((grt_line_clip_fill_xy)(grd_line_clip_fill_vector[GR_VLINE]))
 #define grd_sline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_SLINE]))
 #define grd_cline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_CLINE]))
-#define grd_wire_poly_line_clip_fill ((grt_wire_poly_uline)(grd_line_clip_fill_vector[GR_WIRE_POLY_LINE]))
-#define grd_wire_poly_sline_clip_fill ((grt_wire_poly_usline)(grd_line_clip_fill_vector[GR_WIRE_POLY_SLINE]))
-#define grd_wire_poly_cline_clip_fill ((grt_wire_poly_ucline)(grd_line_clip_fill_vector[GR_WIRE_POLY_CLINE]))
 #define grd_pixel_fill(c, parm, x, y) gr_fill_upixel(c, x, y)
 
 #define gr_clut_hflip_flat8_ubitmap \
@@ -486,14 +479,11 @@ extern int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm);
 uchar *gr_rsd8_unpack(uchar *src, uchar *dst);
 
 #define gr_set_unpack_buf(buf) grd_unpack_buf = buf
-#define gr_get_unpack_buf() grd_unpack_buf
 #define GR_UNPACK_RSD8_OK 0
 #define GR_UNPACK_RSD8_NOBUF 1
 #define GR_UNPACK_RSD8_NOTRSD 2
 uchar gr_free_blend(void);
 uchar gr_init_blend(int log_blend_levels);
-
-#define gr_start_frame ((void (*)())grd_canvas_table[START_FRAME])
 
 #pragma pack(pop)
 

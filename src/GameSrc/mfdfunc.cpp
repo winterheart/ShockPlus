@@ -789,7 +789,7 @@ uchar mfd_weapon_beam_handler(MFD *m, uiEvent *e) {
 #ifdef CURSOR_BACKUPS
         backup[20] = (uchar *)malloc(f->bm.w * f->bm.h);
         LG_memcpy(backup[20], f->bm.bits, f->bm.w * f->bm.h);
-        gr_init_bm(&backup_mfd_cursor, backup[14], BMT_FLAT8, 0, mfd_cursor.w, mfd_cursor.h);
+        gr_init_bitmap(&backup_mfd_cursor, backup[14], BMT_FLAT8, 0, mfd_cursor.w, mfd_cursor.h);
 #endif
         retval = TRUE;
     }
@@ -1786,7 +1786,7 @@ uchar mfd_grenade_slider_handler(MFD *m, short val, uiEvent *ev, void *data) {
 #ifdef CURSOR_BACKUPS
         backup[20] = (uchar *)malloc(f->bm.w * f->bm.h);
         LG_memcpy(backup[20], f->bm.bits, f->bm.w * f->bm.h);
-        gr_init_bm(&backup_mfd_cursor, backup[14], BMT_FLAT8, 0, mfd_cursor.w, mfd_cursor.h);
+        gr_init_bitmap(&backup_mfd_cursor, backup[14], BMT_FLAT8, 0, mfd_cursor.w, mfd_cursor.h);
 #endif
         uiPushRegionCursor(MFD_REGION(m), &slider_cursor);
     }
@@ -1829,7 +1829,7 @@ errtype mfd_grenade_init(MFD_Func *f) {
 #ifdef CURSOR_BACKUPS
     backup[21] = (uchar *)Malloc(slider_bmap.w * slider_bmap.h);
     LG_memcpy(backup[21], slider_bmap.bits, slider_bmap.w * slider_bmap.h);
-    gr_init_bm(&backup_slider_cursor, backup[21], BMT_FLAT8, 0, slider_bmap.w, slider_bmap.h);
+    gr_init_bitmap(&backup_slider_cursor, backup[21], BMT_FLAT8, 0, slider_bmap.w, slider_bmap.h);
 #endif
     return OK;
 }

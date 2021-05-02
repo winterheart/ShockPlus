@@ -39,10 +39,4 @@ extern grt_uline_fill_table *grd_uline_fill_table_list[];
 extern grt_uline_fill gen_uline_fill_table[][GRD_LINE_TYPES];
 extern grt_uline_fill flat8_uline_fill_table[][GRD_LINE_TYPES];
 
-/*
-// WH - these tables not used by game, see lintab.c
-extern grt_uline_fill bank8_uline_fill_table[][GRD_LINE_TYPES];
-extern grt_uline_fill bank24_uline_fill_table[][GRD_LINE_TYPES];
-extern grt_uline_fill modex_uline_fill_table[][GRD_LINE_TYPES];
-*/
 #endif

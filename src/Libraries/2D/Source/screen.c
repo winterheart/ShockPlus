@@ -71,7 +71,7 @@ grs_screen *gr_alloc_screen(short w, short h) {
     /* set up bitmap. */
     s = (grs_screen *)p;
     c = (grs_canvas *)(p + sizeof(*s));
-    gr_init_bm(&s->bm, b, BMT_DEVICE, 0, w, h);
+    gr_init_bitmap(&s->bm, b, BMT_DEVICE, 0, w, h);
 
     /* start with upper left visible. */
     s->x = 0;

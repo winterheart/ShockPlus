@@ -2254,7 +2254,7 @@ errtype make_options_cursor(void) {
     orig_w = w = res_bm_width(REF_IMG_bmOptionCursor);
     h = res_bm_height(REF_IMG_bmOptionCursor);
     ss_point_convert(&w, &h, FALSE);
-    gr_init_bm(&option_cursor_bmap, svga_options_cursor_bits, BMT_FLAT8, BMF_TRANS, w, h);
+    gr_init_bitmap(&option_cursor_bmap, svga_options_cursor_bits, BMT_FLAT8, BMF_TRANS, w, h);
     gr_make_canvas(&option_cursor_bmap, &cursor_canv);
     gr_push_canvas(&cursor_canv);
     gr_clear(0);

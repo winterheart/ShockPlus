@@ -222,7 +222,7 @@ void _fr_init_all_tmaps(void) {
             for (y = 0; y < 16; y++)
                 dummy_tm[(x * 16) + y] =
                     (((x >> 1) + (y >> 1)) & 1) ? ((2 * abs(8 - x)) > y) ? v1 : v2 : ((2 * abs(8 - x)) > y) ? v3 : v4;
-        gr_init_bm(tmap_bm + i, dummy_tm, BMT_FLAT8, 0, 16, 16);
+        gr_init_bitmap(tmap_bm + i, dummy_tm, BMT_FLAT8, 0, 16, 16);
         g3_set_vtext(i, tmap_bm + i);
     }
 #ifdef RANDOMLY_SET_VCOLORS
@@ -713,10 +713,6 @@ int fr_start_view(void) {
         _fr_per_func = g3_draw_lmap;
         g3_set_tmaps_linear();
     }
-
-#ifdef _FR_PIXPROF
-    gr_start_frame();
-#endif
 
 #ifdef STEREO_SUPPORT
     if (((_fr_curflags & (FR_PICKUPM_MASK | FR_HACKCAM_MASK)) == 0) && inp6d_stereo_active &&

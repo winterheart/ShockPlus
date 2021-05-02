@@ -41,22 +41,6 @@ int gri_per_umap_setup(int n, grs_vertex **vplist, grs_per_setup *ps);
 
 grs_per_context *grd_per_context = NULL; /* perspective mapping context */
 
-/*int fix_mul_16_32_20(int one, int two) {
-   return one * two;
-}
-
-int fix_mul_3_16_20(int one, int two) {
-   return one * two;
-}
-
-int fix_mul_3_32_16(int one, int two) {
-   return one * two;
-}
-
-int fix_mul_3_3_3(int one, int two) {
-   return one * two;
-}*/
-
 int gri_per_umap_setup(int n, grs_vertex **vplist, grs_per_setup *ps) {
     fix a, b, c0, cz, z_min, aos, bos;
     fix z_max, y_min, y_max, x_min, x_max;

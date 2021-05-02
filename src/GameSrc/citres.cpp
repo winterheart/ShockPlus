@@ -174,7 +174,7 @@ errtype load_res_bitmap_cursor(LGCursor *c, grs_bitmap *bmp, Ref rid, uchar allo
         bits = bmp->bits;
     if (temp_bmp.bits == NULL)
         critical_error(CRITERR_MEM | 5);
-    gr_init_bm(bmp, bits, BMT_FLAT8, BMF_TRANS, w, h);
+    gr_init_bitmap(bmp, bits, BMT_FLAT8, BMF_TRANS, w, h);
     gr_make_canvas(bmp, &temp_canv);
     gr_push_canvas(&temp_canv);
     gr_clear(0);

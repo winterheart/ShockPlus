@@ -64,7 +64,7 @@ void gen_font_uchar(grs_font *f, char c, short x, short y) {
     data_buf = (uchar *)f + f->buf;
     off_tab = f->off_tab;
     offset = off_tab[(uchar)c - f->min];
-    gr_init_bm(&bm, NULL, (f->id == 0xcccc) ? BMT_FLAT8 : BMT_MONO,
+    gr_init_bitmap(&bm, NULL, (f->id == 0xcccc) ? BMT_FLAT8 : BMT_MONO,
         BMF_TRANS, off_tab[(uchar)c - f->min + 1] - offset, f->h);
     bm.row = f->w;
     /* draw the character with no clipping. */
