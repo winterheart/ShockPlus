@@ -291,7 +291,7 @@ errtype uiPushCursor(cursor_stack* cs, LGCursor* c)
       LGCursor** tmp = (LGCursor**)malloc(cs->size*2*sizeof(LGCursor*));
       //SPEW_ANAL(DSRC_UI_Cursor_Stack,("cs_push(%x,%x), growing stack\n",cs,c));
       if (tmp == NULL) return ERR_NOMEM;
-      LG_memcpy(tmp,cs->stack,cs->size*sizeof(LGCursor*));
+      memcpy(tmp,cs->stack,cs->size*sizeof(LGCursor*));
       free(cs->stack);
       cs->stack = tmp;
       cs->size *= 2;

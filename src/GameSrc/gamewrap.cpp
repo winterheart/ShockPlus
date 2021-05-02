@@ -214,7 +214,7 @@ errtype save_game(char *fname, char *comment) {
     player_struct.version_num = PLAYER_VERSION_NUMBER;
     player_struct.realspace_loc = objs[player_struct.rep].loc;
     EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
-    LG_memcpy(player_struct.edms_state, &player_state, sizeof(fix) * 12);
+    memcpy(player_struct.edms_state, &player_state, sizeof(fix) * 12);
     // LZW later		ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum,
     // RDF_LZW);
 
@@ -458,7 +458,7 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
     plr_obj = PLAYER_OBJ;
     for (i = 0; i < 4; i++)
         plrdiff[i] = player_struct.difficulty[i];
-    LG_memcpy(tmpname, player_struct.name, sizeof(tmpname));
+    memcpy(tmpname, player_struct.name, sizeof(tmpname));
 
     // KLC - don't need this anymore.  ResExtract(SAVE_GAME_ID_BASE + 1, (void *)&player_struct);
 
@@ -474,7 +474,7 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
 
     player_create_initial();
 
-    LG_memcpy(player_struct.name, tmpname, sizeof(player_struct.name));
+    memcpy(player_struct.name, tmpname, sizeof(player_struct.name));
     for (i = 0; i < 4; i++)
         player_struct.difficulty[i] = plrdiff[i];
 

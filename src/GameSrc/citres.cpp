@@ -137,7 +137,7 @@ errtype load_res_bitmap(grs_bitmap *bmp, Ref rid, uchar alloc) {
             goto out;
         }
     }
-    LG_memcpy(bits, (char *)(f + 1), sz);
+    memcpy(bits, (char *)(f + 1), sz);
     *bmp = f->bm;
     bmp->bits = bits;
 out:

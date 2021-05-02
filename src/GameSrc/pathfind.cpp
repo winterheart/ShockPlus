@@ -70,7 +70,7 @@ uchar pf_obj_height(MapElem *pme, uchar old_z);
     } while (0)
 #define CLEAR_PATH(pathid)                                                 \
     do {                                                                   \
-        LG_memset((void *)(paths[(pathid)].moves), 0, NUM_PATH_STEPS / 4); \
+        memset((void *)(paths[(pathid)].moves), 0, NUM_PATH_STEPS / 4); \
     } while (0)
 
 // Note that a dest_z of 0 means to ignore that whole concept
@@ -224,7 +224,7 @@ errtype delete_path(char path_id) {
     // To delete, just mark the path as unused and zero out its data
     if ((path_id < 0) || (path_id >= MAX_PATHS))
         return (ERR_NOEFFECT);
-    LG_memset(&paths[path_id], 0, sizeof(Path));
+    memset(&paths[path_id], 0, sizeof(Path));
     used_paths &= ~(1 << path_id);
     return (OK);
 }
@@ -249,7 +249,7 @@ typedef short spt;
 #define FORALLINSPTLIST(pspt, iter, loop) for (iter = pspt[0], i = 0; SPT_X(pspt[i]) != 0; i++, iter = pspt[i])
 
 //#define CLEARSPTLIST(pspt, num, loop) do { for (loop=0; loop < num; loop++) { pspt[loop] = 0; } } while (0)
-#define CLEARSPTLIST(pspt, num) LG_memset(pspt, 0, sizeof(spt) * num)
+#define CLEARSPTLIST(pspt, num) memset(pspt, 0, sizeof(spt) * num)
 
 // A given element in the pathfind buffer is 8 bits
 // 5 bits of Z
@@ -616,7 +616,7 @@ errtype find_path(char path_id) {
     // Clear the lists
     CLEARSPTLIST(exp_l1, EXPAND_LIST_SIZE);
     CLEARSPTLIST(exp_l2, EXPAND_LIST_SIZE);
-    LG_memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uchar));
+    memset(pathfind_buffer, 0, MAP_XSIZE * MAP_YSIZE * sizeof(uchar));
 #ifdef REALLY_SLOW_PATHFIND_CLEARING
     for (i = 0; i < MAP_XSIZE; i++) {
         for (j = 0; j < MAP_YSIZE; j++) {

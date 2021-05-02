@@ -64,9 +64,9 @@ void double_re_heapify(PQueue *q, int head);
 // ---------
 void swapelems(PQueue* q,int i, int j)
 {
-   LG_memcpy(swap_buffer,NTH(q,i),q->elemsize);
-   LG_memcpy(NTH(q,i),NTH(q,j),q->elemsize);
-   LG_memcpy(NTH(q,j),swap_buffer,q->elemsize);
+   memcpy(swap_buffer,NTH(q,i),q->elemsize);
+   memcpy(NTH(q,i),NTH(q,j),q->elemsize);
+   memcpy(NTH(q,j),swap_buffer,q->elemsize);
 }
 
 void re_heapify(PQueue *q)
@@ -187,8 +187,8 @@ errtype pqueue_insert(PQueue* q, void* elem)
 errtype pqueue_extract(PQueue* q, void* elem)
 {
    if (q->fullness == 0) return ERR_DUNDERFLOW;
-   LG_memcpy(elem,NTH(q,0),q->elemsize);
-   LG_memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
+   memcpy(elem,NTH(q,0),q->elemsize);
+   memcpy(NTH(q,0),NTH(q,q->fullness-1),q->elemsize);
    q->fullness--;
    re_heapify(q);
    return OK;
@@ -197,7 +197,7 @@ errtype pqueue_extract(PQueue* q, void* elem)
 errtype pqueue_least(PQueue* q, void* elem)
 {
    if (q->fullness == 0) return ERR_DUNDERFLOW;
-   LG_memcpy(elem,NTH(q,0),q->elemsize);
+   memcpy(elem,NTH(q,0),q->elemsize);
    return OK;
 }
 

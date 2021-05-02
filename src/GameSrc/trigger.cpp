@@ -1389,7 +1389,7 @@ grs_bitmap shodan_draw_normal;
 void hack_shodan_conquer_func(char c) {
     extern char thresh_fail;
     shodan_bitmask = tmap_static_mem;
-    LG_memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
+    memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
     shodan_draw_fs.bits = tmap_static_mem + (SHODAN_BITMASK_SIZE / 8);
     shodan_draw_normal.bits = shodan_draw_fs.bits + (320 * 200);
     load_res_bitmap(&shodan_draw_fs, SHODAN_FULLSCRN_CONQUER_REF, FALSE);

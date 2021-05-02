@@ -86,13 +86,13 @@ errtype init_player(Player *pplr) {
     extern int _fr_global_detail;
     extern uchar which_lang;
 
-    LG_memcpy(tmp, pplr->name, sizeof(tmp)); // Save these so they won't be cleared.
+    memcpy(tmp, pplr->name, sizeof(tmp)); // Save these so they won't be cleared.
     tmpdiff = *(long *)pplr->difficulty;
 
     // Zero out whole structure
-    LG_memset(pplr, 0, sizeof(Player));
+    memset(pplr, 0, sizeof(Player));
 
-    LG_memcpy(pplr->name, tmp, sizeof(pplr->name)); // Now restore them.
+    memcpy(pplr->name, tmp, sizeof(pplr->name)); // Now restore them.
     memmove(pplr->difficulty, &tmpdiff, 4);
 
     // Set appropriate non-zero things.
@@ -108,7 +108,7 @@ errtype init_player(Player *pplr) {
     pplr->cspace_hp = PLAYER_MAX_HP;
     pplr->cspace_time_base = BASE_CSPACE_TIME;
     pplr->hit_points_regen = 0;
-    LG_memset(pplr->hit_points_lost, 0, NUM_DAMAGE_TYPES * sizeof(pplr->hit_points_lost[0]));
+    memset(pplr->hit_points_lost, 0, NUM_DAMAGE_TYPES * sizeof(pplr->hit_points_lost[0]));
     pplr->accuracy = MAX_ACCURACY;
     pplr->energy = MAX_ENERGY;
     pplr->shield_absorb_rate = 0;

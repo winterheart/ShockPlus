@@ -140,7 +140,7 @@ uchar setup_cube_face(fix ndist, fix xp, fix yp, fix xhlf, fix yhlf, int nrm_cmp
     l_pt[1] = yp;
     l_pt[2] = ndist;
 
-    LG_memset(unit_norm, 0, 3 * 4); //  _memset32l(unit_norm,0,3);
+    memset(unit_norm, 0, 3 * 4); //  _memset32l(unit_norm,0,3);
     if (nrm_cmp < 0)
         unit_norm[(-nrm_cmp) - 1] = -fix_1;
     else

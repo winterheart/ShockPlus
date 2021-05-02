@@ -497,7 +497,7 @@ void player_dies() {
     physics_zero_all_controls();
 
     // clear edms_state
-    LG_memset(player_struct.edms_state, 0, sizeof(fix) * 12);
+    memset(player_struct.edms_state, 0, sizeof(fix) * 12);
 
     // reset the inventory page
     inventory_page = 0;

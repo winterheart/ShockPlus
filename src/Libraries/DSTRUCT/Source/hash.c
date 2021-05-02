@@ -129,8 +129,8 @@ errtype hash_copy(Hashtable* t, Hashtable* s)
    if (t->statvec == NULL) return ERR_NOMEM;
    t->vec = malloc(t->elemsize*t->size);
    if (t->vec == NULL) return ERR_NOMEM;
-   LG_memcpy(t->vec,s->vec,t->size*t->elemsize);
-   LG_memcpy(t->statvec,s->statvec,t->size);
+   memcpy(t->vec,s->vec,t->size*t->elemsize);
+   memcpy(t->statvec,s->statvec,t->size);
    return OK;
 }
 
@@ -212,7 +212,7 @@ errtype hash_set(Hashtable* h, void* elem)
       grow(h,h->size*2);
    if (!find_elem(h,elem,&i))
       i = find_index(h,elem);
-   LG_memcpy(ELEM(h,i),elem,h->elemsize);
+   memcpy(ELEM(h,i),elem,h->elemsize);
    h->statvec[i] = HASH_FULL;
    h->fullness++;
    return OK;
@@ -225,7 +225,7 @@ errtype hash_insert(Hashtable* h, void* elem)
    if (h->fullness*100/h->size > FULLNESS_THRESHHOLD_PERCENT)
       grow(h,h->size*2);
    i = find_index(h,elem);
-   LG_memcpy(ELEM(h,i),elem,h->elemsize);
+   memcpy(ELEM(h,i),elem,h->elemsize);
    h->statvec[i] = HASH_FULL;
    h->fullness++;
    return OK;

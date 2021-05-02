@@ -257,7 +257,7 @@ void update_cspace_tiles(void) {
     uchar *tmp_ptr = (uchar *)big_buffer;
     MapElem *mmp;
 
-    LG_memset(tmp_ptr, 0, 64 * 64);
+    memset(tmp_ptr, 0, 64 * 64);
     mmp = MAP_GET_XY(0, 0);
     for (i = 0, cur_tp = 0; i < 64; i++)
         for (j = 0; j < 64; j++, cur_tp++, mmp++)

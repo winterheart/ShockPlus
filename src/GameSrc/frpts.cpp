@@ -72,8 +72,8 @@ g3s_phandle *_fr_ptbase, *_fr_ptnext; /* global place to get points from */
 // i drank so much tea, i wrote my letters in kanji
 // round and round the block i walked, pretending you were with me
 int fr_pts_frame_start(void) {
-    LG_memset(*(pt_rowv + 0), 0xffff, _fr_pt_wid * sizeof(ushort));
-    LG_memset(*(pt_rowv + 1), 0xffff, _fr_pt_wid * sizeof(ushort));
+    memset(*(pt_rowv + 0), 0xffff, _fr_pt_wid * sizeof(ushort));
+    memset(*(pt_rowv + 1), 0xffff, _fr_pt_wid * sizeof(ushort));
     _fr_ret;
 }
 

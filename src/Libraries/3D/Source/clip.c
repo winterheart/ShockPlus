@@ -76,7 +76,7 @@ int g3_clip_line(g3s_point *src[], g3s_point *dest[]) {
     // if all the same, leave
     if (cc == 0) {
         // copy src to dest
-        LG_memcpy(dest, src, 2 * sizeof(g3s_point *));
+        memcpy(dest, src, 2 * sizeof(g3s_point *));
         return CLIP_NONE;
     }
     if (ca != 0)
@@ -243,7 +243,7 @@ int g3_clip_line(g3s_point *src[], g3s_point *dest[]) {
     // if its been clipped it needs it
 
     // final copy to tmp
-    LG_memcpy(dest, tmps, 2 * sizeof(g3s_point *));
+    memcpy(dest, tmps, 2 * sizeof(g3s_point *));
 
     for (i = 0; i < 2; i++) {
         _tmp = dest[i];
@@ -281,7 +281,7 @@ int g3_clip_polygon(int n, g3s_point *src[], g3s_point *dest[]) {
     // if all the same, leave
     if (cc == 0) {
         // copy src to dest
-        LG_memcpy(dest, src, n * sizeof(g3s_point *));
+        memcpy(dest, src, n * sizeof(g3s_point *));
         return n;
     }
 
@@ -435,7 +435,7 @@ int g3_clip_polygon(int n, g3s_point *src[], g3s_point *dest[]) {
     // if its been clipped it needs it
 
     // final copy to tmp
-    LG_memcpy(dest, tmps, n * sizeof(g3s_point *));
+    memcpy(dest, tmps, n * sizeof(g3s_point *));
 
     for (i = 0; i < n; i++) {
         _tmp = dest[i];

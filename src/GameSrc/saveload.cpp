@@ -127,7 +127,7 @@ void store_objects(char **buf, ObjID *obj_array, char obj_count) {
             }
             *(Obj *)s = objs[id];
             s += sizeof(Obj);
-            LG_memcpy(s, sh->data + sh->struct_size * objs[id].specID, sh->struct_size);
+            memcpy(s, sh->data + sh->struct_size * objs[id].specID, sh->struct_size);
             s += sh->struct_size;
             ObjDel(id);
         } else {
@@ -155,7 +155,7 @@ void restore_objects(char *buf, ObjID *obj_array, char obj_count) {
             if (id != OBJ_NULL) {
                 objs[id].info = next->info;
                 spec = (sh->data + sh->struct_size * objs[id].specID);
-                LG_memcpy(spec + sizeof(ObjSpec), s + sizeof(ObjSpec), sh->struct_size - sizeof(ObjSpec));
+                memcpy(spec + sizeof(ObjSpec), s + sizeof(ObjSpec), sh->struct_size - sizeof(ObjSpec));
                 obj_array[i] = id;
             }
             s += sh->struct_size;
@@ -223,7 +223,7 @@ uchar go_to_different_level(int targlevel) {
     store_objects(&buf, player_struct.inventory, NUM_GENERAL_SLOTS);
     if (!in_cyber) {
         EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
-        LG_memcpy(player_struct.edms_state, &player_state, sizeof(fix) * 12);
+        memcpy(player_struct.edms_state, &player_state, sizeof(fix) * 12);
     } else {
         early_exit_cyberspace_stuff();
     }
@@ -564,7 +564,7 @@ void convert_cit_map(oFullMap *omp, FullMap **mp)
    if ((*mp)!=NULL)
     { Free((*mp)->map); Free(*mp); }
    *mp=Malloc(sizeof(FullMap));
-   LG_memcpy(*mp,omp,sizeof(oFullMap));
+   memcpy(*mp,omp,sizeof(oFullMap));
    (*mp)->map=Malloc(sizeof(MapElem)<<(omp->x_shft+omp->y_shft));
    for (ibase=0,i=0; i<(1<<omp->y_shft); i++, ibase+=(1<<(omp->x_shft)))
       for (j=0; j<(1<<omp->x_shft); j++)

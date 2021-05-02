@@ -983,9 +983,9 @@ void show_obj(ObjID cobjid) {
                                                      (ubyte)view, &ref, &anch);
                     gr_rsd8_convert(tpdata, &tpdata_temp);
                     tpdata = &tpdata_temp;
-                    LG_memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
+                    memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
                     tele_bm.bits = big_buffer + 32768;
-                    LG_memset(tele_bm.bits, 0, tele_bm.w * tele_bm.h);
+                    memset(tele_bm.bits, 0, tele_bm.w * tele_bm.h);
                     line = fix_int(fix_mul_div(fix_make(_fr_cobj->info.current_frame, 0), fix_make(tele_bm.h, 0),
                                                fix_make(MAX_TELEPORT_FRAME, 0)));
                     for (srcp = tpdata->bits, dstp = tele_bm.bits, trgp = tpdata->bits + line * tele_bm.w; srcp < trgp;
@@ -993,7 +993,7 @@ void show_obj(ObjID cobjid) {
                         if (*srcp != 0)
                             *dstp = TELEPORT_COLOR + (rand() & 0x3);
                     trgp = tpdata->bits + tele_bm.h * tele_bm.w;
-                    LG_memcpy(dstp, srcp, trgp - srcp);
+                    memcpy(dstp, srcp, trgp - srcp);
 
                     _fr_draw_bitmap(&tele_bm, _fdt_dist, FALSE, anch.ul.x, anch.ul.y);
                     release_critter_bitmap_fast(ref);

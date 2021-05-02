@@ -141,7 +141,7 @@ int fr_clip_frame_start(void) {
     // setup real obj stack
     //   _fr_init_vecwork();
     // hmm... is this really necessary????
-    LG_memset(cone_span_list, 0xff, fr_map_y * 2 * sizeof(uchar));
+    memset(cone_span_list, 0xff, fr_map_y * 2 * sizeof(uchar));
     _fr_sdbg(SANITY, _fr_init_vecwork()); // hey, why not?
     _fr_ret;
 }

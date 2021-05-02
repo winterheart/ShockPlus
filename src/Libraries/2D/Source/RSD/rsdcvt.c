@@ -65,7 +65,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm) {
         return GR_UNPACK_RSD8_NOBUF;
     if (sbm->type != BMT_RSD8)
         return GR_UNPACK_RSD8_NOTRSD;
-    *dbm = *sbm; // LG_memcpy (dbm, sbm, sizeof (*sbm));
+    *dbm = *sbm; // memcpy (dbm, sbm, sizeof (*sbm));
     if (sbm->flags & BMF_TLUC8)
         dbm->type = BMT_TLUC8;
     else
@@ -92,14 +92,14 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm) {
                     /* current code is all on this scanline. */
                     switch (rsd_code) {
                     case RSD_RUN:
-                        LG_memset(p_dst, *rsd_src, rsd_count);
+                        memset(p_dst, *rsd_src, rsd_count);
                         rsd_src++;
                         break;
                     case RSD_SKIP:
-                        LG_memset(p_dst, kSkipColor, rsd_count);
+                        memset(p_dst, kSkipColor, rsd_count);
                         break;
                     default: /* RSD_DUMP */
-                        LG_memcpy(p_dst, rsd_src, rsd_count);
+                        memcpy(p_dst, rsd_src, rsd_count);
                         rsd_src += rsd_count;
                         break;
                     }
@@ -112,13 +112,13 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm) {
                     op_count = x_right - x;
                     switch (rsd_code) {
                     case RSD_RUN:
-                        LG_memset(p_dst, *rsd_src, op_count);
+                        memset(p_dst, *rsd_src, op_count);
                         break;
                     case RSD_SKIP:
-                        LG_memset(p_dst, kSkipColor, op_count);
+                        memset(p_dst, kSkipColor, op_count);
                         break;
                     default: /* RSD_DUMP */
-                        LG_memcpy(p_dst, rsd_src, op_count);
+                        memcpy(p_dst, rsd_src, op_count);
                         rsd_src += op_count;
                         break;
                     }
@@ -132,7 +132,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm) {
             x -= sbm->w;
             if (over_run) {
                 assert(over_run > 0);
-                LG_memset(p_dst, kSkipColor, over_run);
+                memset(p_dst, kSkipColor, over_run);
                 p_dst += over_run;
             }
             y++;
@@ -141,7 +141,7 @@ int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm) {
 rsd_done:
     if ((over_run = (dbm->bits + dbm->row * dbm->h) - p_dst)) {
         assert(over_run > 0);
-        LG_memset(p_dst, kSkipColor, over_run);
+        memset(p_dst, kSkipColor, over_run);
     }
     return GR_UNPACK_RSD8_OK;
 }

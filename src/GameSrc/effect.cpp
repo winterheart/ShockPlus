@@ -432,8 +432,8 @@ errtype increment_anim(ulong num_units) {
     }
 
     // Objects on the animation list
-    LG_memset(anim_rem, 0, MAX_ANIMLIST_SIZE);
-    LG_memset(cb_list, 0, MAX_ANIMLIST_SIZE);
+    memset(anim_rem, 0, MAX_ANIMLIST_SIZE);
+    memset(cb_list, 0, MAX_ANIMLIST_SIZE);
     for (i = 0; i < anim_counter; i++) {
         id = animlist[i].id;
         num_frames = anim_frames(id);
@@ -757,7 +757,7 @@ errtype remove_obj_from_animlist(ObjID id) {
 }
 
 errtype animlist_clear() {
-    LG_memset(animlist, 0, sizeof(AnimListing) * MAX_ANIMLIST_SIZE);
+    memset(animlist, 0, sizeof(AnimListing) * MAX_ANIMLIST_SIZE);
     anim_counter = 0;
     return (OK);
 }

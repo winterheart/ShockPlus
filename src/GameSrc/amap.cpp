@@ -1045,7 +1045,7 @@ void amap_str_delete(char *toast_str) {
     if (s == amap_str_ptr)
         amap_str_ptr = toast_str; // we are freeing the last created string
     else {
-        LG_memmove(toast_str, s, recompact_len);                 // move over the data
+        memmove(toast_str, s, recompact_len);                 // move over the data
         amap_str_ptr -= del_len;                                 // move the next pointer back
         amap_fixup_existing(amap_str_deref(toast_str), del_len); // set current notes up right...
     }

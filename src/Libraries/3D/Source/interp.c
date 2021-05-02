@@ -216,7 +216,7 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     parm_ptr = (&object_ptr) + sizeof(object_ptr); //va_start(parm_ptr, object_ptr);
 
     // mark res points as free
-    LG_memset(resbuf, 0, N_RES_POINTS * 4);
+    memset(resbuf, 0, N_RES_POINTS * 4);
 
     // scale view vector for scale
     scale = *(short *)(object_ptr - 2);

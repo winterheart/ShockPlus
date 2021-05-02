@@ -85,7 +85,7 @@ errtype load_small_texturemaps(void) {
     ObjSpecID osid;
     uchar anim_used[MAX_SMALL_TMAPS / 8];
 
-    LG_memset(anim_used, 0, MAX_SMALL_TMAPS / 8);
+    memset(anim_used, 0, MAX_SMALL_TMAPS / 8);
 
     // Figure out which animations are in use
     osid = objBigstuffs[0].id;
@@ -410,7 +410,7 @@ errtype clear_texture_properties(void) {
     int i;
 
     // clear it all
-    LG_memset(texture_properties, 0, sizeof(TextureProp) * GAME_TEXTURES);
+    memset(texture_properties, 0, sizeof(TextureProp) * GAME_TEXTURES);
 
     // set the stuff that needs values besides zero
     for (i = 0; i < GAME_TEXTURES; i++) {

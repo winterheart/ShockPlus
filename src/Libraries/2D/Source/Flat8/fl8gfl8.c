@@ -52,7 +52,7 @@ void flat8_get_flat8_ubitmap(grs_bitmap *bm, short x, short y) {
     src = grd_bm.bits + grow * y + x;
     dst = bm->bits;
     while (h--) {
-        LG_memmove(dst, src, w);
+        memmove(dst, src, w);
         src += grow;
         dst += brow;
     }

@@ -54,10 +54,10 @@ errtype array_grow(Array *a, int size)
    if (size <= a->vecsize) return OK;
    tmpvec = (char *)malloc(a->elemsize*size);
    if (tmpvec == NULL) return ERR_NOMEM;
-   LG_memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
+   memcpy(tmpvec,a->vec,a->vecsize*a->elemsize);
    tmplist = (int *)malloc(size*sizeof(int));
    if (tmplist == NULL) return ERR_NOMEM;
-   LG_memcpy(tmplist,a->vec,a->vecsize*sizeof(int));
+   memcpy(tmplist,a->vec,a->vecsize*sizeof(int));
    free(a->vec);
    free(a->freevec);
    a->vecsize = size;

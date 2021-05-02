@@ -355,7 +355,7 @@ void status_bio_set(short bio_mode) {
     // let's try to do the right thing!
     bio_background_bitmap.bits = status_background;
 
-    LG_memcpy(bio_background_bitmap.bits, (char *)(f + 1), sizeof(char) * f->bm.w * f->bm.h);
+    memcpy(bio_background_bitmap.bits, (char *)(f + 1), sizeof(char) * f->bm.w * f->bm.h);
 
     bio_data = (bio_data_block *)bio_data_buffer;
     for (i = 0; i < NUM_BIO_TRACKS; i++)
@@ -467,7 +467,7 @@ errtype status_bio_add(int *var, int max_value, int update_time, int track_numbe
         new_block = bio_data + track_number;
         new_block->free = FALSE;
         new_block->data = var;
-        LG_memset(&(new_block->height), INVALID_HEIGHT, sizeof(uchar) * MAX_BIO_LENGTH);
+        memset(&(new_block->height), INVALID_HEIGHT, sizeof(uchar) * MAX_BIO_LENGTH);
 
         // We must first check if the variable is greater than max value, if so make it max_value
         var_value = (*var > max_value) ? max_value : *var;

@@ -640,13 +640,13 @@ errtype init_pal_fx() {
 
         _g3d_enable_blend = (start_mem >= BLEND_THRESHOLD);
         if (_g3d_enable_blend) {
-            LG_memcpy(tmppal_lower, ppall, 32 * 3);
-            LG_memset(ppall, 0, 32 * 3);
+            memcpy(tmppal_lower, ppall, 32 * 3);
+            memset(ppall, 0, 32 * 3);
             gr_set_pal(0, 256, ppall);
 
             gr_init_blend(1); // we want 2 tables, really, basically, and all
 
-            LG_memcpy(ppall, tmppal_lower, 32 * 3);
+            memcpy(ppall, tmppal_lower, 32 * 3);
             gr_set_pal(0, 256, ppall);
         }
     }

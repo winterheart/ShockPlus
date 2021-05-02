@@ -836,9 +836,9 @@ ObjID obj_create_base(int triple) {
         }
         break;
     case CLASS_PHYSICS:
-        LG_memset(&objPhysicss[new_specid].p1, 0, (sizeof(ObjLoc)));
-        LG_memset(&objPhysicss[new_specid].p2, 0, (sizeof(ObjLoc)));
-        LG_memset(&objPhysicss[new_specid].p3, 0, (sizeof(ObjLoc)));
+        memset(&objPhysicss[new_specid].p1, 0, (sizeof(ObjLoc)));
+        memset(&objPhysicss[new_specid].p2, 0, (sizeof(ObjLoc)));
+        memset(&objPhysicss[new_specid].p3, 0, (sizeof(ObjLoc)));
         break;
     case CLASS_DOOR:
         if (ObjProps[OPTRIP(triple)].flags & RENDER_BLOCK)
@@ -955,7 +955,7 @@ ObjID obj_create_clone(ObjID dna) {
     }
 
     // copy instance data from default
-    LG_memcpy(pspec + sizeof(ObjSpec), pdef + sizeof(ObjSpec), spec_hdr->struct_size - sizeof(ObjSpec));
+    memcpy(pspec + sizeof(ObjSpec), pdef + sizeof(ObjSpec), spec_hdr->struct_size - sizeof(ObjSpec));
 
     // Give back the object ID of the fresh clone
     return (new_obj);
@@ -1251,7 +1251,7 @@ errtype obj_create_player(ObjLoc *plr_loc) {
     plr_loc->z = obj_height_from_fix(pos_list[2] << 8);
 
     if ((player_struct.edms_state[0]) && (!global_fullmap->cyber)) {
-        LG_memcpy(&new_state, player_struct.edms_state, sizeof(fix) * 12);
+        memcpy(&new_state, player_struct.edms_state, sizeof(fix) * 12);
         state_to_objloc(&new_state, plr_loc);
         use_new = TRUE;
     } else {
@@ -1368,7 +1368,7 @@ errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass) {
     }
 
     // copy instance data from default
-    LG_memcpy(pspec + sizeof(ObjSpec), pdef + sizeof(ObjSpec), spec_hdr->struct_size - sizeof(ObjSpec));
+    memcpy(pspec + sizeof(ObjSpec), pdef + sizeof(ObjSpec), spec_hdr->struct_size - sizeof(ObjSpec));
     return (OK);
 }
 
@@ -1632,9 +1632,9 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero (I don't think they're used at all), so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(DrugProps, 0, sizeof(DrugProps));
+    memset(DrugProps, 0, sizeof(DrugProps));
     cp += NUM_DRUG * 17;
-    LG_memset(StatsDrugProps, 0, sizeof(StatsDrugProps));
+    memset(StatsDrugProps, 0, sizeof(StatsDrugProps));
     cp += NUM_STATS_DRUG * 7;
 
     //-------------
@@ -1643,11 +1643,11 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(HardwareProps, 0, sizeof(HardwareProps));
+    memset(HardwareProps, 0, sizeof(HardwareProps));
     cp += NUM_HARDWARE * 2;
-    LG_memset(GoggleHardwareProps, 0, sizeof(GoggleHardwareProps));
+    memset(GoggleHardwareProps, 0, sizeof(GoggleHardwareProps));
     cp += NUM_GOGGLE_HARDWARE;
-    LG_memset(HardwareHardwareProps, 0, sizeof(HardwareHardwareProps));
+    memset(HardwareHardwareProps, 0, sizeof(HardwareHardwareProps));
     cp += NUM_HARDWARE_HARDWARE * 2;
 
     //-------------
@@ -1656,7 +1656,7 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(SoftwareProps, 0, sizeof(SoftwareProps));
+    memset(SoftwareProps, 0, sizeof(SoftwareProps));
     cp += NUM_SOFTWARE * 2;
     cp += NUM_OFFENSE_SOFTWARE;
     cp += NUM_DEFENSE_SOFTWARE;
@@ -1670,7 +1670,7 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(BigstuffProps, 0, sizeof(BigstuffProps));
+    memset(BigstuffProps, 0, sizeof(BigstuffProps));
     cp += NUM_BIGSTUFF * 4;
     cp += NUM_ELECTRONIC_BIGSTUFF;
     cp += NUM_FURNISHING_BIGSTUFF;
@@ -1687,7 +1687,7 @@ errtype obj_load_properties() {
     // For Mac version:  Most of this data is all zeros, so in those cases don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(SmallstuffProps, 0, sizeof(SmallstuffProps));
+    memset(SmallstuffProps, 0, sizeof(SmallstuffProps));
     cp += NUM_SMALLSTUFF * 2;
     cp += NUM_USELESS_SMALLSTUFF;
     cp += NUM_BROKEN_SMALLSTUFF;
@@ -1700,7 +1700,7 @@ errtype obj_load_properties() {
 
     cp += NUM_ONTHEWALL_SMALLSTUFF;
 
-    LG_memset(PlotSmallstuffProps, 0, sizeof(PlotSmallstuffProps));
+    memset(PlotSmallstuffProps, 0, sizeof(PlotSmallstuffProps));
     cp += NUM_PLOT_SMALLSTUFF * 2;
 
     //-------------
@@ -1709,7 +1709,7 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(FixtureProps, 0, sizeof(FixtureProps));
+    memset(FixtureProps, 0, sizeof(FixtureProps));
     cp += NUM_FIXTURE;
     cp += NUM_CONTROL_FIXTURE;
     cp += NUM_RECEPTACLE_FIXTURE;
@@ -1724,7 +1724,7 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(DoorProps, 0, sizeof(DoorProps));
+    memset(DoorProps, 0, sizeof(DoorProps));
     cp += NUM_DOOR;
     cp += NUM_NORMAL_DOOR;
     cp += NUM_DOORWAYS_DOOR;
@@ -1763,7 +1763,7 @@ errtype obj_load_properties() {
     // For Mac version:  The data for these are all zero, so don't worry about
     // converting, just zero the arrays.
 
-    LG_memset(ContainerProps, 0, sizeof(ContainerProps));
+    memset(ContainerProps, 0, sizeof(ContainerProps));
     cp += NUM_CONTAINER * 3;
     cp += NUM_ACTUAL_CONTAINER;
     cp += NUM_WASTE_CONTAINER;
@@ -1921,22 +1921,22 @@ errtype obj_zero_unused(void) {
     ObjSpecID specid;
     int counters[2][2];
 
-    LG_memset(counters, 0, 4 * sizeof(int));
+    memset(counters, 0, 4 * sizeof(int));
     for (cl = CLASS_GUN; cl < NUM_CLASSES; cl++) {
         ObjSpecHeader *curHead = &objSpecHeaders[cl]; /* get our special class header data */
         for (specid = 1; specid < curHead->size;
              specid++) { /* find the base of our obj and cast it to a ObjSpec common header struct */
             ObjSpec *curSpec = (ObjSpec *)(curHead->data + (curHead->struct_size * specid));
             if (!objs[id = curSpec->bits.id].active) /* toast all but the Spec part */
-                LG_memset(((char *)curSpec) + sizeof(ObjSpec), 0, curHead->struct_size - sizeof(ObjSpec));
+                memset(((char *)curSpec) + sizeof(ObjSpec), 0, curHead->struct_size - sizeof(ObjSpec));
             counters[0][objs[id].active ? 1 : 0]++;
         }
     }
     for (id = 0; id < NUM_OBJECTS; id++) /* go through all objects, though i bet they are all seen above */
         if (!objs[id].active)            /* and thus we should be able to skip this, i bet */
         {
-            LG_memset(&objs[id].active, 0, ((uchar *)&objs[id].ref) - ((uchar *)&objs[id].active));
-            LG_memset(&objs[id].loc, 0, sizeof(ObjLoc) + sizeof(ObjInfo));
+            memset(&objs[id].active, 0, ((uchar *)&objs[id].ref) - ((uchar *)&objs[id].active));
+            memset(&objs[id].loc, 0, sizeof(ObjLoc) + sizeof(ObjInfo));
             counters[1][0]++;
         } else
             counters[1][1]++;

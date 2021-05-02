@@ -110,9 +110,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     } while (0)
 
 #undef flat8_pixel_fill_row
-#define flat8_pixel_fill_row               \
-    do {                                   \
-        LG_memset(p + x0, c, x1 - x0 + 1); \
+#define flat8_pixel_fill_row            \
+    do {                                \
+        memset(p + x0, c, x1 - x0 + 1); \
     } while (0)
 
 #undef flat8_pixel_fill_init

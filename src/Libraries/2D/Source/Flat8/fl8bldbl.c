@@ -52,7 +52,7 @@ void flat8_flat8_v_double_ubitmap(grs_bitmap *bm) {
     row = grd_bm.row;
     b_row = bm->row;
 
-    LG_memcpy(dst, src, bm->w);     /* first copy the top line */
+    memcpy(dst, src, bm->w);     /* first copy the top line */
     for (i = 0; i < bm->h - 1; i++) /* for each row source, 2 destination */
     {
         src_nxt = src + b_row;      /* next line of source */
@@ -147,21 +147,21 @@ void gri_flat8_hv_quadruple_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, i
     /* if we're at the bottom edge of the source bitmap, just copy the bottom row
      * 3 times. */
     if (full_h_blend == 0) {
-        LG_memcpy(dst + D_ROW, dst, 4 * QSB_SIZE);
-        LG_memcpy(dst + 2 * D_ROW, dst, 4 * QSB_SIZE);
-        LG_memcpy(dst + 3 * D_ROW, dst, 4 * QSB_SIZE);
+        memcpy(dst + D_ROW, dst, 4 * QSB_SIZE);
+        memcpy(dst + 2 * D_ROW, dst, 4 * QSB_SIZE);
+        memcpy(dst + 3 * D_ROW, dst, 4 * QSB_SIZE);
     }
 
     /* copy the top row to fill out the top of the dest. */
     dst = dst_bm->bits + (D_ROW + 1) * (D_ROW / 4);
     for (i = 0; i < D_ROW / 4; i++) {
-        LG_memcpy(dst - D_ROW, dst, 4 * QSB_SIZE);
+        memcpy(dst - D_ROW, dst, 4 * QSB_SIZE);
         dst -= D_ROW;
     }
     /* copy the bottom row to fill out the bottom of the dest. */
     dst = dst_bm->bits + (3 * D_ROW + 1) * (D_ROW / 4);
     for (i = 0; i < D_ROW / 4; i++) {
-        LG_memcpy(dst, dst - D_ROW, 4 * QSB_SIZE);
+        memcpy(dst, dst - D_ROW, 4 * QSB_SIZE);
         dst += D_ROW;
     }
     /* copy the right and left colums to fill out the right and left edges. */
@@ -241,7 +241,7 @@ void gri_flat8_hv_double_sub_bitmap(grs_bitmap *src_bm, grs_bitmap *dst_bm, int 
     /* if we're at the bottom edge of the source bitmap, just copy the bottom row
      * 3 times. */
     if (full_h_blend == 0)
-        LG_memcpy(dst + D_ROW, dst, 4 * QSB_SIZE);
+        memcpy(dst + D_ROW, dst, 4 * QSB_SIZE);
 
     // all this is unnecessary if we're just doing linear maps.
     //   /* copy the top row to fill out the top of the dest. */

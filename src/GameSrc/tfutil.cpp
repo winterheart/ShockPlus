@@ -54,7 +54,7 @@ static tf_norm_set facets[3];
 
 // really, have to say this is a pretty simple one, really
 void facelet_clear(void) {
-    LG_memset(&facets[0], 0, sizeof(facets)); //   _memset32l(&facets[0],0,sizeof(facets)/sizeof(long));
+    memset(&facets[0], 0, sizeof(facets)); //   _memset32l(&facets[0],0,sizeof(facets)/sizeof(long));
 }
 
 // facelet_add adds to the current facelet arrays
@@ -130,7 +130,7 @@ void facelet_send(void) {
     cur_face = &facets[0];
     for (i = 0; i < 3; i++, cur_face++) {
         if ((cur_face->ia.cnt | cur_face->ua.cnt) == 0) {
-            LG_memset(&terrain_info.cx + (i * 3), 0, 3 * 4); //     _memset32l(&terrain_info.cx+(i*3),0,3);
+            memset(&terrain_info.cx + (i * 3), 0, 3 * 4); //     _memset32l(&terrain_info.cx+(i*3),0,3);
             continue;                                        // nope not nothing here...
         }
         nrm = cur_face->ua.nrm;

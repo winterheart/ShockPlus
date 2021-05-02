@@ -182,7 +182,7 @@ uchar _tf_set_flet(int flags, fix att, fix dist, fix *norm) {
         break;
     }
 
-    LG_memset(cur_fc->norm, 0, 3 * 4); //  _memset32l(cur_fc->norm,0,3);
+    memset(cur_fc->norm, 0, 3 * 4); //  _memset32l(cur_fc->norm,0,3);
     cur_fc->norm[pv] = full_norms[flags & SS_BCD_PRIM_NEG];
 #ifdef USE_OLD_PASSING
 i_hate_everyone : {
@@ -564,7 +564,7 @@ uchar tf_solve_cylinder(fix pt[3], fix irad, fix height) {
             tf_Spew(Cylinder, ("scyl in.."));
             if ((pt[2] < 0) || (pt[2] > height)) // flat top+bottom
             {
-                LG_memset(nrm, 0, 3 * 4); //            _memset32l(nrm,0,3);
+                memset(nrm, 0, 3 * 4); //            _memset32l(nrm,0,3);
 
                 if (r_dist > (rad >> 1))
                     att = fix_div(r_dist - (urad >> 1), (urad >> 1));

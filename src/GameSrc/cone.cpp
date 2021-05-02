@@ -99,7 +99,7 @@ void reverse_poly_list(int index, fix *new_pts) {
     int n;
 
     // Copy over the raw data to the temp list
-    LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+    memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
 
     // copy the data back, but in reverse order
     // (fastest way????)
@@ -129,7 +129,7 @@ uchar clockwise_poly(int index, fix *poly_pts) {
     if (index < 3)
         return (TRUE); // Is a point or line clockwise??? - hmmmmmm, why not?
 
-    LG_memcpy(temp_pts, poly_pts, sizeof(fix) * 2 * index);
+    memcpy(temp_pts, poly_pts, sizeof(fix) * 2 * index);
     while (extra_div) {
         int i;
 
@@ -193,7 +193,7 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point) {
 
     // Reduce values to a reasonable number, so cross product is happy
     // Copy over the raw data to the temp list
-    LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+    memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
     vpoint.x = viewer_point.x;
     vpoint.y = viewer_point.y;
 
@@ -298,7 +298,7 @@ int insert_viewer_position(int index, fix *new_pts, fix_point viewer_point) {
         // shift data over, so we can insert the viewer point
 
         current_pt = new_pts + (insert * 2);
-        LG_memmove(current_pt + 2, current_pt, sizeof(fix) * 2 * (index - insert));
+        memmove(current_pt + 2, current_pt, sizeof(fix) * 2 * (index - insert));
         *(current_pt) = viewer_point.x;
         *(current_pt + 1) = viewer_point.y;
         insert = index + 1;
@@ -369,7 +369,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer) {
     }
 
     // Check for overlap
-    LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+    memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
     for (i = 1, j = 0; i < index; i++) {
         if (pt_ang[i - 1] >= FIXANG_PI)
             break;
@@ -453,7 +453,7 @@ int radius_fix(int index, fix *new_pts, fix_point viewer) {
 
         second = third = TRUE;
 
-        LG_memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
+        memcpy(temp_pts, new_pts, sizeof(fix) * 2 * index);
 
         // shrink down values to compensate for fix-point limitations
         while (extra_div) {
@@ -560,7 +560,7 @@ uchar find_view_area(fix *cone_list, fix floor_val, fix roof_val, int *count, fi
     g3_get_view_pyramid(my_view);
 
     if (((_fr_curflags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT) && !(_fr_curflags & FR_HACKCAM_FLAG))
-        LG_memcpy(main_view_vectors, my_view, sizeof(g3s_vector) * 4);
+        memcpy(main_view_vectors, my_view, sizeof(g3s_vector) * 4);
 
     // check if we're looking completely up, or completely down
     // if so, we can do something fast

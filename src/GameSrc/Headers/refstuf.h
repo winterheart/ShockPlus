@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define CitrefsClearDealt()                          \
     do {                                             \
-        LG_memset(refdealt, 0, NUM_REF_OBJECTS / 8); \
+        memset(refdealt, 0, NUM_REF_OBJECTS / 8); \
     } while (0)
 #define CitrefSetDealt(orefid)                          \
     do {                                                \
@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define CitrefsClearHomeSq()                           \
     do {                                               \
-        LG_memset(homesquare, 0, NUM_REF_OBJECTS / 8); \
+        memset(homesquare, 0, NUM_REF_OBJECTS / 8); \
     } while (0)
 #define CitrefSetHomeSq(orefid)                           \
     do {                                                  \

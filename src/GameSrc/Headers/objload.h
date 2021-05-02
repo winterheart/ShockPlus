@@ -31,17 +31,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objprop.h"
 #include "objapp.h"
 
-#pragma pack(push,2)
+#pragma pack(push, 2)
 
 #define NUM_OBJECT_BIT_LEN ((NUM_OBJECT + 7) >> 3)
 
-#define ObjLoadMeSetAll()                            \
-    do {                                             \
-        LG_memset(loadme, 0xFF, NUM_OBJECT_BIT_LEN); \
-    } while (0)
-#define ObjLoadMeClearAll()                       \
+#define ObjLoadMeSetAll()                         \
     do {                                          \
-        LG_memset(loadme, 0, NUM_OBJECT_BIT_LEN); \
+        memset(loadme, 0xFF, NUM_OBJECT_BIT_LEN); \
+    } while (0)
+#define ObjLoadMeClearAll()                    \
+    do {                                       \
+        memset(loadme, 0, NUM_OBJECT_BIT_LEN); \
     } while (0)
 #define ObjLoadMeSet(opnum)                         \
     do {                                            \

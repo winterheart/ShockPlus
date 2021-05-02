@@ -136,11 +136,11 @@ void ObjsInit(void) {
     //	SpewReport (("ObjsInit ()\n"));
 
     // clear out everything
-    LG_memset((void *)objs, 0, sizeof(Obj) * NUM_OBJECTS);
-    LG_memset((void *)objRefs, 0, sizeof(ObjRef) * NUM_REF_OBJECTS);
+    memset((void *)objs, 0, sizeof(Obj) * NUM_OBJECTS);
+    memset((void *)objRefs, 0, sizeof(ObjRef) * NUM_REF_OBJECTS);
     for (c = CLASS_FIRST; c < NUM_CLASSES; c++) {
         head = &objSpecHeaders[c];
-        LG_memset((void *)head->data, 0, head->size * head->struct_size);
+        memset((void *)head->data, 0, head->size * head->struct_size);
     }
 
     // set up the free chains for objects
@@ -674,7 +674,7 @@ uchar ObjSysOkay(void) {
     // 1. Every Obj is in either the free chain or the used chain,
     // and does not appear twice in any chain.
 
-    LG_memset(usedObj, 0, NUM_OBJECTS);
+    memset(usedObj, 0, NUM_OBJECTS);
 
     //	SpewAnal (("Free Objs: "));
     //	DBG_Anal ({RangeInit ();})
@@ -737,7 +737,7 @@ uchar ObjSysOkay(void) {
 
     // 3. No ObjRef occurs twice in the free chain.
 
-    LG_memset(usedRef, 0, NUM_REF_OBJECTS);
+    memset(usedRef, 0, NUM_REF_OBJECTS);
 
     cur = objRefs[OBJ_REF_NULL].next;
 
@@ -765,7 +765,7 @@ uchar ObjSysOkay(void) {
     // not appear twice in any chain.
 
     for (i = CLASS_FIRST; i < NUM_CLASSES; i++) {
-        LG_memset(usedObj, 0, NUM_OBJECTS);
+        memset(usedObj, 0, NUM_OBJECTS);
         head = &objSpecHeaders[i];
         cur = ((ObjSpec *)head->data)->next;
         while (cur) {
@@ -1255,7 +1255,7 @@ uchar HeaderObjSpecCopy(ObjClass cls, ObjSpecID old, ObjSpecID new, ObjSpecHeade
     // need to copy the rest
 
     if ((size = head->struct_size - sizeof(ObjSpec)) > 0) {
-        LG_memcpy(data + head->struct_size * new + sizeof(ObjSpec), data + head->struct_size * old + sizeof(ObjSpec),
+        memcpy(data + head->struct_size * new + sizeof(ObjSpec), data + head->struct_size * old + sizeof(ObjSpec),
                   size);
     }
     return TRUE;

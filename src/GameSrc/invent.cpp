@@ -1944,7 +1944,7 @@ errtype inventory_clear(void) {
         r.lr.y = INVENTORY_PANEL_Y + INVENTORY_PANEL_HEIGHT;
         if (dirty_inv_canvas) {
             FrameDesc *f = static_cast<FrameDesc *>(RefGet(REF_IMG_bmBlankInventoryPanel));
-            LG_memcpy(inv_backgnd.bits, f + 1, f->bm.w * f->bm.h);
+            memcpy(inv_backgnd.bits, f + 1, f->bm.w * f->bm.h);
             dirty_inv_canvas = FALSE;
         }
         uiHideMouse(&r);
@@ -2484,7 +2484,7 @@ LGRegion *create_invent_region(LGRegion *root, LGRegion **pbuttons, LGRegion **p
         // This background is going to get used by the 360 ware
         // in fullscreen mode, so we need extra bits
         inv_backgnd.bits = (uchar *)malloc(MAX_INV_FULL_WD(INV_FULL_WD) * MAX_INV_FULL_HT(grd_cap->h - GAME_MESSAGE_Y));
-        LG_memcpy(inv_backgnd.bits, (f + 1), f->bm.w * f->bm.h);
+        memcpy(inv_backgnd.bits, (f + 1), f->bm.w * f->bm.h);
 	RefUnlock(REF_IMG_bmBlankInventoryPanel);
 
         // init the canvas

@@ -437,7 +437,7 @@ uchar games_handle_menu(MFD *m, uiEvent *ev) {
         return FALSE;
 
     COOKIE = GAME_COOK(game);
-    LG_memset(GAME_DATA, 0, GAME_DATA_SIZE);
+    memset(GAME_DATA, 0, GAME_DATA_SIZE);
     GAME_MODE = game;
     game_init_funcs[GAME_MODE](GAME_DATA);
 
@@ -771,7 +771,7 @@ void games_init_road(void *game_state) {
     cur_rs->lane_cnt = 3;
     cur_rs->player_lane = 1;
     cur_rs->diff = BASE_DIFF;
-    LG_memset(&cur_rs->player_move, 0, sizeof(road_state) - 4); // clear rest of fields
+    memset(&cur_rs->player_move, 0, sizeof(road_state) - 4); // clear rest of fields
 }
 
 void games_run_road(road_state *s) {
@@ -812,7 +812,7 @@ void games_run_road(road_state *s) {
         cur_rs->player_lane = cur_rs->lane_cnt - 1;
 
     if (car_hit() == HIT_SMART)
-        LG_memset(cur_rs->lanes, 0, 8 * sizeof(ushort));
+        memset(cur_rs->lanes, 0, 8 * sizeof(ushort));
     else if (car_hit()) // else if (car_hit()==HIT_BAD)
     {
         play_digi_fx(SFX_DESTROY_CRATE, 1);

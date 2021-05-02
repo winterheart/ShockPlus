@@ -326,7 +326,7 @@ void init_motion_polling(void) {
     uiSetKeyboardPolling(motion_key_scancodes);
 }
 
-void setup_motion_polling(void) { LG_memset(poll_controls, 0, sizeof(poll_controls)); }
+void setup_motion_polling(void) { memset(poll_controls, 0, sizeof(poll_controls)); }
 
 void process_motion_keys(void) {
     physics_set_player_controls(

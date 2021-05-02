@@ -219,7 +219,7 @@ void get_phys_state(int ph, State *new_state, ObjID id) {
     }
 }
 
-void physics_zero_all_controls() { LG_memset(player_controls, 0, sizeof(player_controls)); }
+void physics_zero_all_controls() { memset(player_controls, 0, sizeof(player_controls)); }
 
 errtype physics_set_player_controls(int bank, byte xvel, byte yvel, byte zvel, byte xyrot, byte yzrot, byte xzrot) {
     if (xvel != CONTROL_NO_CHANGE)
@@ -1196,7 +1196,7 @@ errtype physics_init() {
     EDMS_startup(&init_data);
 
     // Create some defaults
-    LG_memset(&standard_state, 0, sizeof(State)); // _memset32l(&standard_state,0,12);
+    memset(&standard_state, 0, sizeof(State)); // _memset32l(&standard_state,0,12);
 
     return (OK);
 }

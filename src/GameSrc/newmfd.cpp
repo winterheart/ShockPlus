@@ -285,7 +285,7 @@ void screen_init_mfd(uchar fullscrn) {
         mfd_background = f->bm;
         mfd_background.bits = (uchar *)malloc(MAX_WD(MFD_VIEW_WID) * MAX_HT(MFD_VIEW_HGT));
 
-        LG_memcpy(mfd_background.bits, (f + 1), f->bm.w * f->bm.h);
+        memcpy(mfd_background.bits, (f + 1), f->bm.w * f->bm.h);
         RefUnlock(REF_IMG_bmBlankMFD);
 
         gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
@@ -316,7 +316,7 @@ errtype mfd_update_screen_mode() {
 
         // Copy the background bytes
         grs_bitmap *bm = lock_bitmap_from_ref(REF_IMG_bmBlankMFD);
-        LG_memcpy(mfd_background.bits, bm->bits, bm->w * bm->h);
+        memcpy(mfd_background.bits, bm->bits, bm->w * bm->h);
         RefUnlock(REF_IMG_bmBlankMFD);
 
         gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, new_width, new_height);
@@ -356,7 +356,7 @@ void mfd_change_fullscreen(uchar on) {
         // put the background bitmap back
         grs_bitmap *bm = lock_bitmap_from_ref(REF_IMG_bmBlankMFD);
         RefUnlock(REF_IMG_bmBlankMFD);
-        LG_memcpy(_fullscreen_mfd.bm.bits, bm->bits, bm->w * bm->h);
+        memcpy(_fullscreen_mfd.bm.bits, bm->bits, bm->w * bm->h);
     }
 }
 

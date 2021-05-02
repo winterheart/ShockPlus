@@ -111,10 +111,10 @@ uchar fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args)
     if (camtype & CAMBIT_OBJ)
         _cam->obj_id = oid;
     else
-        LG_memcpy(_cam->coor, coor, sizeof(fix) * CAM_COOR_CNT);
+        memcpy(_cam->coor, coor, sizeof(fix) * CAM_COOR_CNT);
 
     if (args != NULL)
-        LG_memcpy(_cam->args, args, sizeof(fix) * CAM_ARGS_CNT);
+        memcpy(_cam->args, args, sizeof(fix) * CAM_ARGS_CNT);
 
     return TRUE;
 }
@@ -135,11 +135,11 @@ int fr_camera_update(cams *cam, uintptr_t arg1, int whicharg, uintptr_t arg2) {
         if (_cam->type & CAMBIT_OBJ)
             _cam->obj_id = (unsigned int)arg1;
         else
-            LG_memcpy(_cam->coor, (void*)arg1, sizeof(fix) * CAM_COOR_CNT);
+            memcpy(_cam->coor, (void*)arg1, sizeof(fix) * CAM_COOR_CNT);
     }
 
     if (whicharg == CAM_UPDATE_ALL)
-      LG_memcpy(_cam->args, (void*)arg2, sizeof(fix) * CAM_ARGS_CNT);
+      memcpy(_cam->args, (void*)arg2, sizeof(fix) * CAM_ARGS_CNT);
     else if (whicharg < CAM_ARGS_CNT)
         _cam->args[whicharg] = (fix)arg2;
     return TRUE;
@@ -208,7 +208,7 @@ fix *fr_camera_getpos(cams *cam) {
     if (_cam->type & CAMBIT_OBJ) /* set fix x,y,z etc from the object positions */
         fr_camera_getobjloc(_cam->obj_id, _cam->coor);
 
-    LG_memcpy(fr_camera_last, _cam->coor, sizeof(fix) * CAM_COOR_CNT);
+    memcpy(fr_camera_last, _cam->coor, sizeof(fix) * CAM_COOR_CNT);
     if (_cam->type & CAMBIT_MOD)
         fr_camera_last[3] = (fr_camera_last[3] + eye_mods[0]) & 0xffff;
     if ((_cam->type & (CAMBIT_OFF | CAMBIT_ANG)) != 0) {

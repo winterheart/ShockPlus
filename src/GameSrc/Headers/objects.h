@@ -64,7 +64,7 @@ typedef short ObjSpecID;
 #include "objapp.h"
 #endif
 
-#pragma pack(push,2)
+#pragma pack(push, 2)
 
 // The common data for all objects
 typedef struct Obj {
@@ -190,9 +190,9 @@ extern ObjRef objRefs[NUM_REF_OBJECTS];
 
 extern uchar objsDealt[NUM_OBJECTS / 8];
 
-#define ObjsClearDealt()                          \
-    do {                                          \
-        LG_memset(objsDealt, 0, NUM_OBJECTS / 8); \
+#define ObjsClearDealt()                       \
+    do {                                       \
+        memset(objsDealt, 0, NUM_OBJECTS / 8); \
     } while (0)
 #define ObjSetDealt(x)                         \
     do {                                       \

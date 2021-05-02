@@ -753,7 +753,7 @@ uchar keyslork_handler(uiEvent *ev, uchar butid) {
 #pragma enable_message(202)
 
 void slork_init(uchar butid, slorker slork) {
-    LG_memset(&OButtons[butid].rect, 0, sizeof(LGRect));
+    memset(&OButtons[butid].rect, 0, sizeof(LGRect));
     OButtons[butid].user.sl = slork;
     OButtons[butid].evmask = UI_EVENT_KBD_COOKED;
     OButtons[butid].drawfunc = NULL;
@@ -1075,7 +1075,7 @@ void clear_obuttons() {
     uiGetSlabCursorStack(uiCurrentSlab, &cs);
     uiPopCursorEvery(cs, &slider_cursor);
     mouse_unconstrain();
-    LG_memset(OButtons, 0, MAX_OPTION_BUTTONS * sizeof(opt_button));
+    memset(OButtons, 0, MAX_OPTION_BUTTONS * sizeof(opt_button));
 }
 
 void opanel_redraw(uchar back) {

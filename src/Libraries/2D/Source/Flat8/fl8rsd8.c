@@ -208,13 +208,13 @@ int gri_flat8_rsd8_bitmap(grs_bitmap *bm, short x_left, short y_top) {
             if (x + rsd_count <= x_right) {
                 switch (rsd_code) {
                 case RSD_RUN:
-                    LG_memset(p_dst, *rsd_src, rsd_count);
+                    memset(p_dst, *rsd_src, rsd_count);
                     rsd_src++;
                     break;
                 case RSD_SKIP:
                     break;
                 default: /* RSD_DUMP */
-                    LG_memcpy(p_dst, rsd_src, rsd_count);
+                    memcpy(p_dst, rsd_src, rsd_count);
                     rsd_src += rsd_count;
                     break;
                 }
@@ -225,12 +225,12 @@ int gri_flat8_rsd8_bitmap(grs_bitmap *bm, short x_left, short y_top) {
                 op_count = x_right - x;
                 switch (rsd_code) {
                 case RSD_RUN:
-                    LG_memset(p_dst, *rsd_src, op_count);
+                    memset(p_dst, *rsd_src, op_count);
                     break;
                 case RSD_SKIP:
                     break;
                 default: /* RSD_DUMP */
-                    LG_memcpy(p_dst, rsd_src, op_count);
+                    memcpy(p_dst, rsd_src, op_count);
                     rsd_src += op_count;
                     break;
                 }

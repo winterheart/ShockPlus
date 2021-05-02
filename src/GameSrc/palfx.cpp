@@ -77,7 +77,7 @@ void palfx_fade_down() {
 
     FadeStartTicks = SDL_GetTicks();
 
-    LG_memset(blackp, 0, sizeof(blackp));
+    memset(blackp, 0, sizeof(blackp));
     gr_get_pal(0, 256, savep);
 
     if ((num_installed_shifts >= 1) && (pal_fade_id >= 0) && (palette_query_effect(pal_fade_id) == ACTIVE)) {
@@ -95,7 +95,7 @@ byte palfx_start_fade_up(uchar *new_pal) {
 
     FadeStartTicks = SDL_GetTicks();
 
-    LG_memset(blackp, 0, sizeof(blackp));
+    memset(blackp, 0, sizeof(blackp));
     id = palette_install_fade(REAL_TIME, 0, 255, FADE_UP_DELAY, FADE_UP_STEPS, blackp, new_pal);
     palette_advance_effect(id, 1);
     return (id);

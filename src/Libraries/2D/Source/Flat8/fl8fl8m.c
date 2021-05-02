@@ -87,7 +87,7 @@ int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten) {
                             if (src[i])
                                 dst[i] = src[i];
                     } else {
-                        LG_memmove(dst + xi, src + xi, xf - xi);
+                        memmove(dst + xi, src + xi, xf - xi);
                     }
                 }
             }

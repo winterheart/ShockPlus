@@ -169,7 +169,7 @@ grs_bitmap *gr_alloc_bitmap(uchar type, ushort flags, short w, short h) {
     p = (uchar *)malloc(sizeof(tmp_bm) + (tmp_bm.row * tmp_bm.h));
     if (p) {
         tmp_bm.bits = p + sizeof(tmp_bm);
-        *(grs_bitmap *)p = tmp_bm; // LG_memcpy(p, &tmp_bm, sizeof(tmp_bm));
+        *(grs_bitmap *)p = tmp_bm; // memcpy(p, &tmp_bm, sizeof(tmp_bm));
     }
     return (grs_bitmap *)p;
 }
