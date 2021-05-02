@@ -51,31 +51,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grpix.h"
 #include "grstate.h"
 
-/* unclipped flat8 bitmap capture.  reads data from the current canvas at
-   (x,y) into the bitmap described by bm.  the destination bitmap is always
-   completely filled. */
-void gen_get_flat8_ubitmap(grs_bitmap *bm, short x, short y) {
-    uchar *dst = bm->bits;
-    short right = x + bm->w;
-    short bot = y + bm->h;
-    short cur_x;
-
-    gr_push_state();
-    if (bm->flags & BMF_TRANS) {
-        for (; y < bot; y++, dst += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, dst++)
-                if (gr_get_upixel(cur_x, y))
-                    *dst = gr_get_upixel(cur_x, y);
-        }
-    } else {
-        for (; y < bot; y++, dst += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, dst++)
-                *dst = gr_get_upixel(cur_x, y);
-        }
-    }
-    gr_pop_state();
-}
-
 /* clipped flat8 bitmap capture.  reads from the current canvas at (x,y)
    into bm, clipping against the canvas.  any section of the destination
    bitmap that was clipped is not written to. */

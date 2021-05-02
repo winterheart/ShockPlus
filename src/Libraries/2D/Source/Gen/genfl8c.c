@@ -37,29 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grcbm.h"
 #include "grpix.h"
 
-/* bozo flat8 bitmap drawer. */
-void gen_flat8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl) {
-    uchar *src = bm->bits;
-    short right = x + bm->w;
-    short bot = y + bm->h;
-    short cur_x;
-
-    if (cl == NULL)
-        cl = grd_screen->clut;
-    if (bm->flags & BMF_TRANS) {
-        for (; y < bot; y++, src += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, src++)
-                if (*src)
-                    gr_set_upixel(cl[*src], cur_x, y);
-        }
-    } else {
-        for (; y < bot; y++, src += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, src++)
-                gr_set_upixel(cl[*src], cur_x, y);
-        }
-    }
-}
-
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
 int gen_flat8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *cl) {
     short w, h;

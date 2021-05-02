@@ -182,16 +182,16 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
 
     (ptr_type)gen_int_ucircle, /* curves, should change to fixed-point */
     (ptr_type)gen_int_circle,
-    (ptr_type)gen_fix_ucircle,
-    (ptr_type)gen_fix_circle,
+    gr_null,
+    gr_null,
     (ptr_type)gen_int_udisk,
     (ptr_type)gen_int_disk,
-    (ptr_type)gen_fix_udisk,
-    (ptr_type)gen_fix_disk,
-    (ptr_type)gen_int_urod,
-    (ptr_type)gen_int_rod,
-    (ptr_type)gen_fix_urod,
-    (ptr_type)gen_fix_rod,
+    gr_null,
+    gr_null,
+    gr_null,
+    gr_null,
+    gr_null,
+    gr_null,
 
     // MLA - added these two for the device functions
     (ptr_type)flat8_flat8_ubitmap, /* bitmap drawing functions. */

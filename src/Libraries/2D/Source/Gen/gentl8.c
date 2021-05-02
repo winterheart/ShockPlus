@@ -40,35 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grpix.h"
 #include "tlucdat.h"
 
-/* bozo tluc8 bitmap drawer. */
-void gen_tluc8_ubitmap(grs_bitmap *bm, short x, short y) {
-    uchar *src = bm->bits;
-    short right = x + bm->w;
-    short bot = y + bm->h;
-    short cur_x;
-
-    if (bm->flags & BMF_TRANS) {
-        for (; y < bot; y++, src += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, src++)
-                if (*src) {
-                    if (tluc8tab[*src] == NULL)
-                        gr_set_upixel(*src, cur_x, y);
-                    else
-                        gr_set_upixel(tluc8tab[*src][gr_get_upixel(cur_x, y)], cur_x, y);
-                }
-        }
-    } else {
-        for (; y < bot; y++, src += bm->row - bm->w) {
-            for (cur_x = x; cur_x < right; cur_x++, src++) {
-                if (tluc8tab[*src] == NULL)
-                    gr_set_upixel(*src, cur_x, y);
-                else
-                    gr_set_upixel(tluc8tab[*src][gr_get_upixel(cur_x, y)], cur_x, y);
-            }
-        }
-    }
-}
-
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
 int gen_tluc8_bitmap(grs_bitmap *bm, short x, short y) {
     short w, h;

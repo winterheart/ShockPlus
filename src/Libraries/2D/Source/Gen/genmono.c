@@ -54,69 +54,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grdbm.h"
 #include "grpix.h"
 
-/* draw a monochrome bitmap with calls to gr_set_pixel for maximum device
-   independence and slowness. draws 1's in the source bitmap as currently
-   set foreground, and 0's are bacground if opaque, or not drawn if trans-
-   parent. */
-void gen_mono_ubitmap(grs_bitmap *bm, short x, short y) {
-    short w, h;   /* working width and height */
-    short dst_x;  /* destination x */
-    int bit;      /* bit from 0-7 in source byte */
-    uchar *p_row; /* pointer to current row of bitmap */
-    uchar *p;     /* pointer to source byte */
-
-    h = bm->h;
-    p_row = bm->bits;
-
-    if (bm->flags & BMF_TRANS) {
-        /* transparent bitmap; draw 1's as fcolor, don't draw 0's. */
-        while (h-- > 0) {
-            /* set up scanline. */
-            bit = bm->align;
-            dst_x = x;
-            p = p_row;
-            w = bm->w;
-
-            while (w-- > 0) {
-                /* do current scanline. */
-                if (*p & bitmask[bit])
-                    gr_set_pixel(grd_gc.fcolor, dst_x, y);
-                dst_x++;
-                if (++bit > 7) {
-                    bit = 0;
-                    p++;
-                }
-            }
-
-            y++;
-            p_row += bm->row;
-        }
-    } else {
-        /* opaque bitmap; draw 1's as fcolor, 0's as bcolor. */
-        while (h-- > 0) {
-            bit = bm->align;
-            dst_x = x;
-            p = p_row;
-            w = bm->w;
-
-            while (w-- > 0) {
-                if (*p & bitmask[bit])
-                    gr_set_upixel(grd_gc.fcolor, dst_x, y);
-                else
-                    gr_set_upixel(grd_gc.bcolor, dst_x, y);
-                dst_x++;
-                if (++bit > 7) {
-                    bit = 0;
-                    p++;
-                }
-            }
-
-            y++;
-            p_row += bm->row;
-        }
-    }
-}
-
 /* clip monochrome bitmap against cliprect and jump to unclipped drawer. */
 int gen_mono_bitmap(grs_bitmap *bm, short x, short y) {
     short w, h;

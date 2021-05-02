@@ -59,8 +59,6 @@ void gen_int_udisk(short x0, short y0, short r) {
     b = fix_div(a, (grd_cap->aspect));
 
     gr_int_uoval(x0, y0, fix_fint(a), fix_fint(b));
-
-    return;
 }
 
 /* this really should return a clip code */
@@ -77,6 +75,4 @@ void gen_int_disk(short x0, short y0, short r) {
     b = fix_div(a, (grd_cap->aspect));
 
     c = gr_int_oval(x0, y0, fix_fint(a), fix_fint(b));
-
-    return;
 }

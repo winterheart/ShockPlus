@@ -42,17 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grdbm.h"
 #include "grp24.h"
 
-#if 0
-// MLA - this doesn't appear to be used anywhere
-void memmove (uchar *dst, uchar *src, int n);
-#pragma aux memmove = "mov  eax,ecx" \
-                      "shr  ecx,2"   \
-                      "rep  movsd"   \
-                      "mov  ecx,eax" \
-                      "and  ecx,3"   \
-                      "rep  movsb" parm[edi][esi][ecx] modify[eax ecx edi esi];
-#endif
-
 void gen_flat24_ubitmap(grs_bitmap *bm, short x0, short y0) {
     short x, y;
     uchar *p, *lp;

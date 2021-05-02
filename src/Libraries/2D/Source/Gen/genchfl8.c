@@ -44,24 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grpix.h"
 #include "grclhbm.h"
 
-/* draw an unclipped, horizontally flipped flat 8 bitmap to a
-   canvas. */
-void gen_clut_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl) {
-    short r;     /* right x coordinate */
-    short b;     /* bottom y coordinate */
-    short cur_x; /* current x */
-    uchar *src;  /* pointer into source bitmap */
-
-    if (cl == NULL)
-        cl = gr_get_clut();
-    r = x + bm->w - 1;
-    b = y + bm->h - 1;
-    src = bm->bits;
-    for (; y <= b; y++, src += bm->row - bm->w)
-        for (cur_x = r; cur_x >= x; cur_x--, src++)
-            gr_set_upixel(cl[*src], cur_x, y);
-}
-
 /* draw a clipped, horizontally flipped flat 8bitmap to a canvas. */
 int gen_clut_hflip_flat8_bitmap(grs_bitmap *bm, short x, short y, uchar *cl) {
     short w, h;

@@ -62,7 +62,6 @@ set(2D_SRC
 	Source/Gen/genulin.c
 	Source/Gen/genuslin.c
 	Source/Gen/genvpoly.c
-	Source/Gen/general.c
 	Source/Gen/gencirc.c
 	Source/Gen/genfl8.c
 	Source/Gen/genf24.c

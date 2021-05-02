@@ -214,16 +214,11 @@ extern void gen_vox_rect(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap
                          int doth);
 extern void gen_vox_poly(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap *col, grs_bitmap *ht);
 extern void gen_vox_cpoly(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap *col, grs_bitmap *ht);
-extern void unpack_rsd8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
-extern int unpack_rsd8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
-extern void unpack_rsd8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-extern int unpack_rsd8_clut_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
 
 extern void temp_point(short x, short y);
 extern void temp_upoint(short x, short y);
 
 extern void temp_flat8_ubitmap(grs_bitmap *bm, int x, int y);
-extern void temp_flat8_bitmap(grs_bitmap *bm, int x, int y);
 
 extern void temp_flat8_mask_bitmap(grs_bitmap *bm, int x, int y, grs_stencil *sten);
 extern void temp_flat8_clut_ubitmap(grs_bitmap *bm, int x, int y, uchar *cl);
@@ -271,47 +266,31 @@ extern int temp_clut_scale_map(grs_bitmap *bm, short x, short y, short w, short 
 
 extern void gen_int_ucircle(short x, short y, short r);
 extern int gen_int_circle(short x0, short y0, short r);
-extern void gen_fix_ucircle(void);
-extern void gen_fix_circle(void);
 extern void gen_int_udisk(short x0, short y0, short r);
 extern void gen_int_disk(short x0, short y0, short r);
-extern void gen_fix_udisk(void);
-extern void gen_fix_disk(void);
-extern void gen_int_urod(void);
-extern void gen_int_rod(void);
-extern void gen_fix_urod(void);
-extern void gen_fix_rod(void);
 
 /* bitmap drawing functions. */
-extern void gen_mono_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gen_mono_bitmap(grs_bitmap *bm, short x, short y);
-extern void gen_flat8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gen_flat8_bitmap(grs_bitmap *bm, short x, short y);
 extern void gen_flat24_ubitmap(grs_bitmap *bm, short x0, short y0);
 extern int gen_flat24_bitmap(grs_bitmap *bm, short x0, short y0);
 extern void gri_gen_rsd8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gri_gen_rsd8_bitmap(grs_bitmap *bm, short x, short y);
 extern void unpack_rsd8_ubitmap(grs_bitmap *bm, short x, short y);
-extern int unpack_rsd8_bitmap(grs_bitmap *bm, short x, short y);
-extern void gen_tluc8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gen_tluc8_bitmap(grs_bitmap *bm, short x, short y);
 
 /* clut bitmap drawing functions. */
-extern void gen_flat8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *clut);
 extern int gen_flat8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *clut);
 extern void unpack_rsd8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *clut);
 extern int unpack_rsd8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *clut);
 
 /* bitmap get functions. */
-extern void gen_get_flat8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gen_get_flat8_bitmap(grs_bitmap *bm, short x, short y);
 
 /* bitmap horizontal flip routines. */
-extern void gen_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gen_hflip_flat8_bitmap(grs_bitmap *bm, short x, short y);
 
 /* bitmap color lookup table horizontal flip routines. */
-extern void gen_clut_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl);
 extern int gen_clut_hflip_flat8_bitmap(grs_bitmap *bm, short x, short y, uchar *cl);
 
 extern void gen_font_ustring(grs_font *f, char *s, short x, short y);
