@@ -269,12 +269,7 @@ void view360_render(void) {
         if (ACTIVE[i]) {
             fr_rend(CONTEXT[i]);
             if (full_game_3d) {
-#ifdef STEREO_SUPPORT
-                if (convert_use_mode == 5)
-                    full_visible = VISIBLE_BIT(i);
-                else
-#endif
-                    full_visible |= VISIBLE_BIT(i);
+                full_visible |= VISIBLE_BIT(i);
             }
             on = TRUE;
         }

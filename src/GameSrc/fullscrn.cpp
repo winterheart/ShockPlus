@@ -61,17 +61,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "game_screen.h" // was screen.h?
 #include "Shock.h"
 
-#ifdef NOT_YET // KLC stereo
-
-#include <config.h>
-
-#ifdef STEREO_SUPPORT
-#include <inp6d.h>
-#include <i6dvideo.h>
-#endif
-
-#endif // NOT_YET
-
 // -------
 // GLOBALS
 // -------
@@ -352,10 +341,6 @@ void fullscreen_start() {
     _current_root = fullroot_gadget;
 #endif
 
-#ifdef STEREO_SUPPORT
-    if (inp6d_stereo)
-        mode_id = 5;
-#endif
     change_svga_screen_mode();
 
     inv_change_fullscreen(TRUE);
@@ -364,25 +349,6 @@ void fullscreen_start() {
     string_message_info(REF_STR_FSMode);
     mfd_force_update();
     draw_page_buttons(TRUE);
-#ifdef STEREO_SUPPORT
-    if (inp6d_stereo) {
-        //      uchar cur_pal[768];
-        //      gr_get_pal(0,256,&cur_pal[0]);
-        //      uiHideMouse(NULL);
-        //      gr_set_mode(i6d_ss->scr_mode,TRUE);
-        //      gr_set_pal(0,256,&cur_pal[0]);
-        if (i6d_ss->scr_mode == grd_mode) {
-            i6d_ss->stereo_screen = grd_screen->c;
-            i6_video(I6VID_SET_MODE, i6d_ss);
-            if (i6_video(I6VID_STR_SETUP, i6d_ss)) {
-                Warning(("Stereo setup failed"));
-                i6_video(I6VID_CLEAR_MODE, i6d_ss);
-                inp6d_stereo_active = FALSE;
-            } else
-                inp6d_stereo_active = TRUE;
-        }
-    }
-#endif
 #ifdef PALFX_FADES
 //   if (pal_fx_on) palfx_fade_up(FALSE);
 #endif
@@ -399,15 +365,6 @@ void fullscreen_exit() {
     uchar cur_pal[768];
     extern grs_screen *cit_screen;
     uchar *s_table;
-#endif
-
-#ifdef STEREO_SUPPORT
-    if (mode_id == 5)
-        mode_id = 0;
-    if (inp6d_stereo_active) {
-        i6_video(I6VID_CLEAR_MODE, i6d_ss);
-        inp6d_stereo_active = FALSE;
-    }
 #endif
     uiHideMouse(NULL);
 

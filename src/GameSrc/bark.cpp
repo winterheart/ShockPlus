@@ -80,12 +80,7 @@ void mfd_bark_expose(MFD *mfd, ubyte control) {
             draw_raw_resource_bm(MKREF(RES_mfdArtOverlays, MFD_ART_TRIOP), 0, 0);
         }
         if (full && global_fullmap->cyber && mfd->id == MFD_RIGHT && (full_visible & visible_mask(mfd->id)) == 0) {
-#ifdef STEREO_SUPPORT
-            if (convert_use_mode == 5)
-                full_visible = visible_mask(mfd->id);
-            else
-#endif
-                full_visible |= visible_mask(mfd->id);
+            full_visible |= visible_mask(mfd->id);
             mfd_notify_func(MFD_BARK_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, TRUE);
         }
 

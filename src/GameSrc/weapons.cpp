@@ -67,10 +67,6 @@ extern "C" {
 #include "frtypes.h"
 #include "doorparm.h"
 #include "gr2ss.h"
-#ifdef STEREO_SUPPORT
-#include <inp6d.h>
-#include <i6dvideo.h>
-#endif
 
 #define MIN_ENERGY_WPN_THRESHOLD 20
 #define FATIGUE_ACCURACY_RATIO 400
@@ -895,15 +891,6 @@ uchar fire_player_weapon(LGPoint *pos, LGRegion *r, uchar pull) {
     cp = realpos;
     if (!DoubleSize)
         ss_mouse_convert(&(cp.x), &(cp.y), TRUE);
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5) {
-        switch (i6d_device) {
-        case I6D_VFX1:
-            realpos.x = realpos.x << 1;
-            break;
-        }
-    }
-#endif
     if (!RECT_TEST_PT(&rc, cp)) {
         //realpos.x = r->abs_x + RectWidth(r->r) / 2;
         //realpos.y = r->abs_y + RectHeight(r->r) / 2;

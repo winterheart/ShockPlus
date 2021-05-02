@@ -567,14 +567,7 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, uchar OnOff) {
                 gr_clear(0);
                 gr_pop_canvas();
             }
-#ifdef STEREO_SUPPORT
-            if (convert_use_mode == 5)
-                full_visible = visible_mask(mfd_id);
-            else
-#endif
-            {
-                full_visible |= visible_mask(mfd_id);
-            }
+            full_visible |= visible_mask(mfd_id);
             full_raise_region(&mfd[mfd_id].reg2);
             chg_set_sta(FULLSCREEN_UPDATE);
         }
@@ -868,28 +861,8 @@ uchar mfd_view_callback(uiEvent *e, LGRegion *r, intptr_t udata) {
         return TRUE;
     for (i = 0; i < f->handler_count; i++) {
         LGPoint pos = e->pos;
-#ifdef STEREO_SUPPORT
-        if (convert_use_mode == 5) {
-            pos.y -= m->rect.ul.y;
-            switch (i6d_device) {
-            case I6D_CTM:
-                if (which_mfd == 0)
-                    pos.x -= m->rect.ul.x;
-                else
-                    pos.x -= (m->rect.ul.x << 1);
-                break;
-            case I6D_VFX1:
-                Warning(("original pos.x = %d, m->rect.ul.x = %d!\n", pos.x, m->rect.ul.x));
-                pos.x -= (m->rect.ul.x);
-                break;
-            }
-        } else {
-#endif
-            pos.x -= m->rect.ul.x;
-            pos.y -= m->rect.ul.y;
-#ifdef STEREO_SUPPORT
-        }
-#endif
+        pos.x -= m->rect.ul.x;
+        pos.y -= m->rect.ul.y;
         if (RECT_TEST_PT(&f->handlers[i].r, pos))
             if (f->handlers[i].proc(m, e, &f->handlers[i]))
                 return TRUE;
@@ -1190,32 +1163,10 @@ void fullscreen_refresh_mfd(ubyte mfd_id) {
 #ifdef SVGA_SUPPORT
         gr2ss_override = OVERRIDE_ALL;
 #endif
-#ifdef STEREO_SUPPORT
-        if (convert_use_mode == 5) {
-            pmfd_canvas->bm.flags |= BMF_TRANS;
-            if (mfd_id == 0) {
-                ss_safe_set_cliprect(r.ul.x, 0, r.lr.x << 1, r.lr.y);
-                if (i6d_device == I6D_CTM)
-                    ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x, -5);
-                else
-                    ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x, m->rect.ul.y);
-            } else {
-                ss_safe_set_cliprect(r.ul.x >> 1, 0, r.lr.x, r.lr.y);
-                if (i6d_device == I6D_CTM)
-                    ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x >> 1, -5);
-                else
-                    ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x >> 1, m->rect.ul.y);
-            }
-            pmfd_canvas->bm.flags &= ~BMF_TRANS;
-        } else {
-#endif
-            ss_safe_set_cliprect(r.ul.x, r.ul.y, r.lr.x, r.lr.y);
-            pmfd_canvas->bm.flags |= BMF_TRANS;
-            ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x, m->rect.ul.y);
-            pmfd_canvas->bm.flags &= ~BMF_TRANS;
-#ifdef STEREO_SUPPORT
-        }
-#endif
+        ss_safe_set_cliprect(r.ul.x, r.ul.y, r.lr.x, r.lr.y);
+        pmfd_canvas->bm.flags |= BMF_TRANS;
+        ss_noscale_bitmap(&(pmfd_canvas->bm), m->rect.ul.x, m->rect.ul.y);
+        pmfd_canvas->bm.flags &= ~BMF_TRANS;
 #ifdef SVGA_SUPPORT
         gr2ss_override = old_over;
 #endif
@@ -1650,12 +1601,5 @@ void restore_mfd_slot(int mfd_id) {
     set_mfd_from_defaults(mfd_id, func, slot);
     player_struct.mfd_save_slot[mfd_id] = -1;
     full_visible &= ~(visible_mask(mfd_id));
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5)
-        full_visible = (player_struct.mfd_save_vis & visible_mask(mfd_id));
-    else
-#endif
-    {
-        full_visible |= (player_struct.mfd_save_vis & visible_mask(mfd_id));
-    }
+    full_visible |= (player_struct.mfd_save_vis & visible_mask(mfd_id));
 }

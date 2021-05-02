@@ -25,13 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "str.h"
 
-#ifdef STEREO_SUPPORT
-#include <i6dvideo.h>
-extern uchar inp6d_stereo_active;
-
-#define S_DELTA 5
-#endif
-
 #ifdef SVGA_SUPPORT
 uchar gr2ss_override = OVERRIDE_NONE;
 char convert_type = 0;
@@ -81,9 +74,6 @@ void ss_scale_string(char *s, short x, short y) {
     grs_font *f = gr_get_font();
     int c = gr_get_fcolor();
     Id use_font = ID_NULL;
-#ifdef STEREO_SUPPORT
-    uchar rv = perform_svga_conversion(OVERRIDE_SCALE);
-#endif
 
     if (convert_use_mode == 0) {
         gr_string(s, x, y);
@@ -110,45 +100,14 @@ void ss_scale_string(char *s, short x, short y) {
                 use_font = RES_megaMediumLEDFont;
             break;
         }
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && inp6d_stereo_active) {
-            if (use_font == ID_NULL) {
-                short w, h;
-                gr_string_size(s, (short *)&w, (short *)&h);
-                gr_push_canvas(i6d_ss->cf_left);
-                gr_set_font(f);
-                gr_set_fcolor(c);
-                gr_scale_string(s, x + S_DELTA, y, SCONV_X(w) + S_DELTA, SCONV_Y(h));
-                gr_pop_canvas();
-                gr_push_canvas(i6d_ss->cf_right);
-                gr_set_font(f);
-                gr_set_fcolor(c);
-                gr_scale_string(s, x - S_DELTA, y, SCONV_X(w) - S_DELTA, SCONV_Y(h));
-            } else {
-                gr_push_canvas(i6d_ss->cf_left);
-                gr_set_font((grs_font *)ResLock(use_font));
-                gr_set_fcolor(c);
-                gr_string(s, x + S_DELTA, y);
-                gr_pop_canvas();
-                gr_push_canvas(i6d_ss->cf_right);
-                gr_set_font((grs_font *)ResLock(use_font));
-                gr_set_fcolor(c);
-                gr_string(s, x - S_DELTA, y);
-            }
-            gr_pop_canvas();
+        if (use_font == ID_NULL) {
+            short w, h;
+            gr_string_size(s, (short *)&w, (short *)&h);
+            gr_scale_string(s, x, y, SCONV_X(w), SCONV_Y(h));
         } else {
-#endif
-            if (use_font == ID_NULL) {
-                short w, h;
-                gr_string_size(s, (short *)&w, (short *)&h);
-                gr_scale_string(s, x, y, SCONV_X(w), SCONV_Y(h));
-            } else {
-                gr_set_font((grs_font *)ResLock(use_font));
-                gr_string(s, x, y);
-            }
-#ifdef STEREO_SUPPORT
+            gr_set_font((grs_font *)ResLock(use_font));
+            gr_string(s, x, y);
         }
-#endif
         if (use_font != ID_NULL)
             ResUnlock(use_font);
         gr_set_font(ttfont);
@@ -163,48 +122,16 @@ void ss_scale_string(char *s, short x, short y) {
 }
 
 void ss_string(char *s, short x, short y) {
-    uchar rv;
-    if ((rv = perform_svga_conversion(OVERRIDE_SCALE))) {
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active)) {
-            gr_push_canvas(i6d_ss->cf_left);
-            if (convert_use_mode)
-                ss_scale_string(s, SCONV_X(x) + S_DELTA, SCONV_Y(y));
-            else
-                ss_scale_string(s, x + S_DELTA, y);
-            gr_set_canvas(i6d_ss->cf_right);
-            if (convert_use_mode)
-                ss_scale_string(s, SCONV_X(x) - S_DELTA, SCONV_Y(y));
-            else
-                ss_scale_string(s, x - S_DELTA, y);
-            gr_pop_canvas();
-        } else
-#endif
-            ss_scale_string(s, SCONV_X(x), SCONV_Y(y));
+    if (perform_svga_conversion(OVERRIDE_SCALE)) {
+        ss_scale_string(s, SCONV_X(x), SCONV_Y(y));
     } else {
         gr_string(s, x, y);
     }
 }
 
 void ss_bitmap(grs_bitmap *bmp, short x, short y) {
-    uchar rv;
-    if ((rv = perform_svga_conversion(OVERRIDE_SCALE))) {
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active)) {
-            gr_push_canvas(i6d_ss->cf_left);
-            if (convert_use_mode)
-                gr_scale_bitmap(bmp, SCONV_X(x) + S_DELTA, SCONV_Y(y), SCONV_X(bmp->w) + S_DELTA, SCONV_Y(bmp->h));
-            else
-                gr_bitmap(bmp, x + S_DELTA, y);
-            gr_set_canvas(i6d_ss->cf_right);
-            if (convert_use_mode)
-                gr_scale_bitmap(bmp, SCONV_X(x) - S_DELTA, SCONV_Y(y), SCONV_X(bmp->w) - S_DELTA, SCONV_Y(bmp->h));
-            else
-                gr_bitmap(bmp, x - S_DELTA, y);
-            gr_pop_canvas();
-        } else
-#endif
-            gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
+    if (perform_svga_conversion(OVERRIDE_SCALE)) {
+        gr_scale_bitmap(bmp, SCONV_X(x), SCONV_Y(y), SCONV_X(bmp->w), SCONV_Y(bmp->h));
         //      Warning(("scaling %d x %d to %d x %d\n",bmp->w,bmp->h,SCONV_X(bmp->w),SCONV_Y(bmp->h)));
     } else
         gr_bitmap(bmp, x, y);
@@ -218,24 +145,8 @@ void ss_ubitmap(grs_bitmap *bmp, short x, short y) {
 }
 
 void ss_noscale_bitmap(grs_bitmap *bmp, short x, short y) {
-    uchar rv;
-    if ((rv = perform_svga_conversion(OVERRIDE_SCALE))) // ?
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active)) {
-            gr_push_canvas(i6d_ss->cf_left);
-            if (convert_use_mode)
-                gr_bitmap(bmp, SCONV_X(x) + S_DELTA, SCONV_Y(y));
-            else
-                gr_bitmap(bmp, x + S_DELTA, y);
-            gr_set_canvas(i6d_ss->cf_right);
-            if (convert_use_mode)
-                gr_bitmap(bmp, SCONV_X(x) - S_DELTA, SCONV_Y(y));
-            else
-                gr_bitmap(bmp, x - S_DELTA, y);
-            gr_pop_canvas();
-        } else
-#endif
-            gr_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
+    if (perform_svga_conversion(OVERRIDE_SCALE)) // ?
+        gr_bitmap(bmp, SCONV_X(x), SCONV_Y(y));
     else
         gr_bitmap(bmp, x, y);
 }
@@ -248,54 +159,16 @@ void ss_scale_bitmap(grs_bitmap *bmp, short x, short y, short w, short h) {
 }
 
 void ss_rect(short x1, short y1, short x2, short y2) {
-    uchar rv;
-    if ((rv = perform_svga_conversion(OVERRIDE_SCALE))) {
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active)) {
-            int c = gr_get_fcolor();
-            gr_push_canvas(i6d_ss->cf_left);
-            gr_set_fcolor(c);
-            if (convert_use_mode)
-                gr_rect(SCONV_X(x1) + S_DELTA, SCONV_Y(y1), SCONV_X(x2) + S_DELTA, SCONV_Y(y2));
-            else
-                gr_rect(x1 + S_DELTA, y1, x2 + S_DELTA, y2);
-            gr_set_canvas(i6d_ss->cf_right);
-            gr_set_fcolor(c);
-            if (convert_use_mode)
-                gr_rect(SCONV_X(x1) - S_DELTA, SCONV_Y(y1), SCONV_X(x2) - S_DELTA, SCONV_Y(y2));
-            else
-                gr_rect(x1 - S_DELTA, y1, x2 - S_DELTA, y2);
-            gr_pop_canvas();
-        } else
-#endif
-            gr_rect(SCONV_X(x1), SCONV_Y(y1), SCONV_X(x2), SCONV_Y(y2));
+    if (perform_svga_conversion(OVERRIDE_SCALE)) {
+        gr_rect(SCONV_X(x1), SCONV_Y(y1), SCONV_X(x2), SCONV_Y(y2));
     } else {
         gr_rect(x1, y1, x2, y2);
     }
 }
 
 void ss_box(short x1, short y1, short x2, short y2) {
-    uchar rv;
-    if ((rv = perform_svga_conversion(OVERRIDE_SCALE))) {
-#ifdef STEREO_SUPPORT
-        if ((rv == SVGA_CONV_SCREEN) && (inp6d_stereo_active)) {
-            int c = gr_get_fcolor();
-            gr_push_canvas(i6d_ss->cf_left);
-            gr_set_fcolor(c);
-            if (convert_use_mode)
-                gr_box(SCONV_X(x1) + S_DELTA, SCONV_Y(y1), SCONV_X(x2) + S_DELTA, SCONV_Y(y2));
-            else
-                gr_box(x1 + S_DELTA, y1, x2 + S_DELTA, y2);
-            gr_set_canvas(i6d_ss->cf_right);
-            gr_set_fcolor(c);
-            if (convert_use_mode)
-                gr_box(SCONV_X(x1) - S_DELTA, SCONV_Y(y1), SCONV_X(x2) - S_DELTA, SCONV_Y(y2));
-            else
-                gr_box(x1 - S_DELTA, y1, x2 - S_DELTA, y2);
-            gr_pop_canvas();
-        } else
-#endif
-            gr_box(RSCONV_X(x1), RSCONV_Y(y1), RSCONV_X(x2), RSCONV_Y(y2));
+    if (perform_svga_conversion(OVERRIDE_SCALE)) {
+        gr_box(RSCONV_X(x1), RSCONV_Y(y1), RSCONV_X(x2), RSCONV_Y(y2));
     } else {
         gr_box(x1, y1, x2, y2);
     }
@@ -510,22 +383,6 @@ void ss_set_hack_mode(short new_m, short *tval) {
 
 void ss_mouse_convert(short *px, short *py, uchar down) {
     if (convert_use_mode != 0) {
-#ifdef STEREO_SUPPORT
-        if (convert_use_mode == 5) {
-            switch (i6d_device) {
-            case I6D_CTM:
-                return;
-                break;
-            case I6D_VFX1:
-                if (down)
-                    *py = fix_int(fix_mul_div(fix_make(*py, 0), fix_make(200, 0), fix_make(480, 0)));
-                else
-                    *py = fix_int(fix_mul_div(fix_make(*py, 0), fix_make(480, 0), fix_make(200, 0)));
-                return;
-            }
-        }
-#endif
-
         if (down) {
             *px = INV_SCONV_X(*px);
             *py = INV_SCONV_Y(*py);
@@ -537,17 +394,7 @@ void ss_mouse_convert(short *px, short *py, uchar down) {
 }
 
 void ss_mouse_convert_round(short *px, short *py, uchar down) {
-    short ox, oy;
-
     if (convert_use_mode != 0) {
-#ifdef STEREO_SUPPORT
-        if (convert_use_mode == 5) {
-            ss_mouse_convert(px, py, down);
-            return;
-        }
-#endif
-        ox = *px;
-        oy = *py;
         if (down) {
             *px = fix_int(INV_FIXCONV_X(fix_make(*px, 0x8000)));
             *py = fix_int(INV_FIXCONV_Y(fix_make(*py, 0x8000)));
@@ -559,21 +406,5 @@ void ss_mouse_convert_round(short *px, short *py, uchar down) {
 }
 
 void mouse_unconstrain(void) {
-    /*  for now
-    #ifdef SVGA_SUPPORT
-       if (convert_use_mode == 5)
-       {
-          switch (i6d_device)
-          {
-             case I6D_CTM:
-                mouse_constrain_xy(0,0,grd_cap->w-1,grd_cap->h-1);
-                break;
-             case I6D_VFX1:
-                mouse_constrain_xy(0,0,i6d_ss->scr_w >> 1, i6d_ss->scr_h);
-                break;
-          }
-       }
-       else
-    #endif  */
     mouse_constrain_xy(0, 0, grd_cap->w - 1, grd_cap->h - 1);
 }

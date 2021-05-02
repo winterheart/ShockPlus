@@ -299,18 +299,7 @@ void hud_update_lines(short x, short *y, short unused1, short unused2) {
                 if (full_game_3d)
                     use_y += FULLSCREEN_Y_OFFSET;
             }
-#ifdef STEREO_SUPPORT
-            {
-                short temp;
-                if (convert_use_mode == 5)
-                    use_x = 12;
-                ss_set_hack_mode(2, &temp);
-#endif
-                res_draw_text_shadowed(RES_tinyTechFont, HUDLINE_BUFFER(i), use_x, use_y, TRUE);
-#ifdef STEREO_SUPPORT
-                ss_set_hack_mode(0, &temp);
-            }
-#endif
+            res_draw_text_shadowed(RES_tinyTechFont, HUDLINE_BUFFER(i), use_x, use_y, TRUE);
         } else
             hud_free_line(i);
 }

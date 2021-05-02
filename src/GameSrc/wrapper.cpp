@@ -1722,10 +1722,6 @@ void olh_dealfunc(ushort olh) {
 }
 #pragma enable_message(202)
 
-#ifdef STEREO_SUPPORT
-#define INITIAL_OCULAR_DIST fix_make(3, 0x4000)
-#endif
-
 ushort wrap_joy_type = 0;
 ushort high_joy_flags;
 void joystick_type_func(ushort new_joy_type) {
@@ -1847,9 +1843,6 @@ void video_screen_init(void) {
     extern short mode_id;
 #endif
     uchar sliderbase;
-#ifdef STEREO_SUPPORT
-    extern uchar inp6d_headset;
-#endif
 
     keys = get_temp_string(REF_STR_KeyEquivs3);
     clear_obuttons();
@@ -1920,10 +1913,6 @@ void headset_screen_init(void) {
     LGRect r;
     int i;
     char *keys;
-#ifdef STEREO_SUPPORT
-    extern uchar inp6d_stereo;
-    extern int inp6d_stereo_div;
-#endif
 
     keys = get_temp_string(REF_STR_KeyEquivs5);
 
@@ -1933,33 +1922,6 @@ void headset_screen_init(void) {
 
     standard_button_rect(&r, i, 2, 2, 2);
     pushbutton_init(HEAD_RECENTER_BUTTON, keys[0], REF_STR_HeadsetText + 1, wrapper_pushbutton_func, &r);
-
-#ifdef STEREO_SUPPORT
-    i++;
-    standard_slider_rect(&r, i, 2, 2);
-    r.ul.x -= 1;
-    slider_init(i, REF_STR_HeadsetText + 2, sizeof(inp6d_stereo_div), FALSE, &inp6d_stereo_div, fix_make(10, 0),
-                INITIAL_OCULAR_DIST, NULL, &r);
-
-    i++;
-    standard_button_rect(&r, i, 2, 2, 2);
-    multi_init(i, keys[1], REF_STR_HeadsetText + 3, REF_STR_OffonText, ID_NULL, sizeof(inp6d_stereo),
-               &inp6d_stereo, 2, headset_stereo_dealfunc, &r);
-
-    if (i6d_device == I6D_ALLPRO)
-        dim_pushbutton(i);
-
-    i++;
-    standard_button_rect(&r, i, 2, 2, 2);
-    multi_init(i, keys[3], REF_STR_MoreHeadset + 1, REF_STR_OffonText, ID_NULL, sizeof(headset_track),
-               &headset_track, 2, headset_tracking_dealfunc, &r);
-
-    i++;
-    standard_slider_rect(&r, i, 2, 2);
-    r.ul.x -= 1;
-    slider_init(i, REF_STR_MoreHeadset, sizeof(hack_headset_fov), FALSE, &hack_headset_fov,
-                HEADSET_FOV_MAX - HEADSET_FOV_MIN, inp6d_real_fov - HEADSET_FOV_MIN, headset_fov_dealfunc, &r);
-#endif
 
     // Standard return button and other bureaucracy
     standard_button_rect(&r, 5, 2, 2, 2);

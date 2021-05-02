@@ -606,28 +606,8 @@ int get_item_at_pixrow(inv_display *dp, int row) {
     int y_step;
     int r1, r2;
 
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5) {
-        switch (i6d_device) {
-        case I6D_CTM:
-            ipanel_y = 1;
-            y_step = Y_STEP << 2;
-            break;
-        case I6D_VFX1:
-            ipanel_y = INVENTORY_PANEL_Y >> 1;
-            //            ipanel_y = (200 - inv_fullscrn_canvas.bm.h);
-            //            y_step = Y_STEP << 1;
-            y_step = 10;
-            break;
-        default:
-            break;
-        }
-    } else
-#endif
-    {
-        ipanel_y = INVENTORY_PANEL_Y;
-        y_step = Y_STEP;
-    }
+    ipanel_y = INVENTORY_PANEL_Y;
+    y_step = Y_STEP;
     r1 = row;
     row -= ipanel_y + dp->top + y_step;
     if (row < 0)
@@ -2008,12 +1988,7 @@ errtype inventory_draw_new_page(int pgnum) {
     inv_last_page = -1;
     inventory_page = pgnum;
     if (full_game_3d) {
-#ifdef STEREO_SUPPORT
-        if (convert_use_mode == 5)
-            full_visible = FULL_INVENT_MASK;
-        else
-#endif
-            full_visible |= FULL_INVENT_MASK;
+        full_visible |= FULL_INVENT_MASK;
         full_raise_region(inventory_region_full);
         chg_set_sta(FULLSCREEN_UPDATE);
     }
@@ -2157,21 +2132,8 @@ uchar inventory_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
 #endif
     if (game_paused)
         return (TRUE);
+    relx = ev->pos.x - INVENTORY_PANEL_X;
 
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5) {
-        if (i6d_device == I6D_CTM)
-            relx = ev->pos.x - 1;
-        else {
-            relx = (ev->pos.x - ((320 - inv_fullscrn_canvas.bm.w) / 2)) >> 1;
-            //         Warning(("relx: %d = %d - %d = %d >> 1\n",relx,ev->pos.x,((320-inv_fullscrn_canvas.bm.w)/2),
-            //             (ev->pos.x - ((320-inv_fullscrn_canvas.bm.w)/2))));
-        }
-    } else
-#endif
-    {
-        relx = ev->pos.x - INVENTORY_PANEL_X;
-    }
     if (invpanel_focus && !(ev->mouse_data.buttons & (1 << MOUSE_RBUTTON))) {
         uiReleaseFocus(r, UI_EVENT_MOUSE_MOVE);
         invpanel_focus = FALSE;
@@ -2186,22 +2148,7 @@ uchar inventory_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
             short rel_y;
             short x, y;
             short smx, smy;
-#ifdef STEREO_SUPPORT
-            if (convert_use_mode == 5) {
-                switch (i6d_device) {
-                case I6D_CTM:
-                    rel_y = ev->pos.y - 1;
-                    break;
-                case I6D_VFX1:
-                    rel_y = ev->pos.y - (INVENTORY_PANEL_Y >> 1);
-                    //                     rel_y = ev->pos.y - (200 - inv_fullscrn_canvas.bm.h);
-                    break;
-                default:
-                    break;
-                }
-            } else
-#endif
-                rel_y = ev->pos.y - INVENTORY_PANEL_Y;
+            rel_y = ev->pos.y - INVENTORY_PANEL_Y;
             gr_push_canvas(&inv_fullscrn_canvas);
             smx = SEARCH_MARGIN;
             smy = SEARCH_MARGIN;
@@ -2316,12 +2263,7 @@ uchar pagebutton_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
                     gr_push_canvas(pinv_canvas);
                     gr_clear(0);
                     gr_pop_canvas();
-#ifdef STEREO_SUPPORT
-                    if (convert_use_mode == 5)
-                        full_visible = FULL_INVENT_MASK;
-                    else
-#endif
-                        full_visible |= FULL_INVENT_MASK;
+                    full_visible |= FULL_INVENT_MASK;
                     inv_last_page = -1;
                     full_raise_region(inventory_region_full);
                     chg_set_sta(FULLSCREEN_UPDATE);

@@ -74,27 +74,6 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "tools.h"
 #include "weapons.h"
 #include "mouselook.h"
-
-#ifdef NOT_YET // KLC - for VR headsets
-
-#include <conio.h>
-#include <config.h>
-#include <inp6d.h>
-#ifdef STEREO_SUPPORT
-#include <i6dvideo.h>
-#include <mfddims.h>
-#endif
-
-#include <paintbit.h>
-#include <editscrn.h>
-#include <frcamera.h>
-#include <frprotox.h>
-#ifdef SVGA_SUPPORT
-#include <frtypes.h>
-#endif
-
-#endif // NOT_YET
-
 #include "OpenGL.h"
 
 #define CHECK_FOR_A_PACKET
@@ -2162,38 +2141,10 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
 
     pt = evp;
 
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5) {
-        extern uchar inventory_mouse_handler(uiEvent * ev, LGRegion * r, intptr_t data);
-        extern uchar mfd_view_callback(uiEvent * e, LGRegion * r, intptr_t udata);
-        switch (i6d_device) {
-        case I6D_CTM:
-            if (full_visible & FULL_INVENT_MASK)
-                return (inventory_mouse_handler(ev, r, v));
-            if ((full_visible & FULL_L_MFD_MASK) && (evp.x < ((MFD_VIEW_LFTX + MFD_VIEW_WID) << 1)))
-                return (mfd_view_callback(ev, r, 0));
-            if ((full_visible & FULL_R_MFD_MASK) && (evp.x > ((MFD_VIEW_RGTX + MFD_VIEW_WID) >> 1)))
-                return (mfd_view_callback(ev, r, 1));
-            break;
-        case I6D_VFX1:
-            if (full_visible & FULL_INVENT_MASK)
-                return (inventory_mouse_handler(ev, r, v));
-            if ((full_visible & FULL_L_MFD_MASK) && (evp.x < ((MFD_VIEW_LFTX + MFD_VIEW_WID) << 1)))
-                return (mfd_view_callback(ev, r, 0));
-            if ((full_visible & FULL_R_MFD_MASK) && (evp.x > ((MFD_VIEW_RGTX + MFD_VIEW_WID) >> 1)))
-                return (mfd_view_callback(ev, r, 1));
-            break;
-        }
-    }
-#endif
-
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode != 5)
-#endif
-        if (DoubleSize)                  // If double sizing, convert the y to 640x480, then
-            evp.y = SCONV_Y(evp.y) >> 1; // half it.  The x stays as is.
-        else
-            ss_point_convert(&(evp.x), &(evp.y), FALSE);
+    if (DoubleSize)                  // If double sizing, convert the y to 640x480, then
+        evp.y = SCONV_Y(evp.y) >> 1; // half it.  The x stays as is.
+    else
+        ss_point_convert(&(evp.x), &(evp.y), FALSE);
 
     view3d_got_event = TRUE;
     pt.x += r->r->ul.x - r->abs_x;

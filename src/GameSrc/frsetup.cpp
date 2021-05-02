@@ -136,12 +136,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #include "star.h"
 #include "MODELS/d_f_face.h"
-
-#ifdef STEREO_SUPPORT
-#include <inp6d.h>
-#include <i6dvideo.h>
-#endif
-
 #include "OpenGL.h"
 
 // Internal Prototypes
@@ -270,13 +264,7 @@ void fr_set_default_ptrs(void) {
 
 // actually init the 3d, as one might expect, also set up global statics for the renderer
 void fr_startup(void) {
-// should be dynamic and flippable....
-#ifdef STEREO_SUPPORT
-    g3_init_stereo(FR_PT_CNT, AXIS_ORDER);
-    g3_set_eyesep(FIX_UNIT / 35);
-#else
     g3_init(FR_PT_CNT, AXIS_ORDER);
-#endif
     _fr_init_all_tmaps();
     fr_tables_build();
     _fr_glob_flags = 0;
@@ -617,10 +605,6 @@ int fr_prepare_view(frc *view) {
     _fr_ret;
 }
 
-#ifdef STEREO_SUPPORT
-extern uchar hack_cameras_needed;
-#endif
-
 /* sets the 3d system up based upon the prepared context */
 #define FIXANG_EPS (FIXANG_PI >> 5)
 #define FIXANG_MASK (2 * FIXANG_PI - 1)
@@ -714,38 +698,9 @@ int fr_start_view(void) {
         g3_set_tmaps_linear();
     }
 
-#ifdef STEREO_SUPPORT
-    if (((_fr_curflags & (FR_PICKUPM_MASK | FR_HACKCAM_MASK)) == 0) && inp6d_stereo_active &&
-        ((_fr_curflags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT)) {
-        extern uchar g3d_stereo;
-        i6_video(I6VID_FRM_START, NULL); // lets go
-        i6_video(I6VID_FRM_INFIN, NULL); // begin infinite region
-        gr_set_canvas(i6d_ss->cf_infin);
-        //      gr_clear(0x78);
-        //      gr_clear(0);
-        i6_video(I6VID_FRM_STEREO, NULL); // now, the stereo set
-        gr_set_canvas(i6d_ss->cf_left);
-        if (i6d_device == I6D_CTM)
-            grd_cap->aspect <<= 1;
-        g3_set_eyesep(inp6d_stereo_div / 96); // stereo div is in fix inches...
-        g3_start_stereo_frame(i6d_ss->cf_right);
-        //      g3d_stereo=0;
-    } else
-#endif
-        g3_start_frame();
-
-    /*KLC - stereo
-       if (inp6d_headset)
-       {
-          extern int inp6d_curr_fov;
-               use_zoom=g3_get_zoom(FR_DEF_AXIS,build_fix_angle(inp6d_curr_fov),320,200);
-          std_size=2;
-       }
-       else*/
-    {
-        use_zoom = _fr->viewer_zoom;
-        std_size = 1;
-    }
+    g3_start_frame();
+    use_zoom = _fr->viewer_zoom;
+    std_size = 1;
 
     if (_frp.faces.cyber) {
 	// Grab the Dirac from EDMS and copy to the system matrix.
@@ -823,26 +778,6 @@ int fr_send_view(void) {
     if(should_opengl_swap()) {
         opengl_end_frame();
     }
-
-    // stereo support - closedown ??
-#ifdef STEREO_SUPPORT
-    if (((_fr_curflags & (FR_PICKUPM_MASK | FR_HACKCAM_MASK)) == 0) && inp6d_stereo_active &&
-        ((_fr_curflags & FR_CURVIEW_MASK) == FR_CURVIEW_STRT)) {
-        gr_set_canvas(grd_screen_canvas);
-        if (_fr->draw_call)
-            snd_frm = _fr->draw_call(grd_screen_canvas, &_fr->draw_canvas.bm, _fr->xtop, _fr->ytop, _fr_curflags);
-        gr_set_canvas(i6d_ss->cf_left);
-        (*fr_mouse_show)();
-        gr_set_canvas(i6d_ss->cf_right);
-        (*fr_mouse_show)();
-        i6_video(I6VID_FRM_DONE, NULL);
-        i6_video(I6VID_FRM_COPY, NULL); // send it's butt
-        gr_set_canvas(i6d_ss->cf_left);
-        if (i6d_device == I6D_CTM)
-            grd_cap->aspect >>= 1;
-        _fr_ret;
-    }
-#endif
 
     // If we're rendering just the quick mono bitmap (for clicking on items, on-line help, etc),
     // then return here.

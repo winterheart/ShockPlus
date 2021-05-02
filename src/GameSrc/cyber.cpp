@@ -160,12 +160,7 @@ errtype enter_cyberspace_stuff(char dest_lev) {
     mfd_change_slot(MFD_LEFT, MFD_INFO_SLOT);
     mfd_change_slot(MFD_RIGHT, MFD_INFO_SLOT);
 
-#ifdef STEREO_SUPPORT
-    if (convert_use_mode == 5)
-        full_visible = FULL_R_MFD_MASK | FULL_INVENT_MASK;
-    else
-#endif
-        full_visible |= FULL_R_MFD_MASK | FULL_INVENT_MASK;
+    full_visible |= FULL_R_MFD_MASK | FULL_INVENT_MASK;
     hardware_closedown(TRUE);
     drug_closedown(TRUE);
     change_mode_func(0, 0, FULLSCREEN_LOOP);

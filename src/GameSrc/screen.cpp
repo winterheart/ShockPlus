@@ -156,16 +156,6 @@ errtype screen_init(void) {
     gr2ss_register_mode(0, 640, 400);
     gr2ss_register_mode(0, 640, 480);
     gr2ss_register_mode(0, 1024, 768);
-#ifdef STEREO_SUPPORT
-    if (i6d_device == I6D_VFX1) {
-        Warning(("size = %d, %d!\n", i6d_ss->scr_w, i6d_ss->scr_h));
-        gr2ss_register_mode(0, 320, 240);
-        gr2ss_register_mode(0, 640, 240); // VFX Hack Mode
-    } else {
-        gr2ss_register_mode(0, 320, 100); // note secret stereo mode
-        gr2ss_register_mode(0, 640, 350); // CTM Hack Mode
-    }
-#endif
 #endif
 
     // Install mouse converter...

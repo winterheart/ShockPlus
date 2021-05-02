@@ -3018,12 +3018,7 @@ void set_inventory_mfd(ubyte obclass, ubyte type, uchar grab) {
             int i;
             for (i = 0; i < NUM_MFDS; i++) {
                 if (player_struct.mfd_current_slots[i] == MFD_ITEM_SLOT) {
-#ifdef STEREO_SUPPORT
-                    if (convert_use_mode == 5) {
-                        full_visible = FULL_MFD_MASK(i);
-                    } else
-#endif
-                        full_visible |= FULL_MFD_MASK(i);
+                    full_visible |= FULL_MFD_MASK(i);
                 }
             }
         }
