@@ -79,7 +79,6 @@ set(2D_SRC
 	Source/Flat8/fl8ll.c
 	Source/Flat8/fl8s.c
 	Source/Flat8/fl8hfl8.c
-	Source/Flat8/fl8pnt.c
 	Source/Flat8/fl8fl8m.c
 	Source/Flat8/fl8ltp.c
 	Source/Flat8/fl8fl8c.c
@@ -109,7 +108,6 @@ set(2D_SRC
 	Source/Flat8/fl8tsmap.c
 	Source/Flat8/fl8ply.c
 	Source/Flat8/fl8sply.c
-	Source/Flat8/fl8rect.c
 	Source/Flat8/fl8gfl8.c
 	Source/Flat8/fl8tl8.c
 	Source/Flat8/fl8p24.c

@@ -189,7 +189,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* 8-bit pixel prototypes. */
 extern void flat8_set_upixel(long color, short x, short y);
-extern int flat8_set_pixel(long color, short x, short y);
 extern long flat8_get_upixel(short x, short y);
 extern long flat8_get_pixel(short x, short y);
 
@@ -201,66 +200,13 @@ extern long flat8_get_pixel24(short x, short y);
 
 /* straight, rectangular-type primitives. */
 extern void flat8_clear(long color);
-extern void flat8_upoint(short x, short y);
-extern int flat8_point(short x, short y);
-extern void flat8_uhline(short x0, short y0, short x1);
-extern void flat8_uvline(short x0, short y0, short y1);
-extern void flat8_urect(short left, short top, short right, short bot);
 
 /* fixed-point rendering-type primitives. */
-extern void flat8_fix_uline(fix x0, fix y0, fix x1, fix y1);
-extern void flat8_fix_usline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
-extern void flat8_fix_ucline(fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rgb c1);
-extern void flat8_upoly(long c, int n, grs_vertex **vpl);
-extern void flat8_uspoly(long c, int n, grs_vertex **vpl);
-extern void flat8_ucpoly(long c, int n, grs_vertex **vpl);
 extern void flat8_interp2_ubitmap(grs_bitmap *bm);
 extern void flat8_filter2_ubitmap(grs_bitmap *bm);
-extern void flat8_tluc8_upoly(long c, int n, grs_vertex **vpl);
-extern void flat8_tluc8_uspoly(long c, int n, grs_vertex **vpl);
-
-extern void flat8_flat8_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-extern void flat8_flat8_solid_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, int c);
-
-extern void flat8_flat8_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_flat8_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_flat8_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-
-extern void flat8_flat8_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_flat8_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void flat8_flat8_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-
-extern int flat8_flat8_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern int flat8_flat8_lit_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern int flat8_flat8_clut_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-extern int flat8_flat8_solid_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, int c);
-
-extern void flat8_lin_lit_utmap(int n, fix *vlist, grs_bitmap *bm, fix *m, fix *l);
-
-extern void flat8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
-extern int flat8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
 
 extern void flat8_mono_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
 extern int flat8_mono_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
-
-extern void flat8_rsd8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
-extern int flat8_rsd8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
-
-extern void flat8_flat8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-
-extern void flat8_rsd8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-extern int flat8_rsd8_clut_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-
-extern void flat8_rsd8_scale_solid_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, int c);
-extern int flat8_rsd8_scale_solid_bitmap(grs_bitmap *bm, short x, short y, short w, short h, int c);
-
-extern void flat8_tluc8_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
-extern int flat8_tluc8_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
-
-extern void flat8_tluc8_clut_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-extern int flat8_tluc8_clut_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
 
 // internal scaler/mapper prototypes
 int gri_opaque_solid_scale_umap_init(grs_tmap_loop_info *info, grs_vertex **vert);
@@ -273,14 +219,7 @@ int gri_opaque_clut_scale_umap_init(grs_tmap_loop_info *tli);
 /* bitmap drawing functions. */
 extern void flat8_mono_ubitmap(grs_bitmap *bm, short x, short y);
 extern void flat8_flat8_ubitmap(grs_bitmap *bm, short x, short y);
-extern void flat8_rsd8_ubitmap(grs_bitmap *bm, short x, short y);
 extern void flat8_tluc8_ubitmap(grs_bitmap *bm, short x, short y);
-extern int flat8_rsd8_bitmap(grs_bitmap *bm, short x, short y);
-
-extern void flat8_flat8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl);
-
-extern void flat8_rsd8_solid_ubitmap(grs_bitmap *bm, short x, short y, int c);
-extern int flat8_rsd8_solid_bitmap(grs_bitmap *bm, short x, short y, int c);
 
 /* bitmap get routines. */
 extern void flat8_get_flat8_ubitmap(grs_bitmap *bm, short x, short y);
@@ -301,6 +240,5 @@ extern void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *ds
 extern void flat8_flat8_smooth_hv_double_ubitmap(grs_bitmap *src, grs_bitmap *dst);
 
 extern void flat8_flat8_v_double_ubitmap(grs_bitmap *bm);
-extern void flat8_flat8_hv_double_ubitmap(grs_bitmap *bm);
-extern void flat8_flat8_smooth_v_double_ubitmap(grs_bitmap *bm);
+
 #endif /* !__FLAT8_H */
