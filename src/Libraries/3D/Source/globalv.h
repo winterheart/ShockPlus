@@ -149,16 +149,4 @@ extern long _g3d_stereo_tmp[14]; //   dd     14 dup (?) ;temporary point list
 
 // palette base for gouraud-shaded polys
 
-extern sfix gouraud_base; //  sfix    ?
-
-// for statistics
-/*	ifdef   dbg_on
-
-n_polys dw      ?
-n_polys_drawn   dw      ?
-n_polys_triv_acc        dw      ?
-n_polys_triv_rej        dw      ?
-n_polys_clip_2d dw      ?
-n_polys_clip_3d dw      ?
-
-        endif*/
+extern fix16 gouraud_base; //  sfix    ?

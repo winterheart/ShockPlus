@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 // prototypes
@@ -164,49 +164,6 @@ void g3_eval_light_obj_cen(void) {
     // MLA - this routine is buggy as far as I can tell, it doesn't work at all
     // edi is never set or just happens to be set right, or it always falls
     // through the first test (non_local)
-
-    /*    ; is local?
-        test    _g3d_light_type,LT_LOC_LIGHT or LT_SPEC
-        jz     non_local
-
-        ; find center of object, duh, center is at 0,0,0
-        ;lea     esi,zero_vec
-        ;call    g3_rotate_point; this would be point in viewer space
-        ; returns point in edi
-        ;mov     tmp1,edi
-
-        ; evaluate local light
-        test    _g3d_light_type,LT_LOC_LIGHT
-        jz      no_loc
-        mov     eax,edi
-        call    g3_eval_loc_light
-        jmp     test_spec
-        no_loc:
-        call    g3_eval_vec_light
-
-        ; is spec set?
-        test_spec:
-        test    _g3d_light_type,LT_SPEC
-        jz     spec_done
-
-        ; evaluate view
-        ; view vector relative to zero is in _view_position
-        ; already
-        ;mov     eax,tmp1
-        lea     eax,zero_vec    ;in reality should write a diff routine
-        call    g3_eval_view
-
-        call    g3_eval_ldotv
-
-        spec_done:
-        ;mov     edi,tmp1
-        ;freepnt edi
-        ret
-
-        non_local:
-        ; assumes you've transformed
-        ; it already
-        jmp    g3_eval_vec_light*/
 }
 
 // set your view to be straight ahead, use when using specular,
@@ -282,7 +239,7 @@ fix light_diff_raw(g3s_phandle src, g3s_phandle dest) {
     if (temp < 0)
         temp = 0;
     temp += _g3d_amb_light; // add ambient light
-    temp >>= 4;             // convert to sfix, consider row 16 normal
+    temp >>= 4;             // convert to fix16, consider row 16 normal
     dest->i = temp;
     return (temp);
 }
@@ -345,7 +302,7 @@ fix light_spec_raw(g3s_phandle src, g3s_phandle dest) {
         ;
     temp = (LT_TABSIZE << 12) - 1; // if its over the max, set it to just under max
 
-    dest->i = temp >> 4; // convert to sfix, consider row 16 normal
+    dest->i = temp >> 4; // convert to fix16, consider row 16 normal
     return (temp);
 }
 
@@ -399,7 +356,7 @@ fix light_dands_raw(g3s_phandle src, g3s_phandle dest) {
     if (temp >= (LT_TABSIZE << 12))
         temp = (LT_TABSIZE << 12) - 1; // if its over the max, set it to just under max
 
-    dest->i = temp >> 4; // convert to sfix, consider row 16 normal
+    dest->i = temp >> 4; // convert to fix16, consider row 16 normal
     return (temp);
 }
 

@@ -1,12 +1,12 @@
 set(3D_SRC
 	Source/alloc.c
-	Source/Bitmap.c
+	Source/3d_bitmap.c
 	Source/clip.c
 	Source/detail.c
 	Source/fov.c
-	Source/GlobalV.c
+	Source/globalv.c
 	Source/instance.c
-	Source/interp.c
+	Source/3dinterp.c
 	Source/light.c
 	Source/matrix.c
 	Source/points.c

@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <math.h> // sqrtl()
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "fix.h"
 #include "lg.h"
 
@@ -130,7 +130,7 @@ void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0, g3s_vector *v1, g3s_
     v->gZ = fix64_frac(r[2]);
 
     // see if fit into a longword
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         r_temp = r[i];
         if (r_temp < 0)
             r_temp = -r_temp;

@@ -153,7 +153,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2d.h"
 #include "fix.h"
 
-#pragma pack(push,2)
+#pragma pack(push, 2)
 
 // MLA defines
 #define SwapFix(x, y)   \
@@ -182,13 +182,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define uvm8 unscaled_matrix.m8
 #define uvm9 unscaled_matrix.m9
 
-// Defines for stuff strewn all about the world
-// #define stereo_on 1
-
-#define f1_0 fix_make(1, 0)
-#define f0_5 fix_make(0, 0x8000)
-#define f0_25 fix_make(0, 0x4000)
-
 // gets the next available pnt in reg.
 #define getpnt(res)               \
     {                             \
@@ -207,16 +200,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         first_free = src;                \
     }
 
-// FIXME Move to FIX
-// new types:
-typedef short sfix;
-
-#define sfix_make(a, b) ((((short)(a)) << 8) | (b))
-#define fix_from_sfix(a) (((fix)(a)) << 8)
-
 #define g3_set_i(pnt, ii)          \
     do {                           \
-        pnt->i = sfix_make(ii, 0); \
+        pnt->i = fix16_make(ii, 0); \
         pnt->p3_flags |= PF_I;     \
     } while (0);
 #define g3_set_rgb(pnt, r, g, b)         \
@@ -303,19 +289,19 @@ typedef struct g3s_point {
 #endif
 
     fix sx, sy;     // screen coords
-    ubyte codes;     // clip codes
+    ubyte codes;    // clip codes
     ubyte p3_flags; // misc flags
 #if 0               // #ifdef __cplusplus
-	sfix u,v;
+	fix16 u,v;
 #else
     union {
         struct {
-            sfix u, v;
+            fix16 u, v;
         } uv;        // for texturing, etc.
         grs_rgb rgb; // for RGB-space gouraud shading
     };
 #endif
-    sfix i; // gouraud shading & lighting
+    fix16 i; // gouraud shading & lighting
 } g3s_point;
 
 // clip codes
@@ -405,19 +391,6 @@ int g3_clip_polygon(int n, g3s_point *src[], g3s_point *dest[]);
  *      Graphics-specific 3d routines
  *
  */
-
-// stereo functions
-short g3_init_stereo(short max_points, int user_x_axis, int user_y_axis, int user_z_axis);
-// sets up system for stereo by allocating twice as many
-// points, setting g3d_stereo_base to the amount of memory
-// the points take up
-
-void g3_start_stereo_frame(grs_canvas *rt);
-// mark all points as being unused, sets g3d_stereo to true
-// sets g3d_rt_canv to rt so you know where to render to
-
-void g3_set_eyesep(fix sep);
-// sets g3d_eyesep_raw to sep
 
 // System inialization, etc.
 
@@ -704,14 +677,6 @@ int g3_check_and_draw_cpoly(int n_verts, g3s_phandle *p);
 // MLA #pragma aux g3_check_and_draw_cpoly "*" parm [ecx] [esi] value [eax]
 // modify [eax ebx ecx edx esi edi];
 
-// versions of the poly routines which take the args on the stack
-int g3_draw_poly_st(int n_verts, ...);
-int g3_draw_cpoly_st(int n_verts, ...); // RBG-space smooth poly
-int g3_draw_spoly_st(int n_verts, ...); // smooth poly
-int g3_check_and_draw_poly_st(int n_verts, ...);
-int g3_check_and_draw_cpoly_st(int n_verts, ...);
-int g3_check_and_draw_spoly_st(int n_verts, ...);
-
 grs_vertex **g3_bitmap(grs_bitmap *bm, g3s_phandle p);
 // MLA #pragma aux g3_bitmap "*" parm [esi] [edi] modify [eax ebx ecx edx];
 grs_vertex **g3_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, short u_anchor, short v_anchor);
@@ -802,219 +767,6 @@ int g3_light_lmap_tile(g3s_phandle upperleft, g3s_vector *u_vec, g3s_vector *v_v
 void g3_interpret_object(ubyte *object_ptr, ...);
 extern void g3_set_tmaps_linear(void);
 extern void g3_reset_tmaps(void);
-
-// Pragmas for all these functions
-
-/* MLA
-#pragma aux g3_init_stereo "*" parm [eax] [ebx] [ecx] [edx] value [ax];
-#pragma aux g3_start_stereo_frame "*" parm [eax] modify [eax ebx ecx];
-#pragma aux g3_set_eyesep "*" parm [eax];
-
-#pragma aux g3_vec_dotprod "*" parm [esi] [edi] modify exact [eax ebx ecx edx
-esi] #pragma aux g3_vec_mag "*" parm [esi] modify [eax ebx ecx edx esi edi]
-#pragma aux g3_vec_normalize "*" parm [esi] modify [eax ebx ecx edx edi];
-#pragma aux g3_vec_add "*" parm [edi] [esi] [ebx] modify exact [eax];
-#pragma aux g3_vec_sub "*" parm [edi] [esi] [ebx] modify exact [eax];
-#pragma aux g3_vec_scale "*" parm [edi] [esi] [ebx] modify exact [eax edx];
-#pragma aug g3_vec_rotate "*" parm [ebx] [esi] [edi] modify [eax ecx edx];
-
-#pragma aux g3_init "*" parm [eax] [ebx] [ecx] [edx] value [ax];
-#pragma aux g3_shutdown "*";
-#pragma aux g3_count_free_points "*" value [eax];
-
-#pragma aux g3_alloc_point "*" value [eax] modify exact [eax esi ebx];
-#pragma aux g3_alloc_list  "*" value [eax] parm [ecx] [esi] modify exact [eax
-ebx esi];
-
-#pragma aux g3_rotate_point "*" parm [esi] value [edi] modify [eax ebx ecx edx
-esi edi]; #pragma aux g3_rotate_grad "*" parm [esi] value [edi] modify [eax ebx
-ecx edx esi edi]; #pragma aux g3_rotate_norm "*" parm [esi] value [edi] modify
-[eax ebx ecx edx esi edi]; #pragma aux g3_project_point "*" parm [edi] modify
-exact [eax ecx edx]; #pragma aux g3_transform_point "*" parm [esi] value [edi]
-modify [eax ebx ecx edx esi edi]; #pragma aux g3_rotate_light_norm "*" parm
-[esi] value [edi] modify [eax ebx ecx edx esi edi];
-
-
-#pragma aux g3_rotate_list "*" parm [ecx] [edi] [esi] value [ax] modify [eax ebx
-ecx edx esi edi]; #pragma aux g3_project_list "*" parm [ecx] [esi] value [ax]
-modify [eax ebx ecx edx esi edi]; #pragma aux g3_transform_list "*" parm [ecx]
-[edi] [esi] value [ax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_rotate_delta_v "*" parm [edi] [esi] modify [eax ebx ecx edx esi];
-
-#pragma aux g3_add_delta_v "*" parm [edi] [esi] modify [eax ebx edx esi];
-#pragma aux g3_add_delta_x "*" parm [edi] [eax] modify [eax ebx edx];
-#pragma aux g3_add_delta_y "*" parm [edi] [eax] modify [eax ebx edx];
-#pragma aux g3_add_delta_z "*" parm [edi] [eax] modify [eax ebx edx];
-#pragma aux g3_add_delta_xy "*" parm [edi] [eax] [ebx] modify exact [eax ebx ecx
-edx esi]; #pragma aux g3_add_delta_xz "*" parm [edi] [eax] [ebx] modify exact
-[eax ebx ecx edx esi]; #pragma aux g3_add_delta_yz "*" parm [edi] [eax] [ebx]
-modify exact [eax ebx ecx edx esi]; #pragma aux g3_add_delta_xyz "*" parm [edi]
-[eax] [ebx] [ecx] modify exact [eax ebx ecx edx esi];
-
-
-#pragma aux g3_copy_add_delta_v "*" parm [esi] [ebx] value [edi] modify [eax
-ebx]; #pragma aux g3_copy_add_delta_x "*" parm [esi] [eax] value [edi] modify
-exact [eax ebx edx esi]; #pragma aux g3_copy_add_delta_y "*" parm [esi] [eax]
-value [edi] modify exact [eax ebx edx esi]; #pragma aux g3_copy_add_delta_z "*"
-parm [esi] [eax] value [edi] modify exact [eax ebx edx esi]; #pragma aux
-g3_copy_add_delta_xy "*" parm [esi] [eax] [ebx] value [edi] modify exact [eax
-ebx ecx edx]; #pragma aux g3_copy_add_delta_xz "*" parm [esi] [eax] [ebx] value
-[edi] modify exact [eax ebx ecx edx]; #pragma aux g3_copy_add_delta_yz "*" parm
-[esi] [eax] [ebx] value [edi] modify exact [eax ebx ecx edx]; #pragma aux
-g3_copy_add_delta_xyz "*" parm [esi] [eax] [ebx] [ecx] value [edi] modify exact
-[eax ebx ecx edx esi];
-
-#pragma aux g3_replace_add_delta_x "*" parm [esi] [edi] [eax] value [edi] modify
-exact [eax ebx edx esi]; #pragma aux g3_replace_add_delta_y "*" parm [esi] [edi]
-[eax] value [edi] modify exact [eax ebx edx esi]; #pragma aux
-g3_replace_add_delta_z "*" parm [esi] [edi] [eax] value [edi] modify exact [eax
-ebx edx esi];
-
-#pragma aux g3_rotate_delta_x  "*" parm [edi] [eax] modify exact [eax ebx edx];
-#pragma aux g3_rotate_delta_y  "*" parm [edi] [eax] modify exact [eax ebx edx];
-#pragma aux g3_rotate_delta_z  "*" parm [edi] [eax] modify exact [eax ebx edx];
-#pragma aux g3_rotate_delta_xz "*" parm [edi] [eax] [ebx] modify exact [eax ebx
-ecx edx esi]; #pragma aux g3_rotate_delta_xy "*" parm [edi] [eax] [ebx] modify
-exact [eax ebx ecx edx esi]; #pragma aux g3_rotate_delta_yz "*" parm [edi] [eax]
-[ebx] modify exact [eax ebx ecx edx esi]; #pragma aux g3_rotate_delta_xyz "*"
-parm [edi] [eax] [ebx] [ecx] modify exact [eax ebx ecx edx esi];
-
-#pragma aux g3_dup_point "*" parm [esi] value [edi] modify [ebx ecx esi];
-#pragma aux g3_copy_point "*" parm [edi] [esi] modify exact [ecx esi];
-
-#pragma aux g3_free_point "*" parm [eax] modify exact [ebx esi];
-#pragma aux g3_free_list "*" parm [ecx] [esi] modify exact [eax ebx ecx esi];
-
-#pragma aux g3_set_view_matrix "*" parm [esi] [ebx] [eax] modify [eax ebx ecx
-edx esi edi]; #pragma aux g3_set_view_angles "*" parm [esi] [ebx] [ecx] [eax]
-modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_start_frame "*" modify [eax ebx ecx];
-#pragma aux g3_end_frame "*" value [eax];
-
-#pragma aux g3_draw_horizon "*" parm [eax] [edx] modify [eax ebx ecx edx esi
-edi];
-
-#pragma aux g3_check_codes "*" parm [ecx] [esi] value [bx] modify exact [ebx ecx
-edx esi];
-
-#pragma aux g3_check_normal_facing "*" parm [esi] [edi] value [al] modify exact
-[eax ebx ecx edx]; #pragma aux g3_check_poly_facing "*" parm [eax] [edx] [ebx]
-value [al] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_start_object "*" parm [esi] value [al] modify exact [eax];
-#pragma aux g3_start_object_matrix "*" parm [esi] [edi] value [al] modify [eax
-ebx ecx edx esi edi]; #pragma aux g3_start_object_angles_v "*" parm [esi] [edi]
-[ecx] value [al] modify [eax ebx ecx edx esi edi]; #pragma aux
-g3_start_object_angles_xyz "*" parm [esi] [eax] [ebx] [edx] [ecx] value [al]
-modify [eax ebx ecx edx esi edi]; #pragma aux g3_start_object_angles_x "*" parm
-[esi] [ebx] value [al] modify [eax ebx ecx edx esi edi]; #pragma aux
-g3_start_object_angles_y "*" parm [esi] [ebx] value [al] modify [eax ebx ecx edx
-esi edi]; #pragma aux g3_start_object_angles_z "*" parm [esi] [ebx] value [al]
-modify [eax ebx ecx edx esi edi]; #pragma aux g3_start_object_angles_xy "*" parm
-[esi] [ebx] [edx] [ecx] value [al] modify [eax ebx ecx edx esi edi]; #pragma aux
-g3_start_object_angles_xz "*" parm [esi] [ebx] [edx] [ecx] value [al] modify
-[eax ebx ecx edx esi edi]; #pragma aux g3_start_object_angles_yz "*" parm [esi]
-[ebx] [edx] [ecx] value [al] modify [eax ebx ecx edx esi edi]; #pragma aux
-g3_end_object "*" modify [ecx esi edi]; #pragma aux g3_scale_object "*" parm
-[eax] modify [ecx eax edx];
-
-#pragma aux g3_draw_line "*" parm [esi] [edi] value [eax] modify [eax ebx ecx
-edx esi edi]; #pragma aux g3_draw_cline "*" parm [esi] [edi] value [eax] modify
-[eax ebx ecx edx esi edi]; #pragma aux g3_draw_sline "*" parm [esi] [edi] value
-[eax] modify [eax ebx ecx edx esi edi]; #pragma aux g3_draw_point "*" parm [esi]
-value [eax] modify [eax ecx edx esi];
-
-#pragma aux g3_get_FOV parm [esi] [edi] modify exact [eax ebx ecx edx];
-#pragma aux g3_get_zoom "*" parm [eax] [ebx] [ecx] [edx] value [eax] modify
-exact [eax ebx ecx edx esi edi];
-
-#pragma aux g3_get_view_pyramid "*" parm [edi] modify exact [eax ebx ecx edx esi
-edi];
-
-#pragma aux g3_get_slew_step "*" parm [eax] [ebx] [ecx] [edi] modify exact [eax
-edx esi];
-
-#pragma aux g3_compute_normal "*" parm [edi] [eax] [edx] [ebx] modify exact [eax
-ebx ecx edx esi edi];
-
-#pragma aux g3_transpose parm [esi] modify exact [eax];
-#pragma aux g3_copy_transpose parm [edi] [esi] modify exact [eax];
-
-#pragma aux g3_matrix_x_matrix parm [ebx] [esi] [edi] modify exact [eax ebx ecx
-edx];
-
-#pragma aux g3_interpret_object "*" parm caller modify [eax ebx ecx edx esi
-edi];
-*/
-
-// inline code to handle stack args for polygon routines
-
-// Note that these are a lot uglier than they need to be, because C is so
-// annoying.  For starters, I shouldn't even have to specifiy the number of
-// parms, since C obviously knows this number.  Secondly,  if I have varargs,
-// C forces me to put all the args on the stack, when I really want the
-// count in register and the rest on the stack.  Lastly, since these are
-// inline functions, C won't do the stack fixup, and since I don't have
-// access, once again, to the parameter count, I have to use the variable
-// to fixup the stack.  This is really ugly since a wrong count supplied to
-// the function will mess up the stack.  Too bad C doesn't have a constant
-// defined to be the parameter count for the current function.
-
-// awwwww, poor matt
-
-// MLA- took these out because we can't do inline asm in PowerPC (or 68K for
-// that matter) and all routines need to be C callable
-/*
-#pragma aux g3_draw_poly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_draw_poly"     \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_draw_spoly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_draw_spoly"    \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_draw_cpoly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_draw_cpoly"    \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_check_and_draw_poly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_check_and_draw_poly"   \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_check_and_draw_cpoly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_check_and_draw_cpoly"  \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-
-#pragma aux g3_check_and_draw_spoly_st = \
-        "mov ecx,[esp]"                 \
-        "lea esi,4[esp]"                        \
-        "call	g3_check_and_draw_spoly"  \
-        "pop ecx"                               \
-        "lea esp,[esp+ecx*4]"   \
-        parm [ecx] [esi] value [eax] modify [eax ebx ecx edx esi edi];
-*/
 
 #pragma pack(pop)
 

@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 // returns current field of view. returns ax=x FOV, bx=y FOV
@@ -70,12 +70,10 @@ fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height) {
     fix unscalezoom, temp1;
     long templong;
 
-    fix_sincos(angle, &sin_val, &cos_val); // call	fix_sincos	;angle in
-                                           // bx
-    temp1 = fix_div(f1_0 - cos_val, cos_val + f1_0);
+    fix_sincos(angle, &sin_val, &cos_val);
+    temp1 = fix_div(FIX_UNIT - cos_val, cos_val + FIX_UNIT);
 
-    unscalezoom = fix_sqrt(temp1); // 	call	fix_sqrt_	;eax = unscaled zoom
-
+    unscalezoom = fix_sqrt(temp1);
     // now, temp1 would be zoom if not for window and pixel matrix scaling.
     // correct for these
 
@@ -83,12 +81,9 @@ fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height) {
     pixel_ratio = grd_cap->aspect;
 
     // get matrix scale value for given window size
-    templong = fix_mul_div(window_height, pixel_ratio,
-                           window_width); // imul	pixel_ratio	;height * pixrat
-                                          // 	idiv	ebx	;eax = h * pixrat / w
+    templong = fix_mul_div(window_height, pixel_ratio, window_width);
     // window and pixrat scaling affects y. see if y FOV requested
-    if (templong <= f1_0) // cmp	eax,f1_0	;< 1.0? jle	scale_x	;scale x
-    {
+    if (templong <= FIX_UNIT) {
         if (axis != 'X')
             return (unscalezoom);
         return (fix_mul(unscalezoom, templong));

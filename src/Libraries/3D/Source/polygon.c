@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "clip.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 #include "rgb.h"
 #include "OpenGL.h"
@@ -127,47 +127,12 @@ int g3_check_and_draw_poly(long c, int n_verts, g3s_phandle *p) {
 }
 
 int check_and_draw_common(long c, int n_verts, g3s_phandle *p) {
-// clang-format off
-#ifdef stereo_on
-  test    _g3d_stereo,1
-  jz      check_and_draw_common_raw
-  pushm eax,ecx,esi
 
-  call check_and_draw_common_raw
-  set_rt_canv
-
-  popm eax,ecx,esi
-  pushm eax,ecx
-
-  // moves list at esi to temp and repoints esi
-  test gour_flag,6
-  jnz  do_uvi_copy1
-  move_to_stereo
-  jmp     raw_poly_continue1
-do_uvi_copy1:
-  mov     edx,esi
-  mov     eax,ecx
-  move_to_stereo_and_uvi
-  mov     esi,edx
-raw_poly_continue1:
-
-  popm eax,ecx
-  call check_and_draw_common_raw
-
-  set_lt_canv
-  ret
-check_and_draw_common_raw:
-#endif
-        // clang-format on
-
-        if (g3_check_poly_facing(p[0], p[1], p[2])) {
-#ifdef stereo_on
-        js draw_poly_common_raw
-#else
+    if (g3_check_poly_facing(p[0], p[1], p[2])) {
         return draw_poly_common(c, n_verts, p);
-#endif
+    } else {
+        return 0; // no draw
     }
-    else return 0; // no draw
 }
 
 // takes ecx=# verts, esi=ptr to list of point handles
@@ -215,43 +180,7 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
     grs_vertex *dest;
     long rgb;
 
-// clang-format off
-#ifdef stereo_on
-  test    _g3d_stereo, 1
-  jz      draw_poly_common_raw
-
-  pushm eax,ecx,esi
-
-  call draw_poly_common_raw
-  set_rt_canv
-
-  popm eax,ecx,esi
-  pushm eax,ecx
-
-  // moves list at esi to temp and repoints esi
-  test gour_flag,6
-  jnz  do_uvi_copy2
-  move_to_stereo
-  jmp     raw_poly_continue2
-do_uvi_copy2:
-  mov     edx,esi
-  mov     eax,ecx
-  move_to_stereo_and_uvi
-  mov     esi,edx
-raw_poly_continue2:
-
-  popm eax,ecx
-  call draw_poly_common_raw
-
-  set_lt_canv
-  ret
-
-draw_poly_common_raw:
-#endif
-
-        // clang-format on
-
-        poly_color = c;
+    poly_color = c;
 
     // first, go through points and get codes
     andcode = 0xff;
@@ -399,8 +328,9 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
     if (draw_color == 255)
         draw_color = 0;
 
-    if (gour_flag == 0) // normal line
-    {
+    if (gour_flag == 0) {
+        // normal line
+
         // use wire poly lines.  Always clip.
         // set up args -- vertex contents on stack, pass sp
         // for line only need 1st 2 elements of grs_vertex, only push them
@@ -412,8 +342,9 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
             draw_color, gr_get_fill_parm(), &v0, &v1);
 
         result = CLIP_NONE;
-    } else if (gour_flag > 0) // cline
-    {
+    } else if (gour_flag > 0) {
+        // cline
+
         uchar a, b, c;
 
         v0.x = p0->sx;
@@ -454,8 +385,9 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
 
                 mov     eax,CLIP_NONE
                 jmp     leave_draw_line*/
-    } else // sline
-    {
+    } else {
+        // sline
+
         DEBUG("%s: implement me?", __FUNCTION__);
         // we have to do this annoyingly because i is an sfix,
         // and 2d takes a fix, so we dump things in eax and munge

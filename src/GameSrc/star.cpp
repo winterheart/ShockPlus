@@ -48,13 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define  STAR_SPEW
 #define STARS_ANTI_ALIAS
 
-#ifdef STEREO_ON
-extern uchar g3d_stereo;
-extern fix g3d_eyesep_raw;
-extern uchar *g3d_rt_canv_bits;
-extern uchar *g3d_lt_canv_bits;
-#endif
-
 // globals for state
 sts_vec *std_vec;
 uchar *std_col;
@@ -255,9 +248,6 @@ void star_render(void) {
     int x, y;
     int x1, y1;
     g3s_vector v;
-#ifdef STEREO_ON
-    uchar old_stereo;
-#endif
 #ifdef STARS_ANTI_ALIAS
     int anti_alias = grd_bm.w >= std_alias_size;
 #endif
@@ -265,11 +255,6 @@ void star_render(void) {
 #ifdef STAR_SPEW
     star_num_behind = 0;
     star_num_projected = 0;
-#endif
-
-#if defined(STARS_ANTI_ALIAS) && defined(STEREO_ON)
-    if (g3d_stereo)
-        anti_alias = 0;
 #endif
 
     // exit if no one every drew a star field anywhere visible
@@ -291,17 +276,7 @@ void star_render(void) {
         std_min_z = 0;
 
 // scale by max radius
-#ifndef STEREO_ON
     g3_scale_object(fix_sqrt(std_max_rad));
-#else
-    // add in eyesep raw cause that's as much bigger it could be
-    g3_scale_object(fix_sqrt(std_max_rad) + (g3d_stereo ? g3d_eyesep_raw : 0));
-#endif
-
-#ifdef STEREO_ON
-    old_stereo = g3d_stereo;
-    g3d_stereo = 0;
-#endif
 
     for (i = 0; i < std_num; ++i) {
         // in theory if codes aren't set it's on the screen
@@ -338,26 +313,6 @@ void star_render(void) {
                     }
                 }
             }
-
-#ifdef STEREO_ON
-            if (old_stereo) {
-                // switch canvases quickly
-                grd_bm.bits = g3d_rt_canv_bits;
-                if (std_size <= 1) {
-                    if (gr_get_pixel(x, y) == 0xff)
-                        gr_set_pixel(std_col[i], x, y);
-                } else {
-                    for (x1 = x; x1 < x + std_size; ++x1) {
-                        for (y1 = y; y1 < y + std_size; ++y1) {
-                            if (gr_get_pixel(x1, y1) == 0xff)
-                                gr_set_pixel(std_col[i], x1, y1);
-                        }
-                    }
-                }
-                // switch back
-                grd_bm.bits = g3d_lt_canv_bits;
-            }
-#endif
         }
 
         g3_free_point(s);
@@ -366,10 +321,6 @@ void star_render(void) {
     if(use_opengl()) {
         opengl_end_stars();
     }
-
-#ifdef STEREO_ON
-    g3d_stereo = old_stereo;
-#endif
 
 #ifdef STAR_SPEW
     mprintf("stars = %d behind = %d proj = %d\n", st_num, star_num_behind, star_num_projected);

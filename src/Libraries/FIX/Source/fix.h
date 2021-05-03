@@ -201,7 +201,6 @@ int long_fast_pyth_dist(int a, int b);
    represented as a 32-bit number as a*2^16. */
 
 typedef int32_t fix;
-typedef fix fix16;
 
 // define min and max
 #define FIX_MAX (0x7fffffff)
@@ -360,6 +359,12 @@ extern fix fix_pow(fix x, fix y);
 // Computes e to the x
 //
 fix fix_exp(fix x);
+
+// fix16 - 8 bits integer, 8 bits fraction
+typedef int16_t fix16;
+
+#define fix16_make(a, b) ((((int16_t)(a)) << 8) | (b))
+#define fix_from_fix16(a) (((fix)(a)) << 8)
 
 //////////////////////////////
 //

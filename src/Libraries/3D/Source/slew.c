@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 // fills in three vectors, each of length step_size, in the x,y, & z directions

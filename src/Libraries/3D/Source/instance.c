@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 // externs
@@ -68,6 +68,11 @@ void instance_matrix(g3s_matrix *src, g3s_matrix *dest);
 uchar save_context(void);
 uchar g3_start_object_angles_zy(g3s_vector *p, fixang ty, fixang tz, int rotation_order);
 uchar start_obj_common(g3s_vector *p, g3s_angvec *o, int rotation_order);
+
+// dest=c1*s1+c2*s2
+fix update_m(fix c1, fix s1, fix c2, fix s2);
+// dest=c1*s1-c2*s2
+fix update_ms(fix c1, fix s1, fix c2, fix s2);
 
 #define MAX_INSTANCE_DEPTH 5
 

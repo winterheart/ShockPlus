@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "clip.h"
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "fix.h"
 
 #define NEXTI(x) (((x) + 1 == n) ? 0 : (x) + 1)
@@ -585,36 +585,3 @@ void g3_bottom_intersect(void) {
     _tmp->codes = CC_OFF_Y | (s->codes & e->codes & CC_OFF_X);
     g3_intersect();
 }
-
-/*
-void project_point(g3s_point *src[],int n)
-{
-   g3s_point *p;
-   ubyte c;
-   int i;
-
-   for (i=0;i<n;i++) {
-      c = 0;
-      p = src[i];
-
-      if ( (p->p3_flags&PF_PROJECTED) == 0) {
-
-         // subtract, mask sign bit and shift into place
-         if (p->gZ < 0) c |= CC_BEHIND;
-         if (p->gX > p->gZ) c|= CC_OFF_RIGHT;
-         else if (p->gX <= -p->gZ) c|= CC_OFF_LEFT;
-         if (p->gY >= p->gZ) c |= CC_OFF_TOP;
-         else if (p->gY <= -p->gZ) c |= CC_OFF_BOT;
-
-         p->codes = c;
-
-         // project if inside
-         if (c==0) {
-            p->sx = fix_mul(_scrw,(FIX_UNIT+fix_div(p->gX,p->gZ)));
-            p->sy = fix_mul(_scrh,(FIX_UNIT-fix_div(p->gY,p->gZ)));
-            p->p3_flags |= PF_PROJECTED;
-         }
-      }
-   }
-}
-*/

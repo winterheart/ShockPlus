@@ -126,7 +126,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "3d.h"
 #include "clip.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 extern void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
@@ -378,54 +378,8 @@ int do_tmap(int n, g3s_phandle *vp, grs_bitmap *bm) {
     int i;
     g3s_phandle *src;
     g3s_phandle tempHand;
-
-// clang-format off
-#ifdef stereo_on
-  test    _g3d_stereo,1
-  jz      no_stereo1
-  push    eax                // calling destroys eax
-  mov     ecx,d [ti_ptr]
-  push    ecx
-  mov     ecx,d [ti_ptr+4]
-  push    ecx
-  mov     ecx,tmap_func
-  push    ecx
-  mov     ecx,light_flag
-  push    ecx
-  call    do_tmap_raw
-  pop     eax
-  mov     light_flag,eax
-  pop     eax
-  mov     tmap_func,eax
-  pop     eax
-  mov     d [ti_ptr+4],eax
-  pop     eax
-  mov     d [ti_ptr],eax
-  pop     eax
-
-  pushm eax,ebx           // copy list and codes and uv and rgb and i
-  // num  points,pointer to  bmap
-
-  move_to_stereo_and_uvi
-
-  set_rt_canv
-
-  popm eax,ebx
-  call do_tmap_raw
-
-  set_lt_canv
-  popad
-  ret
-
-do_tmap_raw:
-  pushad
-no_stereo1:
-#endif
-
-        // clang-format on
-
-        // convert RSD bitmap to normal
-        if (bm->type == BMT_RSD8) {
+    // convert RSD bitmap to normal
+    if (bm->type == BMT_RSD8) {
         if (gr_rsd8_convert(bm, &unpack_bm) != GR_UNPACK_RSD8_OK)
             return CLIP_ALL;
         else
@@ -691,61 +645,3 @@ void calc_warp_matrix2(g3s_phandle upperleft, fix x10, fix x20, fix y10, fix y20
     warp[7] = fix_mul(x20, z10) - fix_mul(x10, z20);
     warp[8] = fix_mul(x10, y20) - fix_mul(x20, y10);
 }
-
-// ------------------------------------------------------------------------------------------------
-// MLA - calc_warp_matrix never called! none of this stuff used!?
-
-/*
-getdel  macro   dest,ofs,src1,src2
-       mov     eax,[src1].ofs
-       sub     eax,[src2].ofs
-       break_if        o,'overflow in getdel'
-       mov     dest,eax
-       endm
-
-divm    macro   dest,reg
-       mov     eax,dest
-       cdq
-       idiv    reg
-       mov     dest,eax
-       endm
-
-
-
-// figure out the goofy warp matrix.
-// takes three points: ebx,ecx,edx=basis 0,1,2 and bm_ptr must point to
-// the address of the bitmap.
-// only handles square bitmaps now.
-void calc_warp_matrix(void)
-{
-// get deltas
-// x10 = r1->x - r0->x   x20 = r2->x - r0->x
-// y10 = r1->y - r0->y   y20 = r2->y - r0->y
-// z10 = r1->z - r0->z   z20 = r2->z - r0->z
-       // get 10 differences.
-       getdel  x10,x,ecx,ebx
-       getdel  y10,y,ecx,ebx
-       getdel  z10,z,ecx,ebx
-       // get 20 differences.
-       getdel  x20,x,edx,ebx
-       getdel  y20,y,edx,ebx
-       getdel  z20,z,edx,ebx
-       mov     esi,ebx                 // esi -> basis0
-
-       mov     ebx,width_count
-       cmp     ebx,1
-       je      skip_w_div
-       divm    x10,ebx
-       divm    y10,ebx
-       divm    z10,ebx
-skip_w_div:
-       mov     ebx,height_count
-       cmp     ebx,1
-       je      skip_h_div
-       divm    x20,ebx
-       divm    y20,ebx
-       divm    z20,ebx
-skip_h_div:
-                               jmp			calc_warp_matrix2
-}
- */

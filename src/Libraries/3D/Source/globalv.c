@@ -109,16 +109,6 @@ uchar shift_table[256] = {
 };
 // clang-format on
 
-/*  db      0
-        db      1
-        db      2   dup (2)
-        db      4   dup (3)
-        db      8   dup (4)
-        db      16  dup (5)
-        db      32  dup (6)
-        db      64  dup (7)
-        db      128 dup (8)*/
-
 // these vars describe the translation from the user's coordinate system
 // to our coordinate system
 
@@ -182,16 +172,4 @@ long _g3d_stereo_tmp[14];   //   dd     14 dup (?) ;temporary point list
 
 // palette base for gouraud-shaded polys
 
-sfix gouraud_base; //  sfix    ?
-
-// for statistics
-/*	ifdef   dbg_on
-
-n_polys dw      ?
-n_polys_drawn   dw      ?
-n_polys_triv_acc        dw      ?
-n_polys_triv_rej        dw      ?
-n_polys_clip_2d dw      ?
-n_polys_clip_3d dw      ?
-
-        endif*/
+fix16 gouraud_base; //  sfix    ?

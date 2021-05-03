@@ -83,7 +83,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include <FixMath.h>
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 /*#define f1_0	 fixmake(1)
@@ -292,23 +292,19 @@ void scale_view_matrix(void) {
     fix temp_fix;
 
     // set matrix scale vector based on zoom
-    _matrix_scale.gX = f1_0; // use 1.0 as defaults
-    _matrix_scale.gY = f1_0;
-    _matrix_scale.gZ = f1_0;
+    _matrix_scale.gX = FIX_UNIT; // use 1.0 as defaults
+    _matrix_scale.gY = FIX_UNIT;
+    _matrix_scale.gZ = FIX_UNIT;
 
-    if (_view_zoom <= f1_0)
+    if (_view_zoom <= FIX_UNIT)
         _matrix_scale.gZ = _view_zoom;
     else
-        _matrix_scale.gY = _matrix_scale.gX = fix_div(f1_0, _view_zoom);
+        _matrix_scale.gY = _matrix_scale.gX = fix_div(FIX_UNIT, _view_zoom);
 
     // scale set matrix scale vector based on window and pixel ratio
     temp_long = fix_mul_div(window_height, pixel_ratio, window_width);
 
-#ifdef stereo_on
-    _g3d_eyesep = fix_mul(-temp_long, _g3d_eyesep_raw); // calculate true eyesep
-#endif
-
-    if (temp_long <= f1_0)
+    if (temp_long <= FIX_UNIT)
         _matrix_scale.gX = fix_mul(_matrix_scale.gX, temp_long);
     else
         _matrix_scale.gY = fix_div(_matrix_scale.gY, temp_long);
@@ -468,17 +464,17 @@ void get_pyr_vector(g3s_vector *corners) {
     int64_t den_z = cross(d13, d56, d23, d46);
 
     if (llabs(den_x) >= llabs(den_y) && llabs(den_x) >= llabs(den_z)) {
-        corners->gX = f1_0;
+        corners->gX = FIX_UNIT;
         corners->gY = den_y / (den_x >> 16);
         corners->gZ = den_z / (den_x >> 16);
     } else if (llabs(den_y) >= llabs(den_x) && llabs(den_y) >= llabs(den_z)) {
         corners->gX = den_x / (den_y >> 16);
-        corners->gY = f1_0;
+        corners->gY = FIX_UNIT;
         corners->gZ = den_z / (den_y >> 16);
     } else {
         corners->gX = den_x / (den_z >> 16);
         corners->gY = den_y / (den_z >> 16);
-        corners->gZ = f1_0;
+        corners->gZ = FIX_UNIT;
     }
 
     // got_vector

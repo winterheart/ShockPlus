@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 #include "OpenGL.h"
 #include <stdbool.h>
@@ -184,23 +184,6 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
     long rm1;
     long rm2;
     long rm3;
-
-#ifdef stereo_on
-    if (_g3d_stereo & 1) {
-
-        ;
-        edi is point handle pushm edi,
-            esi call g3_bitmap_common_raw set_rt_canv
-
-                popm edi,
-            esi add edi,
-            _g3d_stereo_base call g3_bitmap_common_raw set_lt_canv
-
-                ret
-
-                    g3_bitmap_common_raw:
-    }
-#endif
 
     if ((p->p3_flags & PF_PROJECTED) == 0)
         if (g3_project_point(p) == 0)
@@ -395,7 +378,7 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
                     if (!use_opengl()) {
                         h_map(bm, 4, _g3d_bitmap_poly, &tmap_info);
                     } else {
-                        int opengl_bitmap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+                        int opengl_bitmap(grs_bitmap * bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
                         opengl_bitmap(bm, 4, _g3d_bitmap_poly, &tmap_info);
                     }
                     return (_g3d_bitmap_poly);
@@ -408,7 +391,7 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
     if (!use_opengl()) {
         h_map(bm, 4, _g3d_bitmap_poly, &tmap_info);
     } else {
-        int opengl_bitmap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+        int opengl_bitmap(grs_bitmap * bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
         opengl_bitmap(bm, 4, _g3d_bitmap_poly, &tmap_info);
     }
 

@@ -63,7 +63,7 @@ int _game_fr_tmap;
 int _fdt_dist;                         // distance in hv squares to us
 fix _fr_fhgt_step;                     // single hgt step
 fix _fr_fhgt_list[MAX_HGT + 1];        // all hgt steps fix mapping
-sfix _fr_sfuv_list[(2 * MAX_HGT) + 1]; // all hgt steps uv mapping
+fix16 _fr_sfuv_list[(2 * MAX_HGT) + 1]; // all hgt steps uv mapping
 fix slope_norm[MAX_HGT][3];            // table for sloped floors
 
 // these example values are for a 32wide map, they get set in frpipe when map is resized
@@ -108,7 +108,7 @@ static g3s_phandle *_fdt_rcore; // right core for external walls
 static int _fdt_rbase;          // value of pbase at right of external walls, we use pbase itself for left
 static int _fdt_me_flags;       // hold store the current map flags
 static int _fdt_wmap;           // current tmap family to use
-static sfix _fdt_slock;         // sfix value for vlock in square
+static fix16 _fdt_slock;        // fix16 value for vlock in square
 
 int _fdt_pbase; // where pbase is, for corner for idx lookup - sadly global for object lighting
 

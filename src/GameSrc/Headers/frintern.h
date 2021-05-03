@@ -113,7 +113,7 @@ int _fr_do_light(g3s_phandle work, int hgt_code);
 #ifndef __FRTERR_SRC
 // map/world data layout
 #ifdef __3D_H
-extern sfix _fr_sfuv_list[];
+extern fix16 _fr_sfuv_list[];
 #endif
 extern fix _fr_fhgt_step;
 extern fix _fr_fhgt_list[];

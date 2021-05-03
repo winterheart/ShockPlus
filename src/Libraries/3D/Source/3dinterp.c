@@ -78,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 //#include <String.h>
 //#include <_stdarg.h>
@@ -140,13 +140,48 @@ extern char gour_flag; // gour flag for actual polygon drawer
 #define OP_JNORM 1
 
 #define n_ops 40
-    void *opcode_table[n_ops] = {
-        do_eof,        do_jnorm,     do_lnres,     do_multires,   do_polyres,    do_setcolor, do_sortnorm,
-        do_debug,      do_setshade,  do_goursurf,  do_x_rel,      do_y_rel,      do_z_rel,    do_xy_rel,
-        do_xz_rel,     do_yz_rel,    do_icall_p,   do_icall_b,    do_icall_h,    0,           do_sfcal,
-        do_defres,     do_defres_i,  do_getparms,  do_getparms_i, do_gour_p,     do_gour_vc,  do_getvcolor,
-        do_getvscolor, do_rgbshades, do_draw_mode, do_getpcolor,  do_getpscolor, do_scaleres, do_vpnt_p,
-        do_vpnt_v,     do_setuv,     do_uvlist,    do_tmap_op,    do_dbg};
+void *opcode_table[n_ops] = {
+    do_eof,
+    do_jnorm,
+    do_lnres,
+    do_multires,
+    do_polyres,
+    do_setcolor,
+    do_sortnorm,
+    do_debug,
+    do_setshade,
+    do_goursurf,
+    do_x_rel,
+    do_y_rel,
+    do_z_rel,
+    do_xy_rel,
+    do_xz_rel,
+    do_yz_rel,
+    do_icall_p,
+    do_icall_b,
+    do_icall_h,
+    0,
+    do_sfcal,
+    do_defres,
+    do_defres_i,
+    do_getparms,
+    do_getparms_i,
+    do_gour_p,
+    do_gour_vc,
+    do_getvcolor,
+    do_getvscolor,
+    do_rgbshades,
+    do_draw_mode,
+    do_getpcolor,
+    do_getpscolor,
+    do_scaleres,
+    do_vpnt_p,
+    do_vpnt_v,
+    do_setuv,
+    do_uvlist,
+    do_tmap_op,
+    do_dbg
+};
 
 #define N_RES_POINTS 1000
 #define PARM_DATA_SIZE 4 * 100
@@ -183,7 +218,7 @@ grs_bitmap *_vtext_tab[N_VTEXT_ENTRIES] = {
 // clang-format on
 
 // ptr to stack parms
-ubyte *parm_ptr; //va_list parm_ptr;
+ubyte *parm_ptr; // va_list parm_ptr;
 
 // space for parms to objects
 char parm_data[PARM_DATA_SIZE];
@@ -213,7 +248,7 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     }
 
     // get addr of stack parms
-    parm_ptr = (&object_ptr) + sizeof(object_ptr); //va_start(parm_ptr, object_ptr);
+    parm_ptr = (&object_ptr) + sizeof(object_ptr); // va_start(parm_ptr, object_ptr);
 
     // mark res points as free
     memset(resbuf, 0, N_RES_POINTS * 4);
@@ -231,13 +266,11 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
             scale = -scale;
 
             temp = (((ulong)_view_position.gX) >> 16); // get high 16 bits
-            // FIXME: DG: I guess they meant &, not &&
-            // shamaz: Fixed that
             if (((temp << scale) & 0xffff0000) != 0)
-                return;                             // overflow
+                return;                                // overflow
             temp = (((ulong)_view_position.gY) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
-                return;                             // overflow
+                return;                                // overflow
             temp = (((ulong)_view_position.gZ) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
                 return; // overflow
@@ -260,7 +293,6 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
         gr_set_fill_type(FILL_NORM);
         opcode_table[OP_JNORM] = &do_jnorm;
     }
-
 }
 
 // interpret the object
@@ -617,9 +649,7 @@ uchar *do_getparms_i(uchar *opcode) {
     return opcode + 8;
 }
 
-uchar *do_dbg(uchar *opcode) {
-    return opcode + 8;
-}
+uchar *do_dbg(uchar *opcode) { return opcode + 8; }
 
 extern void (*g3_tmap_func)();
 extern int temp_poly(long c, int n, grs_vertex **vpl);
@@ -675,8 +705,3 @@ uchar *do_ldjnorm(uchar *opcode) {
     } else
         return opcode + (*(short *)(opcode + 2)); // surface not visible
 }
-
-//external calls to these do-nothing functions can be safely removed
-void FlipShort(short *sh) {}
-void FlipLong(long *lng) {}
-void FlipVector(short n, g3s_vector *vec) {}

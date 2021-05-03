@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include <FixMath.h>
 #include "3d.h"
-#include "GlobalV.h"
+#include "globalv.h"
 #include "lg.h"
 
 // prototypes
@@ -99,74 +99,8 @@ g3s_phandle g3_transform_point(g3s_vector *v) {
 int g3_project_point(g3s_phandle p) {
     fix x, y, z, res;
 
-#ifdef stereo_on
-    test _g3d_stereo,
-        1 jz no_stereo1
-            // is this a sister point?
-            cmp edi,
-        _g3d_stereo_list jl not_sister
-
-            // debug_brk 'yo, found projecting sister'
-
-            // copy the point and add
-            mov esi,
-        edi sub esi, _g3d_stereo_base mov ecx,
-        (size g3s_point) / 4 rep movsd
-
-                               mov eax,
-        _g3d_eyesep sub edi,
-        (size g3s_point) // restore edi
-        add[edi]
-            .x,
-        eax
-
-            // call clip encoder on this point
-            mov ecx,
-        ebx call code_point mov ebx,
-        ecx
-
-            // project point like a normal point
-            mov _g3d_stereo,
-        0 pop esi call g3_project_point mov _g3d_stereo,
-        1
-
-        ret
-
-            not_sister :
-        // copy the point
-        mov esi,
-        edi add edi,
-        _g3d_stereo_base mov ecx,
-        (size g3s_point) / 4 rep movsd mov eax,
-        _g3d_eyesep sub edi,
-        (size g3s_point) // restore edi
-        add[edi]
-            .x,
-        eax
-
-            // call clip encoder
-            mov ecx,
-        ebx call code_point mov ebx,
-        ecx
-
-            sub edi,
-        _g3d_stereo_base no_stereo1 :
-#endif
-
-        /*printf("g3_project_point\n");
-
-        char printy[100];
-        fix_sprint(printy, p->gX);
-        printf("%s\n", printy);
-
-        fix_sprint(printy, p->gY);
-        printf("%s\n", printy);
-
-        fix_sprint(printy, p->gZ);
-        printf("%s\n", printy);*/
-
-        // check if this point is in front of the back plane.
-        z = p->gZ;
+    // check if this point is in front of the back plane.
+    z = p->gZ;
     if (z <= 0)
         return 0;
     x = p->gX;
@@ -201,70 +135,9 @@ int g3_project_point(g3s_phandle p) {
     // modify point flags to indicate projection.
     p->p3_flags |= PF_PROJECTED;
 
-#ifdef stereo_on
-    test _g3d_stereo, 1 jz no_stereo2 mov eax,
-        [edi].sy // copy over old sy
-            add edi,
-        _g3d_stereo_base // load twin address
-            mov[edi]
-                .sy,
-        eax // make new sy, could add the .5 addition here too
-
-            mov eax,
-        [edi].x
-            // reproject the x coord
-            imul _scrw                //* screen width
-                proj_div_2 : idiv ecx /// z
-                                 add eax,
-        _biasx //+center
-            mov[edi]
-                .sx,
-        eax // save
-
-            // indicate projection
-            or [edi].p3_flags,
-        PF_PROJECTED
-
-            // restore edi
-            sub edi,
-        _g3d_stereo_base no_stereo2 :
-#endif
-
-        // point has been projected.
-        return 1;
+    // point has been projected.
+    return 1;
 }
-
-// MLA - all the divide exception handler overflow stuff was removed, and
-// checked before each divide.  So all of this stuf isn't needed
-/*
-        public  proj_div_0,proj_div_1,divide_overflow_3d
-ifdef  stereo_on
-        public  proj_div_2,divide_overflow_r3d
-endif
-
-//this gets called by the system divide overflow handler when there is an
-//overflow at proj_div_0, proj_div_1
-divide_overflow_3d:
-//       fall    project_overflow
-project_overflow:
-        or      [edi].codes,CC_CLIP_OVERFLOW
-
-ifdef stereo_on
-        test    _g3d_stereo,1
-        jz      no_stereo3
-        add     edi,_g3d_stereo_base
-divide_overflow_r3d:
-        or      [edi].codes,CC_CLIP_OVERFLOW
-        sub     edi,_g3d_stereo_base
-no_stereo3:
-endif
-
-        cspew   "!"     //"project overflow!"
-        // this did not use to restore this
-        ex_set_div_action esi
-        pop     esi
-        ret
-*/
 
 // takes esi=ptr to array of vectors, edi=ptr to list for point handles,
 // ecx=count
