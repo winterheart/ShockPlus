@@ -32,11 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rgb.h"
 #include "scrdat.h"
 
-// prototypes
-void gri_build_blend(uchar *base_addr, int blend_fac);
-int gr_free_blend(void);
-uchar gr_init_blend(int log_blend_levels);
-
 // points to blend_tabs-1 tables, each 64k
 uchar *grd_blend = NULL;
 uchar *grd_half_blend = NULL;

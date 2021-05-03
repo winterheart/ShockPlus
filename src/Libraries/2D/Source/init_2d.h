@@ -37,11 +37,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
  */
 
-#ifndef __INIT_H
-#define __INIT_H
+#ifndef __INIT_2D_H
+#define __INIT_2D_H
 extern int gr_init (void);
 extern int gr_vga_init (void);
 extern int gr_flat8_init (void);
 #define gr_svga_init gr_init
 #define gr_vesa_init gr_init
-#endif /* !__INIT_H */
+#endif /* __INIT_2D_H */

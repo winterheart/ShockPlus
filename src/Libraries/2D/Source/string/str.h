@@ -53,6 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif // !defined(__cplusplus)
 
+#include "ctxmac.h"
+
 /* prototypes for non-table driven string handling routines. */
 extern void gr_font_string_size(grs_font *font, char *string, short *width, short *height);
 extern short gr_font_string_width(grs_font *font, char *string);
@@ -67,6 +69,14 @@ extern void gr_font_string_unwrap(char *s);
 #define gr_char_width(c) gr_font_char_width((grs_font *)gr_get_font(), c)
 #define gr_char_size(c, w, h) gr_font_char_size((grs_font *)gr_get_font(), c, w, h)
 #define gr_string_wrap(string, width) gr_font_string_wrap((grs_font *)gr_get_font(), string, width)
+
+#define gr_string(s, x, y) \
+    (((int (*)(grs_font *, char *, short, short))grd_canvas_table[DRAW_STRING]))((grs_font *)gr_get_font(), s, x, y)
+#define gr_scale_string(s, x, y, w, h)                                                                \
+    (((int (*)(grs_font *, char *, short, short, short, short))grd_canvas_table[DRAW_SCALE_STRING]))( \
+        (grs_font *)gr_get_font(), s, x, y, w, h)
+#define gr_char(s, x, y) \
+    (((int (*)(grs_font *, char, short, short))grd_canvas_table[DRAW_CHAR]))((grs_font *)gr_get_font(), s, x, y)
 
 #if defined(__cplusplus)
 }
