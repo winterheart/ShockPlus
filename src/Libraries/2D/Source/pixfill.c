@@ -17,21 +17,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 /*
- * $Source: r:/prj/lib/src/2d/RCS/pixfill.h $
- * $Revision: 1.2 $
- * $Author: kevin $
- * $Date: 1994/08/16 15:36:39 $
+ * $Source: n:/project/lib/src/2d/RCS/pixfill.c $
+ * $Revision: 1.1 $
+ * $Author: lmfeeney $
+ * $Date: 1994/06/11 00:57:49 $
  */
 
-#ifndef __PIXFILL_H
-#define __PIXFILL_H
-
+#include "grrend.h"
 #include "grpix.h"
-#include "lintyp.h"
+#include "pixtab.h"
 
-#define grd_pixel_fill(c, parm, x, y) gr_fill_upixel(c, x, y)
+/* not all pixel fill routines use all parameters */
+// MLA #pragma off (unreferenced)
 
 void gri_set_fill_globals(int32_t *fill_type_ptr, int32_t fill_type, void (***function_table_ptr)(),
-                          void (**function_table)(), grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector);
-
-#endif /* __PIXFILL_H */
+                          void (**function_table)(), grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector) {
+    *fill_type_ptr = fill_type;
+    *function_table_ptr = function_table;
+    *line_vector_ptr = line_vector;
+}

@@ -15,6 +15,7 @@ set(2D_SRC
 	Source/permap.c
 	Source/persetup.c
 	Source/pertol.c
+	Source/pixfill.c
 	Source/rgb.c
 	Source/screen.c
 	Source/sscrn.c

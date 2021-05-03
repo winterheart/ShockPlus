@@ -69,7 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    occurs before grd_gc.fill_type is set, the function table ptrs may get out
    of sync when the interrupt tries to restore the canvas. */
 // implementation of gri_set_fill_globals is in PixFill.c
-extern void gri_set_fill_globals(long *fill_type_ptr, long fill_type,
+extern void gri_set_fill_globals(int32_t *fill_type_ptr, int32_t fill_type,
                           void (***function_table_ptr)(), void (**function_table)(),
                           grt_uline_fill **line_vector_ptr, grt_uline_fill *line_vector);
 
