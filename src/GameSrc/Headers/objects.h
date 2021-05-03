@@ -85,6 +85,7 @@ typedef struct Obj {
     ObjInfo info; // extra, application-specific information
 } Obj;
 
+/*
 typedef struct old_Obj {
     uchar active;         // does this object really exist?
     ObjClass obclass;     // what class this is
@@ -102,6 +103,7 @@ typedef struct old_Obj {
     ObjLoc loc;       // location
     old_ObjInfo info; // extra, application-specific information
 } old_Obj;
+*/
 
 //#define FORALLOBJS(pmo) for (pmo = (objs[OBJ_NULL]).headused; pmo != OBJ_NULL; pmo = objs[pmo].next)
 

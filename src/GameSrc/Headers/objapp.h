@@ -170,6 +170,7 @@ typedef struct {
     uchar inst_flags;     //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } ObjInfo;
 
+/*
 typedef struct {
     int ph;
     byte type;
@@ -179,6 +180,7 @@ typedef struct {
     ubyte time_remainder; // animdata
     uchar inst_flags;     //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
 } old_ObjInfo;
+*/
 
 #ifdef HASH_OBJECTS
 #define OBJ_HASH_ENTRIES 512
@@ -199,10 +201,12 @@ typedef struct {
     ObjRefStateBin bin;
 } ObjRefState;
 
+/*
 typedef struct {
     ObjRefStateBin bin;
     ObjRefStateInfo info;
 } oldObjRefState;
+*/
 
 // The following macros perform simple comparing and copying operations.
 // If your structures are immensely complicated, you can turn them into
