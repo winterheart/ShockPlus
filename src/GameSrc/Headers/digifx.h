@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DIGIFX_H
 #define DIGIFX_H
 
+#include "fix.h"
 #include "lgsndx.h"
 
 int compute_sfx_vol(ushort x1, ushort y1, ushort x2, ushort y2);

@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "frprotox.h"
 #include "map.h"
+#include "rect.h"
 
 uchar draw_tmap_p(int ptcnt);
 

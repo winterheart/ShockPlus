@@ -28,17 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "2dres.h"
 #include "faketime.h"
 #include "player.h"
 #include "newmfd.h"
 #include "mfdint.h"
 #include "mfddims.h"
 #include "mfdpanel.h"
+#include "minimax.h"
 #include "colors.h"
 #include "rcolors.h"
 #include "tools.h"
 #include "wares.h"
-#include "objprop.h"
 #include "objsim.h"
 #include "miscqvar.h"
 #include "cit2d.h"
@@ -49,6 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sfxlist.h"
 #include "musicai.h"
 #include "gamestrn.h"
+#include "vmouse.h"
 
 #include "cybstrng.h"
 #include "otrip.h"

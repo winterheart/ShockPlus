@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EMAIL_H
 
 #include "mfdint.h"
+#include "res.h"
 
 void add_email_handler(LGRegion *r);
 uchar email_color_func(void *dp, int num);

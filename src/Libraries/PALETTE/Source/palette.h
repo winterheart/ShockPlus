@@ -31,12 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Do yourself a favor and quickly read the docs, found in
 //   n:\project\lib\docs\palette.txt, before you use the palette
 //   library.  It may save you some confusion.
+#include <stdlib.h>
 
 #include "lg.h"
 #include "fix.h"
-#include "error.h"
+#include "lg_error.h"
 #include "2d.h"
-#include <stdlib.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * STRUCTS and TYPEDEFS
@@ -118,5 +122,9 @@ extern void palette_swap_shadow(int s, int n, int d);
 extern void palette_print_table();
 
 extern byte num_installed_shifts;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __PALETTE_H

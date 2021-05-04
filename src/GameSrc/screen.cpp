@@ -42,6 +42,7 @@ extern "C" {
 #include "frflags.h"
 #include "citres.h"
 #include "gr2ss.h"
+#include "hotkey.h"
 #include "invent.h"
 #include "invdims.h"
 #include "leanmetr.h"

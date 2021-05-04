@@ -48,15 +48,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifdef AUDIOLOGS
-#include "audiolog.h"
-#endif
-
 #include "frtypes.h"
 #include "frintern.h"
 #include "frparams.h"
 #include "frflags.h"
 #include "gr2ss.h"
+#include "lg.h"
+
+#ifdef AUDIOLOGS
+#include "audiolog.h"
+#endif
 
 int fr_pipe_go_2(void);
 int fr_pipe_go_3(void);

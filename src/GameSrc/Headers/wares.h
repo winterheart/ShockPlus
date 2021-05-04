@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __WARES_H
 #define __WARES_H
 
+#include "fix.h"
 #include "gamesys.h"
 
 /*

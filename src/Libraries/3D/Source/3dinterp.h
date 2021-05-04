@@ -32,6 +32,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  */
 
+#ifndef __3DINTERP_H
+#define __3DINTERP_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "3d.h"
+
 // actual inline code
 extern uchar _vcolor_tab[];
 #define g3_set_vcolor(vcolor_id, color_val) _vcolor_tab[vcolor_id] = (color_val);
@@ -48,3 +57,9 @@ extern uchar itrp_gour_flg, itrp_wire_flag, itrp_check_flg;
 #define g3_set_gour_flag(x) itrp_gour_flag = x
 #define g3_set_wire_flag(x) itrp_wire_flag = x
 #define g3_set_check_flag(x) itrp_check_flag = x
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

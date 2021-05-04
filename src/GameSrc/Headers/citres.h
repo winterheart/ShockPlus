@@ -28,7 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-
+#include "2d.h"
+#include "cursors.h"
+#include "lg_error.h"
+#include "res.h"
 // Defines
 
 // Typedefs

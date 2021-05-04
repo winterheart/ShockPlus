@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "2dres.h"
 #include "MODELS/pelvis.h"
 #include "faketime.h"
 #include "citres.h"
@@ -31,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "criterr.h"
 #include "froslew.h"
+#include "leanmetr.h"
 #include "objprop.h"
 #include "objsim.h"
 #include "tools.h"

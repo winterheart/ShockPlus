@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <cstring>
 
+#include "2dres.h"
 #include "game_screen.h" // for the root region
 #include "fullscrn.h"
 #include "invent.h"

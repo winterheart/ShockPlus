@@ -19,6 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __VOX_H
 #define __VOX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "2d.h"
 
 // Voxel structure
@@ -54,6 +58,9 @@ void vx_init_vox(vxs_vox *v,fix pix_dist,fix pix_size,int depth,grs_bitmap *col,
 // don't forget to call g3_end_object afterwards
 void vx_render(vxs_vox *v);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !__VOX_H */
 

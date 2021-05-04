@@ -32,6 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RND_H
 #define RND_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "lg_types.h"
 #include "fix.h"
 
@@ -91,5 +95,9 @@ void RndGauss16Seed(RndStream *prs, ulong seed);
 
 ulong RndGauss16Fast(RndStream *prs);
 void RndGauss16FastSeed(RndStream *prs, ulong seed);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

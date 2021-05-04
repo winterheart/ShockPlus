@@ -60,10 +60,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSE_H
 
 #include "lg.h"
-#include "error.h"
+#include "lg_error.h"
 #include <stdbool.h>
 #include <stdint.h>
-//#include <Carbon/Carbon.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct _mouse_event {
     short x; // position
@@ -159,5 +162,9 @@ errtype mouse_constrain_xy(short xl, short yl, short xh, short yh);
 // errtype mouse_set_lefty(uchar lefty);
 
 void MousePollProc(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _MOUSE_H

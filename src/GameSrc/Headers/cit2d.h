@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __CIT2D_H
 #define __CIT2D_H
 
+#include "lg_types.h"
+
 /*
  * $Source: r:/prj/cit/src/inc/RCS/cit2d.h $
  * $Revision: 1.4 $

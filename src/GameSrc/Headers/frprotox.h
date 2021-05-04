@@ -51,6 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "2d.h"
+
 #ifndef __FRTYPESX_H
 typedef void frc;
 typedef void fmp;
@@ -114,9 +116,7 @@ extern int (*fr_get_idx)(void);
 extern uchar (*fr_obj_block)(void *mptr, uchar *_sclip, int *loc);
 extern void (*fr_clip_start)(uchar headnorth);
 extern void (*fr_rend_start)(void);
-#ifdef __2D_H
 extern grs_bitmap *(*fr_get_tmap)(void);
-#endif
 
 // default versions of above, defined in frsetup and set there
 void fr_default_mouse(void);
@@ -124,8 +124,6 @@ int fr_default_idx(void), fr_pickup_idx(void);
 uchar fr_default_block(void *mptr, uchar *_sclip, int *loc);
 void fr_default_clip_start(uchar headnorth);
 void fr_default_rend_start(void);
-#ifdef __2D_H
 grs_bitmap *fr_default_tmap(void);
-#endif
 
 #endif // __FRPROTOX_H

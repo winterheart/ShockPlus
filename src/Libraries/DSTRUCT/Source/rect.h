@@ -49,6 +49,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef RECT_H
 #define RECT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //	Here are the Point and LGRect structs
 
 typedef struct {
@@ -161,4 +165,9 @@ Point MakePointInline(ushort x, ushort y);
 // so the compiler generates things like mov eax,ebx;mov ebx,ecx;code as above
 // which is dumb, since we could do the above with bx and cx just as well. ick
 */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

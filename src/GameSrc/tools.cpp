@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ctype.h>
 #include <SDL.h>
 
+#include "2dres.h"
 #include "criterr.h"
 #include "gr2ss.h"
 #include "tools.h"
@@ -36,7 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "musicai.h"
 #include "colors.h"
+#include "event.h"
 #include "gamestrn.h"
+#include "hotkey.h"
 #include "invdims.h"
 #include "fullscrn.h"
 #include "hud.h"

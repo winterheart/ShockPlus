@@ -27,6 +27,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the 2d library.
  */
 
+#ifndef __TMPALLOC_H
+#define __TMPALLOC_H
+
+#include "memall.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern MemStack *temp_mem_get_stack(void);
 extern int temp_mem_init(MemStack *ms);
 extern int temp_mem_uninit(void);
@@ -53,3 +62,9 @@ extern int temp_spew_free(void *p,char *file,int line);
 #define TempRealloc temp_realloc
 #define TempFree temp_free
 #endif /* DBG_ON */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

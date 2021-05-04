@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainloop.h"
 #include "wares.h"
 #include "ai.h"
+#include "palette.h"
 #include "physics.h"
 #include "gamesys.h"
 #include "gametime.h"

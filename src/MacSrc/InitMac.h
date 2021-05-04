@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // InitMac.h - Initialize Mac toolbox managers and setup the application's globals.
 
+#include "lg_types.h"
+
 // How many tick passed since game startup
 extern uint32_t gShockTicks;
 

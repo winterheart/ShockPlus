@@ -54,6 +54,7 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "gamestrn.h"
 #include "gr2ss.h"
 #include "grenades.h"
+#include "hotkey.h"
 #include "invent.h"
 #include "leanmetr.h"
 #include "MacTune.h"

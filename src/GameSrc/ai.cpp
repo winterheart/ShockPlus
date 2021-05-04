@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ai.h"
 #include "aiflags.h"
+#include "edms.h"
 #include "objects.h"
 #include "objsim.h"
 #include "objcrit.h"
@@ -43,7 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objbit.h"
 #include "mapflags.h"
 #include "tilename.h"
-#include "tools.h"
 #include "safeedms.h"
 #include "treasure.h"
 #include "fullscrn.h"

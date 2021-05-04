@@ -29,7 +29,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "2d.h"
+#include "edms.h"
+#include "lg_error.h"
 #include "objects.h"
+#include "rect.h"
+#include "res.h"
 
 #define ID2SPEC(id) (objs[(id)].specID)
 

@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h> // for memset
 
+#include "3dinterp.h"
 #include "effect.h"
 #include "gameobj.h"
 
@@ -49,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gettmaps.h"
 #include "objbit.h"
 #include "rendtool.h"
-
+#include "vox.h"
 #include "frflags.h"
 
 #include "ice.h"

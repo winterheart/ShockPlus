@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef __EDMS_MOD_H
+#define __EDMS_MOD_H
+
 //	Here is an include file for EDMS internal functions.  It contains all that
 //	Stuff that a growing model might need.  Also, it's a good idea, dammit!
 //	=======================================================================
@@ -51,3 +55,5 @@ extern int32_t are_you_there(int32_t object); // May not be needed by most model
 // Sleepy Snoozy...
 // ----------------
 extern int32_t no_no_not_me[MAX_OBJ];
+
+#endif

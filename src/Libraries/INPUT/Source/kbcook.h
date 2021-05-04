@@ -32,8 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __KBCOOK_H
 
 #include <ctype.h>
-//#include "error.h"
-#include "../../H/error.h"
+#include "lg_error.h"
 #include "kb.h"
 
 //#include <Carbon/Carbon.h>

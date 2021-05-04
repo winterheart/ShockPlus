@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdlib.h>
 
+#include "hotkey.h"
 #include "input.h"
 #include "player.h"
 #include "physics.h"

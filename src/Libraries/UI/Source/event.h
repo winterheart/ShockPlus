@@ -17,9 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 */
 #ifndef _EVENT_H
-#define _EVENT_H 
+#define _EVENT_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "lg.h"
-#include "error.h"
+#include "lg_error.h"
 #include "slab.h"
 #include "region.h" 
 #include "mouse.h"
@@ -295,6 +300,8 @@ extern ulong uiDefaultRegionOpacity;
 // When a handler is added to a region, the opacity is set to the
 // value of uiDefaultRegionOpacity.  
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _EVENT_H 

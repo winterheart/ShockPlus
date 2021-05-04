@@ -30,7 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-
+#include "2d.h"
+#include "lg_error.h"
 // Defines
 
 #define NUM_TEXTURE_SIZES 4

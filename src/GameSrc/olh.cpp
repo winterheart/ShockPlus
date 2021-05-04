@@ -38,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hud.h"
 #include "mainloop.h"
 #include "gamescr.h"
+#include "hotkey.h"
 #include "olhint.h"
 #include "faketime.h"
 #include "objbit.h"

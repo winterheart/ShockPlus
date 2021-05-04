@@ -47,6 +47,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Includes
 #include "lg.h"  // every file should have this
 
@@ -54,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // System Library Includes
 #include <stdint.h>
-#include "error.h"
+#include "lg_error.h"
 #include "hash.h" 
 #include "kbcook.h"
 #include "array.h"
@@ -143,6 +147,10 @@ errtype hotkey_list_clear();
 
 // Globals
 
-extern ulong HotkeyContext;  
+extern ulong HotkeyContext;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __HOTKEY_H

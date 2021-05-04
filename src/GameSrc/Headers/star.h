@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __STAR_H
 #define __STAR_H
 
+#include "3dinterp.h"
+
 // small vector structure, all elements are 15 bit
 // with top bit of sign.  Shift left when unpacking
 // to a fix, since sts_vecs are normalized they can

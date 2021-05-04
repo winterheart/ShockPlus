@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#include "2d.h"
+
 // externs for functions in FrUtils.C
 
 extern void Fast_Slot_Copy(grs_bitmap *bm);

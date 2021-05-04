@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #include "game_screen.h"
 #include "gamescr.h"
+#include "keydefs.h"
 #include "tools.h"
-#include "statics.h"
 #include "str.h"
 
 #include "MacTune.h"
@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern "C" {
 #include "afile.h"
+#include "hotkey.h"
 #include "movie.h"
 }
 

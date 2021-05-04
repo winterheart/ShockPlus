@@ -23,7 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "rect.h"
-#include "error.h"
+#include "lg_error.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define INVISIBLE_FLAG 0x80000000
 
@@ -182,5 +186,9 @@ errtype region_get_invisible(LGRegion* reg, uchar* invis);
 #define POINT_MULTIPLY(pt,factor) (pt).x = (pt).x * factor; (pt).y = (pt).y * (factor)
 #define SCALE_RECT(rc, scale_pt) { (rc)->ul.x = (rc)->ul.x * (scale_pt).x; (rc)->lr.x = (rc)->lr.x * (scale_pt).x ;\
       (rc)->ul.y = (rc)->ul.y * (scale_pt).y; (rc)->lr.y = (rc)->lr.y * (scale_pt).y; }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __REGION_H

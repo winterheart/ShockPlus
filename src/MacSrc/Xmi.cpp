@@ -1,5 +1,6 @@
 #include <SDL.h>
 
+#include "res.h"
 #include "Xmi.h"
 #include "MusicDevice.h"
 #include "Prefs.h"
@@ -143,7 +144,6 @@ int ReadXMI(const char *filename) {
 
     INFO("Reading XMI %s", filename);
 
-    extern FILE *fopen_caseless(const char *path, const char *mode); // see caseless.c
     f = fopen_caseless(filename, "rb");
     if (f == 0) {
         ERROR("Could not read XMI");

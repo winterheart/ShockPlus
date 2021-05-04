@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "3dinterp.h"
 #include "map.h"
 
 #include "frintern.h"

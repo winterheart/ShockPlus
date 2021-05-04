@@ -32,7 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "invpages.h"
 #include "gamescr.h"
 #include "mainloop.h"
+#include "event.h"
 #include "hkeyfunc.h"
+#include "hotkey.h"
+#include "keydefs.h"
 #include "gamewrap.h"
 #include "colors.h"
 #include "cybstrng.h"
@@ -57,6 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "olhext.h"
 #include "Xmi.h"
 #include "Prefs.h"
+#include "wrapper.h"
 
 #include "OpenGL.h"
 

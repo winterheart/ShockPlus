@@ -27,6 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "cursors.h"
+#include "res.h"
+
 #define POPUP_MFD_LEFT   0
 #define POPUP_MFD_RIGHT  1
 #define POPUP_DOWN       2

@@ -78,6 +78,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include "lg_types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*
 //	Setting, pushing, & popping allocator sets
 
@@ -179,5 +184,8 @@ void *MemStackAlloc (MemStack *ms, long size);
 void *MemStackRealloc (MemStack *ms, void *ptr, long newsize);
 uchar MemStackFree (MemStack *ms, void *ptr);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

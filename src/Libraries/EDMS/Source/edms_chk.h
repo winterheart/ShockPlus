@@ -17,6 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#ifndef __EDMS_CHK_H
+#define __EDMS_CHK_H
+
 // defines for master debug things
 
 //#define SOLITON_FRAME_CNT
@@ -61,4 +64,6 @@ int EDMS_pfrm = 0;
 #else
 #define sol_sl_at(l, x)
 #define sol_sl(x)
+#endif
+
 #endif

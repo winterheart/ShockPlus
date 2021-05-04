@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "2dres.h"
 #include "email.h"
 #include "invent.h"
 #include "leanmetr.h"
@@ -49,7 +50,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sideicon.h"
 #include "gameloop.h"
 #include "loops.h"
+#include "hotkey.h"
 #include "input.h"
+#include "keydefs.h"
 #include "mfdext.h"
 #include "objbit.h"
 #include "fullscrn.h"
@@ -64,6 +67,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "emailbit.h"
 #include "popups.h"
 #include "str.h"
+#include "vmouse.h"
 
 #include "otrip.h"
 #include "gamescr.h"

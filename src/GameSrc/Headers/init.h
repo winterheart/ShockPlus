@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __INIT_H
 #define __INIT_H
 
+#include "lg_error.h"
+#include "lg_types.h"
+
 // init.h
 extern void init_all(void);
 extern void free_all(void);

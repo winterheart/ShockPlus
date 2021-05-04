@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "olhext.h"
 #include "hotkey.h"
 #include "input.h"
+#include "keydefs.h"
 #include "mainloop.h"
 #include "movekeys.h"
 

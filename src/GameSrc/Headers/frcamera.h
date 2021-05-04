@@ -51,6 +51,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FRCAMERA_H
 #define __FRCAMERA_H
 
+#include "fix.h"
+#include "lg_types.h"
+
 #define CAM_COOR_CNT 6
 #define CAM_ARGS_CNT 3
 

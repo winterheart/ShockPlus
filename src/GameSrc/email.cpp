@@ -27,8 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <ctype.h>
 
+#include "2dres.h"
 #include "Prefs.h"
-
+#include "hotkey.h"
 #include "invdims.h"
 #include "invent.h"
 #include "mfdint.h"

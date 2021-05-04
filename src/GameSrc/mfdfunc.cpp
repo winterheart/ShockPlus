@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "2dres.h"
 #include "ammomfd.h"
 #include "bark.h"
 #include "biohelp.h"
@@ -38,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "email.h"
 #include "fixtrmfd.h"
 #include "gearmfd.h"
+#include "hotkey.h"
 #include "invent.h"
 #include "mfdgump.h"
 #include "mfdpanel.h"
@@ -83,6 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdgames.h"
 #include "shodan.h"
 #include "str.h"
+#include "vmouse.h"
 
 #define MFD_SHIELD_FUNC 19
 

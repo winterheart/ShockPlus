@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // C Library Includes
 
 // System Library Includes
-#include "error.h" 
+#include "lg_error.h"
 
 // Master Game Includes
 

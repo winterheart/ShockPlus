@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
+#include "event.h"
 #include "sideicon.h"
 #include "sideart.h"
 #include "popups.h"

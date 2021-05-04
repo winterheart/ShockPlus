@@ -28,7 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL.h>
 
 #include "Shock.h"
+#include "palette.h"
 #include "palfx.h"
+
 extern "C" {
 #include "sdl_events.h"
 };

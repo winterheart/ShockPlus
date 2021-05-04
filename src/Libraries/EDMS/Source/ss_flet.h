@@ -23,8 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/08/24 05:43:55 $
  */
 
-#if !defined(SS_FLET_H)
-#define SS_FLET_H
+#ifndef __SS_FLET_H
+#define __SS_FLET_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -139,4 +139,4 @@ typedef enum tagTerrainHit {
 }
 #endif // defined(__cplusplus)
 
-#endif // !defined(SS_FLET_H)
+#endif //

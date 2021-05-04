@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __FAKETIME_H
 #define __FAKETIME_H
 
+#include "lg_types.h"
+
 /* total bogosity that saves having to alter 50 source files */
 /* the non-time-faking parts of faketime + the new improved timer.h */
 

@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frprotox.h"
 #include "faketime.h"
 #include "game_screen.h"
+#include "gamerend.h"
 #include "fullscrn.h"
 #include "hudobj.h"
 #include "cybmem.h"

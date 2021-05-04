@@ -230,7 +230,7 @@ void InitSDL() {
 SDL_Color gamePalette[256];
 bool UseCutscenePalette = FALSE; // see cutsloop.c
 void SetSDLPalette(int index, int count, uchar *pal) {
-    static bool gammalut_init = 0;
+    static bool gammalut_init = false;
     static uchar gammalut[100 - 10 + 1][256];
     if (!gammalut_init) {
         double factor = (can_use_opengl() ? 1.0 : 2.2); // OpenGL uses 2.2
@@ -244,7 +244,7 @@ void SetSDLPalette(int index, int count, uchar *pal) {
             for (j = 0; j < 256; j++)
                 gammalut[i - 10][j] = (uchar)(pow((double)j / 255, gamma) * 255);
         }
-        gammalut_init = 1;
+        gammalut_init = true;
         INFO("Gamma LUT init\'ed");
     }
 

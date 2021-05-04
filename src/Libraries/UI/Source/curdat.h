@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "curtyp.h"
+#include "cursors.h"
 
 extern int MouseLock;
 extern LGRegion* CursorRegion;

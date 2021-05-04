@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ShockBitmap.h"
 
+#include "2dres.h"
 #include "amaploop.h"
 #include "audiolog.h"
 #include "criterr.h"
@@ -38,6 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "gamestrn.h"
 #include "gr2ss.h"
+#include "hotkey.h"
+#include "keydefs.h"
 #include "lvldata.h"
 #include "mainloop.h"
 #include "mfdfunc.h"
@@ -48,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "rcolors.h"
 #include "str.h"
+#include "vmouse.h"
 #include "wares.h"
 
 // octant-wise, that is...

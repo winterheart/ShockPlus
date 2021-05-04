@@ -58,6 +58,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __RES_H
 #define __RES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //��� For now
 //#define DBG_ON		1
 
@@ -388,5 +392,9 @@ int32_t ResPack(int32_t filenum);                   // remove empty entries
 extern FILE *fopen_caseless(const char *path, const char *mode);
 
 #pragma pack(pop)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

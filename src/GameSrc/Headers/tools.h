@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __TOOLS_H
 
 #include "lg_types.h"
-#include "error.h"
+#include "lg_error.h"
 #include "res.h"
 #include "fix.h"
 #include "region.h"

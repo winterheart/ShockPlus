@@ -23,7 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/19 20:44:42 $
  */
 
-//#include "error.h"
+#ifndef AUDIOLOG_H
+#define AUDIOLOG_H
+
+#include "lg_error.h"
 //#include "lg.h"
 
 extern errtype audiolog_init();
@@ -34,3 +37,5 @@ extern errtype audiolog_loop_callback();
 extern bool audiolog_playing(int email_id);
 
 extern uchar audiolog_setting;
+
+#endif

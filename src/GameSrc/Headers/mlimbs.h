@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/19 20:44:53 $
  */
 
+#include "lg_types.h"
 
 // KLC what's the diff between a char and a signed char?     typedef signed char schar;
 

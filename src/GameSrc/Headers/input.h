@@ -19,8 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __INPUT_H
 #define __INPUT_H
 
+#include "fix.h"
 #include "frtypesx.h"
 #include "objects.h"
+#include "region.h"
 
 // -------
 // DEFINES

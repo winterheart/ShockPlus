@@ -66,8 +66,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rect.h"
 #include "region.h" 
 #include "mouse.h" 
-#include "error.h"
+#include "lg_error.h"
 #include "array.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Defines
 
@@ -255,6 +259,10 @@ extern errtype uiPushCursorOnce(uiCursorStack* cs, LGCursor* c);
 
 extern errtype uiPopCursorEvery(uiCursorStack* cs, LGCursor* c);
 // deletes every instance of c from cs.
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __CURSORS_H
                                                                                                                                                

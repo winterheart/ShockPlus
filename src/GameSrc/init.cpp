@@ -38,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamepal.h"
 #include "gamestrn.h"
 #include "gamescr.h"
+#include "hotkey.h"
 #include "init.h"
 #include "input.h"
 #include "map.h"
@@ -53,6 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sideicon.h"
 #include "textmaps.h"
 #include "tickcount.h"
+#include "tmpalloc.h"
 #include "tools.h"
 #include "gamerend.h"
 #include "mainloop.h"
@@ -63,6 +65,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dynmem.h"
 #include "vitals.h"
 #include "view360.h"
+#include "vox.h"
 #include "shock_version.h" // for system shock version number
 
 extern "C" {

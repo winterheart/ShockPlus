@@ -27,6 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "lg_error.h"
+#include "lg_types.h"
+#include "lzw.h"
+
 // Defines
 
 // Typedefs

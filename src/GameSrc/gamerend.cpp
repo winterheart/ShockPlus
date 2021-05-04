@@ -55,6 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "wares.h"
 #include "rendfx.h"
 #include "hudobj.h" // for beam effect following
+#include "vmouse.h"
 
 // maybe we can not have this
 #include "frtypes.h" // has to be before frprotox so proto gets the context for real

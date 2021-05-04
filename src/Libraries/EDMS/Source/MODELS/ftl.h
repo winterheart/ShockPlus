@@ -16,6 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef __FTL_H
+#define __FTL_H
+
 //	This seems silly now, but later it will all make sense, sensei...
 //	=================================================================
 int32_t EDMS_cast_projectile(Q *X, Q D[3], Q kick, Q knock, Q size, Q range, int32_t exclude, physics_handle shooter);
+
+#endif

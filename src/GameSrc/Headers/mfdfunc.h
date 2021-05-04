@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MFDFUNC_H
 
 #include "mfdint.h"
+#include "res.h"
 
 void draw_mfd_item_spew(Ref id, int n);
 char *level_to_floor(int lev_num, char *buf);

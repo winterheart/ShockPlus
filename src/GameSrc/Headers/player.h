@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "fix.h"
 #include "gamesys.h"
 #include "objects.h"
 #include "map.h"

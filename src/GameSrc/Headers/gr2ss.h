@@ -16,6 +16,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef GR2SS_H
+#define GR2SS_H
+
+#include "2d.h"
 #include "frprotox.h"
 
 #ifdef SVGA_SUPPORT
@@ -137,4 +142,6 @@ extern void ss_mouse_convert_round(short *px, short *py, uchar down);
 
 #define MODE_SCONV_X(x, m) x
 #define MODE_SCONV_Y(y, m) y
+#endif
+
 #endif

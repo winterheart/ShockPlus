@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "colors.h"
 #include "criterr.h"
 #include "cybstrng.h" // for word bitmaps
+#include "edms.h"
 #include "froslew.h"  // objslew and camera stuff..
 #include "gameobj.h"
 #include "gamescr.h" // for citadel font

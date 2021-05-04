@@ -16,8 +16,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 */
+
+#ifndef __VMOUSE
+#define __VMOUSE
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // virtualized mouse support
 extern errtype ui_mouse_get_xy(short *pmx, short *pmy);
 extern errtype ui_mouse_put_xy(short pmx, short pmy);
 extern errtype ui_mouse_constrain_xy(short xl, short yl, short xh, short yh);
 extern errtype ui_mouse_do_conversion(short *pmx, short *pmy, uchar down);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

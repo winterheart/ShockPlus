@@ -1,6 +1,9 @@
-#include "MusicDevice.h"
 #include <stdlib.h>
 #include <string.h>
+
+#include "lg.h"
+#include "MusicDevice.h"
+
 #ifdef WIN32
 // General Windows API support
 #ifndef WIN32_LEAN_AND_MEAN

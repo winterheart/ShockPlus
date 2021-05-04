@@ -37,6 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
 
+#ifndef __IDOF_H
+#define __IDOF_H
+
 //////////////////////////////
 //
 // Wherein we discover how I[] is indexed
@@ -251,3 +254,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  0: cannot be autodestructed
 //  1: can be autodestructed
 #define IDOF_AUTODESTRUCT 38
+
+#endif

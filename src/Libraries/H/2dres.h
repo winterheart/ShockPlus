@@ -45,8 +45,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _2DRES_H
 #define _2DRES_H
 
-#include "../2D/Source/2d.h"
-#include "../RES/Source/res.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "2d.h"
+#include "res.h"
 #include "../DSTRUCT/Source/rect.h"
 
 #pragma pack(push,2)
@@ -71,5 +75,9 @@ extern const ResourceFormat FrameDescFormat;
 
 
 #pragma pack(pop)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

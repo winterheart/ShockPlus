@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "lg.h"
+
 #ifdef LOST_TREASURES_OF_MFD_GAMES
 #include <limits.h>
 #include <string.h>

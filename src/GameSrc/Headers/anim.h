@@ -1,12 +1,11 @@
 #ifndef ANIM_H
 #define ANIM_H
 
-#include <rect.h>
-//#include <llist.h>
-#include <res.h>
-#include <2d.h>
-#include <2dres.h>
-#include <fix.h>
+
+#include "2dres.h"
+#include "fix.h"
+#include "rect.h"
+#include "region.h"
 
 //      Animation event codes
 

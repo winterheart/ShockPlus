@@ -45,6 +45,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "2d.h"
+#include "lg_error.h"
 
 #define SNOW_COLOR_SET   0
 #define BLOOD_COLOR_SET  1

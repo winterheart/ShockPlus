@@ -27,13 +27,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "2d.h"
+
 //--------------------
 //  Function Prototypes
 //--------------------
 int main(int argc, char **argv);
 
 void InitSDL();
-extern "C" void SetSDLPalette(int index, int count, uchar *pal);
+#ifdef __cplusplus
+extern "C" {
+#endif
+void SetSDLPalette(int index, int count, uchar *pal);
+#ifdef __cplusplus
+}
+#endif
+
 void SDLDraw();
 void CaptureMouse(bool capture);
 bool CheckArgument(char *name);

@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CURSORS_H
 #define CURSORS_H
 
+#include "slab.h"
+
 uchar cursor_get_callback(LGRegion* reg, LGRect* rect, void* vp);
 
 errtype ui_init_cursor_stack(uiSlab* slab, LGCursor* default_cursor);

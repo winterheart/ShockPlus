@@ -25,9 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#ifndef MINIMAX_H
+#define MINIMAX_H
+
 void minimax_setup(void *boardpos, uint pos_siz, char depth, uchar minimize, int (*evaluator)(void *),
                    uchar (*generate)(void *, int, bool), uchar (*horizon)(void *));
 void minimax_step(void);
 uchar minimax_done(void);
 void minimax_get_result(int *value, char *which);
 void fstack_init(uchar *fs, uint siz);
+
+#endif

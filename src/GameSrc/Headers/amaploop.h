@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "amap.h"
+#include "event.h"
 
 #define AMAP_FULLEXPOSE (LL_CHG_BASE << 1)
 #define AMAP_MAP_EV     (LL_CHG_BASE << 2)

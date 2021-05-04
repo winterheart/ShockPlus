@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes for example mfd.
-#include <stdlib.h>
 
+#include "2dres.h"
 #include "bark.h"
 #include "mfdext.h"
 #include "mfddims.h"

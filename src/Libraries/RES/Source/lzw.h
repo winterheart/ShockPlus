@@ -46,6 +46,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //	Options
 
 //#define OPTIMIZED_LZW_EXPAND_FD2BUFF		// uncomment for hard-coded
@@ -330,5 +334,9 @@ void LzwFpDestCtrl(intptr_t destLoc, LzwCtrl ctrl);
 void LzwFpDestPut(uint8_t byte);
 void LzwNullDestCtrl(int32_t destLoc, LzwCtrl ctrl);
 void LzwNullDestPut(uint8_t byte);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

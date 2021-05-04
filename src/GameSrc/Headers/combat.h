@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "edms.h"
 #include "objects.h"
+#include "rect.h"
 
 #define RAYCAST_ATTACK_SIZE (fix_make(0, 0x0400))
 #define NO_RAYCAST_KICKBACK_SPEED (fix_make(0, 0x0100))

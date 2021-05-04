@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "3dinterp.h"
+#include "edms.h"
 #include "tfdirect.h"
 
 // Internal Prototypes

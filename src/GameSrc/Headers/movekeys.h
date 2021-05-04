@@ -16,6 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef MOVEKEYS_H
+#define MOVEKEYS_H
+
+#include "event.h"
+
 #define MAX_MOVE_KEYBINDS  256
 
 #define CODE_Q         0x0C
@@ -86,3 +92,5 @@ enum
 uchar motion_keycheck_handler(uiEvent *ev, LGRegion *r, intptr_t data);
 void setup_motion_polling(void);
 void process_motion_keys(void);
+
+#endif

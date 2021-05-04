@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef _HASH_H
 #define _HASH_H
 #include "lg.h" 
-#include "error.h" 
+#include "lg_error.h"
 
 /*
  * $Source: n:/project/lib/src/dstruct/RCS/hash.h $

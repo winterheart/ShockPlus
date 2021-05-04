@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __HAND_H
 #define __HAND_H
 
+#include "res.h"
+
 /*
  * $Source: n:/project/cit/src/inc/RCS/hand.h $
  * $Revision: 1.4 $

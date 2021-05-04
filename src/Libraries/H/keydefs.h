@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef __KEYDEFS_H
+#define __KEYDEFS_H
+
 #define KEY_DEL 0x08
 #define KEY_BS 0x08
 #define KEY_TAB 0x09
@@ -47,3 +51,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KEY_F13 128 + 12
 #define KEY_F14 128 + 13
 #define KEY_F15 128 + 14
+
+#endif

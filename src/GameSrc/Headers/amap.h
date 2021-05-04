@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __AMAP_H
 
 // header for the real infernal automap
+#include "2d.h"
 
 // defines
 #define AMAP_PURE_MODE 0x0000

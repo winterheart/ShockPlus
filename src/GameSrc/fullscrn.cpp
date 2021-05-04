@@ -27,8 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ShockBitmap.h"
 #include "Prefs.h"
 
-#include "mode.h"
-
+#include "2d.h"
 #include "amap.h"
 #include "biohelp.h"
 #include "fullscrn.h"
@@ -40,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FrUtils.h"
 #include "gameloop.h"
 #include "gr2ss.h"
+#include "hotkey.h"
 #include "hud.h"
 #include "input.h"
 #include "invent.h"
@@ -55,6 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "status.h"
 #include "tools.h"
 #include "view360.h"
+#include "vmouse.h"
 #include "wares.h"
 #include "wrapper.h"
 

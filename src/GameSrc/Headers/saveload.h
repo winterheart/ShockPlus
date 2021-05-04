@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "lg_error.h"
+#include "res.h"
 
 // C Library Includes
 

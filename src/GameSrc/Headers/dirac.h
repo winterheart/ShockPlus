@@ -19,6 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Here is the high and mighty Dirac Frame header file, courtesy of Mr. Robert Fermier...
 // ======================================================================================
 
+#ifndef DIRAC_H
+#define DIRAC_H
+
+#include "edms.h"
+
 //	Struct...
 //	---------
 typedef struct {
@@ -34,3 +39,5 @@ void EDMS_get_Dirac_frame_viewpoint(physics_handle ph, State *s);
 void EDMS_set_Dirac_frame_parameters(physics_handle ph, Dirac_frame *d);
 void EDMS_get_Dirac_frame_parameters(physics_handle ph, Dirac_frame *d);
 void EDMS_control_Dirac_frame(physics_handle ph, fix forward, fix pitch, fix yaw, fix roll);
+
+#endif

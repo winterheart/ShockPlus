@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef AIRUPT_H
 #define AIRUPT_H
 
+#include "lg_error.h"
+#include "lg_types.h"
+
 errtype check_asynch_ai(uchar new_score_ok);
 void grind_music_ai(void);
 

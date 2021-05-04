@@ -44,9 +44,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 #include "lg.h"  // every file should have this
-#include "error.h"
+#include "lg_error.h"
 #include <stdio.h>
 #include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Defines
 // Comparson function, works like strcmp
@@ -90,12 +94,12 @@ errtype pqueue_read(PQueue* q, FILE *fd, void (*readfunc)(FILE *fd, void* elem))
 errtype pqueue_destroy(PQueue* q);
 // Destroys a priority queue.
 
-
-
-
-
 // Globals
 
 #pragma pack(pop)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __PQUEUE_H

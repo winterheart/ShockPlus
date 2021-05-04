@@ -29,9 +29,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef __TYPES_H
-#include "lg_types.h"
+#ifndef __LG_H
+#define __LG_H
+
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+#include "lg_types.h"
 
 #include <string.h>
 #include "log.h"
@@ -86,3 +91,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AUDIOLOGS 1
 #define SVGA_CUTSCENES 1
 #define LOST_TREASURES_OF_MFD_GAMES 1
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
