@@ -80,8 +80,6 @@ uchar shodan_sfx_go = FALSE;
 #define MFD_EMAILMUG_FUNC 14
 #define EMAIL_BASE_ID RES_email0
 
-#define CHAR_SOFTSP 2
-
 #define BASE_VMAIL 256
 
 #define MUGSHOT_IDX 0

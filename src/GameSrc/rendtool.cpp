@@ -327,8 +327,8 @@ uchar draw_tmap_p(int ptcnt) {
 //  offsets
 grs_bitmap *game_fr_tmap_128(void) {
     grs_bitmap *draw_me;
-    register int loop = TEXTURE_128_INDEX;
-    register int cur_drop = _frp.view.drop_rad[0] + textprops[_game_fr_tmap].distance_mod;
+    int loop = TEXTURE_128_INDEX;
+    int cur_drop = _frp.view.drop_rad[0] + textprops[_game_fr_tmap].distance_mod;
 
     if (cur_drop < _fdt_dist) {
         cur_drop += _frp.view.drop_rad[1];
@@ -346,8 +346,8 @@ grs_bitmap *game_fr_tmap_128(void) {
 
 grs_bitmap *game_fr_tmap_64(void) {
     grs_bitmap *draw_me;
-    register int loop = TEXTURE_64_INDEX;
-    register int cur_drop = _frp.view.drop_rad[1] + textprops[_game_fr_tmap].distance_mod;
+    int loop = TEXTURE_64_INDEX;
+    int cur_drop = _frp.view.drop_rad[1] + textprops[_game_fr_tmap].distance_mod;
 
     if (cur_drop < _fdt_dist) {
         loop++; // now 32
