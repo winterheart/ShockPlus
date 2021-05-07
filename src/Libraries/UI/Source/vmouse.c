@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "error.h"
 #include "mouse.h"
 #include "vmouse.h"
-//#include <mprintf.h>
 
 void (*ui_mouse_convert)(short *px, short *py, uchar down) = NULL;
 void (*ui_mouse_convert_round)(short *px, short *py, uchar down) = NULL;

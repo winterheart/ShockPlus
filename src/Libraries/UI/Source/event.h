@@ -272,14 +272,14 @@ extern ushort uiDoubleClickTolerance;
 
 // Global mask of what events are to be dispatched.
 // initially set to ALL_EVENTS
-extern ulong uiGlobalEventMask;
+extern uint32_t uiGlobalEventMask;
 
 // The initial value of the opacity of a region, used until
 // an opacity is set for the region.
 // Defaults to zero.
 // When a handler is added to a region, the opacity is set to the
 // value of uiDefaultRegionOpacity.
-extern ulong uiDefaultRegionOpacity;
+extern uint32_t uiDefaultRegionOpacity;
 
 #ifdef __cplusplus
 }

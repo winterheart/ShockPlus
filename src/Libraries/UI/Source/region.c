@@ -42,8 +42,6 @@ uchar reg_exp_CB(LGRegion *reg, LGRect *rc, void *data);
 errtype region_expose_absolute(LGRegion *reg, LGRect *newr);
 errtype region_manage_place(LGRegion *reg);
 errtype region_manage_remove(LGRegion *reg);
-int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
-errtype region_abs_rect(LGRegion *reg, LGRect *orig_rect, LGRect *conv);
 errtype region_set_moving(LGRegion *reg, int val);
 int region_convert_tochild(LGRegion *from_reg, LGRect *orig, LGRect *conv);
 int region_convert_toparent(LGRegion *from_reg, LGRect *orig, LGRect *conv);

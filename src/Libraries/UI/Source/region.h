@@ -44,23 +44,23 @@ extern "C" {
 
 #define UI_LINKED 1
 
-typedef struct _Region {
+typedef struct Region {
     int abs_x, abs_y; // upper left in absolute coords
     LGRect *r;        // rectangle covered by this region, in coord frame of parent.
     int z;            // z-coordinate to determine stacking
     int moving;
-    uchar (*expose)(struct _Region *reg, LGRect *r);     // function to draw a given rectangle
-    uchar (*save_under)(struct _Region *reg, LGRect *r); // function to save under a given rectangle
-    uchar (*replace)(struct _Region *reg, LGRect *r);
+    uchar (*expose)(struct Region *reg, LGRect *r);     // function to draw a given rectangle
+    uchar (*save_under)(struct Region *reg, LGRect *r); // function to save under a given rectangle
+    uchar (*replace)(struct Region *reg, LGRect *r);
     ulong status_flags;
     int device_type;
     void *handler;
     void *cursors;
     void *user_data; // user-provided region information for callback use
     int event_order;
-    struct _Region *sub_region;  // Head of children regions
-    struct _Region *next_region; // next region at same level
-    struct _Region *parent;      // parent of this region
+    struct Region *sub_region;  // Head of children regions
+    struct Region *next_region; // next region at same level
+    struct Region *parent;      // parent of this region
     LGRect real_rect;
 } LGRegion;
 

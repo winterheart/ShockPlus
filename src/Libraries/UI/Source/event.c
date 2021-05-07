@@ -53,27 +53,27 @@ errtype ui_init_focus_chain(uiSlab *slab);
 // HANDLER CHAIN DEFINES
 // ---------------------
 
-typedef struct _ui_event_handler {
-    ulong typemask; // Which event types does this handle?
-                    /* handler proc: called when a specific event is received */
+typedef struct ui_event_handler {
+    uint32_t typemask; // Which event types does this handle?
+                       /* handler proc: called when a specific event is received */
     uiHandlerProc proc;
     intptr_t state; // handler-specific state data
-    int next;       // used for chaining handlers.
+    int32_t next;   // used for chaining handlers.
 } uiEventHandler;
 
-typedef struct _handler_chain {
+typedef struct handler_chain {
     Array chain;
     int front;
-    ulong opacity;
+    uint32_t opacity;
 } handler_chain;
 
 #define INITIAL_CHAINSIZE 4
 #define INITIAL_FOCUSES 5
-#define CHAIN_END -1
+#define CHAIN_END (-1)
 
-ulong uiGlobalEventMask = ALL_EVENTS;
+uint32_t uiGlobalEventMask = ALL_EVENTS;
 
-ulong last_mouse_draw_time = 0;
+uint32_t last_mouse_draw_time = 0;
 
 // ----------------------------
 // HANDLER CHAIN IMPLEMENTATION
@@ -168,7 +168,7 @@ errtype uiSetRegionHandlerMask(LGRegion *r, int id, int evmask) {
 // OPACITY
 // -------
 
-ulong uiDefaultRegionOpacity = 0;
+uint32_t uiDefaultRegionOpacity = 0;
 
 ulong uiGetRegionOpacity(LGRegion *reg) {
     handler_chain *ch = (handler_chain *)(reg->handler);

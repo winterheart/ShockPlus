@@ -46,4 +46,4 @@ extern LGRect *HideRect;
 extern int curhiderect;
 extern grs_canvas *CursorCanvas;
 extern grs_canvas DefaultCursorCanvas;
-extern struct _cursor_saveunder SaveUnder;
+extern struct cursor_saveunder SaveUnder;

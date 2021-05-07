@@ -143,7 +143,7 @@ errtype hotkey_list_clear();
 
 // Globals
 
-extern ulong HotkeyContext;
+extern uint32_t HotkeyContext;
 
 #ifdef __cplusplus
 }

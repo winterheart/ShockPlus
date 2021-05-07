@@ -81,8 +81,8 @@ struct _cursor;
 typedef void (*CursorDrawFunc)(int cmd, LGRegion *r, struct _cursor *c, LGPoint pos);
 
 // The commands are as follows:
-#define CURSOR_DRAW 0
-#define CURSOR_UNDRAW 1
+#define CURSOR_DRAW 0       // draw cursor
+#define CURSOR_UNDRAW 1     // don't draw cursor
 #define CURSOR_DRAW_HFLIP 2 // draw horizontally flipped.  Go figure.
 
 typedef struct _cursor {
@@ -167,7 +167,6 @@ errtype uiHideMouse(LGRect *r);
 // Shows the mouse if it intersects r.
 errtype uiShowMouse(LGRect *r);
 
-
 // Recomputes and redraws the current cursor based on the position of the mouse.
 errtype uiSetCursor(void);
 
@@ -233,7 +232,6 @@ extern errtype uiPushCursor(uiCursorStack *cs, LGCursor *c);
 
 // pops the top cursor off of cs.
 extern errtype uiPopCursor(uiCursorStack *cs);
-
 
 // Points *c to the top cursor on cs; or NULL if there is no
 // top cursor.  will NOT set *c to the default cursor.

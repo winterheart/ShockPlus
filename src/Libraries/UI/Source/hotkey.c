@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CHAIN_LENGTH 2
 #define CHAIN_END -1
 
-ulong HotkeyContext = 0xFFFFFFFF;
+uint32_t HotkeyContext = 0xFFFFFFFF;
 
 #pragma require_prototypes off
 int hotkey_hash_func(void *v) {

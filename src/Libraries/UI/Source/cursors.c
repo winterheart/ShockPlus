@@ -106,16 +106,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "2d.h"
+#include "curdrw.h"
 #include "cursors.h"
 #include "curtyp.h"
-//#include <libdbg.h>
 #include "vmouse.h"
-#include <stdio.h> // printf()
 
-#define SPEW_ANAL Spew
-
-#define BMT_SAVEUNDER BMT_FLAT8
-#define MAPSIZE(x, y) ((x) * (y))
 #define CURSOR_STACKSIZE 5
 #define STARTING_SAVEUNDER_WD 16
 #define STARTING_SAVEUNDER_HT 16
@@ -125,7 +120,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------
 
 // Global: the saveunder for bitmap cursors
-struct _cursor_saveunder SaveUnder;
+struct cursor_saveunder SaveUnder;
 
 extern uiSlab *uiCurrentSlab;
 #define RootCursorRegion (uiCurrentSlab->creg)
@@ -160,7 +155,7 @@ int CursorMoveTolerance = 0;
 // ------------------
 // INTERNAL PROTOTYPES
 // ------------------
-typedef struct _cursor_callback_state {
+typedef struct cursor_callback_state {
     LGCursor **out;
     LGRegion **reg;
 } cstate;
@@ -171,7 +166,7 @@ typedef struct _cursor_callback_state {
 
 // KLC - now just allocates a bitmap at the beginning and never actually grows it.
 static errtype grow_save_under(short x, short y) {
-    int sz = MAPSIZE(x, y);
+    int sz = x * y;
     if (SaveUnder.mapsize >= sz)
         return ERR_NOEFFECT;
 
@@ -190,9 +185,7 @@ static errtype grow_save_under(short x, short y) {
 uchar cursor_get_callback(LGRegion *reg, LGRect *rect, void *vp) {
     cstate *s = (cstate *)vp;
     cursor_stack *cs = (cursor_stack *)(reg->cursors);
-    uchar anal = FALSE;
-    // DBG(DSRC_UI_Anal, { anal = TRUE;});
-    // if (anal) SPEW_ANAL(DSRC_UI_Cursor_Stack,("cursor_get_callback(%x,%x,%x)\n",reg,rect,s));
+
     if (cs == NULL)
         *(s->out) = NULL;
     else {
@@ -200,16 +193,12 @@ uchar cursor_get_callback(LGRegion *reg, LGRect *rect, void *vp) {
         *(s->reg) = reg;
     }
     if (*(s->out) == NULL && uiCurrentSlab != NULL) {
-        // if (anal) SPEW_ANAL(DSRC_UI_Cursor_Stack,("cursor_get_callback(): using global default\n"));
         *(s->out) = uiCurrentSlab->cstack.stack[0];
     }
     return *(s->out) != NULL;
 }
 
-#define cstack_init uiMakeCursorStack
-
 errtype uiMakeCursorStack(cursor_stack *res) {
-    // Spew(DSRC_UI_Cursor_Stack,("cstack_init(%x)\n",res));
     if (res == NULL)
         return ERR_NULL;
     res->size = CURSOR_STACKSIZE;
@@ -223,10 +212,7 @@ errtype uiMakeCursorStack(cursor_stack *res) {
     return OK;
 }
 
-#define ui_destroy_cursor_stack uiDestroyCursorStack
-
 errtype uiDestroyCursorStack(cursor_stack *cstack) {
-    // Spew(DSRC_UI_Cursor_Stack,("ui_destroy_cursor_stack(%x) \n",cstack));
     if (cstack == NULL)
         return ERR_NULL;
     if (cstack->size == 0)
@@ -264,14 +250,11 @@ errtype uiGetDefaultCursor(uiCursorStack *cs, LGCursor **c) {
     return OK;
 }
 
-#define cs_push uiPushCursor
-
 errtype uiPushCursor(cursor_stack *cs, LGCursor *c) {
     if (cs == NULL)
         return ERR_NULL;
     if (cs->fullness >= cs->size) {
         LGCursor **tmp = (LGCursor **)malloc(cs->size * 2 * sizeof(LGCursor *));
-        // SPEW_ANAL(DSRC_UI_Cursor_Stack,("cs_push(%x,%x), growing stack\n",cs,c));
         if (tmp == NULL)
             return ERR_NOMEM;
         memcpy(tmp, cs->stack, cs->size * sizeof(LGCursor *));
@@ -331,17 +314,14 @@ errtype uiPopCursorEvery(uiCursorStack *cs, LGCursor *c) {
     return err;
 }
 
-#define get_region_stack uiGetRegionCursorStack
-
-errtype get_region_stack(LGRegion *r, cursor_stack **cs) {
+errtype uiGetRegionCursorStack(LGRegion *r, cursor_stack **cs) {
     cursor_stack *res = (cursor_stack *)(r->cursors);
     if (res == NULL) {
         errtype err;
-        // SPEW_ANAL(DSRC_UI_Cursor_Stack,("get_region_stack(%x,%x), creating stack\n",r,cs));
         r->cursors = res = (cursor_stack *)malloc(sizeof(cursor_stack));
         if (res == NULL)
             return ERR_NOMEM;
-        err = cstack_init(res);
+        err = uiMakeCursorStack(res);
         if (err != OK)
             return err;
     }
@@ -356,20 +336,15 @@ errtype get_region_stack(LGRegion *r, cursor_stack **cs) {
 static int uiCursorCallbackId;
 
 errtype ui_init_cursor_stack(uiSlab *slab, LGCursor *default_cursor) {
-    errtype err = cstack_init(&slab->cstack);
-    // Spew(DSRC_UI_Cursor_Stack,("ui_init_cursor_stack(%x,%x) err = %d\n",slab,default_cursor,err));
+    errtype err = uiMakeCursorStack(&slab->cstack);
     if (err != OK)
         return err;
     slab->cstack.stack[0] = default_cursor;
     return OK;
 }
 
-extern void cursor_draw_callback(ss_mouse_event *e, void *data);
-extern void bitmap_cursor_drawfunc(int cmd, LGRegion *r, LGCursor *c, LGPoint pos);
 
 errtype ui_init_cursors(void) {
-    errtype err;
-    // Spew(DSRC_UI_Cursors ,("ui_init_cursors()\n"));
     grow_save_under(STARTING_SAVEUNDER_WD, STARTING_SAVEUNDER_HT);
     // KLC - just initalize it to a sizeable bitmap, and leave it that way.
     // SaveUnder.bm.bits = (uchar *)malloc(6144);
@@ -380,7 +355,7 @@ errtype ui_init_cursors(void) {
 
     gr_init_sub_canvas(grd_screen_canvas, &DefaultCursorCanvas, 0, 0, grd_cap->w, grd_cap->h);
     gr_cset_cliprect(&DefaultCursorCanvas, 0, 0, grd_cap->w, grd_cap->h);
-    err = mouse_set_callback(cursor_draw_callback, NULL, &uiCursorCallbackId);
+    errtype err = mouse_set_callback(cursor_draw_callback, NULL, &uiCursorCallbackId);
     if (err != OK)
         return err;
     HideRect = (LGRect *)malloc(sizeof(LGRect) * INITIAL_RECT_STACK);
@@ -400,17 +375,14 @@ errtype uiUpdateScreenSize(LGPoint size) {
 
     gr_init_sub_canvas(grd_screen_canvas, &DefaultCursorCanvas, 0, 0, w, h);
     gr_cset_cliprect(&DefaultCursorCanvas, 0, 0, w, h);
-    //   mouse_set_screensize(w,h);
-    //   mouse_constrain_xy(0,0,w,h);
+    // mouse_set_screensize(w,h);
+    // mouse_constrain_xy(0,0,w,h);
     return (OK);
 }
 
 errtype ui_shutdown_cursors(void) {
-    errtype err;
-    // Spew(DSRC_UI_Cursors,("ui_shutdown_cursors()\n"));
     free(SaveUnder.bm.bits);
-    err = mouse_unset_callback(uiCursorCallbackId);
-    return err;
+    return mouse_unset_callback(uiCursorCallbackId);
 }
 
 uchar ui_set_current_cursor(LGPoint pos) {
@@ -418,9 +390,7 @@ uchar ui_set_current_cursor(LGPoint pos) {
     uchar result = FALSE;
 
     ui_mouse_do_conversion(&(pos.x), &(pos.y), TRUE);
-    // Spew(DSRC_UI_Cursors,("ui_set_current_cursor(<%d,%d>)\n",pos.x,pos.y));
     if (uiCurrentSlab == NULL) {
-        // SPEW_ANAL(DSRC_UI_Cursors,("ui_set_current_cursor(): no current slab\n"));
         result = FALSE;
         goto out;
     }
@@ -431,7 +401,6 @@ uchar ui_set_current_cursor(LGPoint pos) {
         goto out;
     }
     if (RootCursorRegion == NULL) {
-        // SPEW_ANAL(DSRC_UI_Cursors,("ui_set_current_cursor(): no root region\n"));
         result = FALSE;
         goto out;
     }
@@ -440,13 +409,12 @@ uchar ui_set_current_cursor(LGPoint pos) {
 
     result = region_traverse_point(RootCursorRegion, pos, cursor_get_callback, TOP_TO_BOTTOM, &s);
 out:
-    // Spew(DSRC_UI_Cursors,("ui_set_current_cursor(): current cursor = %x\n",CurrentCursor));
     return result;
 }
 
 void ui_update_cursor(LGPoint pos) {
     uchar show = ui_set_current_cursor(pos);
-    //   ui_mouse_do_conversion(&(pos.x),&(pos.y),FALSE);
+    // ui_mouse_do_conversion(&(pos.x),&(pos.y),FALSE);
     if (show && LastCursor != NULL && !PointsEqual(pos, LastCursorPos)) {
         MouseLock++;
         LastCursor->func(CURSOR_UNDRAW, LastCursorRegion, LastCursor, LastCursorPos);
@@ -468,7 +436,6 @@ errtype uiSetCursor(void) {
     LGPoint pos;
     uchar show = MouseLock == 0;
     errtype retval = OK;
-    // Spew(DSRC_UI_Cursors,("uiSetCursor(), MouseLock = %d\n",MouseLock));
     if (!ui_set_current_cursor(pos)) {
         retval = ERR_NULL;
     }
@@ -482,8 +449,7 @@ errtype uiSetCursor(void) {
 
 errtype uiSetRegionDefaultCursor(LGRegion *r, LGCursor *c) {
     cursor_stack *cs;
-    errtype err = get_region_stack(r, &cs);
-    // Spew(DSRC_UI_Cursor_Stack,("uiSetRegionDefaultCursor(%x,%x)\n",r,c));
+    errtype err = uiGetRegionCursorStack(r, &cs);
     if (err != OK)
         return err;
     cs->stack[0] = c;
@@ -493,11 +459,10 @@ errtype uiSetRegionDefaultCursor(LGRegion *r, LGCursor *c) {
 
 errtype uiPushRegionCursor(LGRegion *r, LGCursor *c) {
     cursor_stack *cs;
-    errtype err = get_region_stack(r, &cs);
-    // Spew(DSRC_UI_Cursor_Stack,("uiPushRegionCursor(%x,%x)\n",r,c));
+    errtype err = uiGetRegionCursorStack(r, &cs);
     if (err != OK)
         return err;
-    err = cs_push(cs, c);
+    err = uiPushCursor(cs, c);
     if (err != OK)
         return err;
     return uiSetCursor();
@@ -511,7 +476,6 @@ errtype uiPopRegionCursor(LGRegion *r) {
     if (cs == NULL)
         return ERR_DUNDERFLOW;
     else {
-        // Spew(DSRC_UI_Cursor_Stack,("uiPopRegionCursor(%x)\n",r));
         if (cs->fullness <= 1)
             return ERR_DUNDERFLOW;
         cs->fullness--;
@@ -528,7 +492,6 @@ errtype uiGetRegionCursor(LGRegion *r, LGCursor **c) {
     if (cs == NULL) {
         *c = NULL;
     } else {
-        // Spew(DSRC_UI_Cursor_Stack,("uiGetRegionCursor(%x,%x)\n",r,c));
         *c = cs->stack[cs->fullness - 1];
     }
     return OK;
@@ -536,7 +499,6 @@ errtype uiGetRegionCursor(LGRegion *r, LGCursor **c) {
 
 errtype uiShutdownRegionCursors(LGRegion *r) {
     cursor_stack *cs = (cursor_stack *)(r->cursors);
-    // Spew(DSRC_UI_Cursor_Stack,("uiShutdownRegionCursors(%x)\n",r));
     if (cs == NULL)
         return ERR_NOEFFECT;
     free(cs->stack);
@@ -547,7 +509,6 @@ errtype uiShutdownRegionCursors(LGRegion *r) {
 }
 
 errtype uiSetSlabDefaultCursor(uiSlab *slab, LGCursor *c) {
-    // Spew(DSRC_UI_Cursor_Stack,("uiSetSlabDefaultCursor(%x,%x)\n",slab,c));
     if (slab == NULL)
         return ERR_NULL;
     slab->cstack.stack[0] = c;
@@ -559,10 +520,9 @@ errtype uiSetGlobalDefaultCursor(LGCursor *c) { return uiSetSlabDefaultCursor(ui
 
 errtype uiPushSlabCursor(uiSlab *slab, LGCursor *c) {
     errtype err;
-    // Spew(DSRC_UI_Cursor_Stack,("uiPushSlabCursor(%x,%x)\n",slab,c));
     if (slab == NULL)
         return ERR_NULL;
-    err = cs_push(&slab->cstack, c);
+    err = uiPushCursor(&slab->cstack, c);
     uiSetCursor();
     return err;
 }
@@ -570,7 +530,6 @@ errtype uiPushSlabCursor(uiSlab *slab, LGCursor *c) {
 errtype uiPushGlobalCursor(LGCursor *c) { return uiPushSlabCursor(uiCurrentSlab, c); }
 
 errtype uiPopSlabCursor(uiSlab *slab) {
-    // Spew(DSRC_UI_Cursor_Stack,("uiPopSlabCursor(%x)\n",slab));
     if (slab == NULL)
         return ERR_NULL;
     if (slab->cstack.fullness <= 1)
@@ -583,7 +542,6 @@ errtype uiPopSlabCursor(uiSlab *slab) {
 errtype uiPopGlobalCursor(void) { return uiPopSlabCursor(uiCurrentSlab); }
 
 errtype uiGetSlabCursor(uiSlab *slab, LGCursor **c) {
-    // Spew(DSRC_UI_Cursor_Stack,("uiGetSlabCursor(%x,%x)\n",slab,c));
     if (slab == NULL)
         return ERR_NULL;
     *c = slab->cstack.stack[slab->cstack.fullness - 1];
@@ -695,10 +653,8 @@ errtype uiShowMouse(LGRect *r) {
 }
 
 errtype uiMakeBitmapCursor(LGCursor *c, grs_bitmap *bm, LGPoint hotspot) {
-    // Spew(DSRC_UI_Cursors,("uiMakeBitmapCursor(%x,%x,<%d %d>)\n",c,bm,hotspot.x,hotspot.y));
-
     if (c == NULL) {
-        printf("FIXME uiMakeBitmapCursor tried to make a null cursor!\n");
+        WARN("%s: Tried to make a null cursor!", __FUNCTION__ );
         return ERR_NOEFFECT;
     }
 

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2015-2018 Night Dive Studios, LLC.
+Copyright (C) 2021 ShockPlus Project
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,22 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*
- * $Source: n:/project/lib/src/ui/RCS/curtyp.h $
- * $Revision: 1.1 $
- * $Author: kaboom $
- * $Date: 1993/12/16 07:46:45 $
- *
- * Declarations for cursor types.
- *
- * $Log: curtyp.h $
- * Revision 1.1  1993/12/16  07:46:45  kaboom
- * Initial revision
- *
- */
 
-/* the saveunder for bitmap cursors */
-struct cursor_saveunder {
-    grs_bitmap bm;
-    int mapsize;
-};
+#ifndef __CURDRW
+#define __CURDRW
+
+#include "cursors.h"
+
+extern void cursor_draw_callback(ss_mouse_event *e, void *data);
+extern void bitmap_cursor_drawfunc(int cmd, LGRegion *r, LGCursor *c, LGPoint pos);
+
+#endif
