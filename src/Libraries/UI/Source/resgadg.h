@@ -6,19 +6,19 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*	This file created by RESTOOL */
 
-#define RES_gadgetGfx 500		// (0x1f4)
+#define RES_gadgetGfx 500 // (0x1f4)
 #define REF_IMG_bmGadgetBackground 0x1f40000
 #define REF_IMG_bmCursorMid 0x1f40001
 #define REF_IMG_bmCursorUp 0x1f40002
