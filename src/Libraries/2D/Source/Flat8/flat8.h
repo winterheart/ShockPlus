@@ -199,7 +199,7 @@ extern long flat8_get_upixel24(short x, short y);
 extern long flat8_get_pixel24(short x, short y);
 
 /* straight, rectangular-type primitives. */
-extern void flat8_clear(long color);
+extern void flat8_clear(int32_t color);
 
 /* fixed-point rendering-type primitives. */
 extern void flat8_interp2_ubitmap(grs_bitmap *bm);

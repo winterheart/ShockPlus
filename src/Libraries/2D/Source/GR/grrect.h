@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctxmac.h"
 #include "grlin.h"
 
-#define gr_clear ((void (*)(long color))grd_canvas_table[DRAW_CLEAR])
+#define gr_clear ((void (*)(int32_t color))grd_canvas_table[DRAW_CLEAR])
 #define gr_upoint ((void (*)(short x, short y))grd_canvas_table[DRAW_UPOINT])
 #define gr_point ((int (*)(short x, short y))grd_canvas_table[DRAW_POINT])
 

@@ -37,55 +37,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  */
 
-#include "cnvdat.h"
-#include "lg.h"
 #include <string.h>
 
-/* clear a flat8 canvas. */
-void flat8_clear(long color) {
+#include "cnvdat.h"
+#include "lg.h"
 
-    uchar *p;
-    int h;
-    int w;
-    int row;
-    ushort short_val;
-    double double_stack, doub_vl;
-    uint firstbytes, middoubles, lastbytes, fb, md, lb;
-    uchar *dst;
-    double *dst_doub;
-    uint temp;
-
+/**
+ * Clear FLAT8 Canvas, current in context
+ * @param color filling color from palette
+ */
+void flat8_clear(int32_t color) {
     color &= 0x00ff;
-    p = grd_bm.bits;
-    h = grd_bm.h;
-    w = grd_bm.w;
-    row = grd_bm.row;
 
-    if (w >= 16) // only do doubles if at least two of them (16 bytes)
-    {
-        // get a 64 bit version of color in doub_vl
-        short_val = (uchar)color | color << 8;
-        color = (int)short_val | ((int)short_val) << 16;
-        *(int *)(&double_stack) = color;
-        *((int *)(&double_stack) + 1) = color;
-        doub_vl = double_stack;
+    uint8_t *p = grd_bm.bits;
+    int h = grd_bm.h;
+    int w = grd_bm.w;
+    int row = grd_bm.row;
 
-        lastbytes = w;
-        firstbytes = (intptr_t)p & 3;
-        if (firstbytes != 0) // check for boundary problems
-            lastbytes -= firstbytes;
-
-        middoubles = lastbytes >> 3;
-        lastbytes -= middoubles << 3;
-    } else {
-        lastbytes = w;
-        middoubles = 0;
-    }
-
-    fb = firstbytes, md = middoubles, lb = lastbytes;
     while (h--) {
         // MLA - inlined this code
         memset(p, color, w);
-        p += row;
+        p += row; // FIXME: Why there row, not w? On some images row != w, why?
     }
 }
