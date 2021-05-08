@@ -150,7 +150,6 @@ uchar tilemap_mode_func(ushort keycode, uint32_t context, intptr_t data);
 uchar draw_mode_func(ushort keycode, uint32_t context, intptr_t data);
 uchar clear_highlight_func(ushort keycode, uint32_t context, intptr_t data);
 uchar lighting_func(ushort keycode, uint32_t context, intptr_t data);
-uchar inp6d_panel_func(ushort keycode, uint32_t context, intptr_t data);
 uchar render_panel_func(ushort keycode, uint32_t context, intptr_t data);
 uchar bkpt_me(ushort keycode, uint32_t context, intptr_t data);
 uchar popup_tilemap_func(ushort keycode, uint32_t context, intptr_t data);

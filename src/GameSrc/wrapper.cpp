@@ -108,15 +108,6 @@ static bool digi_gain = true; // enable sfx volume slider
 errtype (*wrapper_cb)(int num_clicked);
 errtype (*slot_callback)(int num_clicked);
 static uchar cursor_loaded = FALSE;
-#if defined(VFX1_SUPPORT) || defined(CTM_SUPPORT)
-uchar headset_track = TRUE;
-#define HEADSET_FOV_MIN 30
-#define HEADSET_FOV_MAX 180
-// these 3 should all be initialized for real elsewhere...
-int inp6d_real_fov = 60;
-int hack_headset_fov = 30;
-#endif
-int inp6d_curr_fov = 60;
 
 errtype music_slots();
 errtype wrapper_do_save();
@@ -1688,38 +1679,6 @@ void mousehand_dealfunc(ushort lefty) {
     // mouse_set_lefty(lefty);
 }
 
-#if defined(VFX1_SUPPORT) || defined(CTM_SUPPORT)
-#pragma disable_message(202)
-void headset_stereo_dealfunc(uchar st_on) {
-    extern uchar inp6d_headset;
-    extern uchar inp6d_stereo;
-    //   extern uchar ui_stereo_on;
-    if ((inp6d_headset) && (i6d_device != I6D_ALLPRO)) {
-        //      ui_stereo_on = inp6d_stereo;
-        if (!inp6d_stereo)
-            i6_video(I6VID_CLOSEDOWN, NULL); // this will want to be I6VID_STR_CLOSE at some point
-        else {
-            if (i6_video(I6VID_STR_START, NULL)) {
-                Warning(("Headset stereo startup failed!\n"));
-                return;
-            }
-        }
-    }
-}
-
-void headset_tracking_dealfunc(uchar tr_on) {
-    Warning(("tracking now %d!\n", tr_on));
-    return;
-}
-
-void headset_fov_dealfunc(int hackval) {
-    inp6d_curr_fov = hack_headset_fov + HEADSET_FOV_MIN;
-    Warning(("FOV now %d!\n", inp6d_curr_fov));
-    return;
-}
-#pragma enable_message(202)
-#endif
-
 #pragma disable_message(202)
 void olh_dealfunc(ushort olh) {
     toggle_olh_func(0, 0, 0);
@@ -1739,7 +1698,6 @@ void joystick_screen_init(void) {
     LGRect r;
     int i = 0;
     char *keys;
-    extern uchar inp6d_headset;
     uchar sliderbase;
 
     extern uchar joystick_count;
@@ -1753,7 +1711,7 @@ void joystick_screen_init(void) {
 
     standard_button_rect(&r, i, 2, 2, 1);
     pushbutton_init(i, keys[i], REF_STR_CenterJoy, center_joy_pushbutton_func, &r);
-    if (!joystick_count && !inp6d_headset) {
+    if (!joystick_count) {
         dim_pushbutton(i);
     }
     i++;
@@ -1784,7 +1742,6 @@ void input_screen_init(void) {
     char *keys;
     int i = 0;
     uchar sliderbase;
-    extern uchar inp6d_headset;
 
     keys = get_temp_string(REF_STR_KeyEquivs1);
     clear_obuttons();
@@ -1884,14 +1841,6 @@ void video_screen_init(void) {
                 sliderbase, gamma_slider_dealfunc, &r);
     i++;
 
-#if defined(VFX1_SUPPORT) || defined(CTM_SUPPORT)
-    standard_button_rect(&r, i, 2, 2, 2);
-    pushbutton_init(HEADSET_BUTTON, keys[2], REF_STR_HeadsetText, wrapper_pushbutton_func, &r);
-    if (!inp6d_headset)
-        dim_pushbutton(HEADSET_BUTTON);
-    i++;
-#endif
-
 #ifdef USE_OPENGL
     // textre filter
     if(can_use_opengl() && gShockPrefs.doUseOpenGL) {
@@ -1911,29 +1860,6 @@ void video_screen_init(void) {
 
     opanel_redraw(TRUE);
 }
-
-#if defined(VFX1_SUPPORT) || defined(CTM_SUPPORT)
-void headset_screen_init(void) {
-    LGRect r;
-    int i;
-    char *keys;
-
-    keys = get_temp_string(REF_STR_KeyEquivs5);
-
-    clear_obuttons();
-
-    i = 0;
-
-    standard_button_rect(&r, i, 2, 2, 2);
-    pushbutton_init(HEAD_RECENTER_BUTTON, keys[0], REF_STR_HeadsetText + 1, wrapper_pushbutton_func, &r);
-
-    // Standard return button and other bureaucracy
-    standard_button_rect(&r, 5, 2, 2, 2);
-    pushbutton_init(RETURN_BUTTON, keys[2], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
-    keywidget_init(QUIT_BUTTON, KB_FLAG_ALT | 'x', wrapper_pushbutton_func);
-    opanel_redraw(TRUE);
-}
-#endif
 
 #ifdef SVGA_SUPPORT
 void screenmode_screen_init(void) {

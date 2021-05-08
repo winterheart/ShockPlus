@@ -49,13 +49,6 @@ extern "C" {
 #include "wrapper.h"
 #include "Shock.h"
 
-/*
-KLC - stereo
-#include "LG_menus.h"	// can't be just "menus" since thats a mac include
-#include "config.h"
-#include "inp6d.h"
-#include "i6dvideo.h"
-*/
 
 #define STATUS_X 4
 #define STATUS_Y 1

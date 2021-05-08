@@ -48,7 +48,6 @@ uchar perform_svga_conversion(uchar mask) {
 
     if (gr2ss_override & OVERRIDE_FAIL)
         return (SVGA_CONV_NONE);
-    // for now -   if ((convert_use_mode == 0) && (!inp6d_stereo_active))
     if (convert_use_mode == 0)
         return (SVGA_CONV_NONE);
     if (_fr->draw_canvas.bm.bits == grd_canvas->bm.bits)

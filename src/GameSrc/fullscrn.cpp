@@ -68,9 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 uchar fullscrn_vitals = TRUE;
 uchar fullscrn_icons = TRUE;
 
-extern uchar inp6d_stereo_active;
-extern uchar inp6d_stereo;
-
 #ifdef SVGA_SUPPORT
 grs_screen *svga_screen = NULL;
 frc *svga_render_context = NULL;

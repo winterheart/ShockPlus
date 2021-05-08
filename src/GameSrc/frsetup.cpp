@@ -167,11 +167,6 @@ uchar det_sizing[4][2] = {{0, 0}, {1, 0}, {0, 0}, {0, 0}}; /* setup for detail m
 uchar det_sizing[4][2] = {{0, 0}, {0, 0}, {0, 0}, {0, 0}}; /* sizing for detail modes */
 #endif
 
-/* KLC - no stereo in Mac version
-extern uchar inp6d_headset;
-extern uchar inp6d_stereo_active;
-extern int inp6d_stereo_div;
-*/
 fauxrend_context *_fr, *_sr; /* current and default fauxrend contexts */
 uint _fr_glob_flags;         /* global flag settings */
 uint _fr_curflags;           /* settings for current rendering */

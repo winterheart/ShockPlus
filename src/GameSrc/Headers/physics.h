@@ -108,7 +108,7 @@ errtype physics_set_player_controls(int bank, byte xvel, byte yvel, byte zvel, b
 #define MOUSE_CONTROL_BANK 0
 #define KEYBD_CONTROL_BANK 1
 #define JOYST_CONTROL_BANK 2
-#define INP6D_CONTROL_BANK 3
+
 errtype physics_set_one_control(int bank, int num, byte val);
 errtype physics_get_one_control(int bank, int num, byte *val);
 
