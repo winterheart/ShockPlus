@@ -46,6 +46,7 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "drugs.h"
 #include "emailbit.h"
 #include "faketime.h"
+#include "fatigue.h"
 #include "frflags.h" // until we do the right thing re: static
 #include "FrUtils.h"
 #include "fullscrn.h"
@@ -94,7 +95,6 @@ ubyte use_distance_mod = 0;
 ubyte pickup_distance_mod = 0;
 ubyte fatigue_threshold = 5;
 
-#define MAX_FATIGUE 10000 // this is stolen from gamesys.c
 #define FATIGUE_COEFF CIT_CYCLE
 #define FATIGUE_THRESHOLD \
     ((player_struct.drug_status[CPTRIP(STAMINA_DRUG_TRIPLE)] == 0) ? (fatigue_threshold * CIT_CYCLE) : MAX_FATIGUE)

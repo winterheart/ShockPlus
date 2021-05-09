@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cardmfd.h"
 #include "cybermfd.h"
 #include "email.h"
+#include "fatigue.h"
 #include "fixtrmfd.h"
 #include "gearmfd.h"
 #include "hotkey.h"
@@ -1932,8 +1933,6 @@ void mfd_grenade_expose(MFD *mfd, ubyte control) {
 #define LAST_FATIGUE(mfd) (mfd_fdata[MFD_BIOWARE_FUNC][1 + 4 * mfd])
 #define LAST_DRUGBITS(mfd) (*(ushort *)&mfd_fdata[MFD_BIOWARE_FUNC][2 + 4 * mfd])
 
-// this is stolen from gamesys.c
-#define MAX_FATIGUE 10000
 #define MAX_HP UCHAR_MAX
 
 #define BIO_DRUG_UP 1   // experincing normal effects

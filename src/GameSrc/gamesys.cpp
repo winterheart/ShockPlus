@@ -38,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "email.h"
 #include "edms.h"
 #include "faketime.h"
+#include "fatigue.h"
 #include "frflags.h"
 #include "frprotox.h"
 #include "fullscrn.h"
@@ -88,8 +89,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HEALTH_RESTORE_UNIT (1u << HEALTH_RESTORE_SHF) // unit time for hp/energy regen
 #define HEALTH_RESTORE_MASK (HEALTH_RESTORE_UNIT - 1)
 #define sqr(x) ((x) * (x))
-#define MAX_FATIGUE 10000
-#define FATIGUE_WARNING_LEVEL 7000
 
 // -------
 // GLOBALS

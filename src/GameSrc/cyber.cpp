@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objects.h"
 #include "map.h"
 #include "faketime.h"
+#include "fatigue.h"
 #include "mfdext.h"
 #include "fullscrn.h"
 #include "cyber.h"
@@ -42,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define FIRST_CSPACE_LEVEL 14
 #define MIN_CSPACE_EXIT_HP 10
-#define MAX_FATIGUE 10000
 
 #define MAX_SHODAN_FAILURES 10
 #define GAME_OVER_HACK 0x6
@@ -60,7 +60,6 @@ ulong cspace_effect_durations[NUM_CS_EFFECTS] = {CIT_CYCLE * 30, CIT_CYCLE * 15,
 void (*cspace_effect_turnoff[])(uchar visible, uchar real) = {turbo_turnoff, decoy_turnoff, NULL};
 
 uchar cyber_nodie = FALSE;
-// FILE *gCyberHdl;
 
 errtype check_cspace_death() {
     if (global_fullmap->cyber) {

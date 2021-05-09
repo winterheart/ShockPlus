@@ -468,9 +468,6 @@ void regenerate_player(void) {
 #define NUM_CSHIELD_LEVELS 10
 #define CSHIELD_ABSORB_RATES(lev) ((lev) == 0) ? 0 : (MAX_CSHIELD_ABSORB / (NUM_CSHIELD_LEVELS - (lev)))
 
-#define MAX_FATIGUE 10000
-#define DEATH_TICKS CIT_CYCLE
-
 ulong player_death_time = 0;
 
 // Something has caused the player to become a fatality

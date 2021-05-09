@@ -28,7 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Defines
+
+/// Maximum fatigue value
 #define MAX_FATIGUE 10000
+
+/// Threshold when fatigue level will blinking
+#define FATIGUE_WARNING_LEVEL 7000
 
 // Prototypes
 
