@@ -94,6 +94,15 @@ LGRegion *root_region = &root_region_data;
 
 // prototypes
 
+/**
+ * Region handler initializer
+ * @param create_it create region?
+ * @param reg region which handle events
+ * @param rct square assigned to region
+ * @param slb assigned slab
+ * @param key_h keyboard event handler
+ * @param maus_h mouse event handler
+ */
 void generic_reg_init(uchar create_it, LGRegion *reg, LGRect *rct, uiSlab *slb, uiHandlerProc key_h,
                       uiHandlerProc maus_h) {
     int callid;
