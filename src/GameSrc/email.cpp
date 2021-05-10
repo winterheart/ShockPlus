@@ -591,7 +591,8 @@ uchar email_invpanel_input_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
         return TRUE;
     //   if (ev->type == UI_EVENT_KBD_COOKED &&  (ev->subtype & BAD_EMAIL_KEYFLAGS))
     //      return FALSE;
-    if (ev->type == UI_EVENT_KBD_COOKED && !((ev->subtype & KB_FLAG_DOWN) != 0 && (ev->subtype & 0xFF) == ' '))
+    // FIXME: when you read email and press space, character jumps. NICE JUMP, HUMAN.
+    if (ev->sdl_data.type == SDL_KEYDOWN && ev->sdl_data.key.keysym.scancode == SDL_SCANCODE_SPACE)
         return FALSE;
     if (next_text_line == EMAIL_DONE) {
         email_page_exit();
