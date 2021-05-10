@@ -612,8 +612,12 @@ uchar amap_ms_callback(curAMap *amptr, int x, int y, short action, ubyte b) {
 
         else if (y > AMAP_HGT(grd_bm.h) - BTN_HGT_MUL) // If in the "Done" button
         {
-            if (y < AMAP_HGT(grd_bm.h)) // quit automap... that was the done button kids.
-                hack_kb_callback(amptr, DO_QUIT);
+            if (y < AMAP_HGT(grd_bm.h)) {
+                // quit automap... that was the done button kids.
+                _new_mode = _last_mode;
+                chg_set_flg(GL_CHG_LOOP);
+                // amap_kb_callback(amptr, KEY_ESC | KB_FLAG_DOWN);
+            }
         }
 
         else // Else we must be in the pan region
@@ -756,7 +760,7 @@ void btn_init(curAMap *amptr) {
             flags_deal(amptr, i, AMAP_UNSET);
 }
 
-uchar amap_kb_callback(curAMap *amptr, int code) {
+uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
     //   char codewas;
     int exp = 0xff; // will get zeroed in case default for codes we ignore
 
@@ -774,56 +778,52 @@ uchar amap_kb_callback(curAMap *amptr, int code) {
     // If we're currently editing a message...
 
     if (cur_mapnote_ptr != NULL) {
-        if (!(code & KB_FLAG_DOWN))
-            return TRUE;
-        code = kb2ascii(code);
-        // KLC      if ((code==KEY_ENTER)||(code==KEY_DEL))
-        if (code == KEY_ENTER) // If we've pressed Enter
-        {
-            if (code == KEY_ENTER) {
-                trail_sp_punt();                  // clear out any trailing spaces
-                if (amptr->flags & AMAP_FULL_MSG) // switch out of editing loop
-                    chg_set_flg(AMAP_MAP_EV);
-            }
-
-            // KLC         if ((code==KEY_DEL)||(cur_mapnote_ptr==cur_mapnote_base))
-            if (cur_mapnote_ptr == cur_mapnote_base) // If the map note string is empty
-            {                                        // then delete the map note
-                obj_destroy(amptr->note_obj);
-                amptr->note_obj = 0;
-                chg_set_flg(AMAP_MAP_EV);
-            } else
-                amap_str_grab(cur_mapnote_base);
-            clear_cur_mapnote();
-        } else if (isprint(code)) { // make sure it isnt too long
-            int clen = strlen(cur_mapnote_base) + 1;
-
-            if (amap_str_deref(cur_mapnote_base) + clen < AMAP_STRING_SIZE)
-                if (clen < FSMAP_MAX_MSG) {
-                    if (*cur_mapnote_ptr != '\0')
-                        memcpy(cur_mapnote_ptr + 1, cur_mapnote_ptr, strlen(cur_mapnote_ptr));
-                    else
-                        *(cur_mapnote_ptr + 1) = '\0';
-                    *cur_mapnote_ptr++ = (char)code;
+        if (ev->type == SDL_KEYDOWN || ev->type == SDL_TEXTINPUT) {
+            // If we've pressed Enter
+            if (ev->type == SDL_KEYDOWN) {
+                if (ev->key.keysym.scancode == SDL_SCANCODE_RETURN) {
+                    trail_sp_punt();                  // clear out any trailing spaces
+                    if (amptr->flags & AMAP_FULL_MSG) // switch out of editing loop
+                        chg_set_flg(AMAP_MAP_EV);
                 }
-        } else if (code == KEY_BS) {
-            if (cur_mapnote_ptr > cur_mapnote_base)
-                *--cur_mapnote_ptr = '\0';
-        } else
-            return FALSE;
-        chg_set_flg(AMAP_MESSAGE_EV);
-        if (amptr->flags & AMAP_FULL_MSG)
-            chg_set_flg(AMAP_MAP_EV);
+
+                if (cur_mapnote_ptr == cur_mapnote_base) {
+                    // If the map note string is empty, then delete the map note
+                    obj_destroy(amptr->note_obj);
+                    amptr->note_obj = 0;
+                    chg_set_flg(AMAP_MAP_EV);
+                } else
+                    amap_str_grab(cur_mapnote_base);
+                clear_cur_mapnote();
+            } else if (ev->type == SDL_TEXTINPUT && isprint(ev->text.text[0])) {
+                // FIXME ^^^^ There is Unicode, need wchar.h stuff
+                // make sure it isnt too long
+                int clen = strlen(cur_mapnote_base) + 1;
+
+                if (amap_str_deref(cur_mapnote_base) + clen < AMAP_STRING_SIZE)
+                    if (clen < FSMAP_MAX_MSG) {
+                        if (*cur_mapnote_ptr != '\0')
+                            memcpy(cur_mapnote_ptr + 1, cur_mapnote_ptr, strlen(cur_mapnote_ptr));
+                        else
+                            *(cur_mapnote_ptr + 1) = '\0';
+                        *cur_mapnote_ptr++ = (char)ev->text.text[0];
+                    }
+            } else if (ev->key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
+                if (cur_mapnote_ptr > cur_mapnote_base)
+                    *--cur_mapnote_ptr = '\0';
+            } else
+                return FALSE;
+            chg_set_flg(AMAP_MESSAGE_EV);
+            if (amptr->flags & AMAP_FULL_MSG)
+                chg_set_flg(AMAP_MAP_EV);
+        }
         return TRUE;
-    }
-
-    // We're not editing.  Keyboard equivalents for buttons.
-
-    else {
+    } else {
+        // We're not editing.  Keyboard equivalents for buttons.
         char btn = -1, todo = AMAP_TOGGLE;
         map_scroll_code = 0;
         map_scroll_clicked = FALSE;
-        switch (code & (~KB_FLAG_DOWN)) {
+        switch (ev->key.keysym.scancode) {
             // KLC      case KEY_PGUP:   case '[': if (!zoom_deal(amptr,BTN_ZOOMOUT)) exp=0; break;
             // KLC      case KEY_PGDN:   case ']': if (!zoom_deal(amptr,BTN_ZOOMIN))  exp=0; break;
             // KLC maybe put keyboard scrolling in later
@@ -831,13 +831,13 @@ uchar amap_kb_callback(curAMap *amptr, int code) {
             // KLC      case KEY_LEFT:   case 'j': map_scroll_code=AMAP_PAN_W; break;
             // KLC      case KEY_UP:     case 'i': map_scroll_code=AMAP_PAN_N; break;
             // KLC      case KEY_DOWN:   case 'k': map_scroll_code=AMAP_PAN_S; break;
-        case KEY_ESC:
-        case 'q':
+        case SDL_SCANCODE_ESCAPE:
+        case SDL_SCANCODE_Q:
             _new_mode = _last_mode;
             chg_set_flg(GL_CHG_LOOP);
             break;
             // KLC      case KEY_BS:      edit_mapnote(amptr); break;
-        case KEY_BS:
+        case SDL_SCANCODE_BACKSPACE:
             obj_destroy(amptr->note_obj); // Delete the map note
             amptr->note_obj = 0;
             clear_cur_mapnote();

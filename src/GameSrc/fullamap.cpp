@@ -48,8 +48,9 @@ uchar amap_mouse_handler(uiEvent *ev, LGRegion *reg, intptr_t v) {
     return (TRUE);
 }
 
+/// AMap Keyboard event handler
 uchar amap_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
-    if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP), ev->cooked_key_data.code))
+    if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP), &ev->sdl_data))
         return FALSE;
     return (main_kb_callback(ev, r, user_data));
 }

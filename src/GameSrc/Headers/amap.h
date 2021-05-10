@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __AMAP_H
 
 // header for the real infernal automap
+#include <SDL.h>
+
 #include "2d.h"
 
 // defines
@@ -71,7 +73,7 @@ typedef struct {
 } curAMap;
 
 // prototypes
-uchar amap_kb_callback(curAMap *amptr, int code);
+uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev);
 void amap_draw(curAMap *amptr, int expose);
 void amap_version_set(int id, int new_ver);
 void automap_init(int version, int id);
