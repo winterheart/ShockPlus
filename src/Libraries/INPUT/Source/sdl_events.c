@@ -832,7 +832,7 @@ kbs_event kb_next(void) {
 //  See if there is a key waiting in the queue.
 //---------------------------------------------------------------
 kbs_event kb_look_next(void) {
-    kbs_event retEvent = {0xFF, 0x00};
+    kbs_event retEvent = {KBC_NONE, 0x00};
 
     int flags = kb_get_flags();
     if (flags & KBF_BLOCK) {
@@ -842,8 +842,9 @@ kbs_event kb_look_next(void) {
     }
 
     if (nextKBevent > 0) {
-        retEvent = kbEvents[0];
+        return kbEvents[0];
     }
+    TRACE("%s: No KB events. Injecting own...", __FUNCTION__ );
     return retEvent;
 
 #if 0
