@@ -51,9 +51,15 @@ bool CheckArgument(char *name);
 // Public Globals
 //--------------------
 
+extern bool UseCutscenePalette;
+
 // Is game being playing?
 extern bool gPlayingGame;
 
 extern grs_screen *cit_screen;
+extern grs_screen *svga_screen;
+
+extern SDL_AudioDeviceID device;
+extern SDL_Palette *sdlPalette;
 extern SDL_Renderer *renderer;
 extern SDL_Window *window;

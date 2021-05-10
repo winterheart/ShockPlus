@@ -224,7 +224,9 @@ errtype status_vitals_update(uchar Full_Redraw);
 
 // Globals
 
+extern int bio_energy_var;
 extern uchar flatline_heart;
 extern uchar chi_amp;
+extern uchar gBioInited;
 
 #endif //__STATUS_H

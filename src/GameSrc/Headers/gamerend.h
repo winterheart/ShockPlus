@@ -74,10 +74,8 @@ int gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, 
 void gamesys_render_func(void *fake_dest_bitmap, int flags);
 void set_shield_raisage(uchar going_up);
 
-#ifdef __GAMEREND_SRC
-int secret_render_fx = 0;
-#else
+extern ulong secret_sfx_time;
 extern int secret_render_fx;
-#endif
+extern short vhold_shift;
 
 #endif // __GAMEREND_H

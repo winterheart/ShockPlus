@@ -42,7 +42,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-#include "frtypesx.h"
+#include "cursors.h"
+#include "frprotox.h"
 #include "region.h"
 
 // Defines
@@ -63,6 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Prototypes
 void change_svga_screen_mode();
+void change_svga_cursors();
 errtype fullscreen_init(void);
 void fullscreen_start();
 void fullscreen_exit(void);
@@ -76,5 +78,17 @@ extern LGRegion *inventory_region_full;
 extern LGRegion *pagebutton_region_full;
 extern uchar full_game_3d;
 extern uchar full_visible;
+
+extern uchar fullscrn_vitals;
+extern uchar fullscrn_icons;
+
+extern uiSlab fullscreen_slab;
+
+#ifdef SVGA_SUPPORT
+extern grs_screen *svga_screen;
+extern frc *svga_render_context;
+extern short svga_mode_data[];
+extern short mode_id;
+#endif
 
 #endif // __FULLSCRN_H

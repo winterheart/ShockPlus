@@ -25,5 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 errtype mfd_viewhelp_init(MFD_Func *f);
 void mfd_viewhelp_expose(MFD *mfd, ubyte control);
 
+extern uchar map_notes_on;
 
 #endif

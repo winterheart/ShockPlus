@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AUDIOLOG_H
 
 #include "lg_error.h"
-//#include "lg.h"
 
 extern errtype audiolog_init();
 extern errtype audiolog_play(int email_id);
@@ -36,6 +35,11 @@ extern void audiolog_stop();
 extern errtype audiolog_loop_callback();
 extern bool audiolog_playing(int email_id);
 
+extern uchar audiolog_cancel_func(ushort keycode, uint32_t context, intptr_t data);
+
+extern int curr_alog;
 extern uchar audiolog_setting;
+extern char secret_pending_hack;
+extern char which_lang;
 
 #endif

@@ -124,12 +124,13 @@ void do_seen_pass(void);
 void draw_dir_dir(int dir, int st, int len);
 int fr_pipe_go_3(void);
 
+extern fix outer_wall[3][4][2];
+
 // the triangle is parm*n, 1<<z*n, 1, so we solve for n for each parm 0-31 and then get x,y
 // ie. n^2=1/(((1<<z)^2)+(parm^2))
 void _fr_init_slopes(int zshf) {
     int loop;
     fix parm, lvl, n, tmp;
-    extern fix outer_wall[3][4][2];
 
     _fr_fhgt_step = fix_make(0, 0x10000 >> zshf);
     lvl = fix_make((1 << zshf), 0);
@@ -151,12 +152,13 @@ void _fr_init_slopes(int zshf) {
     outer_wall[0][0][1] = outer_wall[0][1][1] = _fr_fhgt_list[loop];
 }
 
+extern fix tf_diag_walls[4][2];
+
 /* called by fr_compile_restart when size changes
  * this knows size of world and stuff like that
  */
 int fr_pipe_resize(int x, int y, int z, void *mptr) {
     int i;
-    extern fix tf_diag_walls[4][2];
     fr_map_y = y;
     csp_trans_add[1] = wall_adds[0] = fr_map_x = x;
     wall_adds[2] = -wall_adds[0];

@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frintern.h"
 #include "frparams.h"
 #include "frflags.h"
+#include "gametime.h"
 #include "olhint.h"
 #include "objects.h"
 #include "game_screen.h"
@@ -48,8 +49,6 @@ ubyte olh_radius = MIN_OLH_RADIUS;
 #define RIGHT_MARGIN (OLH_WRAP_WID / SCAN_RATIO)
 
 fauxrend_context *olh_full_context = NULL;
-
-extern fauxrend_context *svga_render_context;
 
 #define FULL_SCAN_WID (FULL_VIEW_WIDTH / SCAN_RATIO)
 #define FULL_SCAN_HGT (FULL_VIEW_HEIGHT / SCAN_RATIO)
@@ -79,12 +78,10 @@ fix x_mul = fix_make(1, 0), y_mul = fix_make(1, 0);
 void olh_svga_deal(void) {
     if (olh_full_context)
         fr_free_view(olh_full_context);
-    olh_init_single_scan(&olh_full_context, svga_render_context);
+    olh_init_single_scan(&olh_full_context, (fauxrend_context*) svga_render_context);
     x_mul = fix_div(fix_make(320, 0), fix_make(grd_mode_cap.w, 0));
     y_mul = fix_div(fix_make(200, 0), fix_make(grd_mode_cap.h, 0));
 }
-
-extern int last_real_time;
 
 ushort olh_scan_objs(void) {
     int xl, yl;

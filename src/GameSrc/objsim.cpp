@@ -24,11 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Object simulator code for Citadel
-#define __OBJSIM_SRC
+#define __OBJSIM_SRC  // FIXME: Get rid of this
 
 #include <string.h>
 #include <stdlib.h>
 
+#include "MacTune.h"
 #include "Shock.h"
 
 #include "amap.h"
@@ -112,6 +113,11 @@ uchar properties_changed = FALSE;
 uchar trigger_check = TRUE;
 ObjID physics_handle_id[MAX_OBJ];
 int physics_handle_max = -1;
+
+ObjID current_object = OBJ_NULL;
+
+int ObjBaseArray[255];
+int ClassBaseArray[16][16];
 
 // Internal Prototypes
 errtype ObjClassInit(ObjID id, ObjSpecID specid, int subclass);
@@ -240,7 +246,6 @@ Ref ref_from_critter_data(ObjID oid, int triple, byte posture, short frame, shor
     Ref retval;
     ubyte v, p;
     ulong old_ticks;
-    extern ulong last_real_time;
     Id our_id;
     RefTable *prt;
     char curr_frames;
@@ -317,13 +322,8 @@ Ref ref_from_critter_data(ObjID oid, int triple, byte posture, short frame, shor
     return (retval);
 }
 
-#include "MacTune.h"
-
 // deparses the bitmap_3d data field for a tpoly object into the bitmap to be textured onto it
 grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *type, Ref *use_ref) {
-    extern grs_bitmap *static_bitmap;
-    extern char camera_map[NUM_HACK_CAMERAS];
-    extern char num_customs;
     short style;
     int32_t use_index;
     Id useme;
@@ -350,8 +350,6 @@ grs_bitmap *bitmap_from_tpoly_data(int tpdata, ubyte *scale, int *index, uchar *
         break;
     case TPOLY_TYPE_CUSTOM_MAT:
         if ((*index >= FIRST_CAMERA_TMAP) && (*index <= FIRST_CAMERA_TMAP + NUM_HACK_CAMERAS)) {
-            extern uchar hack_cameras_needed;
-            extern grs_bitmap *hack_cam_bitmaps[NUM_HACK_CAMERAS];
             short temp_val = (*index) - FIRST_CAMERA_TMAP;
             hack_cameras_needed |= (1 << temp_val);
             do_screen_static();
@@ -1033,12 +1031,10 @@ void place_obj_at_objloc(ObjID id, ObjLoc *newloc, ushort xsize, ushort ysize) {
     (level_gamedata.hazard.zerogbio && me_hazard_bio(MAP_GET_XY(OBJ_LOC_BIN_X(oloc), OBJ_LOC_BIN_Y(oloc))))
 #define FUNKY_GRAV_VAL (fix_make(level_gamedata.hazard.bio, 0))
 
-// Moves an object to an objloc with a given velocity (in physics units, whatever
-// they are).
+// Moves an object to an objloc with a given velocity (in physics units, whatever they are).
 errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, uchar phys_tel, fix x_dot, fix y_dot, fix z_dot) {
     State new_state;
     ushort xsize = 0, ysize = 0;
-    extern cams *_def_cam;
 
     if (phys_tel && ((ObjProps[OPNUM(id)].physics_model != EDMS_NONE) || (id == PLAYER_OBJ))) {
         if (CHECK_OBJ_PH(id))
@@ -2110,7 +2106,6 @@ void diego_teleport_callback(ObjID id, intptr_t data) { obj_destroy(id); }
 #define DIEGO_DEATH_BATTLE_LEVEL 8
 
 uchar death_check(ObjID id, bool *b) {
-    extern char damage_sound_fx;
     if (ID2TRIP(id) == DIEGO_TRIPLE && player_struct.level != DIEGO_DEATH_BATTLE_LEVEL) {
         damage_sound_fx = -1;
         play_digi_fx_obj(SFX_TELEPORT, 1, id);
@@ -2127,10 +2122,6 @@ uchar obj_combat_destroy(ObjID id) {
     bool retval = TRUE;
     ObjSpecID osid = objs[id].specID;
     int i, *d1, *d2;
-    extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
-    extern ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
-    extern ObjID damage_sound_id;
-    extern char damage_sound_fx;
 
     // Check to see if we are a camera-surrogate
     // or a hack camera itself
@@ -2235,8 +2226,6 @@ uchar obj_combat_destroy(ObjID id) {
     }
     return (retval);
 }
-
-errtype obj_floor_func(ObjID id);
 
 #define DEFAULT_AI_WAIT 15
 ObjID object_place(int triple, LGPoint square) {
@@ -2742,8 +2731,6 @@ void spew_about_stuff(char *txt, ObjID id) {
 #endif
 
 #endif // NOT_YET
-
-extern uchar robot_antisocial;
 
 #define MAX_MOVE_OBJS 32
 // uchar of height above the ground to refresh within

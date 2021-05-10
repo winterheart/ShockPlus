@@ -87,6 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "shodan.h"
 #include "str.h"
 #include "vmouse.h"
+#include "weapons.h"
 
 #define MFD_SHIELD_FUNC 19
 
@@ -124,8 +125,6 @@ static uchar in_or_out = FALSE;
 // -------
 
 // Forward declaration of array at bottom of file
-
-extern uchar full_game_3d;
 
 LGRegion *mfd_regions[NUM_MFDS];
 
@@ -344,7 +343,6 @@ void mfd_weapon_expose(MFD *m, ubyte control) {
     uchar punt = player_struct.actives[ACTIVE_WEAPON] == EMPTY_WEAPON_SLOT;
     uchar Redraw = FALSE;
     uchar RedrawAmmoArea = TRUE;
-    extern uchar full_game_3d;
 
     if (control == 0) {
         uiCursorStack *cs;
@@ -1397,14 +1395,10 @@ uchar mfd_item_handler(MFD *m, uiEvent *e) {
 #define LANTERN_LAST_STATE(mfd) (player_struct.mfd_func_data[MFD_LANTERN_FUNC][2 * NUM_MFDS + mfd])
 #define LANTERN_BARRAY_IDX 0
 
-extern uchar muzzle_fire_light;
-
-int energy_cost(int warenum);
 
 uchar mfd_lantern_button_handler(MFD *mfd, LGPoint bttn, uiEvent *ev, void *data) {
     int n = CPTRIP(LANTERN_HARD_TRIPLE);
     int s = player_struct.hardwarez_status[n];
-    void mfd_lantern_setting(int setting);
 
     if (bttn.x >= player_struct.hardwarez[n] || !(ev->subtype & MOUSE_LDOWN))
         return FALSE; // Version too high
@@ -1954,7 +1948,6 @@ void mfd_bioware_expose(MFD *m, ubyte control) {
 
     // turn off the bioware if there's no exposed mfd.
     {
-        extern WARE HardWare[NUM_HARDWAREZ];
         uchar on = full || control & MFD_EXPOSE;
         for (i = 0; i < NUM_MFDS; i++) {
             ubyte slot = player_struct.mfd_current_slots[i];
@@ -2465,7 +2458,6 @@ uchar keypad_num(int b);
 char *keypad_name(int b, char *buf);
 char *mfd_keypad_assemble(keypad_data_type *keypad_data, char *buf);
 errtype mfd_keypad_input(MFD *m, char b_num);
-uchar keypad_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
 uchar mfd_keypad_handler(MFD *m, uiEvent *ev);
 uchar mfd_keypad_button_handler(MFD *mfd, LGPoint bttn, uiEvent *ev, void *data);
 errtype mfd_keypad_init(MFD_Func *f);
@@ -2574,7 +2566,6 @@ errtype mfd_keypad_input(MFD *mfd, char b_num) {
 }
 
 uchar keypad_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
-    extern MFD mfd[];
     uchar digit = kb2ascii(keycode) - '0';
     int m = NUM_MFDS;
     while (mfd_yield_func(MFD_KEYPAD_FUNC, &m)) {

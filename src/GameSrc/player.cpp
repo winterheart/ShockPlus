@@ -25,7 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "audiolog.h"
 #include "objwpn.h"
+#include "physics.h"
 #include "player.h"
 #include "diffq.h" // for time limit
 #include "hud.h"
@@ -83,8 +85,6 @@ errtype init_player(Player *pplr) {
     int i, j;
     char tmp[sizeof(pplr->name)];
     long tmpdiff;
-    extern int _fr_global_detail;
-    extern uchar which_lang;
 
     memcpy(tmp, pplr->name, sizeof(tmp)); // Save these so they won't be cleared.
     tmpdiff = *(long *)pplr->difficulty;
@@ -219,7 +219,6 @@ errtype init_player(Player *pplr) {
 
 errtype player_create_initial() {
     ObjLoc plr_loc;
-    extern Pelvis standard_pelvis;
 
     plr_loc.x = (INITIAL_PLAYER_X) + 0x80;
     plr_loc.y = (INITIAL_PLAYER_Y) + 0x80;

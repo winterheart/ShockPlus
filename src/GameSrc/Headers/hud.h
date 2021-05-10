@@ -29,8 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
-#include "frtypesx.h"
+#include "frprotox.h"
 #include "lg_error.h"
+#include "objects.h"
 #include "rect.h"
 
 // C Library Includes
@@ -90,9 +91,19 @@ errtype hud_set_time(ulong hud_modes, ulong ticks);
 void hud_do_objs(short xtop, short ytop, short xwid, short ywid, uchar reverse);
 void hud_shutdown_lines(void);
 
+void hud_report_damage(ObjID target, byte dmglvl);
+void draw_target_box(short xl, short yl, short xh, short yh);
+void update_damage_report(struct _hudobj_data *dat, uchar reverse);
+
+uchar hud_color_bank_cycle(ushort keycode, uint32_t context, intptr_t data);
+
 // Globals
 extern LGRect target_screen_rect;
 extern ubyte hud_colors[HUD_COLOR_BANKS][HUD_COLORS_PER_BANK];
 extern ubyte hud_color_bank;
+extern ubyte targ_frame;
+
+extern short enviro_edrain_rate;
+extern short enviro_absorb_rate;
 
 #endif // __HUD_H

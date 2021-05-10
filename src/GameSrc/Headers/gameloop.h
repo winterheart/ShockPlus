@@ -80,5 +80,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void game_loop(void);
 
 // Globals
+extern uchar redraw_paused;
 
 #endif // __GAMELOOP_H

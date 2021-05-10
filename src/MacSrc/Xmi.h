@@ -1,4 +1,29 @@
+/*
+
+Copyright (C) 2018-2020 Shockolate Project
+Copyright (C) 2021 ShockPlus Project
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#ifndef XMI_H
+#define XMI_H
+
 #include <SDL_mixer.h>
+
+#include "MusicDevice.h"
 
 #define NUM_THREADS 8
 
@@ -14,6 +39,9 @@ extern unsigned int NumTracks;
 extern char ChannelThread[16]; // 16 device channels
 
 extern int NumUsedChannels; // number of in-use device channels
+
+void AudioStreamCallback(void *userdata, unsigned char *stream, int len);
+void MusicCallback(void *userdata, Uint8 *stream, int len);
 
 void FreeXMI(void);
 int ReadXMI(const char *filename);
@@ -51,6 +79,10 @@ extern SDL_atomic_t DeviceChannelVolume[16]; // only msb: 0-127
 extern SDL_atomic_t ThreadPlaying[NUM_THREADS];
 extern SDL_atomic_t ThreadCommand[NUM_THREADS];
 
+extern MusicDevice *MusicDev;
+
 struct thread_data {
     int i; // thread index
 };
+
+#endif

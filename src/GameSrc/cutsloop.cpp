@@ -20,16 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL.h>
 
 #include "Shock.h"
+#include "audiolog.h"
 #include "cutsloop.h"
 #include "mainloop.h"
 #include "fullscrn.h"
 #include "game_screen.h"
 #include "gamescr.h"
 #include "keydefs.h"
+#include "palfx.h"
 #include "tools.h"
 #include "str.h"
 
 #include "MacTune.h"
+#include "Prefs.h"
 #include "gr2ss.h"
 
 extern "C" {
@@ -74,21 +77,6 @@ static Ref cutscene_anims[3] =
   0xbd7,
   0xbd8
 };
-
-
-
-extern uchar sfx_on;
-extern char which_lang;
-
-extern bool UseCutscenePalette; //see Shock.c
-
-//filled in amov.c when chunk contains subtitle data
-extern char EngSubtitle[256];
-extern char FrnSubtitle[256];
-extern char GerSubtitle[256];
-
-extern SDL_AudioDeviceID device;
-
 
 void AudioStreamCallback(void *userdata, unsigned char *stream, int len)
 {
@@ -262,7 +250,6 @@ void cutscene_loop(void)
     if (done_playing_movie)
     {
       UseCutscenePalette = TRUE; //see Shock.c
-      extern void palfx_fade_down(void);
       palfx_fade_down();
       UseCutscenePalette = FALSE; //see Shock.c
 

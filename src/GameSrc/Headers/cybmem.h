@@ -57,12 +57,7 @@ int flush_resource_cache(void);
 #define PRELOAD_ANIMATION_THRESHOLD EXTRA_TMAP_THRESHOLD // for simplicity, can be set different if we are psyched
 
 // Globals
-#ifdef __CYBMEM_SRC
-uchar big_buffer[BIG_BUFFER_SIZE + 16384];
-int start_mem;
-#else
 extern uchar big_buffer[BIG_BUFFER_SIZE + 16384];
 extern int start_mem;
-#endif
 
 #endif // __CYBMEM_H

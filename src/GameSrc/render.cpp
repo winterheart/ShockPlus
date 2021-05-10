@@ -28,11 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamerend.h"
 #include "render.h"
 #include "frprotox.h"
+#include "frsetup.h"
 #include "faketime.h"
 #include "game_screen.h"
-#include "gamerend.h"
 #include "fullscrn.h"
 #include "hudobj.h"
+#include "input.h"
 #include "cybmem.h"
 
 #include "frcamera.h"
@@ -48,8 +49,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 
 frc *hack_cam_frcs[MAX_CAMERAS_VISIBLE];
-grs_canvas hack_cam_canvases[MAX_CAMERAS_VISIBLE], static_canvas;
-grs_bitmap *hack_cam_bitmaps[MAX_CAMERAS_VISIBLE], *static_bitmap;
+grs_canvas hack_cam_canvases[MAX_CAMERAS_VISIBLE];
+grs_canvas static_canvas;
+grs_bitmap *hack_cam_bitmaps[MAX_CAMERAS_VISIBLE];
+grs_bitmap *static_bitmap;
 cams hack_cam;
 char camera_map[NUM_HACK_CAMERAS];
 ObjID hack_frc_objs[MAX_CAMERAS_VISIBLE];
@@ -208,11 +211,7 @@ int hack_eye; // the fierce pirate
 
 errtype hack_camera_takeover(int hack_cam) {
     LGRect start = {{-5, -5}, {5, 5}};
-    extern LGPoint use_cursor_pos;
     LGPoint ucp;
-    extern bool DoubleSize;
-    extern LGRect mainview_rect;
-    extern LGRect fscrn_rect;
     cams *cam = fr_camera_getdef();
 
     // Turn off the 360 ware, if it is on
@@ -326,7 +325,6 @@ void tile_hit(int mx, int my) {
 #define LIFE_UPDATE_RATE (256 >> 2)
 
 errtype render_run(void) {
-    extern uchar view360_render_on;
     static long last_cspace_update = 0;
 
 #ifdef POPUPS_ALLOWED

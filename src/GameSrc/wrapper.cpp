@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "newmfd.h"
 #include "wrapper.h"
 #include "tools.h"
+#include "init.h"
+#include "input.h"
 #include "invent.h"
 #include "invpages.h"
 #include "gamescr.h"
@@ -41,16 +43,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h"
 #include "fullscrn.h"
 #include "render.h"
+#include "gamestrn.h"
 #include "gametime.h"
 #include "musicai.h"
-#include "input.h"
 #include "gamestrn.h"
 #include "mfdext.h"
+#include "mfdfunc.h"
 #include "miscqvar.h"
 #include "cit2d.h"
 #include "rendtool.h"
+#include "setup.h"
 #include "sideicon.h"
 #include "sndcall.h"
+#include "statics.h"
 #include "sfxlist.h"
 #include "criterr.h"
 #include "gr2ss.h"
@@ -60,7 +65,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "olhext.h"
 #include "Xmi.h"
 #include "Prefs.h"
-#include "wrapper.h"
 
 #include "OpenGL.h"
 
@@ -99,7 +103,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 LGCursor option_cursor;
 grs_bitmap option_cursor_bmap;
 
-extern LGRegion *inventory_region;
 int wrap_id = -1, wrapper_wid, wrap_key_id;
 uchar clear_panel = TRUE, wrapper_panel_on = FALSE;
 grs_font *opt_font;
@@ -128,10 +131,6 @@ void video_screen_init(void);
 uint multi_get_curval(uchar type, void *p);
 void multi_set_curval(uchar type, void *p, uint val, void (*deal)(ushort));
 
-extern LGCursor slider_cursor;
-extern grs_bitmap slider_cursor_bmap;
-extern char which_lang;
-
 void options_screen_init(void);
 void wrapper_init(void);
 void load_screen_init(void);
@@ -157,11 +156,6 @@ LGRegion options_mouseregion[NUM_MOUSEREGION_SCREENS];
 uchar free_mouseregion = 0;
 
 char save_game_name[] = "savgam00.dat";
-
-extern grs_canvas *pinv_canvas;
-extern grs_canvas inv_norm_canvas;
-extern grs_canvas inv_fullscrn_canvas;
-extern grs_canvas inv_view360_canvas;
 
 #define FULL_BACK_X (GAME_MESSAGE_X - INVENTORY_PANEL_X)
 #define FULL_BACK_Y (GAME_MESSAGE_Y - INVENTORY_PANEL_Y)
@@ -309,12 +303,11 @@ void verify_screen_init(void (*verify)(uchar butid), slorker slork);
 #ifdef STATIC_BUTTON_STORE
 opt_button OButtons[MAX_OPTION_BUTTONS];
 #else
-extern grs_canvas _offscreen_mfd;
 opt_button *OButtons;
 uchar fv;
 #endif
 
-#define OPTIONS_COLOR RED_BROWN_BASE + 4
+#define OPTIONS_COLOR (RED_BROWN_BASE + 4)
 
 // decides on a "standard" width for our widgets based on column count
 // of current screen.  Our desire is that uniform widgets of this size
@@ -396,7 +389,6 @@ void draw_button(uchar butid) {
 
 void wrapper_draw_background(short ulx, short uly, short lrx, short lry) {
     short cx1, cx2, cy1, cy2;
-    extern grs_bitmap inv_backgnd;
     short a1, a2, a3, a4;
 
 #ifdef SVGA_SUPPORT
@@ -1063,9 +1055,9 @@ uchar opanel_kb_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
 }
 #pragma enable_message(202)
 
+extern uiSlab *uiCurrentSlab;
 void clear_obuttons() {
     uiCursorStack *cs;
-    extern uiSlab *uiCurrentSlab;
 
     uiGetSlabCursorStack(uiCurrentSlab, &cs);
     uiPopCursorEvery(cs, &slider_cursor);
@@ -1074,7 +1066,6 @@ void clear_obuttons() {
 }
 
 void opanel_redraw(uchar back) {
-    extern grs_bitmap inv_backgnd;
     int but;
     LGRect r = {{INVENTORY_PANEL_X, INVENTORY_PANEL_Y},
                 {INVENTORY_PANEL_X + INVENTORY_PANEL_WIDTH, INVENTORY_PANEL_Y + INVENTORY_PANEL_HEIGHT}};
@@ -1141,7 +1132,6 @@ void standard_slider_rect(LGRect *r, uchar butid, uchar ro, uchar mar) {
 
 errtype wrapper_panel_close(uchar clear_message) {
     uiCursorStack *cs;
-    extern uiSlab *uiCurrentSlab;
     int i;
 
     if (!wrapper_panel_on)
@@ -1174,8 +1164,6 @@ errtype wrapper_panel_close(uchar clear_message) {
     resume_game_time();
     return (OK);
 }
-
-extern uchar game_paused;
 
 uchar can_save() {
     uchar gp = game_paused;
@@ -1569,7 +1557,6 @@ void sound_screen_init(void) {
 #ifdef SVGA_SUPPORT
 uchar wrapper_screenmode_hack = FALSE;
 void screenmode_change(uchar new_mode) {
-    extern short mode_id;
     mode_id = new_mode;
     QUESTVAR_SET(SCREENMODE_QVAR, new_mode);
     change_mode_func(0, 0, _current_loop);
@@ -1581,9 +1568,6 @@ void screenmode_change(uchar new_mode) {
 #endif
 
 void language_change(uchar lang) {
-    extern int string_res_file, mfdart_res_file;
-    extern char *mfdart_files[];
-    extern char *language_files[];
 
     ResCloseFile(string_res_file);
     ResCloseFile(mfdart_res_file);
@@ -1622,15 +1606,11 @@ void dclick_dealfunc(ushort dclick_qvar) {
 }
 
 void joysens_dealfunc(ushort joysens_qvar) {
-    extern fix inpJoystickSens;
-
     inpJoystickSens = QVAR_TO_JOYSENS(joysens_qvar);
 }
 
 #pragma disable_message(202)
 void center_joy_go(uchar butid) {
-
-    // recenter_joystick(0,0,0);
     joystick_screen_init();
 }
 #pragma enable_message(202)
@@ -1688,7 +1668,6 @@ void olh_dealfunc(ushort olh) {
 ushort wrap_joy_type = 0;
 ushort high_joy_flags;
 void joystick_type_func(ushort new_joy_type) {
-    extern uchar joystick_count;
     // joystick_count = joy_init(high_joy_flags | new_joy_type);
     // config_set_single_value("joystick",CONFIG_INT_TYPE,(config_valtype)(high_joy_flags|new_joy_type));
     joystick_screen_init();
@@ -1700,7 +1679,6 @@ void joystick_screen_init(void) {
     char *keys;
     uchar sliderbase;
 
-    extern uchar joystick_count;
     keys = get_temp_string(REF_STR_KeyEquivs6);
     clear_obuttons();
 
@@ -1800,9 +1778,6 @@ void video_screen_init(void) {
     LGRect r;
     int i;
     char *keys;
-#ifdef SVGA_SUPPORT
-    extern short mode_id;
-#endif
     uchar sliderbase;
 
     keys = get_temp_string(REF_STR_KeyEquivs3);
@@ -1879,7 +1854,6 @@ void screenmode_screen_init(void) {
     clear_obuttons();
 
     for (i = 0; i < 5; i++) {
-        extern short svga_mode_data[];
         uchar mode_ok = FALSE;
         char j = 0;
         standard_button_rect(&r, i, 2, 2, 2);
@@ -1980,8 +1954,6 @@ void load_dealfunc(uchar butid, uchar index) {
 #pragma enable_message(202)
 
 void load_screen_init(void) {
-    extern uchar valid_save;
-
     clear_obuttons();
 
     textlist_init(0, *comments, NUM_SAVE_SLOTS, SAVE_COMMENT_LEN, FALSE, 0, valid_save, valid_save, REF_STR_UnusedSave,
@@ -2009,8 +1981,6 @@ void save_dealfunc(uchar butid, uchar index) {
 }
 
 void save_screen_init(void) {
-    extern uchar valid_save;
-
     clear_obuttons();
 
     textlist_init(0, *comments, NUM_SAVE_SLOTS, SAVE_COMMENT_LEN, TRUE, 0xFFFF, 0xFFFF, valid_save, REF_STR_UnusedSave,
@@ -2035,7 +2005,7 @@ void wrapper_start(void (*init)(void)) {
     suspend_game_time();
     opt_font = static_cast<grs_font *>(ResLock(OPTIONS_FONT));
 #ifndef STATIC_BUTTON_STORE
-    OButtons = (opt_button *)(_offscreen_mfd.bm.bits);
+    OButtons = (opt_button *)(offscreen_mfd.bm.bits);
     fv = full_visible;
     full_visible = 0;
 #endif
@@ -2080,7 +2050,6 @@ errtype check_free_diskspace(int *needed) {
 }
 
 errtype do_savegame_guts(uchar slot) {
-    extern uchar valid_save;
     errtype retval = OK;
 
     begin_wait();
@@ -2140,7 +2109,6 @@ errtype make_options_cursor(void) {
     LGPoint hot = {0, 0};
     grs_canvas cursor_canv;
     short orig_w;
-    extern uchar svga_options_cursor_bits[];
     uchar old_over = gr2ss_override;
     gr2ss_override = OVERRIDE_ALL;
 

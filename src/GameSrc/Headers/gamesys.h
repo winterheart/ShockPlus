@@ -142,7 +142,22 @@ void check_hazard_regions(MapElem *newElem);
 
 void expose_player(byte damage, ubyte type, ushort tsecs);
 
+uchar shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, uchar dir);
+
 // Globals
 extern Schedule game_seconds_schedule;
+extern char thresh_fail;
+
+extern short fr_surge_time;
+extern char surg_fx_frame;
+extern short surge_duration;
+
+// biorhythm vars
+extern int bio_absorb;
+extern int rad_absorb;
+
+extern uchar fatigue_warning;
+
+extern ulong obj_check_time;
 
 #endif // __GAMESYS_H

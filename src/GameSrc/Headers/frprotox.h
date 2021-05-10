@@ -53,10 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "2d.h"
 
-#ifndef __FRTYPESX_H
 typedef void frc;
 typedef void fmp;
-#endif
 
 //======== Basic truths
 #define FR_OK       (1)

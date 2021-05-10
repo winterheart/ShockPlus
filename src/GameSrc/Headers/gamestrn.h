@@ -73,5 +73,7 @@ char *get_texture_name(int abs_texture, char *buf, int bufsiz);
 char *get_texture_use_string(int abs_texture, char *buf, int bufsiz);
 
 // Globals
+extern char *language_files[];
+extern int string_res_file;
 
 #endif // __GAMESTRN_H

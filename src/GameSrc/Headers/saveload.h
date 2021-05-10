@@ -53,5 +53,7 @@ errtype load_current_map(Id id_num);
 uchar go_to_different_level(int targlevel);
 
 // Globals
+extern uchar saveload_static;
+extern uint dynmem_mask;
 
 #endif // __SAVELOAD_H

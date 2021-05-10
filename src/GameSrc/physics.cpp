@@ -72,8 +72,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define EXPAND_FIX(x) fix_int(x), fix_frac(x)
 
-#define sqr(fixval) (fix_mul(fixval, fixval))
-
 // INTERNAL PROTOTYPES
 // --------------------
 uchar safety_net_wont_you_back_me_up(ObjID oid);
@@ -108,9 +106,6 @@ Dirac_frame standard_dirac = {
     standard_corner, standard_corner,   standard_corner,    standard_corner,  standard_corner,
 #endif
 };
-
-extern ObjID physics_handle_id[];
-extern int physics_handle_max;
 
 #define check_up(num)
 
@@ -251,9 +246,6 @@ errtype physics_get_one_control(int bank, int num, byte *val) {
 
 int old_x = -1, old_y = -1, old_lev = -1;
 char old_bits = 0;
-extern uchar decon_count;
-extern uchar in_deconst;
-extern uchar in_peril;
 
 #define TUNNEL_CONTROL_MAX fix_make(0x8, 0)
 #define MATCHBOX_SPEED fix_make(0x3F, 0)
@@ -263,7 +255,6 @@ extern uchar in_peril;
 
 errtype compare_locs(void) {
     MapElem *newElem, *oldElem;
-    extern int score_playing;
 
     if ((old_x != PLAYER_BIN_X) || (old_y != PLAYER_BIN_Y) || (old_lev != player_struct.level)) {
         newElem = MAP_GET_XY(PLAYER_BIN_X, PLAYER_BIN_Y);
@@ -384,8 +375,10 @@ void state_to_objloc(State *s, ObjLoc *l) {
 
 #define CYB_VEL_DELTA 32
 #define CYB_VEL_DELTA2 16
-ubyte old_head = 0, old_pitch = 0;
-short last_deltap = 0, last_deltah = 0;
+ubyte old_head = 0;
+ubyte old_pitch = 0;
+short last_deltap = 0;
+short last_deltah = 0;
 
 errtype physics_run(void) {
     int i;
@@ -396,8 +389,6 @@ errtype physics_run(void) {
     fix plr_alpha;
     State new_state;
     uchar some_move = FALSE;
-    extern int fire_kickback;
-    extern uchar hack_takeover;
     static long kickback_time = 0; // i bet this static will someday bite our butts, like save/rest mid kickback?
 #ifdef EDMS_SAFETY_NET
     uchar allow_move = TRUE;
@@ -438,7 +429,7 @@ errtype physics_run(void) {
         ObjSpecID osid;
         {
             fix crouch = fix_make(0, player_struct.lean_filter_state);
-            damp = 3 * sqr(STANDARD_HEIGHT - crouch) / sqr(STANDARD_HEIGHT) + 1;
+            damp = 3 * fix_sqr(STANDARD_HEIGHT - crouch) / fix_sqr(STANDARD_HEIGHT) + 1;
         }
         osid = objPhysicss[0].id;
         while (osid != OBJ_SPEC_NULL) {
@@ -533,14 +524,11 @@ errtype physics_run(void) {
 
         plr_lean = fix_make((int)player_struct.leanx, 0) / 3;
         if (player_struct.controls[CONTROL_ZVEL] > 0) {
-            extern uchar jumpjets_active;
-
             player_set_posture(POSTURE_STAND);
             plr_z = fix_make(player_struct.controls[CONTROL_ZVEL], 0);
             activate_jumpjets(&plr_side, &plr_y, &plr_z);
             jumpjets_active = plr_z < 0;
         } else {
-            extern uchar jumpjets_active;
             plr_z = fix_make(player_struct.controls[CONTROL_ZVEL], 0); /*  /3/damp; */
             jumpjets_active = FALSE;
         }
@@ -617,7 +605,6 @@ errtype physics_run(void) {
                     ubyte new_head, new_pitch; //, new_bank;
                     short new_deltah, new_deltap;
                     State cyber_state;
-                    extern uchar new_cyber_orient;
 
                     get_phys_state(objs[PLAYER_OBJ].info.ph, &cyber_state, PLAYER_OBJ);
 
@@ -1422,8 +1409,6 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad) {
         int a = objPhysicss[objs[collision].specID].bullet_triple;
         int cp_num;
         ObjLoc loc = objs[collision].loc;
-        extern ObjID damage_sound_id;
-        extern char damage_sound_fx;
         uchar special_proj = FALSE;
 
         // set that we've already collided this time
@@ -1585,7 +1570,7 @@ void cit_sleeper_callback(physics_handle caller) {
     }
 }
 
-void cit_autodestruct_callback(physics_handle h) {}
+void cit_autodestruct_callback(physics_handle caller) {}
 
 uchar robot_antisocial = FALSE;
 

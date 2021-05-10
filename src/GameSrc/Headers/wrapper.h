@@ -86,6 +86,8 @@ void wrapper_start(void (*init)(void));
 // as an argument.
 uchar wrapper_options_func(ushort keycode, uint32_t context, intptr_t data);
 
+uchar saveload_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
+
 errtype wrapper_create_mouse_region(LGRegion *root);
 
 #define NUM_SAVE_SLOTS 8
@@ -94,6 +96,14 @@ errtype wrapper_create_mouse_region(LGRegion *root);
 // Globals
 extern char save_game_name[];
 extern char comments[NUM_SAVE_SLOTS + 1][SAVE_COMMENT_LEN];
+
+extern uchar curr_vol_lev;
+extern uchar curr_sfx_vol;
+extern uchar curr_alog_vol;
+
+#ifdef SVGA_SUPPORT
+extern uchar wrapper_screenmode_hack;
+#endif
 
 #define Poke_SaveName(game_num)                    \
     {                                              \

@@ -88,4 +88,6 @@ void zoom_to_side_icon(LGPoint from, int icon);
 #define macro_region_create_with_autodestroy(parent, child, LGRect) \
     region_create(parent, child, LGRect, 0, 0, REG_USER_CONTROLLED | AUTODESTROY_FLAG, NULL, NULL, NULL, NULL)
 
+extern int last_side_icon;
+
 #endif // __SIDEICON_H

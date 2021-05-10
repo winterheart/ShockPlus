@@ -101,7 +101,6 @@ void score_objs(int o_num) {
     ObjID cobjid;
     short objtrip;
     Obj *_os_cobj;
-    extern uchar cam_mode;
     int partition = PRT_NONE, obj_type, our_score;
 
     cobjid = sq_Refs[o_num];
@@ -275,7 +274,6 @@ void partition_sort(void) {
 // go through, do the sort, call show_obj a lot
 // for now, just do oscore straight...
 void render_sorted_objs(void) {
-    extern int _fdt_x, _fdt_y;
     int i;
     partition_cnt = partition_type = draw_last_cnt = 0;
     if (cur_obj_num > 1) {

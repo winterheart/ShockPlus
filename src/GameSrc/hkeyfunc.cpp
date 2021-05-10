@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 #include "Prefs.h"
 
+#include "ai.h"
 #include "fullscrn.h"
+#include "game_screen.h"
 #include "grenades.h"
 #include "invent.h"
 #include "loops.h"
@@ -37,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdext.h"
 #include "MacTune.h"
 #include "musicai.h"
+#include "newmfd.h"
 #include "objwpn.h"
 #include "saveload.h"
 #include "softdef.h"
@@ -222,8 +225,6 @@ uchar toggle_bool_func(ushort keycode, uint32_t context, intptr_t data) {
     return TRUE;
 }
 
-extern bool DoubleSize;
-
 uchar change_mode_func(ushort keycode, uint32_t context, intptr_t data) {
     int newm = (int)data;
 
@@ -295,8 +296,6 @@ void start_music(void) {
 }
 
 void stop_music(void) {
-    extern uchar mlimbs_on;
-
     MacTuneShutdown();
     music_on = FALSE;
     mlimbs_on = FALSE;
@@ -321,8 +320,6 @@ uchar toggle_music_func(ushort keycode, uint32_t context, intptr_t data) {
 }
 
 uchar arm_grenade_hotkey(ushort keycode, uint32_t context, intptr_t data) {
-    extern uchar show_all_actives;
-    extern short inv_last_page;
     int i, row, act;
 
     if (!show_all_actives) {
@@ -343,8 +340,6 @@ uchar arm_grenade_hotkey(ushort keycode, uint32_t context, intptr_t data) {
 }
 
 int select_object_by_class(int obclass, int num, ubyte *quantlist) {
-    extern uchar show_all_actives;
-    extern short inv_last_page;
     int act = player_struct.actives[obclass];
     int newobj = act;
 
@@ -379,8 +374,6 @@ uchar select_drug_hotkey(ushort keycode, uint32_t context, intptr_t data) {
 }
 
 uchar use_drug_hotkey(ushort keycode, uint32_t context, intptr_t data) {
-    extern uchar show_all_actives;
-    extern short inv_last_page;
     int i, row, act;
 
     if (!show_all_actives) {
@@ -398,9 +391,6 @@ uchar use_drug_hotkey(ushort keycode, uint32_t context, intptr_t data) {
 }
 
 uchar clear_fullscreen_func(ushort keycode, uint32_t context, intptr_t data) {
-    extern char last_message[128];
-    extern MFD mfd[2];
-
     full_lower_region(&mfd[MFD_RIGHT].reg2);
     full_lower_region(&mfd[MFD_LEFT].reg2);
     full_lower_region(inventory_region_full);
@@ -462,7 +452,6 @@ uchar location_spew_func(ushort , uint32_t , intptr_t )
 uchar toggle_physics_func(ushort keycode, uint32_t context, intptr_t data) {
     physics_running = !physics_running;
 
-    extern uchar pacifism_on;
     pacifism_on = !physics_running;
 
     if (physics_running)
@@ -771,14 +760,13 @@ uchar unpause_callback(uiEvent *, LGRegion *, void *) { return (TRUE); }
 #endif // NOT_YET
 
 uchar pause_game_func(ushort keycode, uint32_t context, intptr_t data) {
-    extern uchar game_paused, redraw_paused;
-
     game_paused = !game_paused;
     CaptureMouse(!game_paused);
 
-    extern LGCursor globcursor;
-    if (game_paused) uiPushGlobalCursor(&globcursor);
-    else uiPopGlobalCursor();
+    if (game_paused)
+        uiPushGlobalCursor(&globcursor);
+    else
+        uiPopGlobalCursor();
 
     if (game_paused) {
         redraw_paused = TRUE;

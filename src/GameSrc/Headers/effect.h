@@ -171,6 +171,7 @@ errtype add_obj_to_animlist(ObjID id, uchar repeat, uchar reverse, uchar cycle, 
 errtype remove_obj_from_animlist(ObjID id);
 errtype animlist_clear();
 uchar anim_data_from_id(ObjID id, bool *reverse, bool *cycle);
+void init_animlist(void);
 
 #define MAX_ANIMLIST_SIZE 64
 
@@ -191,7 +192,10 @@ typedef struct {
     short speed;
 } AnimListing;
 
+void critter_light_world(ObjID id);
+
 extern short anim_counter;
 extern AnimListing animlist[MAX_ANIMLIST_SIZE];
+extern ObjID beam_effect_id;
 
 #endif // __EFFECT_H

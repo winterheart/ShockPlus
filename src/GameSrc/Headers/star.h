@@ -81,4 +81,6 @@ void star_render(void);
 g3s_phandle star_transform_point(g3s_vector *v);
 //#pragma aux star_transform_point "*" parm [esi] value [edi] modify [eax ebx ecx edx esi edi];
 
+extern int std_alias_size;
+
 #endif

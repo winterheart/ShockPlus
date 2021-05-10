@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <stdlib.h>
-
 #include "gametime.h"
 #include "faketime.h"
 #include "player.h"
@@ -35,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dirac.h"
 #include "framer8.h"
 
-ulong last_real_time = 0;
+uint32_t last_real_time = 0;
 char reflex_remainder = 0;
 
 long gNewShockTicks; // whyyyyyy

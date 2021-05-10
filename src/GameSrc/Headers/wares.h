@@ -185,9 +185,20 @@ void shield_set_absorb(void);
 void shield_toggle(uchar visible, uchar real);
 uchar shield_change_setting_hkey(ushort keycode, uint32_t context, intptr_t data);
 
+uchar hw_hotkey_callback(ushort keycode, uint32_t context, intptr_t data);
+
 // -------
 // Globals
 // -------
+extern uchar jumpjets_active;
+extern ubyte waretype2invtype[];
+
+extern long ware_base_triples[NUM_WARE_TYPES];
+
+extern WARE HardWare[NUM_HARDWAREZ];
+extern WARE Combat_SoftWare[NUM_COMBAT_SOFTS];
+extern WARE Defense_SoftWare[NUM_DEFENSE_SOFTS];
+extern WARE Misc_SoftWare[NUM_MISC_SOFTS];
 
 // what mode are we using.
 extern ubyte motionware_mode;

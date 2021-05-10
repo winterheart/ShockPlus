@@ -57,3 +57,5 @@ extern ulong cspace_effect_times[NUM_CS_EFFECTS];
 extern ulong cspace_effect_durations[NUM_CS_EFFECTS];
 extern ObjID cspace_decoy_obj;
 extern ObjLoc recall_objloc;
+
+extern ObjID shodan_avatar_id;

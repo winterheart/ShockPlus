@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __MAINLOOP_H
 
 #include "gameloop.h"
-#include "frtypesx.h"
+#include "frprotox.h"
 #include "lg_error.h"
 #include "region.h"
 
@@ -78,6 +78,7 @@ extern uint _change_flag;   // change flags for loop
 extern uint _static_change; // current static changes
 extern short _new_mode;     // mode to change to, if any
 extern short _last_mode;    // last mode we were in, to switch back to
+extern uchar game_paused;   // are we "paused"
 extern uchar player_invulnerable;
 extern uchar player_immortal;
 extern uchar physics_running;
@@ -88,6 +89,9 @@ extern uchar saves_allowed;
 extern uchar time_passes;
 extern uchar pal_fx_on;
 extern LGRegion *_current_view;
+
+extern uchar cit_success;
+
 
 #define loopLine(num, code_line) code_line
 

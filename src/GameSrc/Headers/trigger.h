@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "2d.h"
 #include "lg_error.h"
 #include "objects.h"
 
@@ -129,7 +130,9 @@ errtype do_level_entry_triggers();
 short qdata_get(short qdata);
 
 // Globals
-
+extern uchar *shodan_bitmask;
+extern grs_bitmap shodan_draw_fs;
+extern grs_bitmap shodan_draw_normal;
 extern char *trapname_strings[];
 
 #endif // __TRIGGER_H

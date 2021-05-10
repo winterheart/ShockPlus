@@ -71,9 +71,9 @@ extern "C" {
         }                                                 \
     } while (0);
 
-// For mac version.
 #define lg_max(a, b) (((a) > (b)) ? (a) : (b))
 #define lg_min(a, b) (((a) < (b)) ? (a) : (b))
+#define lg_sqr(x) ((x) * (x))
 
 #define GAMEONLY 1
 #define SVGA_SUPPORT 1

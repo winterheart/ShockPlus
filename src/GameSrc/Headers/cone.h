@@ -56,6 +56,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 
+#include "3d.h"
+
 // finds the view area polygon - modifies first argument to become
 // an array of fix points that represents the view area
 // polygon is in clockwise order
@@ -67,6 +69,7 @@ uchar find_view_area(fix *cone_list, fix fix_floor, fix fix_roof, int *count, fi
 // run the cone clip and render it.
 void simple_cone_clip_pass(void);
 
+extern g3s_vector main_view_vectors[4];
 extern fix span_lines[8];
 extern byte span_index[2];
 extern fix span_intersect[4];

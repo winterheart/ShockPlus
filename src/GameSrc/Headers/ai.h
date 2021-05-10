@@ -100,5 +100,8 @@ void ai_critter_seen(void);
 void ai_misses(ObjSpecID osid);
 
 // Globals
+extern uchar pacifism_on;
+
+extern ObjLoc last_known_loc;
 
 #endif // __AI_H

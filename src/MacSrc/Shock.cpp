@@ -38,9 +38,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ShockBitmap.h"
 
 #include "amaploop.h"
+#include "fullscrn.h"
 #include "gr2ss.h"
+#include "init.h"
+#include "invent.h"
 #include "hkeyfunc.h"
 #include "mainloop.h"
+#include "mouselook.h"
 #include "rgb.h"
 #include "setup.h"
 #include "shock_version.h"
@@ -62,21 +66,9 @@ SDL_AudioDeviceID device;
 int num_args;
 char **arg_values;
 
-extern grs_screen *svga_screen;
-extern frc *svga_render_context;
-
 //--------------------
 //  Prototypes
 //--------------------
-extern void init_all(void);
-extern void inv_change_fullscreen(uchar on);
-extern void object_data_flush(void);
-extern errtype load_da_palette(void);
-
-// see Prefs.c
-extern void CreateDefaultKeybindsFile(void);
-extern void LoadHotkeyKeybinds(void);
-extern void LoadMoveKeybinds(void);
 
 //------------------------------------------------------------------------------------
 //		Main function.
@@ -182,7 +174,6 @@ void InitSDL() {
 
     gr_init();
 
-    extern short svga_mode_data[];
     gr_set_mode(svga_mode_data[gShockPrefs.doVideoMode], TRUE);
 
     INFO("Setting up screen and render contexts");
@@ -229,6 +220,7 @@ void InitSDL() {
 
 SDL_Color gamePalette[256];
 bool UseCutscenePalette = FALSE; // see cutsloop.c
+
 void SetSDLPalette(int index, int count, uchar *pal) {
     static bool gammalut_init = false;
     static uchar gammalut[100 - 10 + 1][256];
@@ -303,8 +295,6 @@ void SDLDraw() {
 }
 
 bool MouseCaptured = FALSE;
-
-extern int mlook_enabled;
 
 void CaptureMouse(bool capture) {
     MouseCaptured = (capture && gShockPrefs.goCaptureMouse);

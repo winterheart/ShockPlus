@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "map.h"
 #include "player.h"
 #include "schedule.h"
+#include "damage.h"
 #include "grenades.h"
 #include "invent.h"
 #include "leanmetr.h"
@@ -57,6 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "frflags.h"
 #include "frprotox.h"
+#include "weapons.h"
 
 // this will need to be initialized.
 height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
@@ -276,7 +278,6 @@ void door_event_handler(Schedule *s, SchedEvent *ev) {
         ObjID ground0, p3obj;
         ObjLoc blastLoc;
         ExplosionData *kaboom;
-        extern short fr_sfx_time;
 
         // An earth-shattering kaboom.
         // turn the panel into a destroyed one
@@ -360,8 +361,6 @@ void exposure_event_handler(Schedule *s, SchedEvent *ev) {
         schedule_event(s, &copy);
     }
 }
-
-extern uchar muzzle_fire_light;
 
 void light_event_handler(Schedule *s, SchedEvent *ev) {
     muzzle_fire_light = FALSE;

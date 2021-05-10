@@ -23,8 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/15 12:27:09 $
  */
 
-#define __HUD_SRC
-
 #include <string.h>
 #include <stdio.h>
 
@@ -39,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objsim.h"
 #include "objgame.h"
 #include "gamestrn.h"
+#include "frsetup.h"
 #include "frtypes.h"
 #include "faketime.h"
 #include "fullscrn.h"
@@ -136,12 +135,9 @@ HudLine hud_lines[] = {
 
 #define HUDLINE_BUFFER(i) (hudline_text[HUDLINE_TEXT(&hud_lines[i])])
 
-extern bool DoubleSize;
-
 // --------------
 //  PROTOTYPES
 // --------------
-uchar hud_color_bank_cycle(ushort keycode, uint32_t context, intptr_t data);
 void hud_free_line(int i);
 void hud_delete_line(int i);
 void compute_hud_var(HudLine *hl);
@@ -168,8 +164,6 @@ void hud_delete_line(int i) {
 }
 
 void compute_hud_var(HudLine *hl) {
-    extern short shield_absorb_perc;
-
     char *text = hudline_text[HUDLINE_TEXT(hl)];
     int len = strlen(text);
     char *s = text + len;
@@ -200,7 +194,6 @@ void compute_hud_var(HudLine *hl) {
         break;
     case 5: // message line hud.
     {
-        extern char last_message[];
         strncpy(s, last_message, HUD_STRING_SIZE);
         break;
     }
@@ -214,7 +207,6 @@ void compute_hud_var(HudLine *hl) {
     }
     case 7: // energy usage hud
     {
-        extern short enviro_edrain_rate;
         sprintf(s, "%d", player_struct.energy_spend + enviro_edrain_rate);
         len += strlen(s);
         s += strlen(s);
@@ -223,14 +215,12 @@ void compute_hud_var(HudLine *hl) {
     }
     case 8: // enviro suit absorption
     {
-        extern short enviro_edrain_rate, enviro_absorb_rate;
         sprintf(s, get_temp_string(REF_STR_EnviroAbsorb), enviro_absorb_rate);
         len += strlen(s);
         break;
     }
     case 9: // enviro suit energy drain
     {
-        extern short enviro_edrain_rate, enviro_absorb_rate;
         sprintf(s, get_temp_string(REF_STR_EnviroDrain), enviro_edrain_rate);
         len += strlen(s);
         break;
@@ -294,7 +284,6 @@ void hud_update_lines(short x, short *y, short unused1, short unused2) {
                 use_y = *y;
                 *y += Y_STEP;
             } else {
-                extern uchar full_game_3d;
                 use_y = hud_lines[i].y;
                 if (full_game_3d)
                     use_y += FULLSCREEN_Y_OFFSET;
@@ -363,10 +352,6 @@ static struct _damage_report {
 #define TSTAMP_CUTOFF (CIT_CYCLE / 2) // how old can a damage report get before we nuke it.
 
 #define TARG_EFF_VERSION 3
-
-void hud_report_damage(ObjID target, byte dmglvl);
-void draw_target_box(short xl, short yl, short xh, short yh);
-void update_damage_report(struct _hudobj_data *dat, uchar reverse);
 
 void hud_report_damage(ObjID target, byte dmglvl) {
     short i, best = 0;
@@ -453,7 +438,6 @@ void update_damage_report(struct _hudobj_data *dat, uchar reverse) {
                 */
             } else {
 #ifdef SVGA_SUPPORT
-                extern uchar shadow_scale;
                 uchar old_scale = shadow_scale;
                 shadow_scale = FALSE;
 #endif
@@ -525,8 +509,6 @@ void hud_do_objs(short xtop, short ytop, short xwid, short ywid, uchar reverse) 
 // hud_update()
 
 errtype hud_update(uchar redraw_whole, frc *context) {
-    extern uchar fullscrn_vitals;
-    extern uchar fullscrn_icons;
     fauxrend_context *fc = (fauxrend_context *)context;
     short y = Y_MARGIN;
     short x = X_MARGIN;

@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include "FrUtils.h"
+#include "frsetup.h"
+#include "frutils.h"
 #include "gr2ss.h"
 #include "Shock.h"
 #include "2d.h"
@@ -103,25 +104,6 @@ void Fast_FullScreen_Copy(grs_bitmap *bm) { gr_bitmap(bm, 0, 0); }
 
 //=================================================================
 // Doubling routines
-extern bool SkipLines;
-
-// copy the slot view from offscreen to on, doubling it
-// extern "C"
-//{
-//extern void BlitLargeAlign(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
-//extern void BlitLargeAlignSkip(uchar *draw_buffer, int dstRowBytes, void *dstPtr, long w, long h, long modulus);
-//}
-
-/*
-void Fast_Slot_Double(grs_bitmap *bm, long w, long h) {
-    if (!SkipLines)
-        BlitLargeAlign(bm->bits, gScreenRowbytes, gScreenAddress + (kFastSlotTop * gScreenRowbytes) + kFastSlotLeft, w,
-                       h, bm->row);
-    else
-        BlitLargeAlignSkip(bm->bits, gScreenRowbytes, gScreenAddress + (kFastSlotTop * gScreenRowbytes) + kFastSlotLeft,
-                           w, h, bm->row);
-}
-*/
 
 void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h) {
     if (SkipLines) {

@@ -33,20 +33,21 @@ extern "C" {
 }
 
 #include "MacTune.h"
+#include "Shock.h"
 #include "audiolog.h"
+#include "bark.h"
+#include "cutsloop.h"
 #include "map.h"
 #include "tools.h"
 #include "musicai.h"
 #include "mainloop.h"
-#include "bark.h"
 #include "miscqvar.h"
+#include "wrapper.h"
 
 #define AUDIOLOG_BASE_ID 2741
 #define AUDIOLOG_BARK_BASE_ID 3100
 
 #define ALOG_MUSIC_DUCK 0.7
-
-extern SDL_AudioStream *cutscene_audiostream; // see cutsloop.c
 
 static uint8_t *audiolog_audiobuffer = NULL;
 static uint8_t *audiolog_audiobuffer_pos = NULL;
@@ -59,12 +60,6 @@ char secret_pending_hack;
 
 char *bark_files[] = {"res/data/citbark.res", "res/data/frnbark.res", "res/data/gerbark.res"};
 char *alog_files[] = {"res/data/citalog.res", "res/data/frnalog.res", "res/data/geralog.res"};
-
-extern uchar curr_vol_lev;
-extern uchar curr_alog_vol;
-extern char which_lang;
-
-extern SDL_AudioDeviceID device;
 
 errtype audiolog_init(void) { return OK; }
 

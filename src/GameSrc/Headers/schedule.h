@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes
 #include "schedtyp.h"
+#include "trigger.h"
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
    DER SCHEDUMIFIERINEN
@@ -117,5 +118,6 @@ int compare_events(void *e1, void *e2);
 uchar register_h_event(uchar x, uchar y, uchar floor, char *sem, char *key, uchar no_sfx);
 
 // Globals
+extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
 
 #endif // __SCHEDULE_H

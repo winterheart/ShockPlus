@@ -55,6 +55,9 @@ typedef struct {
     physics_handle exclusion;
 } Combat_Ray;
 
+extern ObjID terrain_hit_obj;
+extern ObjID terrain_hit_exclusion;
+
 // ******* RAYCAST FUNCTIONS *************
 // the following ray_cast_* functions do the same thing, but allow for different types of input
 // returns the first object hit, and returns OBJ_NULL, if ray does not hit any object

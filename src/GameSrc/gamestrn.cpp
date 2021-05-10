@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include "Shock.h"
+#include "audiolog.h"
 #include "gamestrn.h"
 #include "criterr.h"
 #include "objsim.h"
@@ -53,7 +54,6 @@ int string_res_file; // string res filenum
 // ---------
 
 char *language_files[] = {"res/data/cybstrng.res", "res/data/frnstrng.res", "res/data/gerstrng.res"};
-extern char which_lang;
 
 // Wrapper around RefGet suitable for use by lg_sprintf to get string resources
 // for the custom '%S' format specifier.

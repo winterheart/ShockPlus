@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effect.h"
 #include "email.h"
 #include "faketime.h"
+#include "frsetup.h"
 #include "fullscrn.h"
 #include "gamestrn.h"
 #include "gr2ss.h"
@@ -73,8 +74,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MFD_FIXTURE_FLAG 0x8 // class flag for mfd fixtures
 
-errtype accesspanel_trigger(ObjID id);
-
 // -----------
 //  PROTOTYPES
 // -----------
@@ -88,7 +87,7 @@ uchar obj_fixture_zoom(ObjID id, uchar in_inv, uchar *messagep);
 uchar obj_keypad_crunch(int p, uchar digits[]);
 uchar try_use_epick(ObjID panel, ObjID cursor_obj);
 ObjID door_in_square(ObjLoc *loc, uchar usable);
-void regenetron_door_hack();
+
 errtype elevator_janitor_run();
 
 // not in any way the right way to fix this bug, except
@@ -99,10 +98,7 @@ uchar shameful_obselete_flag;
 
 void zoom_mfd(int mfd, bool shifted) {
     LGRect start = {{-5, -5}, {5, 5}};
-    extern LGPoint use_cursor_pos;
     LGPoint ucp;
-
-    extern bool DoubleSize;
 
     if (!shifted)
         mouse_look_off();
@@ -489,7 +485,6 @@ uchar obj_fixture_zoom(ObjID id, uchar in_inv, uchar *messagep) {
 #define BATTERY_ENERGY_BONUS 0x50
 #define TRACBEAM_ENERGY_COST 0x20
 #define TRACBEAM_DIST_MOD 0x20
-extern ubyte pickup_distance_mod;
 
 errtype obj_tractor_beam_func(ObjID id, uchar on) {
     if (on) {
@@ -550,9 +545,8 @@ uchar try_use_epick(ObjID panel, ObjID cursor_obj) {
 }
 
 #define PLASTIQUE_TIME 10
-extern bool gKeypadOverride;
 
-bool ObjectUseShifted = FALSE; //set if shift key was held when using object
+bool ObjectUseShifted = FALSE;
 
 // We return whether or not we used the message line.
 uchar object_use(ObjID id, uchar in_inv, ObjID cursor_obj) {
@@ -562,9 +556,6 @@ uchar object_use(ObjID id, uchar in_inv, ObjID cursor_obj) {
     char i;
     ObjSpecID osid;
     uchar special;
-    extern char camera_map[NUM_HACK_CAMERAS];
-    extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
-    extern ubyte next_text_line;
     int *d1, *d2;
     bool shifted;
 
@@ -1109,7 +1100,6 @@ errtype elevator_janitor_run() {
     ObjID objlist[MAX_JANITOR_OBJS], id;
     uchar dupe;
     ObjRefID orefid;
-    extern uchar robot_antisocial;
 
     // clear out our movelist
     for (i = 0; i < MAX_JANITOR_OBJS; i++)
@@ -1313,7 +1303,6 @@ uchar elevator_use(short dest_level, ubyte which_panel) {
     extern void store_objects(char **buf, ObjID *obj_array, char obj_count);
     extern void restore_objects(char *buf, ObjID *obj_array, char obj_count);
     extern errtype obj_load_art(uchar flush_all);
-    extern uchar robot_antisocial;
     char *buf;
 #endif
 

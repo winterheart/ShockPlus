@@ -34,11 +34,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mapflags.h" // for light_flr and light_ceil
 #include "objects.h"  // for ObjsClearDealt
 #include "frintern.h" // for _fdt_x, _y and _mptr
+#include "frterr.h"
 // gruesome annoyance to destroy projectiles
 #include "damage.h"
 #include "objsim.h"
 #include "objbit.h"
 #include "objprop.h"
+#include "physics.h"
 #include "render.h"
 
 #define USE_OLD_PASSING
@@ -70,9 +72,6 @@ fix tf_solve_2d_case(int flags);
 int _stair_check(fix walls[4][2], int flags);
 void terrfunc_one_map_square(int fmask);
 TerrainHit tf_direct(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, TFType tf_type);
-
-// old style physics...
-extern TerrainData terrain_info;
 
 // passing globals
 ss_facelet_return ss_edms_facelets[SS_MAX_FACELETS];
@@ -144,9 +143,6 @@ int tf_talk = DEFAULT_TALK, tf_tmp;
 #endif
 #define tf_Stat(dat)
 #define terrfunc_it_calls_inc()
-
-// renderer stuff we call
-extern void fr_tfunc_grab_fast(int mask);
 
 #define _tf_list_flet()
 

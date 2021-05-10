@@ -44,8 +44,6 @@ fix inv_convert_y[MAX_CONVERT_TYPES][MAX_USE_MODES];
 // Internal prototypes
 
 uchar perform_svga_conversion(uchar mask) {
-    extern uchar full_game_3d;
-
     if (gr2ss_override & OVERRIDE_FAIL)
         return (SVGA_CONV_NONE);
     if (convert_use_mode == 0)

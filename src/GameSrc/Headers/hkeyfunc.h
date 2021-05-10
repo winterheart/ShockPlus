@@ -163,7 +163,7 @@ uchar zoom_3d_func(ushort keycode, uint32_t context, intptr_t data);
 uchar menu_close_func(ushort keycode, uint32_t context, intptr_t data);
 void start_music(void);
 void stop_music(void);
-uchar toggle_music_func(ushort, uint32_t, intptr_t);
+uchar toggle_music_func(ushort keycode, uint32_t context, intptr_t data);
 uchar mono_clear_func(ushort keycode, uint32_t context, intptr_t data);
 uchar edit_flags_func(ushort keycode, uint32_t context, intptr_t data);
 uchar mono_toggle_func(ushort keycode, uint32_t context, intptr_t data);

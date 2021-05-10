@@ -66,7 +66,6 @@ grs_bitmap *get_bitmap_from_ref_anchor(Ref r, LGRect *anchor) {
 #pragma global_optimizer off
 
 errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, LGRect *anchor, uchar *p) {
-    extern int memcount;
     Ref rid = MKREF(id_num, i);
     FrameDesc *f = static_cast<FrameDesc *>(RefGet(rid));
 
@@ -127,7 +126,6 @@ errtype load_res_bitmap(grs_bitmap *bmp, Ref rid, uchar alloc) {
     char *bits = bmp->bits;
     FrameDesc *f;
     int sz;
-    extern int memcount;
 
     f = RefLock(rid);
     sz = f->bm.w * f->bm.h;

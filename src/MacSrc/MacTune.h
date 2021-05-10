@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //==============================================================================
 
+#ifndef MACTUNE_H
+#define MACTUNE_H
+
 //-----------------
 //  TYPES & DEFINES
 //-----------------
@@ -56,3 +59,7 @@ void MacTunePlayTune(int tune);
 void MacTuneQueueTune(int tune);
 void MacTunePrimeTimer(void);
 void MacTuneUpdateVolume(void);
+
+extern uchar mlimbs_on;
+
+#endif

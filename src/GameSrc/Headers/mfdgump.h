@@ -29,4 +29,6 @@ uchar gump_get_useful(bool shifted);
 void mfd_gump_expose(MFD *mfd, ubyte control);
 uchar mfd_gump_handler(MFD *m, uiEvent *uie);
 
+extern uchar gump_num_objs;
+
 #endif

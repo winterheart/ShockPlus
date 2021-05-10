@@ -49,7 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frquad.h"
 #include "gamescr.h"
 #include "gamestrn.h"
-#include "gr2ss.h"
 #include "lvldata.h"
 #include "map.h"
 #include "mapflags.h"
@@ -62,8 +61,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "rcolors.h"
 #include "refstuf.h"
+#include "render.h"
 #include "str.h"
 #include "tilename.h"
+#include "tools.h"
 
 #define FMK_INT_XX (FMK_INT_NW || FMK_INT_SW || FMK_INT_EW || FMK_INT_WW)
 #define FMK_INT_INT (1 << 8)
@@ -509,7 +510,6 @@ void obj_mess(curAMap *amptr, MapElem *curmp, int drw, int xm, int ym, int tsize
                             gr_set_fcolor(BLACK + 1);
 #ifdef SVGA_SUPPORT
                             {
-                                extern uchar shadow_scale;
                                 shadow_scale = FALSE;
 #endif
 #ifdef CORRECT_PIXEL_RATIO
@@ -1075,6 +1075,5 @@ uchar amap_get_note(curAMap *amptr, char *buf) {
 }
 
 grs_bitmap *screen_automap_bitmap(char c) {
-    extern grs_bitmap *static_bitmap;
     return (static_bitmap);
 }

@@ -156,17 +156,38 @@ extern uchar digi_pan_reverse;
 void grind_credits_music_ai(void);
 
 // Globals
-extern int mlimbs_peril, mlimbs_positive, mlimbs_motion, mlimbs_monster;
+extern int actual_score;
+extern uchar cyber_play;
+extern int ext_rp;
+extern int mai_combat_length;
+extern int mai_damage_sum;
+extern int mlimbs_peril;
+extern int mlimbs_positive;
+extern int mlimbs_motion;
+extern int mlimbs_monster;
 extern ulong mlimbs_combat;
+extern char mlimbs_machine;
 extern int current_score, current_zone, current_mode, random_flag;
 extern int current_transition, last_score;
 extern int boring_count;
 extern int mlimbs_boredom;
+extern uchar decon_count;
+extern uchar in_deconst;
+extern uchar in_peril;
+extern int new_theme;
+extern int new_x;
+extern int new_y;
+extern int old_bore;
+extern short mai_override;
 extern int *output_table;
+extern char peril_bars;
 extern uchar wait_flag;
 extern int next_mode, ai_cycle;
-extern uchar music_card, music_on;
+extern uchar music_card;
+extern uchar music_on;
 extern uchar /*sfx_card, */ sfx_on;
 extern int cur_digi_channels;
+extern int transition_count;
+extern uint32_t last_real_time;
 
 #endif // __MUSICAI_H

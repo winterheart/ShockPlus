@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "MacTune.h"
 #include "Shock.h"
 
 #include "amap.h"
@@ -35,6 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dynmem.h"
 #include "faketime.h"
 #include "frprotox.h"
+#include "fullscrn.h"
 #include "gamewrap.h"
 #include "hud.h"
 #include "invent.h"
@@ -48,6 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objload.h"
 #include "objsim.h"
 #include "olhext.h"
+#include "physics.h"
 #include "player.h"
 #include "saveload.h"
 #include "schedule.h"
@@ -57,7 +60,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "status.h"
 #include "tools.h"
 #include "trigger.h"
+#include "viewhelp.h"
 #include "wares.h"
+#include "weapons.h"
 #include "wrapper.h"
 
 #include "otrip.h"
@@ -65,12 +70,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 #define SCHEDULE_BASE_ID 590
-
-extern long old_ticks;
-extern char saveload_string[30];
-extern uchar display_saveload_checkpoints;
-extern ulong obj_check_time;
-extern uchar mlimbs_on;
 
 // Player struct support for savegames.
 // DOS version savegame reserves 32 bytes for puzzle state.
@@ -278,13 +277,6 @@ errtype load_game_schedules(void) {
 }
 
 errtype interpret_qvars(void) {
-#ifdef SVGA_SUPPORT
-    extern short mode_id;
-#endif
-    extern uchar fullscrn_vitals;
-    extern uchar fullscrn_icons;
-    extern uchar map_notes_on;
-    extern ubyte hud_color_bank;
 
     // KLC - don't do this here - it's a global now.   load_da_palette();
 
@@ -313,14 +305,11 @@ errtype interpret_qvars(void) {
     return (OK);
 }
 
-// char saveArray[16];	//Â¥temp
-
 errtype load_game(char *fname) {
     int filenum;
     ObjID old_plr;
     uchar bad_save = FALSE;
     char orig_lvl;
-    extern uint dynmem_mask;
 
     INFO("load_game %s", fname);
 
@@ -380,7 +369,6 @@ errtype load_game(char *fname) {
         chg_set_flg(GL_CHG_LOOP);
     }
 
-    extern uchar muzzle_fire_light;
     muzzle_fire_light = FALSE;
     if (!(player_struct.hardwarez_status[CPTRIP(LANTERN_HARD_TRIPLE)] & WARE_ON))
         lamp_turnoff(TRUE, FALSE);
@@ -442,7 +430,6 @@ void check_and_update_initial(void) {
 
 uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefined3) {
     int i;
-    extern int actual_score;
     byte plrdiff[4];
     char tmpname[sizeof(player_struct.name)];
     short plr_obj;

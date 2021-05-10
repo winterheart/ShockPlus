@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 #include "ShockBitmap.h"
 #include "2d.h"
+#include "sdl_events.h"
 
 //--------------------
 //  Globals
@@ -42,7 +43,6 @@ void ChangeScreenSize(int width, int height) {
 
     SDL_RenderClear(renderer);
 
-    extern bool fullscreenActive;
     SDL_SetWindowFullscreen(window, fullscreenActive ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 
     SDL_SetWindowSize(window, width, height);

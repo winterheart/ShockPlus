@@ -3,6 +3,7 @@
 #define __CUTSLOOP_H
 
 // Includes
+#include <SDL_audio.h>
 
 // C Library Includes
 
@@ -30,5 +31,6 @@ void cutscene_exit(void);
 short play_cutscene(int id, bool show_credits);
 
 // Globals
+extern SDL_AudioStream *cutscene_audiostream;
 
 #endif // __CUTSLOOP_H

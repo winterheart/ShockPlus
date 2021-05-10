@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdgadg.h"
 #include "newmfd.h"
 #include "status.h"
+#include "game_screen.h"
 #include "gamestrn.h"
 #include "tools.h"
 #include "citres.h"
@@ -269,7 +270,6 @@ errtype mfd_biohelp_init(MFD_Func *f) {
     LGPoint bsize = {BARRY_WID, BUTTON_HGT};
     LGPoint bdims = {1, NUM_BUTTONS};
     LGRect r = {{LEFT_MARGIN, TOP_MARGIN}, {ARROW_X, TOP_MARGIN + BARRY_HGT}};
-    extern LGRegion *root_region;
     err = biohelp_create_mouse_region(root_region);
     if (err != OK)
         return err;

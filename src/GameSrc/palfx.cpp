@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL.h>
 
 #include "Shock.h"
+#include "init.h"
 #include "palette.h"
 #include "palfx.h"
 
@@ -46,9 +47,6 @@ static Uint32 FadeStartTicks;
 
 #define FADE_UP_DELAY 0
 #define FADE_UP_STEPS 500
-
-extern uchar ppall[]; // pointer to main shadow palette
-
 
 //-------------------------------------
 void finish_pal_effect(byte id) {

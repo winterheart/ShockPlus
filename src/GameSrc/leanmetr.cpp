@@ -32,9 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "criterr.h"
 #include "froslew.h"
+#include "frsetup.h"
+#include "fullscrn.h"
 #include "leanmetr.h"
-#include "objprop.h"
 #include "objsim.h"
+#include "render.h"
+#include "status.h"
 #include "tools.h"
 #include "wares.h"
 #include "canvchek.h"
@@ -76,8 +79,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NUM_LEAN_BMAPS 9
 #define BMAPS_PER_POSTURE 3
 
-extern uchar full_game_3d;
-
 static ubyte discrete_eye_height[DISCRETE_EYE_POSITIONS] = {
     3,
     10,
@@ -103,7 +104,6 @@ LGPoint shield_offsets[9] = {
 // -------
 // GLOBALS
 // -------
-extern uchar gBioInited;
 
 LGRegion slot_meter_region;
 LGRegion fullscrn_meter_region;
@@ -336,7 +336,6 @@ int player_get_eye_fixang(void) {
 uchar eye_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     short x = ev->pos.x - r->abs_x;
     short y = ev->pos.y - r->abs_y;
-    extern uchar hack_takeover;
     if (hack_takeover || global_fullmap->cyber)
         return FALSE;
     if (x < 0 || x >= EYEMETER_W)
@@ -578,8 +577,6 @@ void update_meters(uchar force) {
 }
 
 void zoom_to_lean_meter(void) {
-    extern bool DoubleSize;
-
     LGPoint pos;
     LGRect start = {{-5, -5}, {+5, +5}};
     LGRect end = {{0, 0}, {LEANOMETER_W, LEANOMETER_H}};

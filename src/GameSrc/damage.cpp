@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 
 #include "effect.h"
+#include "init.h"
+#include "invent.h"
 #include "newmfd.h"
 #include "damage.h"
 #include "objwpn.h"
@@ -48,6 +50,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gameloop.h"
 #include "target.h"
 #include "objbit.h"
+#include "objuse.h"
+#include "physics.h"
 #include "physunit.h"
 #include "hud.h"
 #include "faketime.h"
@@ -62,6 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffq.h"
 #include "hudobj.h"
 #include "amap.h"
+#include "audiolog.h"
 #include "cutsloop.h"
 
 #define SQUARE(x) ((x) * (x))
@@ -403,7 +408,6 @@ uchar kill_player(void) {
     ObjSpecID osid;
     uchar quick_death = TRUE;
     uchar dummy;
-    extern uchar clear_player_data;
 
     INFO("Player died!\n");
 
@@ -435,8 +439,6 @@ uchar kill_player(void) {
 }
 
 void regenerate_player(void) {
-    extern void wear_off_drug(int i);
-    extern void regenetron_door_hack(void);
     int i;
     for (i = 0; i < NUM_DAMAGE_TYPES; i++)
         player_struct.hit_points_lost[i] = 0;
@@ -473,11 +475,7 @@ ulong player_death_time = 0;
 // Something has caused the player to become a fatality
 // typically this is damage, but can be delayed-death due to craze
 void player_dies() {
-    extern void physics_zero_all_controls();
-    extern void clear_digi_fx();
-    extern short inventory_page;
 #ifdef AUDIOLOGS
-    extern char secret_pending_hack;
     secret_pending_hack = 0;
 #endif
 
@@ -485,8 +483,6 @@ void player_dies() {
     mai_player_death();
     reset_input_system();
     chg_set_sta(GL_CHG_2); // disable the input system
-
-    extern uchar weapon_button_up;
     weapon_button_up = TRUE;
 
     // clear off hud & prep for funky regen FX
@@ -605,8 +601,6 @@ ubyte damage_player(int damage, ubyte dtype, ubyte flags) {
         }
     }
     if (!damage_dealt) {
-        extern int mai_damage_sum;
-
         *cur_hp -= damage;
         mai_damage_sum += damage;
     }
@@ -686,9 +680,6 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags) {
                 ADD_DESTROYED_OBJECT(target_id);
 
             if (DESTROY_SOUND_EFFECT(ObjProps[OPNUM(target_id)].destroy_effect)) {
-                extern ObjID damage_sound_id;
-                extern char damage_sound_fx;
-
                 damage_sound_fx = SFX_CPU_EXPLODE;
                 damage_sound_id = target_id;
             }
@@ -696,7 +687,6 @@ ubyte damage_object(ObjID target_id, int damage, int dtype, ubyte flags) {
 
         if ((obclass == CLASS_CRITTER) && !global_fullmap->cyber) {
             ubyte seriousness = 0;
-            extern void hud_report_damage(ObjID target, byte seriousness);
 
             // marc's desired code
             if (stun)
@@ -1231,7 +1221,6 @@ ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat
     }
 
     if (attack_effect_type == BEAM_TYPE) {
-        extern ObjID beam_effect_id;
         if (effect_id != OBJ_NULL) {
             beam_effect_id = effect_id;
             hudobj_set_id(beam_effect_id, TRUE);

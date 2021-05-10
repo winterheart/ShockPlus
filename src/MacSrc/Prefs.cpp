@@ -30,17 +30,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 #include "Shock.h"
 #include "Prefs.h"
-
+#ifdef AUDIOLOGS
+#include "audiolog.h"
+#endif
 #include "popups.h"
 #include "olhext.h"
+#include "frsetup.h"
+#include "fullscrn.h"
+#include "hkeyfunc.h"
 #include "hotkey.h"
+#include "hud.h"
 #include "input.h"
+#include "invent.h"
 #include "keydefs.h"
 #include "mainloop.h"
+#include "mfdfunc.h"
 #include "movekeys.h"
-
-extern uchar mfd_button_callback_kb(ushort keycode, uint32_t context, intptr_t data);
-extern uchar hw_hotkey_callback(ushort keycode, uint32_t context, intptr_t data);
+#include "wares.h"
+#include "weapons.h"
+#include "wrapper.h"
 
 //--------------------
 //  Filenames
@@ -58,16 +66,6 @@ uchar sfx_on = TRUE;
 //--------------------
 //  Externs
 //--------------------
-extern int _fr_global_detail;
-extern bool DoubleSize;
-extern bool SkipLines;
-extern short mode_id;
-
-extern uchar curr_vol_lev;
-extern uchar curr_sfx_vol;
-extern uchar curr_alog_vol;
-
-extern uchar audiolog_setting;
 
 static const char *PREF_LANGUAGE = "language";
 static const char *PREF_CAPTUREMOUSE = "capture-mouse";
@@ -86,8 +84,6 @@ static const char *PREF_MSG_LENGTH = "message-length";
 static const char *PREF_ALOG_SETTING = "alog-setting";
 static const char *PREF_MIDI_BACKEND = "midi-backend";
 static const char *PREF_MIDI_OUTPUT = "midi-output";
-
-static void SetShockGlobals(void);
 
 //--------------------------------------------------------------------
 //	  Initialize the preferences to their default settings.
@@ -469,41 +465,6 @@ static void LowerCaseInPlace(char *p) {
     }
 }
 
-//*********************************
-// Set hotkey keybinds (see input.c)
-// Also handles fire keybinds
-//*********************************
-
-#ifdef AUDIOLOGS
-extern uchar audiolog_cancel_func(ushort keycode, uint32_t context, intptr_t data);
-#endif
-extern uchar posture_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_mouse_look(ushort keycode, uint32_t context, intptr_t data);
-extern uchar change_mode_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar clear_fullscreen_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar saveload_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar pause_game_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar reload_weapon_hotkey(ushort keycode, uint32_t context, intptr_t data);
-extern uchar select_grenade_hotkey(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_olh_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar select_drug_hotkey(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_music_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar demo_quit_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar cycle_weapons_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_opengl_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar arm_grenade_hotkey(ushort keycode, uint32_t context, intptr_t data);
-extern uchar use_drug_hotkey(ushort keycode, uint32_t context, intptr_t data);
-extern uchar hud_color_bank_cycle(ushort keycode, uint32_t context, intptr_t data);
-extern uchar olh_overlay_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar keypad_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar MacHelpFunc(ushort keycode, uint32_t context, intptr_t data);
-extern uchar wrapper_options_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_giveall_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_physics_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_up_level_func(ushort keycode, uint32_t context, intptr_t data);
-extern uchar toggle_down_level_func(ushort keycode, uint32_t context, intptr_t data);
-
 #define TAB_KEY (KEY_TAB | KB_FLAG_DOWN)
 #define S_TAB_KEY (KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT)
 
@@ -592,8 +553,6 @@ HOTKEYLOOKUP HotKeyLookup[] = {
 
     {NULL, 0, 0, 0}};
 
-// ought to be enough for anybody
-#define MAX_FIRE_KEYS 16
 
 int FireKeys[MAX_FIRE_KEYS + 1]; // see input.c
 
@@ -747,9 +706,6 @@ void LoadHotkeyKeybinds(void) {
 //**********************************
 // Set move keybinds (see movekeys.c)
 //**********************************
-
-extern MOVE_KEYBIND MoveKeybinds[MAX_MOVE_KEYBINDS + 1];
-extern MOVE_KEYBIND MoveCyberKeybinds[MAX_MOVE_KEYBINDS + 1];
 
 static MOVE_KEYBIND MoveKeybindsDefault[] =
 {
@@ -1055,7 +1011,6 @@ void LoadMoveKeybinds(void) {
     MoveKeybinds[num_bound].code = 255;
     MoveCyberKeybinds[num_cyber_bound].code = 255;
 
-    extern void init_motion_polling(void); // see movekeys.c
     init_motion_polling();
 }
 

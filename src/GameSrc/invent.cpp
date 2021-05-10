@@ -48,7 +48,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h"
 #include "gamestrn.h"
 #include "sideicon.h"
+#include "fullscrn.h"
 #include "gameloop.h"
+#include "game_screen.h"
 #include "loops.h"
 #include "hotkey.h"
 #include "input.h"
@@ -306,7 +308,6 @@ uchar show_all_actives = FALSE;
 short inv_last_page = INV_BLANK_PAGE;
 
 LGRegion *inventory_region;
-extern LGRegion *inventory_region_game, *inventory_region_full;
 LGRegion **all_inventory_regions[] = {&inventory_region_game, &inventory_region_full};
 
 #define NUM_INVENT_REGIONS (sizeof(all_inventory_regions) / sizeof(LGRegion **))
@@ -959,9 +960,6 @@ char *null_name_func(inv_display *dp, int n, char *buf) {
 
 static char *grenade_name_func(void *dp, int n, char *buf) { return get_grenade_name(n, buf); }
 
-extern uiSlab fullscreen_slab;
-extern uiSlab main_slab;
-
 grs_bitmap grenade_bmap;
 #ifdef SVGA_SUPPORT
 char grenade_bmap_buffer[8700];
@@ -971,7 +969,6 @@ char grenade_bmap_buffer[700];
 
 void push_live_grenade_cursor(ObjID obj) {
     short w, h;
-    extern LGCursor object_cursor;
     char live_string[22];
 #ifdef CURSOR_BACKUPS
     extern grs_bitmap backup_object_cursor;
@@ -1184,7 +1181,6 @@ static uchar ware_use_func(inv_display *dp, int row) {
 }
 
 void hardware_add_specials(int n, int ver) {
-    extern WARE HardWare[NUM_HARDWAREZ];
     switch (n) {
     case HARDWARE_AUTOMAP:
         mfd_notify_func(MFD_MAP_FUNC, MFD_MAP_SLOT, TRUE, MFD_ACTIVE, TRUE);
@@ -1234,7 +1230,6 @@ ubyte ware_add_func(inv_display *dp, int nn, ObjID *idP, uchar select) {
     uchar oneshot;
     uchar bigstuff_fake = FALSE;
     int n;
-    extern uchar shameful_obselete_flag;
 
     if (global_fullmap->cyber && (objs[id].obclass == CLASS_BIGSTUFF)) {
         bigstuff_fake = TRUE;
@@ -1724,7 +1719,6 @@ void add_email_datamunge(short mung, uchar select) {
     int n;
     uchar flash_email = TRUE;
     ubyte ver;
-    extern short last_email_taken;
 
     n = mung & 0xFF;
     ver = mung >> 8;
@@ -2128,7 +2122,6 @@ uchar inventory_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     inv_display *dp = NULL;
     int i;
     int row = -1;
-    extern uchar game_paused;
 #ifdef SVGA_SUPPORT
     short temp;
 #endif

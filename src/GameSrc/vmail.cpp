@@ -60,7 +60,6 @@ ActAnim *main_anim;
 #define INTRO_VMAIL (NUM_VMAIL+1)
 
 byte current_vmail = -1;
-extern LGCursor vmail_cursor;
 
 Ref vmail_frame_anim[NUM_VMAIL] = {
    RES_FRAMES_shield,
@@ -95,7 +94,6 @@ ubyte vmail_len[NUM_VMAIL] = {
 //
 //
 
-extern grs_canvas *anim_offscreen;
 uchar copied_background = FALSE;
 grs_bitmap *vmail_background = NULL;
 
@@ -244,11 +242,6 @@ errtype play_vmail(byte vmail_no)
 
    // the more I look at this procedure - the more I think
    // art - what were you thinking
-   extern uiSlab fullscreen_slab;
-   extern uiSlab main_slab;
-   extern uchar game_paused;
-   extern uchar checking_mouse_button_emulation;
-   extern short old_invent_page;
 
    // make sure we don't have a current vmail, and we're given a valid vmail num
    if ((current_vmail != -1) || (vmail_no < 0) || (vmail_no >= NUM_VMAIL))

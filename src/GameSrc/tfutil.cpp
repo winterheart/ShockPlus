@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "3dinterp.h"
 #include "edms.h"
+#include "physics.h"
 #include "tfdirect.h"
 
 // Internal Prototypes
@@ -101,8 +102,6 @@ void facelet_add(int which, fix norm[3], fix atten, fix comp, int prim) {
     }
 }
 
-// for now, though wow, is this goofed out
-extern TerrainData terrain_info;
 
 #ifdef COMPUTE_SEPARATES
 // for now, since we dont have real distributed unit and mag

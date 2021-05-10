@@ -39,6 +39,7 @@ extern "C" {
 #include "status.h"
 #include "input.h"
 #include "mainloop.h"
+#include "mfdfunc.h"
 #include "frflags.h"
 #include "citres.h"
 #include "gr2ss.h"
@@ -46,6 +47,7 @@ extern "C" {
 #include "invent.h"
 #include "invdims.h"
 #include "leanmetr.h"
+#include "vmouse.h"
 #include "wrapper.h"
 #include "Shock.h"
 
@@ -65,12 +67,6 @@ extern "C" {
 
 LGRect Inv_rect;
 
-#ifdef SVGA_SUPPORT
-extern grs_screen *svga_screen;
-extern frc *svga_render_context;
-extern short svga_mode_data[];
-extern short mode_id;
-#endif
 
 LGRect *inventory_rect = &Inv_rect, *status_rect, mess_rect;
 LGRect real_status_rect;
@@ -118,10 +114,7 @@ void generic_reg_init(uchar create_it, LGRegion *reg, LGRect *rct, uiSlab *slb, 
 // Initialize the main game screen and draw it's initial state
 LGRect mainview_rect;
 errtype screen_init(void) {
-    extern LGRegion *fullview_region;
     int callid;
-    extern void (*ui_mouse_convert)(short *px, short *py, uchar down);
-    extern void (*ui_mouse_convert_round)(short *px, short *py, uchar down);
 
     // God this is stupid, maybe I'll get it right next project
     status_rect = &real_status_rect;
@@ -199,11 +192,7 @@ errtype screen_init(void) {
     return (OK);
 }
 
-extern void game_redrop_rad(int rad_mod);
-
 void screen_start() {
-    extern LGRegion *pagebutton_region, *inventory_region;
-
     /*  Not yet
        // Check the config system to see if time should automatically be running
        if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = TRUE;
@@ -238,7 +227,6 @@ void screen_start() {
 void screen_exit() {
 #ifdef SVGA_SUPPORT
     uchar cur_pal[768];
-    extern grs_screen *cit_screen;
     uchar *s_table;
 #endif
 
@@ -328,8 +316,6 @@ static grs_bitmap _targbm;
 static grs_bitmap _waitbm;
 static grs_bitmap _firebm;
 static grs_bitmap _vmailbm;
-extern grs_bitmap slider_cursor_bmap;
-extern LGCursor slider_cursor;
 
 errtype load_misc_cursors(void) {
     if (_targbm.bits != NULL) {

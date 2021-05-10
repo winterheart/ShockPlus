@@ -168,7 +168,6 @@ errtype status_vitals_update(uchar Full_Redraw) {
     static short last_health_x = 0;
     static short last_energy_x = 0;
     grs_bitmap *icon_bmp;
-    extern uchar full_game_3d;
     Ref ref;
 
     short health_value, energy_value, health_x, energy_x;

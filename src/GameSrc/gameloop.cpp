@@ -87,12 +87,6 @@ void draw_pause_string(void) {
 
 //------------------------------------------------------------------
 void game_loop(void) {
-    extern uchar game_paused;
-    // temp
-    // extern char saveArray[16];
-    // if (memcmp(0, saveArray, 16))
-    //     Debugger();
-
     // Handle paused game state
     if (game_paused) {
         if (redraw_paused) {

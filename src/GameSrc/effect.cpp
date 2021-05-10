@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objuse.h"
 #include "trigger.h"
 #include "effect.h"
+#include "hand.h"
 #include "weapons.h" // for handart stuff
 #include "objprop.h"
 #include "objwpn.h"
@@ -96,11 +97,9 @@ ubyte effect_matrix[CRIT_HIT_NUM][AMMO_TYPES][SEVERITIES] = {
 
 
 // Internal Prototypes
-void critter_light_world(ObjID id);
 void critter_unlight_world(ObjID id);
 int anim_frames(ObjID id);
 errtype increment_anim(ulong num_units);
-void init_animlist(void);
 
 // -----------------------------------------------------------------
 // do_special_effect_location
@@ -262,10 +261,6 @@ int anim_frames(ObjID id) {
 #define BRIGHT_LIGHT_FLASH 60L // brightness of flash
 #define LIGHT_DELTA 4          // time length of flash
 
-extern ubyte energy_expulsion;
-extern ubyte handart_count;
-extern uchar handart_flash;
-
 #define DEFAULT_ANIMATION_SPEED 32
 
 #ifdef USE_ANIMCRIT_DEFS
@@ -295,7 +290,6 @@ errtype increment_anim(ulong num_units) {
     ulong hand_speed = HANDART_SPEED;
     ubyte old_handart;
     LightSchedEvent new_event;
-    extern uchar anim_on;
 #ifdef SPEW_ON
     char ft1[30];
 #endif
@@ -324,7 +318,6 @@ errtype increment_anim(ulong num_units) {
     if ((handart_show != 1) && handart_flash) {
         byte light_val;
         ubyte slot = player_struct.actives[ACTIVE_WEAPON];
-        extern byte gun_fire_offset;
 
         switch (player_struct.weapons[slot].type) {
         case (GUN_SUBCLASS_BEAM):

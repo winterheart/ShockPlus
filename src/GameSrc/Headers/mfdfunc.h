@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MFDFUNC_H
 #define MFDFUNC_H
 
+#include "2d.h"
 #include "mfdint.h"
 #include "res.h"
 
@@ -40,5 +41,13 @@ void weapon_mfd_for_reload(void);
 
 void mfd_setup_elevator(ushort levmask, ushort reachmask, ushort curlevel, uchar special);
 void mfd_elevator_expose(MFD *mfd, ubyte control);
+
+uchar keypad_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
+
+extern grs_bitmap slider_cursor_bmap;
+extern LGCursor slider_cursor;
+
+// When this is true, don't move the player.
+extern bool gKeypadOverride;
 
 #endif

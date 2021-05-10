@@ -61,6 +61,9 @@ typedef struct {
 
 // Prototypes
 
+// Access panels stick their door to be opened in P1
+errtype accesspanel_trigger(ObjID id);
+
 // Hey.  You've been USED, man.  Prove your manhood. Do something about it!
 // Of course for now, do nothing if not of CLASS_FIXTURE.
 // Returns whether or not the message line was used.
@@ -94,6 +97,12 @@ void unmulti_anim_callback(ObjID id, intptr_t user_data);
 
 errtype gear_power_outage();
 
+void regenetron_door_hack();
+
 // Globals
+
+//set if shift key was held when using object
+extern bool ObjectUseShifted;
+extern uchar shameful_obselete_flag;
 
 #endif // __OBJUSE_H

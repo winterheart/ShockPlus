@@ -26,12 +26,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdlib.h>
 
+#include "gamesys.h"
 #include "hotkey.h"
 #include "input.h"
-#include "player.h"
-#include "physics.h"
-#include "gamesys.h"
+#include "mfdfunc.h"
 #include "movekeys.h"
+#include "physics.h"
 
 #define KEYBD_CONTROL_BANK 1
 
@@ -42,11 +42,8 @@ MOVE_KEYBIND MoveCyberKeybinds[MAX_MOVE_KEYBINDS + 1];
 static uchar motion_key_scancodes[256 + 1];
 static byte poll_controls[6];
 
-extern bool gKeypadOverride;
-
 uchar parse_motion_key(ushort code, short *cnum, short *cval);
 uchar parse_motion_key_cyber(ushort code, short *cnum, short *cval);
-void init_motion_polling(void);
 
 uchar parse_motion_key(ushort code, short *cnum, short *cval) {
     int i = 0, move = -1;

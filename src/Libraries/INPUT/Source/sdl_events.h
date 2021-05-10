@@ -27,4 +27,6 @@ void get_mouselook_vel(int *vx, int *vy);
 void set_mouse_chaos(short dx, short dy);
 void middleize_mouse(void);
 
+extern bool fullscreenActive;
+
 #endif

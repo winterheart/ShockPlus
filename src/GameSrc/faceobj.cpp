@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include "3dinterp.h"
+#include "combat.h"
 #include "gameobj.h"
 
 #include "fr3d.h"
@@ -48,10 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ss_flet.h"
 
 #define height_step fix_make(0, 0x010000 >> SLOPE_SHIFT)
-
-// for raycast exclusion and wackiness
-extern ObjID terrain_hit_obj;
-extern ObjID terrain_hit_exclusion;
 
 static int _n_o_rad;
 static Obj *_n_fr_cobj;

@@ -78,7 +78,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // we forget where he is.
 #define AI_ATTENTION_SPAN CIT_CYCLE * 10
 
-extern ObjLoc last_known_loc;
 ulong time_last_seen;
 uchar priority_check;
 
@@ -593,12 +592,10 @@ void check_attitude_adjustment(ObjID id, ObjSpecID osid, int big_dist, uchar ray
 }
 
 void load_combat_art(int cp_num) {
-    extern Id posture_bases[];
     char p;
     if (ResPtr(posture_bases[ATTACKING_CRITTER_POSTURE] + cp_num) == NULL) {
         // Suspend time during loading of combat art
         ulong old_ticks = *tmd_ticks;
-        extern ulong last_real_time;
         for (p = ATTACKING_CRITTER_POSTURE; p <= ATTACKING2_CRITTER_POSTURE; p++) {
             if (p != KNOCKBACK_CRITTER_POSTURE) {
                 ResLock(posture_bases[p] + cp_num);
@@ -634,7 +631,6 @@ errtype run_combat_ai(ObjID id, uchar raycast_success) {
             if (ai_ranges) {
                 if (pcrit->attack_count < player_struct.game_time) {
                     char posture;
-                    extern uchar music_on;
 
                     load_combat_art(cp_num);
                     if (!(ai_ranges & 0x1))
@@ -881,7 +877,6 @@ errtype ai_run() {
     uchar raycast_success;
     int dist;
     char mood;
-    extern ObjID shodan_avatar_id;
 #ifdef PLAYTEST
     short crit_count = 0;
 #endif

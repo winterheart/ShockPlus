@@ -176,7 +176,16 @@ errtype collide_objects(ObjID collision, ObjID victim, int bad);
 // Globals
 
 extern TerrainData terrain_info;
+
+extern Pelvis standard_pelvis;
 extern State standard_state;
 extern Robot standard_robot;
+
+extern char old_bits;
+extern ubyte old_head;
+extern ubyte old_pitch;
+extern long old_ticks;
+
+extern uchar robot_antisocial;
 
 #endif // __PHYSICS_H

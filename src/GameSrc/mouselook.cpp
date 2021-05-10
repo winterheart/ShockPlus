@@ -19,13 +19,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "froslew.h"
 #include "leanmetr.h"
+#include "mainloop.h"
 #include "mouselook.h"
-#include "mouse.h"
 #include "player.h"
 #include "physics.h"
-#include "objsim.h"
 #include "Prefs.h"
+#include "Shock.h"
 
 extern "C" {
 #include "sdl_events.h"
@@ -36,12 +37,7 @@ float mlook_vsens = 50;
 
 int mlook_vel_x, mlook_vel_y;
 
-extern uchar game_paused;
 extern short mouseInstantX, mouseInstantY;
-extern int32_t eye_mods[3];
-
-extern SDL_Window *window;
-extern SDL_Renderer *renderer;
 
 int mlook_enabled = FALSE;
 

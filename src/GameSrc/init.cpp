@@ -30,10 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitMac.h"
 #include "ShockBitmap.h"
 
+#include "audiolog.h"
 #include "criterr.h"
 #include "cybmem.h"
 #include "cybrnd.h"
 #include "drugs.h"
+#include "effect.h"
 #include "frprotox.h"
 #include "gamepal.h"
 #include "gamestrn.h"
@@ -137,14 +139,6 @@ uchar pause_for_input(ulong wait_time);
 
 errtype init_pal_fx();
 void byebyemessage(void);
-/*
-errtype init_kb();
-errtype init_debug();
-
-extern void load_weapons_data(void);
-extern errtype setup_init(void);
-extern uchar toggle_heap_check(short keycode, ulong context, void *data);
-*/
 
 errtype amap_init(void);
 // extern long old_ticks;
@@ -157,27 +151,8 @@ uchar init_done = FALSE;
 uchar clear_player_data = TRUE;
 uchar objdata_loaded = FALSE;
 
-/*
-extern void (*enter_modes[])(void);
-
-extern int KeyGetch(void);
-extern void start_intro_sound(void);
-extern void start_setup_sound(void);
-extern void end_intro_sound(void);
-extern void end_setup_sound(void);
-
-extern void init_watchpoints(void);
-*/
-
 uchar real_archive_fn[64];
-/*
-#define SPLASH_RES_FILE "splash.rsrc"
-#ifndef EDITOR
-#define MIN_SPLASH_TIME  1000
-#else
-#define MIN_SPLASH_TIME  0
-#endif
-*/
+
 MemStack temp_memstack;
 #define TEMP_STACK_SIZE (16 * 1024)
 
@@ -194,7 +169,6 @@ uchar pause_for_input(ulong wait_time) {
     return (gotInput);
 }
 
-extern char which_lang;
 int mfdart_res_file;
 //#ifdef DEMO
 // uchar *mfdart_files[] = { "mfdart.rsrc", "mfdart.rsrc", "mfdart.rsrc" };
@@ -214,11 +188,6 @@ uchar ppall[PALETTE_SIZE];
 //  Initialize everything!
 //-------------------------------------------------
 void init_all(void) {
-    /*
-       char buf[256];
-       char norun[1];
-       extern char savegame_dir[50];
-       extern Datapath savegame_dpath; */
     ulong pause_time;
     int i;
     bool speed_splash = FALSE;
@@ -335,7 +304,6 @@ void init_all(void) {
 
     // Initialize animation callbacks
     {
-        extern void init_animlist();
         init_animlist();
     }
 
@@ -492,7 +460,6 @@ void object_data_flush(void) {
 
 errtype object_data_load(void) {
     LGRect bounds;
-    extern cams objmode_cam;
 
     //	char buf[256];
     //   MemStat  data;
@@ -587,6 +554,7 @@ errtype load_da_palette(void) {
     return (OK);
 }
 
+extern uchar _g3d_enable_blend;
 errtype init_pal_fx() {
     int i;
     FILE *ipalHdl;
@@ -638,9 +606,7 @@ errtype init_pal_fx() {
 #endif
 
     {
-        extern uchar _g3d_enable_blend;
         uchar tmppal_lower[32 * 3];
-        extern uchar ppall[]; // pointer to main shadow palette
 
         _g3d_enable_blend = (start_mem >= BLEND_THRESHOLD);
         if (_g3d_enable_blend) {
@@ -801,7 +767,6 @@ void free_all(void) {
 // when you need those arms around you, you wont find my arms around you
 // im going im going im going im gone
 void byebyemessage(void) {
-    extern uchar cit_success;
     if (cit_success)
 #ifdef DEMO
         printf("Thanks for playing the System Shock CD Demo %s.\n", SYSTEM_SHOCK_VERSION);

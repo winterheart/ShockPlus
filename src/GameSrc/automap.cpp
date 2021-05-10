@@ -38,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "wares.h"
 #include "lvldata.h"
 #include "cit2d.h"
+#include "fullscrn.h"
 #include "gr2ss.h"
 #include "gamestrn.h"
 #include "sfxlist.h"
@@ -84,7 +85,6 @@ void automap_expose_zoom(MFD *m, ubyte tac);
 // Globals
 // -------
 static long last_update = 0;
-extern uchar full_game_3d;
 
 // ===========================================================================
 //                         * THE AUTOMAP CODE *

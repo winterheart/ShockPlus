@@ -1,19 +1,34 @@
+/*
+
+Copyright (C) 2018-2020 Shockolate Project
+Copyright (C) 2021 ShockPlus Project
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 #include <SDL_mixer.h>
 
-#include "res.h"
-#include "Xmi.h"
-#include "MusicDevice.h"
+#include "cutsloop.h"
 #include "lg_error.h"
 #include "lgsndx.h"
+#include "res.h"
+#include "Shock.h"
+#include "Xmi.h"
 
 static snd_digi_parms digi_parms_by_channel[SND_MAX_SAMPLES];
 static Mix_Chunk *samples_by_channel[SND_MAX_SAMPLES];
-
-extern SDL_AudioStream *cutscene_audiostream;
-extern struct MusicDevice *MusicDev;
-
-extern void AudioStreamCallback(void *userdata, unsigned char *stream, int len);
-extern void MusicCallback(void *userdata, Uint8 *stream, int len);
 
 int snd_start_digital(void) {
 
@@ -27,7 +42,6 @@ int snd_start_digital(void) {
     spec.callback = AudioStreamCallback;
     spec.userdata = (void *)&cutscene_audiostream;
 
-    extern SDL_AudioDeviceID device;
     device = SDL_OpenAudioDevice(NULL, 0, &spec, &obtained, 0);
 
     if (device == 0) {
@@ -128,11 +142,6 @@ void snd_sample_reload_parms(snd_digi_parms *sdp) {
 
 int is_playing = 0;
 
-int MacTuneLoadTheme(char *theme_base, int themeID) {
-    char filename[40];
-    FILE *f;
-    int i;
-
 #define NUM_SCORES 8
 #define SUPERCHUNKS_PER_SCORE 4
 #define NUM_TRANSITIONS 9
@@ -141,10 +150,15 @@ int MacTuneLoadTheme(char *theme_base, int themeID) {
 #define NUM_LAYERABLE_SUPERCHUNKS 22
 #define KEY_BAR_RESOLUTION 2
 
-    extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
-    extern uchar transition_table[NUM_TRANSITIONS];
-    extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
-    extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
+extern uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
+extern uchar transition_table[NUM_TRANSITIONS];
+extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
+extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
+
+int MacTuneLoadTheme(char *theme_base, int themeID) {
+    char filename[40];
+    FILE *f;
+    int i;
 
     StopTheMusic();
 

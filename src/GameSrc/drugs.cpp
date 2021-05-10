@@ -38,6 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fatigue.h"
 #include "gameloop.h"
 #include "gamestrn.h"
+#include "gametime.h"
 #include "init.h"
 #include "mainloop.h"
 #include "miscqvar.h"
@@ -45,6 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "newmfd.h"
 #include "objwarez.h"
 #include "player.h"
+#include "rendtool.h"
 #include "sfxlist.h"
 #include "tools.h"
 
@@ -72,22 +74,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Structures
 // ----------
 
-typedef struct {
-    uint8_t duration; // Preset duration of given drug
-    uint8_t flags;
-    void (*use)(); // Function slots for take, effect, wear off
-    void (*effect)();
-    void (*wearoff)();
-    void (*startup)(void);
-    void (*closedown)(bool visible);
-    void (*after_effect)();
-} DRUG;
 
 // -------
 // Globals
 // -------
-
-extern DRUG Drugs[NUM_DRUGZ]; // Global array of drugs
 
 // ----------
 // Prototypes
@@ -361,8 +351,6 @@ void drug_staminup_wearoff();
 //
 // Initial effects of the staminup drug.
 
-extern uchar fatigue_warning;
-
 void drug_staminup_use() {
     player_struct.fatigue = 0;
 }
@@ -395,7 +383,6 @@ void drug_sight_wearoff();
 void drug_sight_after_effect(void);
 void drug_sight_closedown(bool visible);
 
-extern void set_global_lighting(short);
 #define SIGHT_LIGHT_LEVEL (4 << 8)
 
 // ---------------------------------------------------------------------------
@@ -520,7 +507,6 @@ void drug_reflex_wearoff();
 // Initial effects of the reflex drug.
 
 void drug_reflex_use() {
-    extern char reflex_remainder;
     reflex_remainder = 0;
 }
 
@@ -573,9 +559,6 @@ void drug_genius_wearoff() {}
 // --------------------------------------------------------------------------
 //                              DETOX
 // --------------------------------------------------------------------------
-void drug_detox_use();
-void wear_off_drug(int i);
-void drug_detox_wearoff();
 
 uchar detox_drug_order[] = {
     DRUG_LSD, DRUG_SIGHT, DRUG_GENIUS, DRUG_STAMINUP, DRUG_REFLEX, DRUG_MEDIC,

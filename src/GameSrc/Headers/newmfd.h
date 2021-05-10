@@ -33,7 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // This file is now a placeholder.
 
+#include "2d.h"
 #include "mfdext.h"
+#include "mfdint.h"
 
 void cap_mfds_with_func(uchar func, uchar max);
 void fullscreen_refresh_mfd(ubyte mfd_id);
@@ -47,4 +49,11 @@ errtype mfd_update_screen_mode();
 void mfd_zoom_rect(LGRect *start, int mfdnum);
 void mfd_language_change(void);
 
-#endif // NEWMFD_H
+extern MFD mfd[2];  // Our actual MFD's
+
+extern int last_mfd_cnum[NUM_MFDS];
+
+extern grs_canvas fullscreen_mfd;
+extern grs_canvas offscreen_mfd;
+
+#endif // __NEWMFD_H

@@ -34,9 +34,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "map.h"
 #include "mapflags.h"
+#include "mlimbs.h"
 #include "player.h"
+#include "physics.h"
+#include "setup.h"
 #include "tickcount.h"
 #include "tools.h"
+#include "weapons.h"
 
 #include "Xmi.h"
 
@@ -46,7 +50,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include <ail.h>
 
-uchar music_card = TRUE, music_on = FALSE;
+uchar music_card = TRUE;
+uchar music_on = FALSE;
 
 uchar track_table[NUM_SCORES][SUPERCHUNKS_PER_SCORE];
 uchar transition_table[NUM_TRANSITIONS];
@@ -69,7 +74,8 @@ char tmode_time = 0;
 int actual_score = 0;
 uchar decon_count = 0;
 uchar decon_time = 8;
-uchar in_deconst = FALSE, old_deconst = FALSE;
+uchar in_deconst = FALSE;
+uchar old_deconst = FALSE;
 uchar in_peril = FALSE;
 uchar just_started = TRUE;
 int score_playing = 0;
@@ -86,10 +92,6 @@ int *output_table;
 uchar wait_flag;
 int next_mode, ai_cycle;
 int cur_digi_channels = 4;
-
-// extern int digifx_volume_shift(short x, short y, short z, short phi, short theta, short basevol);
-// extern int digifx_pan_shift(short x, short y, short z, short phi, short theta);
-extern uchar mai_semaphor;
 
 uchar park_random = 75;
 uchar park_playing = 0;
@@ -128,8 +130,6 @@ errtype musicai_shutdown() {
     return (OK);
 }
 
-extern uchar run_asynch_music_ai;
-
 errtype musicai_reset(uchar runai) {
     if (runai) // Figure out if there is a theme to start with.
         grind_music_ai();
@@ -145,10 +145,9 @@ void musicai_clear() {
 
 void mlimbs_do_ai() {
     // extern uchar mlimbs_semaphore;
-    extern ObjID damage_sound_id;
-    extern char damage_sound_fx;
 
-    if (!IsPlaying(0)) gReadyToQueue = 1;
+    if (!IsPlaying(0))
+        gReadyToQueue = true;
 
 
     //repeat shorter tracks while thread 0 is still playing
@@ -232,7 +231,6 @@ void mlimbs_do_ai() {
         // then queue it up.
         //  Does not handle layering.  Just one music track!
         if (gReadyToQueue) {
-            extern bool mlimbs_update_requests;
             mlimbs_update_requests = TRUE;
 
             if (!global_fullmap->cyber)
@@ -375,8 +373,6 @@ int gen_monster(int monster_num) {
 
 int ext_rp = -1;
 
-extern struct mlimbs_request_info default_request;
-
 errtype make_request(int chunk_num, int piece_ID) {
     current_request[chunk_num] = default_request;
     current_request[chunk_num].pieceID = piece_ID;
@@ -387,8 +383,6 @@ errtype make_request(int chunk_num, int piece_ID) {
     current_request[chunk_num].ramp = curr_ramp;
 
     DEBUG("make_request %i %i", chunk_num, piece_ID);
-
-    extern int WonGame_ShowStats;
 
     int i = chunk_num;
     int track = 1+piece_ID;
@@ -497,7 +491,6 @@ void load_score_guts(uint8_t score_play) {
 errtype load_score_for_location(int x, int y) {
     MapElem *pme;
     char sc;
-    extern char old_bits;
 
     pme = MAP_GET_XY(x, y);
     sc = me_bits_music(pme);

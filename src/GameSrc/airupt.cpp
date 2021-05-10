@@ -30,14 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "airupt.h"
 #include "musicai.h"
 #include "map.h"
-#include "tools.h"
 #include "mlimbs.h"
 
 struct mlimbs_request_info default_request = {0, 0, 4, 100, 0, 64, TRUE, 0, 0};
-
-extern int ext_rp;
-extern char mlimbs_machine;
-extern char cyber_play;
 
 #define NUM_SNDMIDIDEVICES 2
 #define NUM_SNDMIDICHANNELS 16
@@ -76,27 +71,14 @@ extern uchar transition_table[NUM_TRANSITIONS];
 extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
 extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
 
-extern char peril_bars;
-
-extern int new_theme;
-extern int new_x, new_y;
-extern int old_bore;
-extern short mai_override;
-
 extern int layer_danger;
 extern int layer_success;
-extern int layer_transition;
-extern int transition_count;
 extern char tmode_time;
-extern int actual_score;
-extern uchar decon_count;
 extern uchar decon_time;
-extern uchar in_deconst, old_deconst;
-extern uchar in_peril;
-extern uchar just_started;
+extern uchar old_deconst;
 extern int score_playing;
 extern short curr_ramp_time, curr_ramp;
-extern char curr_prioritize, curr_crossfade;
+extern char curr_crossfade;
 
 // extern int digifx_volume_shift(short x, short y, short z, short phi, short theta, short basevol);
 // extern int digifx_pan_shift(short x, short y, short z, short phi, short theta);
@@ -104,10 +86,8 @@ extern uchar mai_semaphor;
 
 extern uchar park_random;
 extern uchar park_playing;
-extern uchar access_random;
 
 extern ulong last_damage_sum;
-extern ulong last_vel_time;
 
 // Damage taken decay & quantity of decay
 extern int danger_hp_level;
@@ -115,11 +95,6 @@ extern int danger_damage_level;
 extern int damage_decay_time;
 extern int damage_decay_amount;
 extern int mai_damage_sum;
-
-// How long an attack keeps us in combat music mode
-extern int mai_combat_length;
-
-extern uchar bad_digifx;
 
 extern uchar mlimbs_semaphore;
 

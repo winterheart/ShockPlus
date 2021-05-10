@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include "event.h"
+#include "game_screen.h"
 #include "sideicon.h"
 #include "sideart.h"
 #include "popups.h"
@@ -48,6 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sfxlist.h"
 #include "gr2ss.h"
 #include "canvchek.h"
+#include "wares.h"
 
 // ---------
 // Constants
@@ -113,9 +115,6 @@ grs_bitmap side_icon_background;
 static char shiftnums[] = ")!@#$%^&*(";
 static uchar programmed_sideicon = 0;
 #endif
-
-// this is in wares.c
-extern long ware_base_triples[NUM_WARE_TYPES];
 
 #define IDX_OF_TYPE(type, trip) (OPTRIP(trip) - OPTRIP(ware_base_triples[type]))
 
@@ -261,8 +260,6 @@ void screen_init_side_icons(LGRegion *root) {
 // select_side_icon() selects a given side icon.
 
 void zoom_side_icon_to_mfd(int icon, int waretype, int wnum) {
-    extern ubyte waretype2invtype[];
-
     int mfd;
 
     mfd = mfd_grab_func(MFD_EMPTY_FUNC, MFD_ITEM_SLOT);
@@ -276,11 +273,8 @@ void zoom_side_icon_to_mfd(int icon, int waretype, int wnum) {
 //
 // Callback function for mouse clicks inside the side icons.
 
-extern LGCursor globcursor;
-
 int last_side_icon = -1;
 uchar side_icon_mouse_callback(uiEvent *e, LGRegion *r, intptr_t udata) {
-    extern uchar fullscrn_icons;
     uchar retval = FALSE;
     int i, type, num;
 
@@ -428,7 +422,6 @@ void side_icon_expose(ubyte icon_num) {
     WARE *wares;
     int type, num, n;
     LGRect *r;
-    extern uchar fullscrn_icons;
 
     if (full_game_3d && (global_fullmap->cyber || !(fullscrn_icons)))
         return;

@@ -102,5 +102,23 @@ void invent_language_change(void);
 // Globals
 extern short inventory_page;
 extern short inv_last_page;
+extern int last_invent_cnum;
+extern uchar show_all_actives;
+
+extern uchar dirty_inv_canvas;
+
+extern grs_bitmap inv_backgnd;
+extern grs_canvas inv_norm_canvas;
+extern grs_canvas inv_fullscrn_canvas;
+extern grs_canvas inv_view360_canvas;
+extern grs_canvas *pinv_canvas;
+
+extern grs_canvas inv_gamepage_canvas;
+extern grs_canvas inv_fullpage_canvas;
+extern grs_canvas *ppage_canvas;
+
+extern LGRegion *inventory_region;
+extern LGRegion *pagebutton_region;
+
 
 #endif // __INVENT_H

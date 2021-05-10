@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Includes
 #include "2d.h"
 #include "edms.h"
+#include "frcamera.h"
 #include "lg_error.h"
 #include "objects.h"
 #include "rect.h"
@@ -38,13 +39,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ID2SPEC(id) (objs[(id)].specID)
 
-#ifdef __OBJSIM_SRC
-int ObjBaseArray[255];
-int ClassBaseArray[16][16];
-#else
 extern int ObjBaseArray[255];
 extern int ClassBaseArray[16][16];
-#endif
 
 #define OBJ_PLAYER_CAMERA  0
 #define OBJ_STATIC_CAMERA  1
@@ -134,10 +130,18 @@ errtype set_door_data(ObjID id);
 
 ObjID physics_handle_to_id(physics_handle p);
 
-#ifdef __OBJSIM_SRC
-ObjID current_object = OBJ_NULL;
-#else
+errtype obj_floor_func(ObjID id);
+
 extern ObjID current_object;
-#endif
+extern ObjID physics_handle_id[MAX_OBJ];
+extern int physics_handle_max;
+
+extern uchar cam_mode;
+extern int memcount;
+extern cams objmode_cam;
+extern uchar trigger_check;
+extern Id posture_bases[];
+extern Id critter_id_table[];
+extern uchar new_cyber_orient;
 
 #endif // __OBJSIM_H

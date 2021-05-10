@@ -90,4 +90,8 @@ void empty_slate(void);
 
 // Globals
 
+extern int diff_sum;
+extern ubyte valid_save;
+extern int WonGame_ShowStats;
+
 #endif // __SETUP_H

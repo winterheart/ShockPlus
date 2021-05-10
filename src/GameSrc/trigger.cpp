@@ -63,6 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rendtool.h"
 #include "saveload.h"
 #include "schedule.h"
+#include "setup.h"
 #include "sfxlist.h"
 #include "shodan.h"
 #include "tilename.h"
@@ -964,18 +965,11 @@ errtype trap_damage_func(int p1, int p2, int p3, int p4) {
 }
 
 uchar fake_endgame = FALSE;
-#define ENDGAME_TICKS CIT_CYCLE * 2
+#define ENDGAME_TICKS (CIT_CYCLE * 2)
 
 errtype trap_sfx_func(int p1, int p2, int p3, int p4) {
-    extern short fr_solidfr_time;
-    extern short fr_sfx_time;
-    extern short fr_surge_time;
-    extern char surg_fx_frame;
     short scr_fx, sfx_time, sound_fx;
     short wacky, wacky_sev;
-    extern short surge_duration;
-    extern ulong player_death_time;
-
     sound_fx = qdata_get(p1 & 0xFFFF);
     scr_fx = qdata_get(p3);
     sfx_time = qdata_get(p4);
@@ -1005,7 +999,6 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4) {
 
     // Fake endgame
     case 3: {
-        extern ulong secret_sfx_time;
         physics_zero_all_controls();
         secret_render_fx = FAKEWIN_REND_SFX;
         secret_sfx_time = *tmd_ticks;
@@ -1037,7 +1030,6 @@ errtype trap_sfx_func(int p1, int p2, int p3, int p4) {
         fr_global_mod_flag(FR_SOLIDFR_STATIC, FR_SOLIDFR_MASK);
         break;
     case 4: {
-        extern short vhold_shift;
         fr_global_mod_flag(FR_SFX_VHOLD, FR_SFX_MASK);
         vhold_shift = 0;
         break;
@@ -1177,8 +1169,6 @@ errtype trap_questbit_func(int p1, int p2, int p3, int p4) {
     return (OK);
 }
 
-extern uchar alternate_death;
-
 errtype trap_cutscene_func(int p1, int p2, int p3, int p4) {
     short cs = qdata_get(p1);
 
@@ -1193,7 +1183,6 @@ errtype trap_cutscene_func(int p1, int p2, int p3, int p4) {
 
         play_cutscene(WIN_CUTSCENE, TRUE);
         setup_mode = SETUP_CREDITS;
-        extern int WonGame_ShowStats;
         WonGame_ShowStats = 1;
     //}
 
@@ -1387,7 +1376,6 @@ grs_bitmap shodan_draw_fs;
 grs_bitmap shodan_draw_normal;
 
 void hack_shodan_conquer_func(char c) {
-    extern char thresh_fail;
     shodan_bitmask = tmap_static_mem;
     memset(shodan_bitmask, 0, SHODAN_BITMASK_SIZE / 8);
     shodan_draw_fs.bits = tmap_static_mem + (SHODAN_BITMASK_SIZE / 8);
@@ -1642,8 +1630,6 @@ errtype trap_hack_func(int p1, int p2, int p3, int p4) {
         }
         break;
     case GAME_OVER_HACK: {
-        extern int curr_alog;
-        extern char secret_pending_hack;
         if (curr_alog != -1)
             secret_pending_hack = 1;
         else {
@@ -2233,7 +2219,6 @@ errtype do_ecology_triggers() {
     int trip;
     ObjSpec ospec;
     ObjID id;
-    extern uchar trigger_check;
 
     osid = objTraps[0].id;
     while (osid != OBJ_SPEC_NULL) {

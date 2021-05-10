@@ -39,8 +39,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "colors.h"
 #include "event.h"
 #include "gamestrn.h"
+#include "game_screen.h"
 #include "hotkey.h"
 #include "invdims.h"
+#include "invent.h"
 #include "fullscrn.h"
 #include "hud.h"
 #include "canvchek.h"
@@ -49,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "str.h"
 #include "faketime.h"
 #include "cit2d.h"
+#include "view360.h"
 
 #include "OpenGL.h"
 #include "Shock.h"
@@ -57,8 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  PROTOTYPES
 //------------
 void simple_text_button(char *text, int xc, int yc, int col);
-void Rect_gr_rect(LGRect *r);
-void Rect_gr_box(LGRect *r);
 char *itoa_2_10(char *s, int val);
 
 int str_to_hex(char val) {
@@ -90,7 +91,6 @@ void draw_shadowed_string(char *s, short x, short y, uchar shadow) {
     if (shadow && FONT_IS_MONO(gr_get_font())) // draw a black box
     {
 #ifdef SVGA_SUPPORT
-        extern char convert_use_mode;
         if ((convert_use_mode > 0) && (perform_svga_conversion(OVERRIDE_FONT))) {
             if (shadow_scale)
                 ss_point_convert(&(npt.x), &(npt.y), FALSE);
@@ -394,8 +394,6 @@ LGRect msg_rect[2] = {
      FULLSCREEN_MESSAGE_Y + GAME_MESSAGE_H}};
 
 uchar message_resend = FALSE;
-extern uchar game_paused;
-extern uchar view360_message_obscured;
 
 // Use the string wrapper's secret characters to delete newlines and double spaces.
 void strip_newlines(char *buf) {
@@ -439,7 +437,6 @@ errtype message_info(const char *info_text) {
             }
             x += 2;
         } else if (game_paused) {
-            extern grs_canvas inv_view360_canvas;
             ss_noscale_bitmap(&inv_view360_canvas.bm, x, y);
             x += 2;
             y += 1;
@@ -691,7 +688,6 @@ int hyphenated_wrap_text(char *ps, char *out, short width) {
 char wait_count = 0;
 
 errtype begin_wait() {
-    extern LGCursor wait_cursor;
     errtype retval;
     if (wait_count == 0) {
         uiHideMouse(NULL);

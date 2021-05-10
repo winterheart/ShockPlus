@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamestrn.h"
 #include "objuse.h"
 #include "input.h"
+#include "invent.h"
 #include "objprop.h"
 #include "colors.h"
 #include "objload.h"
@@ -61,9 +62,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LEFT_MARGIN  5
 #define CONTENTS_WID ((MFD_VIEW_WID - 2 * LEFT_MARGIN) / 2)
 #define CONTENTS_HGT ((MFD_VIEW_HGT - FIRST_ITEM_Y - 5) / 2)
-extern char container_extract(ObjID *pidlist, int d1, int d2);
-extern void container_stuff(ObjID *pidlist, int numobjs, int *d1, int *d2);
-extern uchar is_container(ObjID id, int **d1, int **d2);
 
 #define LAST_INPUT_ROW (player_struct.mfd_func_data[MFD_GUMP_FUNC][0])
 #define LAST_DOUBLE    (player_struct.mfd_func_data[MFD_GUMP_FUNC][1])
@@ -198,9 +196,7 @@ uchar gump_get_useful(bool shifted) {
         for (row = 0; row < gump_num_objs; row++) {
             if (gump_idlist[row] && obj_is_useless(gump_idlist[row]) == useless) {
                 uchar result = gump_pickup(row);
-                if (result && shifted)
-                {
-                    extern void absorb_object_on_cursor(ushort keycode, uint32_t context, intptr_t data); //see invent.c
+                if (result && shifted) {
                     absorb_object_on_cursor(0, 0, 0); //parameters unused
                 }
                 return result;
@@ -255,13 +251,11 @@ uchar mfd_gump_handler(MFD *m, uiEvent *e) {
                     //try to pickup and absorb object
                     uchar result = gump_pickup(row);
                     if (result) {
-                        extern void absorb_object_on_cursor(ushort keycode, uint32_t context, intptr_t data); //see invent.c
                         absorb_object_on_cursor(0, 0, 0); //parameters unused
                     }
                     return result;
                 }
                 else {
-                    extern void look_at_object(ObjID);
                     look_at_object(gump_idlist[row]);
                 }
             }

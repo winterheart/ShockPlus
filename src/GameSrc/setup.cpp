@@ -75,15 +75,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern "C" {
 #include "sdl_events.h"
-};
+}
 
+#include "audiolog.h"
+#include "damage.h"
+#include "frintern.h"
+#include "invent.h"
+#include "mouselook.h"
+#include "physics.h"
 #include "splash.h"
 #include "splshpal.h"
 #include "str.h"
 #include "tickcount.h"
+#include "trigger.h"
 #include "MacTune.h"
 #include "Shock.h"
 #include "Xmi.h"
+#include "viewhelp.h"
 
 #ifdef PLAYTEST
 #include <mprintf.h>
@@ -111,20 +119,6 @@ uchar start_first_time = TRUE;
 bool waiting_for_key = false;
 
 static uchar direct_into_cutscene = FALSE;
-
-extern char which_lang;
-extern uchar clear_player_data;
-extern char current_cutscene;
-extern char curr_vol_lev;
-extern char curr_sfx_vol;
-extern uchar fullscrn_vitals;
-extern uchar fullscrn_icons;
-extern uchar map_notes_on;
-extern uchar audiolog_setting;
-extern uchar mouseLefty;
-#ifdef AUDIOLOGS
-extern char curr_alog_vol;
-#endif
 
 errtype draw_difficulty_char(int char_num);
 errtype draw_difficulty_description(int which_cat, int color);
@@ -1406,36 +1400,16 @@ void setup_loop(void) {
 void empty_slate(void) {
     flush_resource_cache();
 
-    extern uint _fr_glob_flags;
     _fr_glob_flags = 0;
-
-    extern uchar *shodan_bitmask;
     shodan_bitmask = NULL;
-
-    extern uchar alternate_death;
     alternate_death = FALSE;
-
-    extern uiSlab fullscreen_slab;
-    extern uiSlab main_slab;
     uiPopSlabCursor(&fullscreen_slab);
     uiPopSlabCursor(&main_slab);
-
-    extern uchar fire_slam;
     fire_slam = FALSE;
-
-    extern short inventory_page;
     inventory_page = 0;
-
-    extern short inv_last_page;
     inv_last_page = -1;
-
-    extern void physics_zero_all_controls(void);
     physics_zero_all_controls();
-
-    extern int mlook_enabled;
     mlook_enabled = 0;
-
-    extern uchar weapon_button_up;
     weapon_button_up = TRUE;
 }
 

@@ -12,3 +12,4 @@ void mouse_look_unpause();
 // Globals
 
 extern int mlook_vel_x, mlook_vel_y;
+extern int mlook_enabled;

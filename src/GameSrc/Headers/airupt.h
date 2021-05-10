@@ -26,4 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 errtype check_asynch_ai(uchar new_score_ok);
 void grind_music_ai(void);
 
+extern uchar mai_semaphor;
+extern uchar run_asynch_music_ai;
+
 #endif

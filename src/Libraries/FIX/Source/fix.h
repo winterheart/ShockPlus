@@ -292,6 +292,9 @@ fix fix_mul_div(fix m0, fix m1, fix d);
 fix fast_fix_mul_int(fix a, fix b);
 #define fast_fix_mul fix_mul
 
+#define fix_sqr(fixval) (fix_mul(fixval, fixval))
+
+
 //========================================
 //
 //  Square rooty kind of stuff.

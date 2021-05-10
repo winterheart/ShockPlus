@@ -142,20 +142,13 @@ uchar empty_bitmap(grs_bitmap *bmp);
 
 // Globals
 
-#ifdef __TEXTMAPS_SRC
-short loved_textures[NUM_LOADED_TEXTURES];
-TextureProp textprops[NUM_LOADED_TEXTURES];
-AnimTextureData animtextures[NUM_ANIM_TEXTURE_GROUPS];
-uchar shading_table[256 * 16];
-uchar bw_shading_table[256 * 16];
-TextureProp *texture_properties;
-#else
 extern short loved_textures[NUM_LOADED_TEXTURES];
 extern TextureProp textprops[NUM_LOADED_TEXTURES];
 extern AnimTextureData animtextures[NUM_ANIM_TEXTURE_GROUPS];
 extern uchar shading_table[256 * 16];
 extern uchar bw_shading_table[256 * 16];
 extern TextureProp *texture_properties;
-#endif
+
+extern uchar all_textures;
 
 #endif // __TEXTMAPS_H

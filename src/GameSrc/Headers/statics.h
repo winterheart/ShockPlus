@@ -60,36 +60,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // put big buffer here? and have a define after it
 
+#include "map.h"
+#include "mfddims.h"
+#include "objapp.h"
+#include "objects.h"
+#include "objprop.h"
 #include "textmaps.h"
+
 extern uchar tmap_static_mem[NUM_STATIC_TMAPS * SIZE_STATIC_TMAP];
 #ifdef SVGA_CUTSCENES
 extern uchar tmap_big_buffer[NUM_STATIC_TMAPS * SIZE_BIG_TMAP];
 #endif
 
-#include "objects.h"
-#include "objapp.h"
-extern Obj objs[NUM_OBJECTS];
-extern ObjRef objRefs[NUM_REF_OBJECTS];
-extern uchar objsDealt[NUM_OBJECTS / 8];
-
 // put rest of obj system here, define after it
 
-#define FRAME_BUFFER_SIZE (320 * 200) + 28
-extern uchar frameBuffer[FRAME_BUFFER_SIZE];
-
-#include "mfddims.h"
-extern uchar *mfd_canvas_bits;
+#define FRAME_BUFFER_SIZE ((320 * 200) + 4096)
+#define STATIC_MAP_SIZE 16 << (DEFAULT_XSHF + DEFAULT_YSHF)
+#define OBJ_BITMAP_POOL_SIZE ((NUM_OBJECT * 2) + 230)
 
 #define ALTERNATE_BUFFER frameBuffer
 #define ALTERNATE_BUFFER_SIZE ((MFD_VIEW_HGT * MFD_VIEW_WID) + FRAME_BUFFER_SIZE)
 
-#include "map.h"
-#define STATIC_MAP_SIZE 16 << (DEFAULT_XSHF + DEFAULT_YSHF)
-
+extern uchar frameBuffer[FRAME_BUFFER_SIZE];
+extern uchar *mfd_canvas_bits;
 extern uchar static_map[STATIC_MAP_SIZE];
-
-#include "objprop.h"
-#define OBJ_BITMAP_POOL_SIZE ((NUM_OBJECT * 2) + 230)
 extern grs_bitmap obj_bitmap_pool[OBJ_BITMAP_POOL_SIZE];
+extern uchar svga_options_cursor_bits[];
 
 #endif // __STATICS_H

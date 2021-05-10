@@ -129,7 +129,25 @@ uchar does_weapon_overload(int type, int subtype);
 
 void unload_current_weapon(void);
 
+void SetMotionCursorsColorForActiveWeapon(void);
+
+uchar reload_weapon_hotkey(ushort key, uint32_t context, intptr_t data);
 
 // Globals
+extern short cursor_color_offset;
+
+extern ObjID damage_sound_id;
+extern char damage_sound_fx;
+extern uchar muzzle_fire_light;
+
+extern ubyte energy_expulsion;
+extern uchar overload_beam;
+extern uchar handart_flash;
+extern byte gun_fire_offset;
+
+extern short mouse_attack_x;
+extern short mouse_attack_y;
+
+extern ulong next_fire_time;
 
 #endif // __WEAPONS_H

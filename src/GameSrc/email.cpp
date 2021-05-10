@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "2dres.h"
 #include "Prefs.h"
+#include "fullscrn.h"
 #include "hotkey.h"
 #include "invdims.h"
 #include "invent.h"
@@ -71,7 +72,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // DEFINES
 // -------
 
-extern uchar full_game_3d;
 LGCursor email_cursor;
 grs_bitmap email_cursor_bitmap;
 uchar email_cursor_currently = FALSE;
@@ -106,9 +106,6 @@ uchar shodan_sfx_go = FALSE;
 //==========================================
 //       INVENTORY PANEL TEXT DISPLAY
 //==========================================
-
-extern LGRegion *inventory_region;
-extern grs_canvas *pinv_canvas;
 
 #define MESSAGE_COLOR 0x5A
 #define MORE_COLOR 0x4C

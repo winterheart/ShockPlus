@@ -51,6 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "physics.h"
 #include "physunit.h"
 #include "trigger.h" // for trap_sfx_func()
+#include "weapons.h"
 
 //----------------
 //  Internal Prototypes
@@ -95,8 +96,6 @@ void convert_grenade_to_explosion(ExplosionData *edata, int triple) {
     edata->offense = GrenadeProps[ctrip].offense_value;
     edata->penet = GrenadeProps[ctrip].penetration;
 }
-
-extern ObjID terrain_hit_exclusion;
 
 // ----------------------------------------------------------------------
 // explosion_ray_cast_attack()
@@ -195,8 +194,6 @@ void do_explosion(ObjLoc loc, ObjID exclusion, ubyte special_effect, ExplosionDa
     uchar no_effect;
     ubyte affect;
     int damage;
-    extern ObjID damage_sound_id;
-    extern char damage_sound_fx;
 
     if (special_effect) {
         fix dist2player;
@@ -474,7 +471,6 @@ void do_grenade_explosion(ObjID id, uchar special_effect) {
 
     // Special earthshaker hack
     if (ID2TRIP(id) == EARTH_G_TRIPLE) {
-        extern short fr_sfx_time;
         fr_global_mod_flag(FR_SFX_SHAKE, FR_SFX_MASK);
         fr_sfx_time = CIT_CYCLE << 1;
     }

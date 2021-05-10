@@ -153,6 +153,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "2d.h"
 #include "fix.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif // !defined(__cplusplus)
+
 #pragma pack(push, 2)
 
 // MLA defines
@@ -769,5 +773,9 @@ extern void g3_set_tmaps_linear(void);
 extern void g3_reset_tmaps(void);
 
 #pragma pack(pop)
+
+#if defined(__cplusplus)
+}
+#endif // !defined(__cplusplus)
 
 #endif /* __3D_H */

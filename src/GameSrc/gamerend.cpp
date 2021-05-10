@@ -37,17 +37,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h" // for resurrect text
 #include "gamestrn.h"
 #include "gamescr.h"
-#include "mainloop.h"
+#include "frsetup.h"
 #include "game_screen.h"
+#include "mainloop.h"
+#include "musicai.h"
 #include "player.h"
+#include "render.h"
 #include "shodan.h"
+#include "statics.h"
 #include "str.h"
+#include "trigger.h"
 #include "bark.h"
 #include "cit2d.h"
 #include "damage.h"
 #include "diffq.h" // for time limit
+#include "effect.h"
 #include "email.h"
 #include "newmfd.h"
+#include "saveload.h"
+#include "status.h"
 #include "fullscrn.h"
 
 #include "hud.h"
@@ -58,11 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "vmouse.h"
 
 // maybe we can not have this
-#include "frtypes.h" // has to be before frprotox so proto gets the context for real
 #include "frprotox.h"
 #include "frflags.h"
 #include "gr2ss.h"
-
 #include "faketime.h"
 #include "hkeyfunc.h"
 
@@ -70,14 +76,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "audiolog.h"
 #endif
 
-extern uchar tmap_big_buffer[];
-
 // prototypes
 void do_secret_fx(void);
 void gamesys_render_effects(void);
 uchar use_ir_hack(void);
 void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base);
 void draw_line_static(grs_bitmap *stat_dest, int dens1, int color1);
+
+int secret_render_fx = 0;
+ulong secret_sfx_time;
+short vhold_shift = 0;
 
 errtype gamerend_init(void) {
     handart_show = 1;
@@ -122,8 +130,6 @@ void set_dmg_percentage(int which, ubyte percent) {
 // beam_effect_update()
 //
 
-extern ObjID beam_effect_id;
-
 #define PRE_FINAL_DEATH    0x1A
 #define DYING_FRAMES       0x20
 #define REBORN_VISION_TICK 0x10
@@ -155,10 +161,6 @@ static uchar systems_line_colors[] = {RED_8_BASE, RED_8_BASE + 3, ORANGE_8_BASE,
 #define CURRENT_VIEW_W (_current_view->r->lr.x - _current_view->r->ul.x)
 #define CURRENT_VIEW_H (_current_view->r->lr.y - _current_view->r->ul.y)
 
-extern uchar flatline_heart;
-extern uchar chi_amp;
-
-ulong secret_sfx_time;
 void do_secret_fx(void) { // boy is this a hack....
     static char dot_buf[] = "........";
     static char tmp_buf[] = "99";
@@ -219,7 +221,6 @@ void do_secret_fx(void) { // boy is this a hack....
         if (*tmd_ticks - sfx_time > V_CLOCK) {
             secret_render_fx++;
             if (c_val == REBORN_FRAMES) {
-                extern uchar music_on;
                 secret_render_fx = 0;
 
                 // look - we should say the player is no longer dead!
@@ -309,13 +310,6 @@ void do_secret_fx(void) { // boy is this a hack....
     }
 }
 
-extern short mouse_attack_x;
-extern short mouse_attack_y;
-extern ulong next_fire_time;
-extern uchar overload_beam;
-extern uchar saveload_static;
-extern bool DoubleSize;
-
 byte beam_offset[NUM_BEAM_GUN] = {-12, -8, -4};
 #define DRAW_BEAM_LINE(c1, c2, c3, c4)                                                               \
     {                                                                                                \
@@ -344,13 +338,11 @@ void gamesys_render_effects(void) {
     Ref temp;
     int deltax, deltay, beamx;
     short mx, my;
-    extern uchar full_game_3d;
 
     TRACE("%s: gamerend", __FUNCTION__);
 
     if ((!global_fullmap->cyber) && (!secret_render_fx)) {
         ubyte active = player_struct.actives[ACTIVE_WEAPON];
-        extern uchar hack_takeover;
 
         // check to make sure we have an active weapon before drawing handart
         if ((player_struct.weapons[active].type != EMPTY_WEAPON_SLOT) && !hack_takeover && !saveload_static) {
@@ -540,7 +532,6 @@ void draw_full_static(
 
 #define TELEPORT_COLOR 0x1C
 #define VHOLD_SHIFT_AMOUNT 7
-short vhold_shift = 0;
 
 #define FULL_CONVERT_X
 
@@ -646,10 +637,6 @@ int gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, 
         switch (flags & FR_OVERLAY_MASK) {
         case FR_OVERLAY_SHODAN: {
             int i;
-            extern uchar *shodan_bitmask;
-            extern grs_bitmap shodan_draw_fs;
-            extern grs_bitmap shodan_draw_normal;
-            extern char thresh_fail;
             uchar *shodan_draw_bits;
             grs_bitmap *curr_shodan;
             short shodan_level = (player_struct.game_time - time_until_shodan_avatar) >> SHODAN_TIME_SHIFT;

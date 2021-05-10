@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //====================================================================================
 
+#pragma once
+
 #include "lg_types.h"
 
 //--------------------
@@ -67,13 +69,20 @@ typedef struct {
 //  Globals
 //--------------------
 extern ShockPrefs gShockPrefs;
+extern uchar sfx_on;
 
 //--------------------
 //  Prototypes
 //--------------------
 void SetDefaultPrefs(void);
+static void SetShockGlobals(void);
+
 int16_t LoadPrefs(void);
 int16_t SavePrefs(void);
+
+void CreateDefaultKeybindsFile(void);
+void LoadHotkeyKeybinds(void);
+void LoadMoveKeybinds(void);
 
 //-------------------
 //  Enums
@@ -86,3 +95,8 @@ enum OPT_SEQ_ { // Must be in the same order as in wraper.h
 #endif // USE_FLUIDSYNTH
     OPT_SEQ_Max
 };
+
+// ought to be enough for anybody
+#define MAX_FIRE_KEYS 16
+extern int FireKeys[MAX_FIRE_KEYS + 1];
+

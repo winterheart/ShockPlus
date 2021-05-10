@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamestrn.h"
 #include "damage.h"
 #include "ai.h"
+#include "hud.h"
 #include "hudobj.h"
 #include "combat.h"
 #include "wares.h"
@@ -55,7 +56,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cit2d.h"
 #include "gr2ss.h"
 
-#define sqr(x) ((x) * (x))
 
 // ==============================================
 //               TARGET MFD CODE
@@ -77,8 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // get the damage string for a critter subclass and damage estimate
 #define DAMAGE_STRING_BASE REF_STR_MutantDmg
 #define GET_DAMAGE_STRING(scl, dmg) (DAMAGE_STRING_BASE + (scl)*DAMAGE_DEGREES + (dmg))
-
-extern uchar full_game_3d;
 
 #define PAGEBUTT_W 8
 #define PAGEBUTT_H 11
@@ -337,7 +335,6 @@ void mfd_target_expose(MFD *m, ubyte control) {
 // ==============================================
 
 #define NUM_TARG_FRAMES 5
-extern ubyte targ_frame;
 
 void select_current_target(ObjID id, uchar force_mfd) {
 #ifdef ANNOY_PLAYERS_TRYING_TO_TARGET_THINGS
@@ -389,7 +386,7 @@ uchar iter_eligible_targets(ObjSpecID *sid) {
     for (; *sid != OBJ_SPEC_NULL; *sid = objCritters[*sid].next) {
         ObjID oid = objCritters[*sid].id;
         ObjLoc loc = objs[oid].loc;
-        int dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) + sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
+        int dsq = lg_sqr(OBJ_LOC_BIN_X(loc) - plr.x) + lg_sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
 
         // you cannot target yourself - well - not this game....
         // cause then you'll have nobody to take your tasks...
@@ -424,7 +421,7 @@ void select_closest_target(void) {
     while (iter_eligible_targets(&sid)) {
         ObjID oid = objCritters[sid].id;
         ObjLoc loc = objs[oid].loc;
-        int dsq = sqr(OBJ_LOC_BIN_X(loc) - plr.x) + sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
+        int dsq = lg_sqr(OBJ_LOC_BIN_X(loc) - plr.x) + lg_sqr(OBJ_LOC_BIN_Y(loc) - plr.y);
         if (dsq < bestdist) {
             bestid = oid;
             bestdist = dsq;

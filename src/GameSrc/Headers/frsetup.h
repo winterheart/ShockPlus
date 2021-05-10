@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2015-2018 Night Dive Studios, LLC.
+Copyright (C) 2021 ShockPlus Project
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,14 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef __FRTYPESX_H
-#define __FRTYPESX_H
-/* FrTypesx.h
- * $Revision: 1.2 $
- * goofy goofy goofy attempt to cut out include dependencies
- */
-#ifndef __FRPROTOX_H
-typedef void frc;
-typedef void fmp;
-#endif
-#endif
+
+#ifndef FRSETUP_H
+#define FRSETUP_H
+
+#include "3d.h"
+
+// Set by machine type
+extern bool DoubleSize;
+extern bool SkipLines;
+
+extern g3s_vector viewer_position;
+extern g3s_angvec viewer_orientation;
+
+#endif // FRSETUP_H

@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "init.h"
 #include "musicai.h"
 #include "saveload.h"
+#include "trigger.h"
 #include "wares.h"
 
 #define FIRST_CSPACE_LEVEL 14
@@ -46,8 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_SHODAN_FAILURES 10
 #define GAME_OVER_HACK 0x6
-
-extern uchar *shodan_bitmask;
 
 ObjID shodan_avatar_id = OBJ_NULL;
 uint32_t time_until_shodan_avatar = 0;
@@ -68,7 +67,6 @@ errtype check_cspace_death() {
         else if (player_struct.cspace_hp == 0) {
             // If we're in endgame mode, we lose.
             if (shodan_bitmask != NULL) {
-                extern char thresh_fail;
                 if (!cyber_nodie) {
                     cyber_nodie = TRUE;
                     mai_player_death();

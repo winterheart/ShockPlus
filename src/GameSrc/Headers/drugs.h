@@ -62,17 +62,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-// Defines
-
-#define DRUG_STAMINUP 0
-#define DRUG_SIGHT    1
-#define DRUG_LSD      2
-#define DRUG_MEDIC    3
-#define DRUG_REFLEX   4
-#define DRUG_GENIUS   5
-#define DRUG_DETOX    6
-
 // Includes
+#include "gamesys.h"
 
 // C Library Includes
 
@@ -85,8 +76,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Game Object Includes
 
 // Defines
+#define DRUG_STAMINUP 0
+#define DRUG_SIGHT    1
+#define DRUG_LSD      2
+#define DRUG_MEDIC    3
+#define DRUG_REFLEX   4
+#define DRUG_GENIUS   5
+#define DRUG_DETOX    6
 
 // Prototypes
+
+typedef struct {
+    uint8_t duration; // Preset duration of given drug
+    uint8_t flags;
+    void (*use)(); // Function slots for take, effect, wear off
+    void (*effect)();
+    void (*wearoff)();
+    void (*startup)(void);
+    void (*closedown)(bool visible);
+    void (*after_effect)();
+} DRUG;
 
 char *get_drug_name(int type, char *buf);
 void drug_use(int type);
@@ -99,6 +108,12 @@ void drug_closedown(bool visible);
 int drug2triple(int type);
 int triple2drug(int triple);
 
+// Detox
+void drug_detox_use();
+void wear_off_drug(int i);
+void drug_detox_wearoff();
+
 // Globals
+extern DRUG Drugs[NUM_DRUGZ]; // Global array of drugs
 
 #endif // __DRUGS_H

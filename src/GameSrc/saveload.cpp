@@ -103,11 +103,6 @@ uchar display_saveload_checkpoints = FALSE;
 uchar saveload_static = FALSE;
 uint dynmem_mask = DYNMEM_ALL;
 
-extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
-extern ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
-extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
-extern uchar trigger_check;
-
 //-------------------------------------------------------
 void store_objects(char **buf, ObjID *obj_array, char obj_count) {
     char *s = (char *)malloc(obj_count * sizeof(Obj) * 3);
@@ -733,9 +728,6 @@ void SwapShortBytes(void *pval2) {
 //---------------------------------------------------------------------------------
 // errtype load_current_map(char* fn, Id id_num, Datapath* dpath)
 errtype load_current_map(Id id_num) {
-    extern int physics_handle_max;
-    extern ObjID physics_handle_id[MAX_OBJ];
-    extern char old_bits;
 
     int i, idx = 0, fd;
     uint32_t map_version;
@@ -1332,7 +1324,6 @@ obj_out:
     // compute_shodometer_value(FALSE);
 
     if (make_player) {
-        extern int score_playing;
         obj_create_player(&plr_loc);
         if (object_version > 9) {
             // Regenerate physics state from player_state here

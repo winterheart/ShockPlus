@@ -31,12 +31,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "map.h"
 
 #include "fr3d.h"
+#include "frintern.h"
 #include "frparams.h"
+#include "frsetup.h"
 #include "frspans.h"
 #include "frflags.h"
 #include "tools.h"
 
-extern uint _fr_curflags;
 #define PRINT_PYRAMID
 
 // temp macros
@@ -77,10 +78,6 @@ typedef struct {
 fix view_cone_list[MAX_PTS * 2];
 int view_count = 0;
 g3s_vector main_view_vectors[4];
-
-// wow is this ugly
-extern g3s_vector viewer_position;
-extern g3s_angvec viewer_orientation;
 
 // prototypes
 void reverse_poly_list(int index, fix *new_pts);

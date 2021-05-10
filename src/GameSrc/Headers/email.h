@@ -39,4 +39,7 @@ void mfd_emailware_expose(MFD *mfd, ubyte control);
 void email_turnon(uchar visible, uchar real_start);
 void email_turnoff(uchar visible, uchar real_stop);
 
+extern short last_email_taken;
+extern short old_invent_page;
+
 #endif

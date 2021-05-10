@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "Shock.h"
 #include "tools.h"
 #include "game_screen.h"
 #include "hotkey.h"
@@ -32,9 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainloop.h"
 #include "amaploop.h"
 #include "lvldata.h"
-
-extern grs_screen *svga_screen;
-extern grs_screen *cit_screen;
 
 // -------------------
 //  INTERNAL PROTOTYPES
@@ -49,8 +47,6 @@ uchar amap_mouse_handler(uiEvent *ev, LGRegion *reg, intptr_t v) {
         return amap_ms_callback(oAMap(MFD_FULLSCR_MAP), ev->pos.x, ev->pos.y, md->action, md->buttons);
     return (TRUE);
 }
-
-uchar amap_kb_callback(curAMap *amptr, int code);
 
 uchar amap_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     if (amap_kb_callback(oAMap(MFD_FULLSCR_MAP), ev->cooked_key_data.code))

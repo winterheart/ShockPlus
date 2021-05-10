@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hud.h"
 #include "player.h"
 #include "map.h"
+#include "mainloop.h"
 #include "citres.h"
 #include "objsim.h"
 #include "objprop.h"
@@ -51,6 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objbit.h"
 #include "rendtool.h"
 #include "vox.h"
+#include "viewhelp.h"
 #include "frflags.h"
 
 #include "ice.h"
@@ -693,7 +695,6 @@ void show_obj(ObjID cobjid) {
     short objtrip;
     short o3drep;
     int model_num = 0;
-    extern uchar cam_mode;
     uchar *model_ptr;
     grs_bitmap *tpdata;
 #ifdef TRANSLUCENT_INVISOS
@@ -707,7 +708,6 @@ void show_obj(ObjID cobjid) {
     Ref ref = 0;
     int obj_type, tluc_val = 0xFF, index = 0, loc_h;
     uchar light_me = TRUE;
-    extern cams objmode_cam;
 
 //   check_up(0x220000|cobjid);
 //   mprintf("cobjid = %x\n",cobjid);
@@ -740,7 +740,6 @@ void show_obj(ObjID cobjid) {
             //         uchar sftware_col[5]={0x3B,0x54,0x7D,0x62,0x27};
             uchar sftware_col[5] = {0x3B, 0x4F, 0x76, 0x5A, 0x23};
             int col = 0xC3, dm = 0, move_me = 1, ndm;
-            extern uchar time_passes;
             fix fx, fy, fz;
             int sc, v;
             //         static long ltime=0;
@@ -865,7 +864,6 @@ void show_obj(ObjID cobjid) {
     case FAUBJ_SPECIAL:
         switch (ID2TRIP(cobjid)) {
         case MAPNOTE_TRIPLE: {
-            extern uchar map_notes_on;
             g3s_phandle note_pts[4];
             int h = player_struct.game_time & 0x3fff;
 
@@ -907,8 +905,6 @@ void show_obj(ObjID cobjid) {
         case SML_CRT_TRIPLE:
         case LG_CRT_TRIPLE:
         case SECURE_CONTR_TRIPLE: {
-            extern grs_bitmap tmap_bm[];
-
             grs_bitmap *b1, b2;
             Ref ref1 = 0, ref2 = 0;
             fix fx, fy, fz;
@@ -1052,7 +1048,6 @@ void show_obj(ObjID cobjid) {
         case FAUBJ_TPOLY:
             switch (ID2TRIP(cobjid)) {
             case TMAP_TRIPLE: {
-                extern uchar all_textures;
                 tpdata = get_texture_map(objBigstuffs[_fr_cobj->specID].data2,
                                          (all_textures) ? TEXTURE_128_INDEX : TEXTURE_64_INDEX);
                 scale = -1;

@@ -98,10 +98,6 @@ void (*enter_modes[])(void) = {screen_start, fullscreen_start, NULL, NULL, setup
 void (*exit_modes[])(void) = {screen_exit, fullscreen_exit, NULL, NULL, setup_exit, NULL, cutscene_exit, fullscreen_exit, amap_exit};
 
 void loopmode_switch(short *cmode) {
-#ifdef SVGA_SUPPORT
-    extern uchar wrapper_screenmode_hack;
-#endif
-
     // Actually switch mode
     _last_mode = *cmode;
     (*exit_modes[_last_mode])();

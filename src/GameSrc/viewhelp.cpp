@@ -98,8 +98,6 @@ errtype install_color_handler(MFD_Func *f);
 #define BAR_SINISTER REF_IMG_BioIconNot
 
 uchar map_notes_on = TRUE;
-extern uchar fullscrn_vitals;
-extern uchar fullscrn_icons;
 
 struct _field_data {
     uchar *var;

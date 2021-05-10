@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2015-2018 Night Dive Studios, LLC.
+Copyright (C) 2021 ShockPlus Project
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,23 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/*
- * $Source: n:/project/cit/src/inc/RCS/mfdgames.h $
- * $Revision: 1.1 $
- * $Author: dc $
- * $Date: 1994/04/22 07:02:03 $
- */
-#ifndef MFDGAMES_H
-#define MFDGAMES_H
 
-// yo, word up
-errtype mfd_games_init(MFD_Func *f);
-uchar mfd_games_handler(MFD *m, uiEvent *e);
-void mfd_games_expose(MFD *m, ubyte control);
+#ifndef FRTERR_H
+#define FRTERR_H
 
-void mfd_games_turnon(uchar visible, uchar real_start);
-void mfd_games_turnoff(uchar visible, uchar real_stop);
+void fr_tfunc_grab_fast(int mask);
 
-extern uchar hideous_secret_game_storage[];
+extern int _game_fr_tmap;
+extern g3s_phandle _fdt_tmppts[8];  /* these are used for all temporary point sets */
 
-#endif
+#endif // FRTERR_H

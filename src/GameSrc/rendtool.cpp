@@ -26,21 +26,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  support for render functions and tools, such as mouse and so on
  */
 
-#include <rendtool.h>
 #include "map.h"
 #include "frintern.h"
+#include "frsetup.h"
 #include "fullscrn.h"
 #include "gamerend.h"
 #include "textmaps.h"
 #include "gettmaps.h"
 
 #include "frcamera.h"
+#include "frterr.h"
+#include "frutils.h"
 #include "player.h"
+#include "rendtool.h"
 
 #include "objects.h"
 #include "objprop.h"
 #include "objbit.h"
 #include "objsim.h"
+#include "view360.h"
 
 #include "modtext.h"
 #include "citmat.h"
@@ -149,9 +153,6 @@ void fauxrend_camera_setfunc(TileCamera *tc);
 // Note that I have fixed this so that the cursor does not flicker.
 // It just works.  Note its simplistic beauty.	I love this job.
 void rend_mouse_hide(void) {
-    extern bool DoubleSize;
-    extern grs_canvas gDoubleSizeOffCanvas;
-    extern bool view360_is_rendering;
 
     MouseLock++;
     if (MouseLock == 1 && CurrentCursor != NULL) {
@@ -192,10 +193,7 @@ void rend_mouse_hide(void) {
 
 void rend_mouse_show(void) { MouseLock -= mouselocked; }
 
-extern int _game_fr_tmap; // current tmap
-extern MapElem *_fdt_mptr;
-
-extern grs_bitmap tmap_bm[32]; // this is dumb, yea yea
+// extern grs_bitmap tmap_bm[32]; // this is dumb, yea yea
 
 static MapElem *home_ptr;
 
@@ -299,8 +297,6 @@ int game_fr_idx(void) { return _game_fr_tmap; }
 #define IsTpStarDraw() (_game_fr_tmap < 2)
 #endif
 
-extern g3s_phandle _fdt_tmppts[8]; /* these are used for all temporary point sets */
-
 // should i draw this texture/map/so on
 uchar draw_tmap_p(int ptcnt) {
     // JAEMZ JAEMZ JAEMZ JAEMZ
@@ -391,8 +387,6 @@ draw_it:
 }
 
 void game_rend_start(void) {
-    extern ObjID no_render_obj;
-    extern uchar cam_mode;
     cams *cur_cam;
     // hey, gots to do this somewhere
     // remove self from object list
@@ -417,18 +411,10 @@ void game_fr_clip_start(uchar headnorth) {
 }
 
 
-/*KLC - no longer used here
-// new regieme, has gruesome hacks for memory saving....
-#define FRAME_BUFFER_SIZE (320*200)
-static uchar *frameBufferFreePtr=NULL;
-extern uchar  frameBuffer[];
-*/
-
 uchar model_base_nums[MAX_VTEXT_OBJS];
 
 void game_fr_startup(void) {
     short curr, index;
-    extern int std_alias_size;
 
     // we know that the main screen we support is 320x200, so.....
     // KLC   frameBufferFreePtr=frameBuffer;
@@ -491,7 +477,6 @@ void game_redrop_rad(int rad_mod) {
 //#pragma enable_message(202)
 
 // errtype is icky
-extern int _fr_global_detail;
 void change_detail_level(byte new_level) { _fr_global_detail = new_level; }
 
 void set_global_lighting(short l_lev) { _frp.lighting.global_mod += l_lev; }
@@ -513,9 +498,10 @@ void fauxrend_camera_setfunc(TileCamera *tc) {
     tc->show = TRUE;
 }
 
+extern fauxrend_context *_sr;
+
 // Like fr_get_at, but takes real screen coordinates.
 ushort fr_get_at_raw(frc *fr, int x, int y, uchar again, uchar transp) {
-    extern fauxrend_context *_sr;
     _fr_top(fr);
     if (again)
         return fr_get_again(_fr, x - _fr->xtop, y - _fr->ytop);

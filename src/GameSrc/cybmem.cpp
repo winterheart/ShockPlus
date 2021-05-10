@@ -26,12 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Memory management and manipulation functions
 // for Cyberia
-#define __CYBMEM_SRC
 
 #include "cybmem.h"
+#include "mainloop.h"
 #include "tools.h"
 #include "textmaps.h"
 #include "objcrit.h"
+#include "objsim.h"
 #include "dynmem.h"
 #include "Shock.h"
 #include "sideicon.h"
@@ -40,8 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 uint32_t loadcount = 0;
 
-extern Id critter_id_table[NUM_CRITTER][NUM_CRITTER_POSTURES];
-extern Id posture_bases[];
+uchar big_buffer[BIG_BUFFER_SIZE + 16384];
+int start_mem;
 
 int hand_fnum, digi_fnum, critter_fnum, critter_fnum2, texture_fnum;
 
@@ -87,8 +88,6 @@ errtype free_dynamic_memory(int mask) {
 }
 
 errtype load_dynamic_memory(int mask) {
-    extern short _new_mode;
-
     if (_new_mode != -1) {
         if ((~loadcount) & mask & DYNMEM_TEXTURES) {
             texture_fnum = ResOpenFile("res/data/texture.res");

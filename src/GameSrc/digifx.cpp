@@ -28,9 +28,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "musicai.h"
 #include "faketime.h"
+#include "schedule.h"
 #include "sndcall.h"
 #include "tools.h"
 #include "trigger.h"
+#include "wrapper.h"
 #ifdef AUDIOLOGS
 #include "audiolog.h"
 #endif
@@ -43,8 +45,6 @@ char priorities[NUM_DIGI_FX];
 
 // This has to be changed if the resource changes location!
 #define SFX_BASE 201
-
-extern uchar curr_alog_vol;
 
 #ifdef NOT_YET
 
@@ -117,8 +117,6 @@ errtype digifx_init() {
 #define MAX_DIGIFX_DIST fix_make(15, 0)
 #define MIN_DIGIFX_DIST fix_make(2, 0)
 
-extern int curr_alog;
-
 // ------------
 //  PROTOYTPES
 // ------------
@@ -165,7 +163,6 @@ int compute_sfx_pan(ushort x1, ushort y1, ushort x2, ushort y2, fixang our_ang) 
 uchar set_sample_pan_gain(snd_digi_parms *sdp) {
     uchar temp_vol, vol;
     uint raw_data = (uint)sdp->data;
-    extern uchar curr_sfx_vol;
 
     if (raw_data & 0x80000000) {
 		//terrain elevator
@@ -218,8 +215,6 @@ void stop_terrain_elevator_sound(short sem)
     {
       short x = (raw_data & 0x7FFF0000) >> 16;
       short y = (raw_data & 0xFFFF);
-
-      extern height_semaphor h_sems[NUM_HEIGHT_SEMAPHORS];
 
       if (h_sems[sem].x == (x >> 8) && h_sems[sem].y == (y >> 8) && h_sems[sem].inuse)
         snd_end_sample(i);
@@ -278,8 +273,6 @@ int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort 
     Id vocRes;
     int retval, real_code = sfx_code, len;
     uchar *addr;
-    extern uchar sfx_on;
-    extern uchar curr_sfx_vol;
 
     if (!sfx_on)
         return -2;

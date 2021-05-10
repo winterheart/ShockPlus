@@ -30,6 +30,9 @@ extern errtype ui_mouse_put_xy(short pmx, short pmy);
 extern errtype ui_mouse_constrain_xy(short xl, short yl, short xh, short yh);
 extern errtype ui_mouse_do_conversion(short *pmx, short *pmy, uchar down);
 
+extern void (*ui_mouse_convert)(short *px, short *py, uchar down);
+extern void (*ui_mouse_convert_round)(short *px, short *py, uchar down);
+
 #ifdef __cplusplus
 }
 #endif

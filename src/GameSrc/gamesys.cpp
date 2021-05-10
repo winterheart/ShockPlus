@@ -24,10 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <stdbool.h>
 #include <cstdlib>
-#include <MODELS/pelvis.h>
 
+#include "MODELS/pelvis.h"
 #include "ai.h"
 #include "cyber.h"
 #include "cybstrng.h"
@@ -72,6 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "schedule.h"
 #include "sfxlist.h"
 #include "shodan.h"
+#include "status.h"
 #include "tools.h"
 #include "tpolys.h"
 #include "trigger.h"
@@ -88,14 +88,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HEALTH_RESTORE_SHF (6u)
 #define HEALTH_RESTORE_UNIT (1u << HEALTH_RESTORE_SHF) // unit time for hp/energy regen
 #define HEALTH_RESTORE_MASK (HEALTH_RESTORE_UNIT - 1)
-#define sqr(x) ((x) * (x))
 
 // -------
 // GLOBALS
 // -------
 int run_fatigue_rate = 5;
-extern short fr_solidfr_time;
-extern short fr_sfx_time;
 ulong fr_shake_time;
 uchar gamesys_on = TRUE;
 
@@ -109,7 +106,6 @@ Schedule game_seconds_schedule;
 // prototypes
 void check_nearby_objects(void);
 void fatigue_player(void);
-uchar shodan_phase_in(uchar *bitmask, short x, short y, short w, short h, short num, uchar dir);
 uchar panel_ref_sanity(ObjID obj);
 int apply_rate(int var, int rate, int t0, int t1, int vmin, int vmax);
 void do_stuff_every_second(void);
@@ -118,7 +114,6 @@ void expose_player_real(short damage, ubyte type, ushort tsecs);
 void game_sched_init(void) { schedule_init(&game_seconds_schedule, GAME_SCHEDULE_SIZE, FALSE); }
 
 void game_sched_free(void) {
-    //extern errtype schedule_free(Schedule * s);
     schedule_free(&game_seconds_schedule);
 }
 
@@ -161,8 +156,6 @@ void check_nearby_objects() {
     int dist, best_dist;
     ObjRefID oref;
     int trip;
-    extern char mlimbs_machine;
-    extern int mlimbs_monster;
     int new_monster;
 #ifdef USE_3DREP_FOR_SHODANIZING
     short rep;
@@ -171,7 +164,6 @@ void check_nearby_objects() {
     ObjSpecID osid;
     LGPoint dest_pt, source_pt;
     int pf_id;
-    extern uchar music_on;
 
     // Should probably distribute different kinds of checks so that there is not a big hit every OBJ_CHECK_TIME
     if (obj_check_time < player_struct.game_time) {
@@ -341,7 +333,6 @@ uchar gamesys_fatigue = TRUE;
 void fatigue_player(void) {
     byte *c = player_struct.controls;
     int deltat, deltaf;
-    extern uchar jumpjets_active;
     if (gamesys_fatigue && !jumpjets_active && !EDMS_pelvis_is_climbing()) {
         deltat = player_struct.deltat;
         deltaf = run_fatigue_rate * (fatigue_val(c[CONTROL_YVEL]) + fatigue_val(2 * c[CONTROL_ZVEL]) +
@@ -351,7 +342,7 @@ void fatigue_player(void) {
                                      // fatigue_val(c[CONTROL_YZROT])/256 +
                                      0);
         if (player_struct.posture != POSTURE_STAND)
-            deltaf /= sqr(player_struct.posture + 1);
+            deltaf /= lg_sqr(player_struct.posture + 1);
         if (motionware_mode == MOTION_SKATES)
             deltaf /= SKATE_MOD;
         player_struct.fatigue += deltaf * deltat / FATIGUE_DENOM + player_struct.fatigue_spend * deltat;
@@ -444,7 +435,6 @@ short shodan_region_full_height[] = {FULL_VIEW_HEIGHT / 8, FULL_VIEW_HEIGHT, FUL
 errtype gamesys_run(void) {
     ObjSpecID osi;
     uchar dummy;
-    extern uchar *shodan_bitmask;
 
 #ifdef AUTOCORRECT_DIFF_TRASH
     for (int i = 0; i < 4; i++) {
@@ -709,8 +699,6 @@ int apply_rate(int var, int rate, int t0, int t1, int vmin, int vmax) {
 
 #define ENERGY_VAR_RATE 50
 
-extern ObjID shodan_avatar_id;
-
 #define MY_FORALLOBJSPECS(pmo, objspec) \
     for (pmo = (objspec[OBJ_SPEC_NULL]).id; pmo != OBJ_SPEC_NULL; pmo = objspec[pmo].next)
 
@@ -722,9 +710,6 @@ extern ObjID shodan_avatar_id;
 
 void do_stuff_every_second() {
     long running_dt = player_struct.game_time - player_struct.last_second_update;
-    extern int bio_energy_var;
-    extern int bio_absorb;
-    extern int rad_absorb;
     int last = (player_struct.last_second_update >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
     int next = (player_struct.game_time >> HEALTH_RESTORE_PRECISION) & HEALTH_RESTORE_MASK;
 
@@ -733,7 +718,6 @@ void do_stuff_every_second() {
             char i;
             ObjSpecID osid;
             ObjID new_id, shrine_obj = OBJ_NULL;
-            extern uchar *shodan_bitmask;
 
             for (i = 0; i < NUM_CS_EFFECTS; i++)
                 if ((cspace_effect_times[i] != 0) && (cspace_effect_times[i] <= player_struct.game_time)) {

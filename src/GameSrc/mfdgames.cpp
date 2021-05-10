@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "2dres.h"
 #include "faketime.h"
+#include "fullscrn.h"
 #include "player.h"
 #include "newmfd.h"
 #include "mfdint.h"
@@ -59,7 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 
 #ifdef LOST_TREASURES_OF_MFD_GAMES
-#include "minimax.h"
 #include "limits.h"
 #endif
 
@@ -71,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // but note it's not managed correctly across save/restore etc.
 //   Hey, this used to be 1024!
 #define HIDEOUS_GAME_STORAGE 2048
-unsigned char hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
+uchar hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
 
 // stuff to check magic cookie in secret game stuff
 #define COOKIE (*((ulong *)hideous_secret_game_storage))
@@ -83,12 +83,9 @@ unsigned char hideous_secret_game_storage[HIDEOUS_GAME_STORAGE + 4];
 
 LGRect GamesMenu;
 static long score_time = 0;
-extern uchar full_game_3d;
 
 static int games_time_diff;
 
-void Rect_gr_box(LGRect *r);
-void Rect_gr_rect(LGRect *r);
 
 #define STRING(x) get_temp_string(REF_STR_##x)
 
@@ -1095,9 +1092,6 @@ void games_run_bots(bots_state *bs) {
 void games_expose_bots(MFD *m, uchar control) {
     bots_state *bs = (bots_state *)GAME_DATA;
     uiEvent fake_event;
-#ifdef SVGA_SUPPORT
-    extern char convert_use_mode;
-#endif
 
     for (; games_time_diff >= PONG_CYCLE; games_time_diff -= PONG_CYCLE) {
         games_run_bots(bs);

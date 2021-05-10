@@ -48,4 +48,6 @@ void show_obj(ObjRefID oRef);
 
 short compute_3drep(Obj *cobj, ObjID cobjid, int obj_type);
 
+extern char curr_clut_table;
+
 #endif // __FAUXOBJD_H

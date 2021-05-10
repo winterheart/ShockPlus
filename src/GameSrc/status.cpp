@@ -39,10 +39,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "faketime.h"
 #include "fullscrn.h"
 #include "gamesys.h"
+#include "input.h"
 #include "physics.h"
 #include "objsim.h"
 #include "biotrax.h"
 #include "otrip.h"
+#include "setup.h"
 
 #include "curdat.h"
 
@@ -188,8 +190,6 @@ grs_bitmap bio_bitmap;
 uchar bio_bitmap_bits[BIO_BITMAP_SIZE];
 #endif
 
-extern LGPoint LastCursorPos;
-
 // Internal Prototype
 
 uchar under_bio(int x);
@@ -225,8 +225,6 @@ uchar under_bio(int x) {
 // going "under" something
 
 void ss_save_under_set_pixel(int color, short i, short j) {
-    extern LGPoint LastCursorPos;
-
     if (LastCursor != NULL) {
         if ((LastCursorPos.x + SaveUnder.bm.w > i) && (LastCursorPos.x <= i)) {
             if ((LastCursorPos.y + SaveUnder.bm.h > j) && (LastCursorPos.y <= j)) {
@@ -782,8 +780,6 @@ ulong time5 = 0;
 ulong time6 = 0;
 ulong time7 = 0;
 int bio_delta = 1;
-extern int diff_sum;
-extern int curr_ll;
 
 // this simulates the heart beat!
 int test_bio_var = 10;
@@ -797,7 +793,6 @@ fix sinX = 0;
 fix sinChi = 0;
 
 void gamescr_bio_func(void) {
-    extern int rad_absorb, bio_absorb;
     int i;
 
     clear_bio_tracks();
@@ -835,8 +830,6 @@ ulong heart_delay = 5;
 uchar flatline_heart;
 
 uchar chi_amp = STATUS_CHI_AMP;
-
-extern ubyte fatigue_threshold;
 
 #define FATIGUE_RANGE (CONTROL_MAX_VAL - SPRINT_CONTROL_THRESHOLD)
 #define ENERGY_ZERO 50

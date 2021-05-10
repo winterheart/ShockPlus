@@ -117,8 +117,6 @@ void star_free(void) { free(std_vec); }
 // wherever there is black.   Not dissimilar to Kevins
 // per tmap hack
 
-extern g3s_vector view_position;
-
 #ifdef STAR_SPEW
 extern int star_num_behind;
 extern int star_num_projected;

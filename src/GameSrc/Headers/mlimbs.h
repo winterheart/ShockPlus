@@ -95,6 +95,7 @@ struct mlimbs_playing_info {
 };
 
 extern struct mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1];
+extern struct mlimbs_request_info default_request;
 
 extern char mlimbs_status; // could make this one bitfield of status, on/off, enable/not, so on
 extern uchar mlimbs_on;
@@ -105,6 +106,9 @@ extern volatile uchar num_XMIDI_sequences;
 extern volatile ulong mlimbs_counter;
 extern volatile void (*mlimbs_AI)();
 extern volatile int mlimbs_master_slot;
+
+extern volatile bool mlimbs_update_requests;
+
 
 /* Function prototypes */
 int mlimbs_init(void);

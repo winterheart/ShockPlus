@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 
 #include "player.h"
+#include "audiolog.h"
 #include "gamestrn.h"
 #include "objapp.h"
 #include "objects.h"
@@ -41,9 +42,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hotkey.h"
 #include "olhint.h"
 #include "faketime.h"
+#include "frsetup.h"
 #include "objbit.h"
 #include "objuse.h"
 #include "olhscan.h"
+#include "saveload.h"
 #include "doorparm.h"
 #include "render.h"
 #include "str.h"
@@ -117,8 +120,6 @@ uchar olh_candidate(ObjID obj) {
         break;
     case CLASS_BIGSTUFF:
         if (IS_SCREEN(obj)) {
-            extern char camera_map[NUM_HACK_CAMERAS];
-            extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
             ObjSpecID sid = objs[obj].specID;
             short v = objBigstuffs[sid].data2 & 0x7F;
             if ((v >= FIRST_CAMERA_TMAP) && (v < FIRST_CAMERA_TMAP + NUM_HACK_CAMERAS)) {
@@ -229,7 +230,6 @@ got_id:
 // ---------
 // EXTERNALS
 // ---------
-extern bool DoubleSize;
 
 //-----------------------------
 // olh_scan_objects()
@@ -405,7 +405,6 @@ void olh_do_cursor(short xl, short yl) {
 // draw olh hud.
 
 void olh_do_hudobjs(short xl, short yl) {
-    extern uchar saveload_static;
     if (global_fullmap->cyber || saveload_static)
         return;
     if (input_cursor_mode == INPUT_OBJECT_CURSOR)
@@ -443,8 +442,6 @@ short _olh_overlay_keys[] = {
 #define NUM_OVERLAY_KEYS (sizeof(_olh_overlay_keys) / sizeof(_olh_overlay_keys[0]))
 
 void olh_overlay(void) {
-    extern LGCursor globcursor;
-    extern char which_lang;
     uchar done = FALSE;
 
     status_bio_end();

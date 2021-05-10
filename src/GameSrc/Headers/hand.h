@@ -52,5 +52,6 @@ Ref get_handart(int *x_offset, int *y_offset, int *beam_x_offset, short mouse_x,
 void notify_draw_handart(void);
 void reset_handart_count(int wpn_num);
 
+extern ubyte handart_count;
 
 #endif // __HAND_H

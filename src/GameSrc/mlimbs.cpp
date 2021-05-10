@@ -43,7 +43,7 @@ volatile struct mlimbs_piece_info xseq_info[MAX_SEQUENCES];                    /
 struct mlimbs_request_info current_request[MLIMBS_MAX_SEQUENCES - 1]; // Request information
 volatile struct mlimbs_channel_info channel_info[MLIMBS_MAX_CHANNELS];         // MIDI channel information
 volatile struct mlimbs_playing_info userID[MLIMBS_MAX_SEQUENCES - 1];          // Sequence instance specific information
-volatile uchar mlimbs_update_requests = FALSE;
+volatile bool mlimbs_update_requests = FALSE;
 
 volatile uchar num_XMIDI_sequences = 0;
 volatile uchar num_master_measures;

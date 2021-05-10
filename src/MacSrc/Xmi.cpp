@@ -4,6 +4,7 @@
 #include "Xmi.h"
 #include "MusicDevice.h"
 #include "Prefs.h"
+#include "wrapper.h"
 
 unsigned int NumTracks;
 char ChannelThread[16]; // 16 device channels
@@ -510,7 +511,6 @@ int MyThread(void *arg) {
                         SDL_LockMutex(MyMutex);
                         if (MusicDev && MusicDev->isOpen) {
                             // scale new volume according to global music volume
-                            extern uchar curr_vol_lev; // 0-100
                             const int scaledVolume = ((int)p2 * (int)curr_vol_lev) / 100;
                             MusicDev->sendControllerChange(MusicDev, channel, p1, scaledVolume);
                         }
@@ -870,10 +870,10 @@ void GetOutputNameXMI(const unsigned int outputIndex, char *buffer, const unsign
     }
     SDL_UnlockMutex(MyMutex);
 }
+extern uchar curr_vol_lev; // 0-100
 
 void UpdateVolumeXMI(void) {
     // global volume has been changed
-    extern uchar curr_vol_lev; // 0-100
     INFO("UpdateVolumeXMI(): Global music volume change to %d percent", curr_vol_lev);
 
     // tell the music driver

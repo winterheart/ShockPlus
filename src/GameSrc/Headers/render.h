@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include "objects.h"
 #include "rect.h"
 
 // C Library Includes
@@ -43,6 +44,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Defines
 #define TM_SIZE_CNT 3
+
+#define MAX_CAMERAS_VISIBLE 2
+#define NUM_HACK_CAMERAS 8
+// hack cameras are "custom textures" 7c through 7f
+// (so, factoring in type, the low byte is fc to ff
+//#define FIRST_CAMERA_TMAP     (short)0x80 - NUM_HACK_CAMERAS
+#define FIRST_CAMERA_TMAP 0x78
 
 // Prototypes
 errtype render_run(void);
@@ -68,12 +76,14 @@ extern fix fr_lite_slope, fr_lite_yint;
 extern int fr_detail_master;
 extern int fr_pseudo_spheres;
 
-#define MAX_CAMERAS_VISIBLE 2
-#define NUM_HACK_CAMERAS 8
-// hack cameras are "custom textures" 7c through 7f
-// (so, factoring in type, the low byte is fc to ff
-//#define FIRST_CAMERA_TMAP     (short)0x80 - NUM_HACK_CAMERAS
-#define FIRST_CAMERA_TMAP 0x78
+extern grs_bitmap *static_bitmap;
+
+extern uchar hack_cameras_needed;
+extern uchar hack_takeover;
+extern grs_bitmap *hack_cam_bitmaps[MAX_CAMERAS_VISIBLE];
+extern char camera_map[NUM_HACK_CAMERAS];
+extern ObjID hack_cam_objs[NUM_HACK_CAMERAS];
+extern ObjID hack_cam_surrogates[NUM_HACK_CAMERAS];
 
 errtype init_hack_cameras(void);
 errtype shutdown_hack_cameras(void);

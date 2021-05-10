@@ -32,12 +32,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdext.h"
 #include "mfddims.h"
 #include "mfdgadg.h"
+#include "mfdgames.h"
 #include "mfdart.h"
 #include "tools.h"
 #include "cybstrng.h"
 #include "gamescr.h"
 #include "gamestrn.h"
 #include "objbit.h"
+#include "objuse.h"
 #include "citres.h"
 
 #include "objsim.h"
@@ -55,9 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ----------
 //  PROTOTYPES
 // ----------
-extern errtype accesspanel_trigger(ObjID id);
-errtype simple_load_res_bitmap_cursor(LGCursor *c, grs_bitmap *bmp, Ref rid);
-errtype load_res_bitmap(grs_bitmap *bmp, Ref rid, uchar alloc);
 
 int wirepos_score(wirePosPuzzle *wppz);
 void wirepos_setup_buttons(wirePosPuzzle *wppz);
@@ -100,10 +99,6 @@ void wacky_int_line(short x1, short y1, short x2, short y2);
 char *grid_help_string(gridFlowPuzzle *gfpz, char *buf, int siz);
 void id_clut_init(uchar *clut);
 
-// not so secret, is it?
-// the fact that we claim to know the size of this is criminal.
-extern uchar hideous_secret_game_storage[2052];
-
 #define HSGS             hideous_secret_game_storage
 #define SHADOW_PANEL_SIG (*((ulong *)HSGS))
 #define OUR_SIGNATURE    (((ulong)'G' << 24) | ((ulong)'r' << 16) | ((ulong)'i' << 8) | ((ulong)'d'))
@@ -124,8 +119,8 @@ int gpz_dk_colors[] = {0x7E, 0x63, 0x27, 0x56, GRAY_BASE + 13};
 LGCursor gridCursor;
 grs_bitmap gridCursorbm;
 #ifdef SVGA_SUPPORT
-uchar
-    gridCursorBits[1016]; // This should be enough, maybe... note wacky computation scaling 9x9 to apropos for 1024x768
+// This should be enough, maybe... note wacky computation scaling 9x9 to apropos for 1024x768
+uchar gridCursorBits[1016];
 #else
 uchar gridCursorBits[81]; // This should be enough
 #endif
@@ -1165,7 +1160,6 @@ uchar gpz_propogate_charge_n_check(gridFlowPuzzle *gfpz) {
     uchar flow;
     short r, c, src_r, src_c;
     gpz_state s;
-    extern errtype accesspanel_trigger(ObjID id);
 
     // uncharge whole grid
     gpz_uncharge_grid(gfpz);
@@ -1589,7 +1583,6 @@ void mfd_setup_gridpanel(ObjID id) {
 }
 
 uchar mfd_gridpanel_handler(MFD *m, uiEvent *ev) {
-    extern uchar mfd_gridpanel_handler(MFD *, uiEvent *);
     uiCursorStack *cs;
     gridFlowPuzzle *gfpz = (gridFlowPuzzle *)&player_struct.mfd_access_puzzles[0];
     int rr = gfpz->gfLayout.rows;

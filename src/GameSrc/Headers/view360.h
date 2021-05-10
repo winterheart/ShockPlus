@@ -55,3 +55,11 @@ int view360_fullscrn_draw_callback(void *, void *vbm, int x, int y, int flg);
 void view360_turnon(uchar visible, uchar real_start);
 void view360_turnoff(uchar visible, uchar real_stop);
 bool view360_check(void);
+
+// Unused, but useful?
+void shock_hflip_in_place(grs_bitmap *bm);
+
+extern uchar view360_message_obscured;
+extern uchar view360_render_on;
+extern short view360_last_update;
+extern uchar view360_is_rendering;

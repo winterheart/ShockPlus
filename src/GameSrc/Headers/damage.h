@@ -80,8 +80,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DAMAGE_STUN        7
 
 // attack_object flags
-#define NO_SHIELD_ABSORBTION 0x01 // should the player's shield not absorb damage
-                                  // default is to absorb
+#define NO_SHIELD_ABSORBTION 0x01 // should the player's shield not absorb damage, default is to absorb
 #define FLASH_BLOOD 0x02
 #define STUN_ATTACK 0x04
 
@@ -90,7 +89,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern short destroyed_obj_count;
 extern ObjID destroyed_ids[MAX_DESTROYED_OBJS];
 
-#define ADD_DESTROYED_OBJECT(X) (destroyed_ids[destroyed_obj_count++] = X)
+#define ADD_DESTROYED_OBJECT(X) (destroyed_ids[destroyed_obj_count++] = (X))
+
+extern uchar alternate_death;
+extern short fr_sfx_time;
+extern short fr_solidfr_time;
+extern short shield_absorb_perc;
 
 // is_obj_destroyed()
 // returns TRUE, if object with id, is scheduled for destruction
@@ -135,8 +139,6 @@ ubyte player_attack_object(ObjID target, int wpn_triple, int power_level, Combat
 // get an estimate of how damaged we are, with above numerical index
 int get_damage_estimate(ObjSpecID osid);
 
-void spew_object_specs(void);
-uchar test_object_specs(short keycode, ulong context, void *data);
 uchar damage_player(int damage, ubyte dtype, ubyte flags);
 uchar kill_player(void);
 void regenerate_player(void);

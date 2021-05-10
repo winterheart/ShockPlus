@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frscreen.h"
 #include "frflags.h"
 #include "frprotox.h"
-#include "FrUtils.h"
+#include "frutils.h"
 #include "gameloop.h"
 #include "gr2ss.h"
 #include "hotkey.h"
@@ -48,9 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "miscqvar.h"
 #include "newmfd.h"
 #include "objprop.h"
+#include "olhscan.h"
 #include "otrip.h"
 #include "rendtool.h"
-#include "screen.h"
+#include "game_screen.h"
 #include "sideicon.h"
 #include "status.h"
 #include "tools.h"
@@ -59,7 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "wares.h"
 #include "wrapper.h"
 
-#include "game_screen.h" // was screen.h?
 #include "Shock.h"
 
 // -------
@@ -84,9 +84,6 @@ uiSlab fullscreen_slab;
 
 #define CFG_TIME_VAR "time_passes"
 
-extern void olh_svga_deal(void);
-void change_svga_cursors();
-
 LGRegion fullroot_region_data, fullview_region_data;
 LGRegion *fullroot_region = &fullroot_region_data; // DUH
 LGRegion *fullview_region;
@@ -98,8 +95,6 @@ uchar full_visible;
 short base_mouse_xr, base_mouse_yr, base_mouse_thresh;
 
 errtype fullscreen_init(void) {
-    extern LGRect fscrn_rect;
-
     generic_reg_init(TRUE, fullroot_region, NULL, &fullscreen_slab, main_kb_callback, NULL);
 
     // Full-screen 3d view region
@@ -131,9 +126,6 @@ errtype fullscreen_init(void) {
 
 // Draw all relevant overlays
 errtype fullscreen_overlay() {
-    extern char last_message[128];
-    extern uchar game_paused;
-
     if (!global_fullmap->cyber) {
         mfd_draw_button_panel(MFD_RIGHT);
         mfd_draw_button_panel(MFD_LEFT);
@@ -158,13 +150,9 @@ errtype fullscreen_overlay() {
 }
 
 // Set all appropriate things to convert us to full screen mode
-
 void change_svga_cursors() {
     ObjID old_obj;
 
-    extern int last_side_icon;
-    extern int last_invent_cnum;
-    extern int last_mfd_cnum[NUM_MFDS];
     short temp;
 
     ss_set_hack_mode(2, &temp);
@@ -191,7 +179,6 @@ void change_svga_cursors() {
 }
 
 void change_svga_screen_mode() {
-    extern uchar redraw_paused;
 
     uchar cur_pal[768];
     uchar *s_table;
@@ -324,8 +311,6 @@ void change_svga_screen_mode() {
 }
 
 void fullscreen_start() {
-    extern LGRegion *pagebutton_region;
-    extern LGRegion *inventory_region;
 
     // Hey, we don't need to hide here because the mouse already gets hidden by fooscreen_exit
     //   uiHideMouse(NULL);
@@ -361,7 +346,6 @@ void fullscreen_start() {
 void fullscreen_exit() {
 #ifdef SVGA_SUPPORT
     uchar cur_pal[768];
-    extern grs_screen *cit_screen;
     uchar *s_table;
 #endif
     uiHideMouse(NULL);

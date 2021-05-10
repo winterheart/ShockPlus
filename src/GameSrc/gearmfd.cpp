@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "fullscrn.h"
 #include "mfdint.h"
 #include "mfdext.h"
 #include "mfddims.h"
@@ -43,7 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // -------
 // DEFINES
 // -------
-extern uchar full_game_3d;
 
 uchar gear_active(ObjID obj);
 

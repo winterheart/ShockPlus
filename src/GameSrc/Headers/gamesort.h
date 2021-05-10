@@ -16,6 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#ifndef GAMESORT_H
+#define GAMESORT_H
+
 void render_sort_start(void);
 void render_sorted_objs(void);
 void sort_show_obj(ObjRefID oRef);
+
+extern ObjID no_render_obj;
+
+#endif

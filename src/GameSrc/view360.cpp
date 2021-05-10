@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "cybmem.h"
 #include "frprotox.h"
 #include "frcamera.h"
 #include "frflags.h"
@@ -45,6 +46,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "colors.h"
 #include "fullscrn.h"
 #include "invpages.h"
+#include "newmfd.h"
+#include "render.h"
 #include "view360.h"
 #include "gr2ss.h"
 
@@ -54,8 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "str.h"
 
 #include "OpenGL.h"
-
-extern uchar dirty_inv_canvas;
 
 // -------
 // GLOBALS
@@ -118,12 +119,21 @@ void view360_restore_inventory() {
     ACTIVE[MID_CONTEXT] = FALSE;
 }
 
-// what/where are these???
-extern grs_canvas _offscreen_mfd, _fullscreen_mfd, inv_view360_canvas;
-
 static uchar rendered_inv_fullscrn = FALSE;
 
-extern void shock_hflip_in_place(grs_bitmap *bm);
+void shock_hflip_in_place(grs_bitmap *bm) {
+    grs_canvas big_canvas;
+    grs_canvas bm_canvas;
+    gr_init_canvas(&big_canvas, big_buffer, BMT_FLAT8, bm->w, bm->h);
+    gr_init_canvas(&bm_canvas, bm->bits, BMT_FLAT8, bm->w, bm->h);
+    gr_push_canvas(&big_canvas);
+    gr_hflip_bitmap(bm, 0, 0);
+    gr_pop_canvas();
+    gr_push_canvas(&bm_canvas);
+    ss_bitmap(&big_canvas.bm, 0, 0);
+    gr_pop_canvas();
+}
+
 
 int view360_fullscrn_draw_callback(void *v, void *vbm, int x, int y, int flg) {
     // KLC   shock_hflip_in_place((grs_bitmap *)vbm);
@@ -145,7 +155,7 @@ void view360_init(void) {
     uchar *canv;
     short x, y, w, h;
 
-    canv = _offscreen_mfd.bm.bits;
+    canv = offscreen_mfd.bm.bits;
     x = MFD_VIEW_LFTX;
     y = MFD_VIEW_Y;
     w = MFD_VIEW_WID;
@@ -172,7 +182,7 @@ void view360_init(void) {
 #endif
     view360_contexts[RIGHT_CONTEXT] =
         fr_place_view(FR_NEWVIEW, FR_DEFCAM, canv, VIEW360_BASEFR | FR_CURVIEW_RGHT, 0, 0, x, y, w, h);
-    canv = _fullscreen_mfd.bm.bits;
+    canv = fullscreen_mfd.bm.bits;
     c = view360_fullscreen_contexts[RIGHT_CONTEXT] =
         fr_place_view(FR_NEWVIEW, FR_DEFCAM, canv, VIEW360_BASEFR | FR_CURVIEW_RGHT, 0, 0, x, y, w, h);
     fr_set_callbacks(c, view360_fullscrn_draw_callback, NULL, NULL);
@@ -336,7 +346,6 @@ void view360_turnoff(uchar visible, uchar real_stop) {
 }
 
 bool view360_check() {
-    extern uchar hack_takeover;
     if (hack_takeover)
         return false;
     return true;

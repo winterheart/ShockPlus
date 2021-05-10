@@ -205,7 +205,7 @@ set(GAME_SRC
 	src/GameSrc/frtables.cpp
 	src/GameSrc/frterr.cpp
 	src/GameSrc/frutil.cpp
-	src/GameSrc/FrUtils.cpp
+	src/GameSrc/frutils.cpp
 	src/GameSrc/fullamap.cpp
 	src/GameSrc/fullscrn.cpp
 	src/GameSrc/gameloop.cpp
@@ -219,7 +219,6 @@ set(GAME_SRC
 	src/GameSrc/gr2ss.cpp
 	src/GameSrc/grenades.cpp
 	src/GameSrc/hand.cpp
-	src/GameSrc/hflip.cpp
 	src/GameSrc/hkeyfunc.cpp
 	src/GameSrc/hud.cpp
 	src/GameSrc/hudobj.cpp
@@ -258,7 +257,7 @@ set(GAME_SRC
 	src/GameSrc/rendtool.cpp
 	src/GameSrc/saveload.cpp
 	src/GameSrc/schedule.cpp
-	src/GameSrc/screen.cpp
+	src/GameSrc/game_screen.cpp
 	src/GameSrc/setup.cpp
 	src/GameSrc/shodan.cpp
 	src/GameSrc/sideicon.cpp

@@ -55,6 +55,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 typedef struct MOVE_KEYBIND_STRUCT {int code, move;} MOVE_KEYBIND;
 
+extern MOVE_KEYBIND MoveKeybinds[MAX_MOVE_KEYBINDS + 1];
+extern MOVE_KEYBIND MoveCyberKeybinds[MAX_MOVE_KEYBINDS + 1];
+
 enum
 {
   M_RUNFORWARD,
@@ -89,6 +92,7 @@ enum
   NUM_MOVES
 };
 
+void init_motion_polling(void);
 uchar motion_keycheck_handler(uiEvent *ev, LGRegion *r, intptr_t data);
 void setup_motion_polling(void);
 void process_motion_keys(void);

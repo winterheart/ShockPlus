@@ -37,6 +37,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "damage.h"
 #include "diffq.h"
 #include "combat.h"
+#include "effect.h"
+#include "gamesys.h"
 #include "grenades.h"
 #include "musicai.h"
 #include "otrip.h"
@@ -46,8 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tilename.h"
 #include "safeedms.h"
 #include "treasure.h"
+#include "trigger.h"
 #include "fullscrn.h"
 #include "sfxlist.h"
+#include "weapons.h"
 
 #include "ice.h"
 #include "cyber.h"
@@ -76,8 +80,6 @@ ObjLoc last_known_loc;
 #define AI_HEAD_HIT_CHANCE 0x40
 void ai_find_player(ObjID id) {
     State st;
-    extern void state_to_objloc(State * s, ObjLoc * l);
-    extern void get_phys_state(int ph, State *new_state, ObjID id);
 
     if (global_fullmap->cyber)
         last_known_loc = objs[PLAYER_OBJ].loc;
@@ -185,7 +187,6 @@ errtype apply_EDMS_controls(ObjSpecID osid) {
 #define ANGER_RADIUS 3
 
 void ai_critter_seen(void) {
-    extern int mai_combat_length;
     mlimbs_combat = player_struct.game_time + mai_combat_length;
 }
 
@@ -209,8 +210,6 @@ errtype ai_critter_hit(ObjSpecID osid, short damage, uchar tranq, uchar stun) {
     oid = objCritters[osid].id;
     switch (ID2TRIP(oid)) {
     case ROBOBABE_TRIPLE: {
-        extern uchar *shodan_bitmask;
-        extern void shodan_phase_in(uchar * bitmask, short x, short y, short w, short h, short num, uchar dir);
         shodan_phase_in(shodan_bitmask, 0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT, damage << 4, FALSE);
     } break;
     }
@@ -295,8 +294,6 @@ errtype ai_critter_hit(ObjSpecID osid, short damage, uchar tranq, uchar stun) {
 errtype ai_autobomb_explode(ObjID id, ObjSpecID osid);
 
 errtype ai_critter_die(ObjSpecID osid) {
-    extern ObjID damage_sound_id;
-    extern char damage_sound_fx;
     ObjID id = objCritters[osid].id;
 
     if (ID2TRIP(id) == AUTOBOMB_TRIPLE)
@@ -557,7 +554,6 @@ errtype do_random_loot(ObjID corpse) {
 errtype ai_critter_really_dead(ObjSpecID osid) {
     int corpse_trip;
     char f;
-    extern errtype obj_floor_func(ObjID id);
 
     corpse_trip = CritterProps[CPNUM(objCritters[osid].id)].corpse;
     if (corpse_trip != 0) {
@@ -604,7 +600,6 @@ void ai_misses(ObjSpecID osid) {
 errtype ai_autobomb_explode(ObjID id, ObjSpecID osid) {
     CritterAttack ca;
     ExplosionData edata;
-    extern void critter_light_world(ObjID id);
 
     ca = CritterProps[CPNUM(id)].attacks[0];
 
@@ -715,7 +710,6 @@ errtype ai_attack_player(ObjSpecID osid, char a) {
 #define SLOW_PROJ_RAY_MASS (fix_make(0, 0x1000))
 #define SLOW_PROJ_RAY_SIZE (fix_make(0, 0x1800))
 #define SLOW_PROJ_RAY_RANGE (fix_make(20, 0))
-extern void get_phys_state(int ph, State *new_state, ObjID id);
 
 errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc, ObjLoc target_loc, uchar a,
                         int duration) {
@@ -728,7 +722,6 @@ errtype ai_fire_special(ObjID src, ObjID target, int proj_triple, ObjLoc src_loc
     ubyte head;
     State new_state;
     Robot da_robot;
-    extern void activate_grenade(ObjSpecID osid);
 
     if (!global_fullmap->cyber) {
         // let's attack only if we think we're going to hit our target

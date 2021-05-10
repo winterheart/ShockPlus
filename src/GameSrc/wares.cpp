@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hud.h"
 #include "player.h"
 #include "email.h"
+#include "gameobj.h"
 #include "gamerend.h"
 #include "gamesys.h"
 #include "mfdgames.h"
@@ -39,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamestrn.h"
 #include "textmaps.h"
 #include "frparams.h"
-#include "FrUtils.h"
+#include "frutils.h"
 #include "objsim.h"
 #include "otrip.h"
 #include "mainloop.h"
@@ -59,6 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "softdef.h"
 #include "cyber.h"
 #include "damage.h"
+#include "wares.h"
 
 //----------------
 //  Internal Prototypes
@@ -70,10 +72,6 @@ bool check_game(void);
 // -------
 
 // forward decls for arrays at end of file
-extern WARE HardWare[NUM_HARDWAREZ];
-extern WARE Combat_SoftWare[NUM_COMBAT_SOFTS];
-extern WARE Defense_SoftWare[NUM_DEFENSE_SOFTS];
-extern WARE Misc_SoftWare[NUM_MISC_SOFTS];
 
 #define MAX_VERSIONS 5
 extern short energy_cost_vec[NUM_HARDWAREZ][MAX_VERSIONS];
@@ -228,7 +226,6 @@ void use_ware(int waretype, int num) {
         //      else                                      invtype = MFD_INV_SOFT_MISC;
     }
     if (ware_sfx != SFX_NONE) {
-        extern char secret_global_pan;
         int ci_idx = wares[num].sideicon;
         // secret_global_pan=(ci_idx==SI_NONE)?SND_DEF_PAN:(ci_idx<5)?5:122;
         hnd = play_digi_fx(ware_sfx, 1);
@@ -453,7 +450,6 @@ void bioware_effect(void) { mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, FAL
 void infrared_turnon(uchar visible, uchar real_start);
 void infrared_turnoff(uchar visible, uchar real_start);
 
-extern char curr_clut_table;
 // ---------------------------------------------------------------------------
 // infrared_turnon()
 //
@@ -532,8 +528,6 @@ struct _lampspec {
 // old lowest value (old 0)
 //   {  0,8,4,0,-2*FIX_UNIT,8*FIX_UNIT},
 // is level 3 above ever used?
-
-extern uchar muzzle_fire_light;
 
 void lamp_set_vals(void) { lamp_set_vals_with_offset(0); }
 
@@ -767,7 +761,6 @@ void activate_jumpjets(fix *xcntl, fix *ycntl, fix *zcntl) {
 //-----------------------
 void fullscreen_turnon(uchar visible, uchar real_start);
 void fullscreen_turnoff(uchar visible, uchar real_start);
-extern bool DoubleSize;
 
 void fullscreen_turnon(uchar visible, uchar real_s) {
     if (visible) {

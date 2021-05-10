@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // System Library Includes
 #include "event.h"
-#include "frtypesx.h"
+#include "frprotox.h"
 
 // Master Game Includes
 
@@ -77,7 +77,14 @@ void generic_reg_init(uchar create_reg, LGRegion *reg, LGRect *rct, uiSlab *slb,
 extern uchar *default_font_buf;
 extern LGRegion *root_region, *mainview_region, *inventory_region_game, *status_region;
 extern LGRegion *pagebutton_region_game;
-extern LGCursor globcursor, wait_cursor, fire_cursor;
+extern LGCursor globcursor;
+extern LGCursor wait_cursor;
+extern LGCursor fire_cursor;
+extern LGCursor vmail_cursor;
 extern frc *normal_game_fr_context;
+
+extern uiSlab main_slab;
+extern LGRect fscrn_rect;
+extern LGRect mainview_rect;
 
 #endif // __GAMESCREEN_H

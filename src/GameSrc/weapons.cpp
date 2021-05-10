@@ -34,13 +34,14 @@ extern "C" {
 
 #include "weapons.h"
 #include "damage.h"
+#include "effect.h"
 #include "hand.h"
 #include "hudobj.h"
+#include "input.h"
 #include "objclass.h"
 #include "objprop.h"
 #include "objwpn.h"
 #include "player.h"
-#include "sdl_events.h"
 #include "gameloop.h"
 #include "objsim.h"
 #include "gamestrn.h"
@@ -51,8 +52,8 @@ extern "C" {
 #include "combat.h"
 #include "sfxlist.h"
 #include "tools.h"
-#include "effect.h"
 #include "schedule.h"
+#include "status.h"
 #include "otrip.h"
 #include "mainloop.h"
 #include "game_screen.h"
@@ -64,14 +65,13 @@ extern "C" {
 #include "colors.h"
 #include "hud.h"
 #include "cybstrng.h"
+#include "frsetup.h"
 #include "frtypes.h"
 #include "doorparm.h"
 #include "gr2ss.h"
 
 #define MIN_ENERGY_WPN_THRESHOLD 20
 #define FATIGUE_ACCURACY_RATIO 400
-
-extern bool DoubleSize;
 
 // char ammo_type_letters[] = "stnths mphssb  ";
 
@@ -251,7 +251,6 @@ ObjID do_wall_hit(Combat_Pt *hit_point, Combat_Pt pt, int triple, short mouse_x,
             // set the special beam weapon effect voodoo
             if (efft && (TRIP2CL(triple) == CLASS_GUN)) {
                 if (TRIP2SC(triple) == GUN_SUBCLASS_BEAM) {
-                    extern ObjID beam_effect_id;
                     beam_effect_id = efft;
                     hudobj_set_id(beam_effect_id, TRUE);
                 }
@@ -300,7 +299,6 @@ uchar player_fire_handtohand(LGPoint *p, ubyte slot, ObjID *what_hit, int gun_tr
 
     ObjID target;
     LGPoint hand_pos;
-    extern ubyte handart_count;
     byte i;
     uchar dead;
     uchar hit_wall = FALSE;
@@ -651,8 +649,6 @@ uchar player_fire_slow_projectile_weapon(LGPoint *pos, ubyte slot, int gun_tripl
 // note that this actually takes in the relevant low-level data, so that
 // the source of the shot need not be a Weapon(tm) but can be a software, etc... -- Rob
 
-extern ubyte old_head, old_pitch;
-
 uchar player_fire_slow_projectile(int proj_triple, int fire_triple, fix proj_mass, fix fire_spd, ubyte proj_speed,
                                   LGPoint *pos) {
     Combat_Pt vector;
@@ -877,8 +873,6 @@ uchar fire_player_weapon(LGPoint *pos, LGRegion *r, uchar pull) {
     LGPoint cp;
     LGRect rc;
     ObjID hit_obj = OBJ_NULL;
-    extern uchar game_paused; // prevent firing when time ain't running
-    extern uchar time_passes;
 
     if (player_struct.dead || game_paused || !time_passes)
         return (FALSE);
@@ -914,12 +908,8 @@ uchar fire_player_weapon(LGPoint *pos, LGRegion *r, uchar pull) {
     //  if we are out of ammo for an automatic weapon - snap back to normal cursor
     if ((!pull && (player_struct.weapons[w].type != GUN_SUBCLASS_AUTO)) ||
         ((player_struct.weapons[w].type == GUN_SUBCLASS_AUTO) && !player_struct.weapons[w].ammo)) {
-        extern uchar fire_slam;
 
         if (fire_slam && (player_struct.last_fire + CURSOR_WAIT < player_struct.game_time)) {
-            extern uiSlab fullscreen_slab;
-            extern uiSlab main_slab;
-
             if (full_game_3d)
                 uiPopSlabCursor(&fullscreen_slab);
             else
@@ -1269,7 +1259,6 @@ void randomize_cursor_pos(LGPoint *cpos, LGRegion *reg, ubyte p)
 #define ENERGY_VAR_RATE 50
 
 ubyte drain_energy(ubyte e) {
-    extern int bio_energy_var;
     ubyte ret;
 
     if (e > player_struct.energy) {
@@ -1305,18 +1294,16 @@ int current_weapon_trip() {
     // CHANGING CURSOR STUFF
     //
 
-#define NUM_MOTION_CURSORS 15
 short cursor_color_offset = RED_BASE + 4;
-extern grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 
-ubyte weapon_colors[NUM_SC_GUN] = {RED_BASE + 4,        // pistol
-                                   GREEN_BASE,          // auto
-                                   0x4A,                // special - yellow
-                                   0x40,                // hand-to-hand - brown
-                                   BLUE_BASE + 4,       // beam
-                                   TURQUOISE_BASE + 3}; // beam proj
-
-extern ubyte handart_count;
+ubyte weapon_colors[NUM_SC_GUN] = {
+    RED_BASE + 4,        // pistol
+    GREEN_BASE,          // auto
+    0x4A,                // special - yellow
+    0x40,                // hand-to-hand - brown
+    BLUE_BASE + 4,       // beam
+    TURQUOISE_BASE + 3   // beam proj
+};
 
 // -----------------------------------------------------------------------------
 // SetMotionCursorsColorForWeapon()

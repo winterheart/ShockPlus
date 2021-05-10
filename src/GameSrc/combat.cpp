@@ -26,10 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "3dinterp.h"
 #include "combat.h"
+#include "cone.h"
 #include "objsim.h"
 #include "objprop.h"
-#include "tools.h"
-#include "effect.h"
 #include "otrip.h"
 
 #include "mainloop.h"
@@ -256,8 +255,6 @@ ObjID ray_cast_objects(ObjID src, ObjID dest, fix bullet_mass, fix bullet_size, 
 
     return (simple_ray_caster(&ray));
 }
-
-extern g3s_vector main_view_vectors[];
 
 // ----------------------------------------------
 // find_fire_vector()

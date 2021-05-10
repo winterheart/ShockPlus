@@ -32,6 +32,7 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include <string.h>
 #include <limits.h>
 
+#include "Prefs.h"
 #include "Shock.h"
 #include "ShockBitmap.h"
 #include "InitMac.h"
@@ -48,7 +49,10 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "faketime.h"
 #include "fatigue.h"
 #include "frflags.h" // until we do the right thing re: static
-#include "FrUtils.h"
+#include "frintern.h"
+#include "frsetup.h"
+#include "frtypes.h"
+#include "frutils.h"
 #include "fullscrn.h"
 #include "gamesys.h"
 #include "gamescr.h"
@@ -56,6 +60,8 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "gr2ss.h"
 #include "grenades.h"
 #include "hotkey.h"
+#include "hud.h"
+#include "input.h"
 #include "invent.h"
 #include "leanmetr.h"
 #include "MacTune.h"
@@ -70,9 +76,11 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "otrip.h"
 #include "physics.h"
 #include "player.h"
+#include "render.h"
 #include "rendtool.h"
 #include "game_screen.h"
 #include "svgacurs.h"
+#include "textmaps.h"
 #include "tools.h"
 #include "weapons.h"
 #include "mouselook.h"
@@ -80,16 +88,9 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 
 #define CHECK_FOR_A_PACKET
 
-#ifdef SVGA_SUPPORT
-extern frc *svga_render_context;
-#endif
-
 // -------
 // DEFINES
 // -------
-
-extern bool DoubleSize;
-
 
 ubyte use_distance_mod = 0;
 ubyte pickup_distance_mod = 0;
@@ -104,12 +105,6 @@ ubyte fatigue_threshold = 5;
 #define MOTION_FOOTPLANT_SCANCODE 0x2A
 
 #define AIM_SCREEN_MARGIN 5
-#define sqr(x) ((x) * (x))
-
-extern LGRect target_screen_rect;
-
-extern uiSlab fullscreen_slab;
-extern uiSlab main_slab;
 
 static ushort mouse_constrain_bits = 0;
 
@@ -138,7 +133,6 @@ Ref motion_cursor_ids[] = {
     REF_IMG_bmUpLeftCursor,   REF_IMG_bmSprintCursor, REF_IMG_bmUpRightCursor,
 };
 
-#define NUM_MOTION_CURSORS 15
 #define NUM_CYBER_CURSORS 9
 #define CYBER_CURSOR_BASE REF_IMG_bmCyberUpLeftCursor
 
@@ -152,9 +146,6 @@ int throw_oomph = 5;
 
 fix inpJoystickSens = FIX_UNIT;
 
-// checking for game paused
-extern uchar game_paused;
-
 LGPoint use_cursor_pos;
 
 #ifdef RCACHE_TEST
@@ -163,11 +154,7 @@ extern uchar res_cache_usage_func(ushort keycode, uint32_t context, intptr_t dat
 // extern uchar texture_annihilate_func(ushort keycode, uint32_t context, intptrr_t data);
 
 // and joysticks, heck, why be efficient
-uchar joystick_mouse_emul = FALSE;
 uchar joystick_count = 0;
-uchar recenter_joystick(ushort keycode, uint32_t context, intptr_t data);
-
-uchar change_gamma(ushort keycode, uint32_t context, intptr_t data);
 
 // -------------
 //  PROTOTYPES
@@ -179,7 +166,6 @@ uchar eye_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
 
 int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move, int *lastsect);
 void view3d_dclick(LGPoint pos, frc *fr, bool shifted);
-void look_at_object(ObjID id);
 uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data);
 void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data);
 uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data);
@@ -347,7 +333,6 @@ extern uchar change_clipper(ushort keycode, uint32_t context, intptr_t data);
 
 void reload_motion_cursors(uchar cyber)
 {
-  extern short cursor_color_offset;
 
   for (int i = 0; i < NUM_MOTION_CURSORS; i++)
   {
@@ -371,7 +356,6 @@ void reload_motion_cursors(uchar cyber)
     // slam the cursor color back to it's childhood colors
     cursor_color_offset = RED_BASE + 4;
 
-    void SetMotionCursorsColorForActiveWeapon(void);
     SetMotionCursorsColorForActiveWeapon();
   }
   else
@@ -397,10 +381,6 @@ void alloc_cursor_bitmaps(void)
   //was a good example of what were they thinking?
 }
 
-#include "frtypes.h"
-//extern bool gPlayingGame;
-extern bool DoubleSize;
-extern bool SkipLines;
 bool gShowFrameCounter = false;
 bool gShowMusicGlobals = false;
 
@@ -661,7 +641,6 @@ void SetMotionCursorForMouseXY(void)
   else
     reg = mainview_region;
 
-  extern int mlook_enabled;
 
   if (mlook_enabled)
     cnum = VIEW_HCENTER | VIEW_VCENTER;
@@ -794,7 +773,6 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
     }
 
     // If mouse look is enabled, just use the centered cursor
-    extern int mlook_enabled;
     if (mlook_enabled) {
         cnum = VIEW_HCENTER | VIEW_VCENTER;
 
@@ -803,7 +781,6 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
     }
 
     if (*lastsect != cnum) {
-        extern LGRegion *fullview_region;
         LGCursor *c = &motion_cursors[cnum];
         //      Warning(("hey, cursor num = %d!\n",cnum));
 
@@ -827,8 +804,6 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
 
 // Not a directly-installed mouse handler, called from view3d_mouse_handler
 void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
-    extern LGCursor fire_cursor;
-    extern uchar hack_takeover;
     LGPoint aimpos = ev->pos;
 
     if (DoubleSize)                        // If double sizing, convert the y to 640x480, then
@@ -941,11 +916,9 @@ void use_object_in_3d(ObjID obj, bool shifted) {
     uchar success = FALSE;
     ObjID telerod = OBJ_NULL;
     uchar showname = FALSE;
-    extern ObjID physics_handle_id[MAX_OBJ];
     int mode = USE_MODE(obj);
     char buf[80];
     Ref usemode = ID_NULL;
-    extern short loved_textures[];
 
     if (global_fullmap->cyber) {
         if (ID2TRIP(obj) != INFONODE_TRIPLE) {
@@ -1003,7 +976,6 @@ void use_object_in_3d(ObjID obj, bool shifted) {
     switch (mode) {
     case PICKUP_USE_MODE: {
         ObjLocState del_loc_state;
-        void grenade_contact(ObjID id, int severity);
 
         if (!check_object_dist(obj, PLAYER_OBJ, MAX_PICKUP_DIST)) {
             string_message_info(REF_STR_PickupTooFar);
@@ -1044,7 +1016,6 @@ void use_object_in_3d(ObjID obj, bool shifted) {
             break;
         }
 
-        extern bool ObjectUseShifted; //see objuse.c
         ObjectUseShifted = shifted;
         if (!object_use(obj, FALSE, object_on_cursor)) {
             if (objs[obj].obclass != CLASS_DOOR)
@@ -1085,7 +1056,6 @@ char *get_object_lookname(ObjID id, char use_string[], int sz) {
     int ref = -1;
     int l;
     int usetrip = ID2TRIP(id);
-    extern short loved_textures[];
 
     strcpy(use_string, "");
 
@@ -1224,12 +1194,8 @@ void look_at_object(ObjID id) {
 
 // Not a directly-installed mouse handler, called from view3d_mouse_handler
 void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
-    extern short loved_textures[];
-    extern uchar hack_takeover;
     short obj_trans, obj;
     frc *use_frc;
-
-    extern int _fr_glob_flags;
 
     if (hack_takeover)
         return;
@@ -1271,14 +1237,13 @@ void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
 
 // -------------------------------------------------------------------------------
 // view3d_mouse_handler is the actual installed mouse handler, dispatching to the above functions
-uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
+uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     static uchar got_focus = FALSE;
     uiMouseData *md = &ev->mouse_data;
-    view3d_data *data = (view3d_data*)v;
+    view3d_data *view3d = (view3d_data*)data;
     uchar retval = TRUE;
     LGPoint pt;
     LGPoint evp = ev->pos;
-    extern int _fr_glob_flags;
 
     pt = evp;
 
@@ -1292,14 +1257,14 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
     pt.y += r->r->ul.y - r->abs_y;
 
     if (!RECT_TEST_PT(r->r, pt)) {
-        data->ldown = FALSE;
+        view3d->ldown = FALSE;
         physics_set_player_controls(MOUSE_CONTROL_BANK, 0, 0, CONTROL_NO_CHANGE, 0, CONTROL_NO_CHANGE,
                                     CONTROL_NO_CHANGE);
         return (FALSE);
     }
     if (md->action & MOUSE_LDOWN) {
-        data->ldown = TRUE;
-        data->lastleft = evp;
+        view3d->ldown = TRUE;
+        view3d->lastleft = evp;
         if (full_game_3d && !got_focus) {
             if (uiGrabFocus(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE) == OK)
                 got_focus = TRUE;
@@ -1308,19 +1273,19 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
         //      view3d_constrain_mouse(r,LBUTTON_CONSTRAIN_BIT);
     }
     if (md->action & MOUSE_LUP || !(md->buttons & (1 << MOUSE_LBUTTON))) {
-        data->ldown = FALSE;
+        view3d->ldown = FALSE;
         if (full_game_3d && got_focus) {
             if (uiReleaseFocus(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE) == OK)
                 got_focus = FALSE;
         }
         //      view3d_unconstrain_mouse(LBUTTON_CONSTRAIN_BIT);
     }
-    if (md->action & MOUSE_LUP && abs(evp.y - data->lastleft.y) < uiDoubleClickTolerance &&
-        abs(evp.x - data->lastleft.x) < uiDoubleClickTolerance) {
+    if (md->action & MOUSE_LUP && abs(evp.y - view3d->lastleft.y) < uiDoubleClickTolerance &&
+        abs(evp.x - view3d->lastleft.x) < uiDoubleClickTolerance) {
         //make shift+leftclick act as double-leftclick with alternate effects
         if (md->modifiers & 1) { //shifted click; see sdl_events.c
-            view3d_dclick(evp, data->fr, TRUE); //TRUE indicates shifted
-            data->lastleft = MakePoint(-100, -100);
+            view3d_dclick(evp, view3d->fr, TRUE); //TRUE indicates shifted
+            view3d->lastleft = MakePoint(-100, -100);
         }
         else {
             ObjID id;
@@ -1337,7 +1302,6 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
             if ((short)id > 0) {
                 look_at_object(id);
             } else if ((short)id < 0) {
-                extern short loved_textures[];
                 int tnum = loved_textures[~id];
                 if (global_fullmap->cyber)
                     string_message_info(REF_STR_CybWall);
@@ -1349,11 +1313,11 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
                         string_message_info(REF_STR_InkyBlack);
                 }
             }
-            data->lastleft.x = -255;
+            view3d->lastleft.x = -255;
         }
     }
     if ((md->action & (MOUSE_RDOWN | MOUSE_RUP)) || (md->buttons & (1 << MOUSE_RBUTTON)))
-        view3d_rightbutton_handler(ev, r, data);
+        view3d_rightbutton_handler(ev, r, view3d);
 
     /* KLC - done in another place now.
        else
@@ -1376,8 +1340,8 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
 
     if (md->action & UI_MOUSE_LDOUBLE) {
         // Spew(DSRC_USER_I_Motion,("use this, bay-bee!\n"));
-        view3d_dclick(evp, data->fr, FALSE);
-        data->lastleft = MakePoint(-100, -100);
+        view3d_dclick(evp, view3d->fr, FALSE);
+        view3d->lastleft = MakePoint(-100, -100);
     }
 
     if (md->action & (MOUSE_WHEELUP | MOUSE_WHEELDN)) {
@@ -1387,8 +1351,8 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
     // data->ldown = TRUE;
 
     // Do mouse motion.
-    if (view3d_mouse_input(evp, r, data->ldown, &data->lastsect) != 0)
-        data->lastleft = MakePoint(-1, -1); // if the player is moving, not a down
+    if (view3d_mouse_input(evp, r, view3d->ldown, &view3d->lastsect) != 0)
+        view3d->lastleft = MakePoint(-1, -1); // if the player is moving, not a down
 
     return (retval);
 }
@@ -1396,8 +1360,6 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t v) {
 typedef struct _view3d_kdata {
     int maxctrl; // max control as affected by fatigue
 } view3d_kdata;
-
-extern int FireKeys[]; //see MacSrc/Prefs.c
 
 uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data)
 {

@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/21 17:38:46 $
  */
 
-#define __TEXTMAPS_SRC
 
 #include <string.h>
 
@@ -41,6 +40,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "OpenGL.h"
 
+short loved_textures[NUM_LOADED_TEXTURES];
+TextureProp textprops[NUM_LOADED_TEXTURES];
+AnimTextureData animtextures[NUM_ANIM_TEXTURE_GROUPS];
+uchar shading_table[256 * 16];
+uchar bw_shading_table[256 * 16];
+TextureProp *texture_properties;
 
 uchar textures_loaded = FALSE;
 
@@ -49,8 +54,6 @@ uchar textures_loaded = FALSE;
 Id tmap_ids[NUM_TEXTURE_SIZES] = {TEXTURE_128_ID, TEXTURE_64_ID, TEXTURE_32_ID, TEXTURE_16_ID};
 ushort tmap_sizes[NUM_TEXTURE_SIZES] = {128, 64, 32, 16};
 uchar all_textures = TRUE;
-
-extern uchar tmap_big_buffer[];
 
 // prototypes
 uchar set_animations(short start, short frames, uchar *anim_used);
@@ -79,7 +82,6 @@ uchar set_animations(short start, short frames, uchar *anim_used) {
 errtype load_small_texturemaps(void) {
     Id id = TEXTURE_SMALL_ID;
     char i = 0;
-    extern uchar obj_is_display(int triple);
     int d;
     char rv = 0;
     ObjSpecID osid;
@@ -128,7 +130,6 @@ errtype load_small_texturemaps(void) {
 // should really do dynamic creation of grs_bitmap *'s for the textures
 // but for now, we'll be lame
 
-extern uchar tmap_static_mem[];
 static uchar *tmap_dynamic_mem = NULL;
 
 #define get_tmap_128x128(i) ((uchar *)&tmap_dynamic_mem[i * (128 * 128)])

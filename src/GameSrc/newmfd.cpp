@@ -42,6 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdext.h"
 #include "mfdfunc.h"
 #include "mfddims.h"
+#include "mfdgump.h"
 #include "input.h"
 #include "player.h"
 #include "tools.h"
@@ -81,7 +82,7 @@ uchar Flash = TRUE; // State of blinking buttons
 LGCursor mfd_bttn_cursors[NUM_MFDS];
 grs_bitmap mfd_bttn_bitmaps[NUM_MFDS];
 
-grs_canvas _offscreen_mfd, _fullscreen_mfd;
+grs_canvas offscreen_mfd, fullscreen_mfd;
 
 #define mfdL mfd[MFD_LEFT]
 #define mfdR mfd[MFD_RIGHT]
@@ -289,9 +290,9 @@ void screen_init_mfd(uchar fullscrn) {
         memcpy(mfd_background.bits, (f + 1), f->bm.w * f->bm.h);
         RefUnlock(REF_IMG_bmBlankMFD);
 
-        gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
-        gr_init_canvas(&_fullscreen_mfd, mfd_background.bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
-        pmfd_canvas = &_offscreen_mfd;
+        gr_init_canvas(&offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
+        gr_init_canvas(&fullscreen_mfd, mfd_background.bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
+        pmfd_canvas = &offscreen_mfd;
         init_newmfd_button_cursors();
         mfd_init_funcs();
     }
@@ -301,8 +302,8 @@ void screen_init_mfd(uchar fullscrn) {
 #ifdef SVGA_SUPPORT
 errtype mfd_update_screen_mode() {
     if (convert_use_mode == 0) {
-        gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
-        gr_init_canvas(&_fullscreen_mfd, mfd_background.bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
+        gr_init_canvas(&offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
+        gr_init_canvas(&fullscreen_mfd, mfd_background.bits, BMT_FLAT8, MFD_VIEW_WID, MFD_VIEW_HGT);
     } else {
 
         int new_width = SCONV_X(MFD_VIEW_WID);
@@ -320,18 +321,18 @@ errtype mfd_update_screen_mode() {
         memcpy(mfd_background.bits, bm->bits, bm->w * bm->h);
         RefUnlock(REF_IMG_bmBlankMFD);
 
-        gr_init_canvas(&_offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, new_width, new_height);
-        gr_init_canvas(&_fullscreen_mfd, mfd_background.bits, BMT_FLAT8, new_width, new_height);
+        gr_init_canvas(&offscreen_mfd, mfd_canvas_bits, BMT_FLAT8, new_width, new_height);
+        gr_init_canvas(&fullscreen_mfd, mfd_background.bits, BMT_FLAT8, new_width, new_height);
     }
     return (OK);
 }
 
 errtype mfd_clear_all() {
     if (full_game_3d) {
-        gr_push_canvas(&_offscreen_mfd);
+        gr_push_canvas(&offscreen_mfd);
         gr_clear(0);
         gr_pop_canvas();
-        gr_push_canvas(&_fullscreen_mfd);
+        gr_push_canvas(&fullscreen_mfd);
         gr_clear(0);
         gr_pop_canvas();
     }
@@ -346,10 +347,10 @@ errtype mfd_clear_all() {
 
 void mfd_change_fullscreen(uchar on) {
     if (on) {
-        gr_push_canvas(&_fullscreen_mfd);
+        gr_push_canvas(&fullscreen_mfd);
         gr_clear(0);
         gr_pop_canvas();
-        gr_push_canvas(&_offscreen_mfd);
+        gr_push_canvas(&offscreen_mfd);
         gr_clear(0);
         gr_pop_canvas();
     } else {
@@ -357,7 +358,7 @@ void mfd_change_fullscreen(uchar on) {
         // put the background bitmap back
         grs_bitmap *bm = lock_bitmap_from_ref(REF_IMG_bmBlankMFD);
         RefUnlock(REF_IMG_bmBlankMFD);
-        memcpy(_fullscreen_mfd.bm.bits, bm->bits, bm->w * bm->h);
+        memcpy(fullscreen_mfd.bm.bits, bm->bits, bm->w * bm->h);
     }
 }
 
@@ -448,7 +449,6 @@ void mfd_notify_func(ubyte fnum, ubyte snum, uchar Grab, MFD_Status stat, uchar 
 
     player_struct.mfd_func_status[fnum] |= MFD_CHANGEBIT;
     if (Full) {
-        void mfd_default_mru(uchar func);
 #ifdef SVGA_SUPPORT
         uchar old_over = gr2ss_override;
         short temp;
@@ -562,9 +562,9 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, uchar OnOff) {
         if (full_game_3d) {
             if (!(full_visible & visible_mask(mfd_id))) {
                 if (mfd_id == MFD_LEFT)
-                    gr_push_canvas(&_offscreen_mfd);
+                    gr_push_canvas(&offscreen_mfd);
                 else
-                    gr_push_canvas(&_fullscreen_mfd);
+                    gr_push_canvas(&fullscreen_mfd);
                 gr_clear(0);
                 gr_pop_canvas();
             }
@@ -752,7 +752,6 @@ uchar mfd_object_cursor_handler(uiEvent *ev, LGRegion *reg, int which_mfd) {
         retval = TRUE;
     }
     if ((ev->subtype & (MOUSE_LUP | MOUSE_RUP)) && object_button_down) {
-        extern uchar gump_num_objs;
         uchar is_gump = mfd_get_active_func(which_mfd) == MFD_GUMP_FUNC && gump_num_objs != 0;
 
         object_button_down = FALSE;
@@ -805,7 +804,7 @@ uchar mfd_scan_opacity(int mfd_id, LGPoint epos) {
     uchar retval = FALSE;
     LGPoint pos = epos;
     short x, y;
-    grs_canvas *cv = ((int)mfd_id == MFD_RIGHT) ? &_fullscreen_mfd : &_offscreen_mfd;
+    grs_canvas *cv = ((int)mfd_id == MFD_RIGHT) ? &fullscreen_mfd : &offscreen_mfd;
 
     pos.x -= mfd[mfd_id].reg.abs_x;
     pos.y -= mfd[mfd_id].reg.abs_y;
@@ -1020,8 +1019,8 @@ void mfd_update() {
         // if they need constant update
 
 #ifndef BAD_BITS_BUG_FIXED
-    _fullscreen_mfd.bm.bits = mfd_background.bits;
-    _offscreen_mfd.bm.bits = mfd_canvas_bits;
+    fullscreen_mfd.bm.bits = mfd_background.bits;
+    offscreen_mfd.bm.bits = mfd_canvas_bits;
 #endif // BAD_BITS_BUG_FIXED
 
     // This code totally depends on our item func implementation.
@@ -1091,7 +1090,7 @@ uchar mfd_update_current_slot(ubyte mfd_id, ubyte status, ubyte num_steps) {
         // Okay, if we are in full screen mode, secretly switch the fine canvas
         // usually served in this restaurant with our own Folger's brand canvas
 
-        pmfd_canvas = (full_game_3d && mfd_id == MFD_RIGHT) ? &_fullscreen_mfd : &_offscreen_mfd;
+        pmfd_canvas = (full_game_3d && mfd_id == MFD_RIGHT) ? &fullscreen_mfd : &offscreen_mfd;
         if (full_game_3d && (control & MFD_EXPOSE_FULL)) {
             gr_push_canvas(pmfd_canvas);
             gr_clear(0);
@@ -1155,7 +1154,7 @@ void fullscreen_refresh_mfd(ubyte mfd_id) {
     uchar old_over = gr2ss_override;
 #endif
     if (visible) {
-        pmfd_canvas = (mfd_id == MFD_RIGHT) ? &_fullscreen_mfd : &_offscreen_mfd;
+        pmfd_canvas = (mfd_id == MFD_RIGHT) ? &fullscreen_mfd : &offscreen_mfd;
 
         r.ul = MakePoint(0, 0);
         r.lr = MakePoint(MFD_VIEW_WID, MFD_VIEW_HGT);

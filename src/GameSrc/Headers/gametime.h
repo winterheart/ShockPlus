@@ -74,5 +74,7 @@ void resume_game_time(void);
 
 // Globals
 extern int run_fatigue_rate;
+extern char reflex_remainder;
+extern uint32_t last_real_time;
 
 #endif // __GAMETIME_H

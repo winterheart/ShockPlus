@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mapflags.h"
 #include "frintern.h"
 #include "frtables.h"
+#include "frterr.h"
 #include "tilename.h"
 #include "frparams.h"
 #include "frflags.h"

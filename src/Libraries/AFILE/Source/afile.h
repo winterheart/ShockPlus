@@ -148,4 +148,8 @@ AfileType AfileLookupType(char *ext);
 int32_t AfileBitmapLength(Afile *paf);
 int32_t AfileAudioLength(Afile *paf);
 
+extern char EngSubtitle[256];
+extern char FrnSubtitle[256];
+extern char GerSubtitle[256];
+
 #endif

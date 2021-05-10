@@ -124,6 +124,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdlib.h> // I HATE THIS
 
+#include "3d.h"
 #include "frcamera.h"
 #include "fr3d.h"
 #include "frtypes.h"
@@ -131,10 +132,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frshipm.h"
 #include "frflags.h"
 #include "frparams.h"
+#include "frsetup.h"
 #include "player.h"
-#include "FrUtils.h"
+#include "frutils.h"
 #include "fullscrn.h"
 #include "star.h"
+#include "view360.h"
 #include "MODELS/d_f_face.h"
 #include "OpenGL.h"
 
@@ -749,7 +752,6 @@ int fr_start_view(void) {
 uchar smooth_double = FALSE;
 g3s_vector zvec = {0, 0, 0};
 
-extern uchar view360_is_rendering;
 
 int fr_send_view(void) {
     uchar snd_frm = TRUE;

@@ -137,5 +137,10 @@ void zoom_rect(LGRect *start, LGRect *end);
 void ZoomDrawProc(int erase);
 
 // Globals
+#ifdef SVGA_SUPPORT
+extern uchar shadow_scale;
+#endif
+
+extern char last_message[128];
 
 #endif // __TOOLS_H
