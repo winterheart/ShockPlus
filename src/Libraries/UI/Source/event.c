@@ -777,7 +777,7 @@ errtype uiPoll(void) {
         }
         if (!msdone) {
             ss_mouse_event mse;
-            errtype err = mouse_next(&mse);
+            err = mouse_next(&mse);
             /*if (poll_mouse_motion)
                while (mse.type == MOUSE_MOTION  && err == OK)
                {
@@ -790,6 +790,7 @@ errtype uiPoll(void) {
                 // note that the equality operator here means that motion-only
                 // events are MOUSE_MOVE, and others are MOUSE events.
                 out.type = (mse.type == MOUSE_MOTION) ? UI_EVENT_MOUSE_MOVE : UI_EVENT_MOUSE;
+                out.sdl_data = mse.event;
                 out.subtype = mse.type;
                 out.mouse_data.tstamp = mse.timestamp;
                 out.mouse_data.buttons = mse.buttons;

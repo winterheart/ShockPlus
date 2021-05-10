@@ -59,23 +59,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MOUSE_H
 #define MOUSE_H
 
+#include <SDL_events.h>
+
 #include "lg.h"
 #include "lg_error.h"
-#include <stdbool.h>
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct _mouse_event {
-    short x; // position
-    short y;
-    uint16_t type; // Event mask, bits defined below
-    uint32_t timestamp;
-    uchar buttons;
-    uchar modifiers; // Added for Mac version
-    char pad[4];     // pad to sixteen bytes
+    short x;            // X-position
+    short y;            // Y-position
+    uint16_t type;      // Event mask, bits defined below
+    uint32_t timestamp; // Event timestamp
+    uchar buttons;      // Buttons pressed
+    uchar modifiers;    // Added for Mac version
+    SDL_Event event;    // Oh yeah, train wreck goes full steam
+    char pad[4];        // pad to sixteen bytes
 } ss_mouse_event;
 
 #define MOUSE_MOTION 1u // Event mask bits
@@ -167,4 +168,4 @@ void MousePollProc(void);
 }
 #endif
 
-#endif // _MOUSE_H
+#endif // MOUSE_H

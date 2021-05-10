@@ -611,7 +611,8 @@ void pump_events(void) {
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP: {
             bool down = (ev.button.state == SDL_PRESSED);
-            ss_mouse_event mouseEvent = {0};
+            ss_mouse_event mouseEvent;
+            mouseEvent.event = ev;
             mouseEvent.type = 0;
 
             // TODO: the old mac code used to emulate right mouse clicks if space, enter, or return
@@ -652,7 +653,8 @@ void pump_events(void) {
             else
                 SetMouseXY(ev.motion.x, ev.motion.y);
 
-            ss_mouse_event mouseEvent = {0};
+            ss_mouse_event mouseEvent;
+            mouseEvent.event = ev;
             mouseEvent.type = MOUSE_MOTION;
             mouseEvent.x = MouseX;
             mouseEvent.y = MouseY;
@@ -676,7 +678,8 @@ void pump_events(void) {
 
         case SDL_MOUSEWHEEL:
             if (ev.wheel.y != 0) {
-                ss_mouse_event mouseEvent = {0};
+                ss_mouse_event mouseEvent;
+                mouseEvent.event = ev;
                 mouseEvent.type = ev.wheel.y < 0 ? MOUSE_WHEELDN : MOUSE_WHEELUP;
                 mouseEvent.x = MouseX;
                 mouseEvent.y = MouseY;
