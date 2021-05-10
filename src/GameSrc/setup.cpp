@@ -471,10 +471,10 @@ int WonGame_ShowStats = 0;
 
 // ticks: 0 wait forever
 int WaitForKey(ulong ticks) {
-    ulong end_ticks = (ulong)TickCount();
+    ulong end_ticks = TickCount();
     ulong key_ticks = end_ticks + (!ticks ? 500 : (ticks * 1 / 8));
     end_ticks = ticks ? end_ticks + ticks : 0;
-    int ch;
+    SDL_Scancode ch;
 
     // wait for specified elapsed ticks or keypress
     for (;;) {
@@ -502,10 +502,10 @@ int WaitForKey(ulong ticks) {
         SDLDraw();
 
         kbs_event ev = kb_next();
-        ch = ev.ascii;
-        ticks = (ulong)TickCount();
+        ch = ev.event.key.keysym.scancode;
+        ticks = TickCount();
 
-        if ((ch == 27 || ch == ' ' || ch == '\r') && ticks >= key_ticks)
+        if ((ch == SDL_SCANCODE_ESCAPE || ch == SDL_SCANCODE_SPACE || ch == SDL_SCANCODE_RETURN) && ticks >= key_ticks)
             break;
         if (end_ticks && ticks >= end_ticks)
             break;
@@ -625,7 +625,7 @@ void PrintCredits(void) {
                     WaitForKey(200);
                     break;
                 case 'G':
-                    if (WaitForKey(2000) == 27)
+                    if (WaitForKey(2000) == SDL_SCANCODE_ESCAPE)
                         end = 1;
                     gr_clear(0);
                     y = 15;
