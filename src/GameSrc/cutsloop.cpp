@@ -74,17 +74,17 @@ void AudioStreamCallback(void *userdata, unsigned char *stream, int len) {
 }
 
 uchar cutscene_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
-    uiCookedKeyData *kd = &ev->cooked_key_data;
-    int code = kd->code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
-
-    if (kd->code & KB_FLAG_DOWN) {
-        switch (code) {
-        case KEY_ESC:
-        case KEY_ENTER:
-        case KEY_SPACE:
+    if (ev->sdl_data.type == SDL_KEYDOWN) {
+        switch (ev->sdl_data.key.keysym.scancode) {
+        case SDL_SCANCODE_ESCAPE:
+        case SDL_SCANCODE_RETURN:
+        case SDL_SCANCODE_SPACE:
             // Go back to the main menu
+            INFO("%s: Skipping cutscene, back to SETUP_LOOP", __FUNCTION__ );
             _new_mode = SETUP_LOOP;
             chg_set_flg(GL_CHG_LOOP);
+            break;
+        default:
             break;
         }
     }
