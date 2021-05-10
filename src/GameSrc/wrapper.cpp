@@ -886,22 +886,24 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
             textlist_select_line(st, butid, line, TRUE);
         }
         return TRUE;
-    } else if (ev->type == UI_EVENT_KBD_COOKED) {
-	short code = ev->cooked_key_data.code;
-        char k = code & 0xFF;
-        uint keycode = code & ~KB_FLAG_DOWN;
-        uchar special = ((code & KB_FLAG_SPECIAL) != 0);
+    } else if (ev->sdl_data.type == SDL_KEYDOWN || ev->sdl_data.type == SDL_TEXTINPUT) {
+        SDL_Keysym key = ev->sdl_data.key.keysym;
+
+        // FIXME It's Unicode, we need to use wchar.h stuff here
+        char k = ev->sdl_data.text.text[0];
+        //uint keycode = code & ~KB_FLAG_DOWN;
+        //uchar special = ((code & KB_FLAG_SPECIAL) != 0);
         char *s;
         char upness = 0;
         char cur = st->currstring;
 
         // explicitly do not deal with alt-x, but leave
         // it to more capable hands.
-        if (keycode == (KB_FLAG_ALT | 'x'))
+        if (key.scancode == SDL_SCANCODE_X && (key.mod & KMOD_ALT))
             return FALSE;
         if (cur >= 0)
             s = textlist_string(st, cur);
-        if (st->editable && cur >= 0 && !special && kb_isprint(keycode)) {
+        if (st->editable && cur >= 0 && /* !special && */ isprint(k)) {
             if (st->index < 0) {
                 strcpy(textlist_string(st, st->numblocks), textlist_string(st, st->currstring));
                 st->index = 0;
@@ -915,8 +917,8 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
             st->modified = TRUE;
             return TRUE;
         }
-        switch (keycode) {
-        case KEY_BS:
+        switch (key.scancode) {
+        case SDL_SCANCODE_BACKSPACE:
             if (st->editable && cur >= 0) {
                 if (st->index < 0) {
                     strcpy(textlist_string(st, st->numblocks), textlist_string(st, st->currstring));
@@ -928,23 +930,25 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
                 textlist_draw_line(st, cur, butid);
             }
             break;
-        case KEY_UP:
+        case SDL_SCANCODE_UP:
             upness = st->numblocks - 1;
             break;
-        case KEY_DOWN:
+        case SDL_SCANCODE_DOWN:
             upness = 1;
             break;
-        case KEY_ENTER:
+        case SDL_SCANCODE_RETURN:
             if (st->currstring >= 0) {
                 st->dealfunc(butid, cur);
                 return TRUE;
             }
             break;
-        case KEY_ESC:
+        case SDL_SCANCODE_ESCAPE:
             // on ESC, clean up but pass the event through.
             textlist_cleanup(st);
             wrapper_panel_close(TRUE);
             return FALSE;
+        default:
+            break;
         }
         if (upness != 0) {
             char newstring;
