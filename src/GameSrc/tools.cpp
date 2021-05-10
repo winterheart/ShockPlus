@@ -701,23 +701,6 @@ errtype begin_wait() {
     return (retval);
 }
 
-#ifdef NOT_YET //
-errtype spoof_mouse_event(void) {
-    int i;
-    uiMouseEvent ev;
-
-    uiMakeMotionEvent(&ev);
-    if (ev.buttons == 0)
-        return OK;
-    for (i = 0; i < NUM_MOUSE_BTNS; i++) {
-        if (ev.buttons & (1 << i))
-            ev.action |= MOUSE_BTN2DOWN(i);
-    }
-    ev.type = UI_EVENT_MOUSE;
-    return uiQueueEvent((uiEvent *)&ev);
-}
-#endif // NOT_YET
-
 errtype end_wait() {
     errtype retval;
     wait_count--;

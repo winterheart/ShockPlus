@@ -478,38 +478,6 @@ uchar uiDispatchEvent(uiEvent *ev) {
     return FALSE;
 }
 
-// Seems to be unused
-errtype uiQueueEvent(uiEvent *ev) {
-    // if this is a keyboard event, queue up earlier events.
-    if (ev->type == UI_EVENT_KBD_RAW || ev->type == UI_EVENT_KBD_COOKED) {
-        kbs_event kbe;
-        for (kbe = kb_next(); kbe.event.type != SDL_FIRSTEVENT; kbe = kb_next()) {
-            uiEvent out;
-            mouse_get_xy(&out.pos.x, &out.pos.y);
-            out.sdl_data = kbe.event;
-            out.type = UI_EVENT_KBD_RAW;
-            out.raw_key_data.scancode = kbe.code;
-            out.raw_key_data.action = kbe.state;
-            event_queue_add(&out);
-        }
-    }
-    if (ev->type == UI_EVENT_MOUSE || ev->type == UI_EVENT_MOUSE_MOVE) {
-        ss_mouse_event mse;
-        errtype err = mouse_next(&mse);
-        for (; err == OK; err = mouse_next(&mse)) {
-            uiEvent out;
-            out.pos.x = mse.x;
-            out.pos.y = mse.y;
-            out.type = (mse.type == MOUSE_MOTION) ? UI_EVENT_MOUSE_MOVE : UI_EVENT_MOUSE;
-            out.mouse_data.action = mse.type;
-            out.mouse_data.modifiers = mse.modifiers;
-            event_queue_add((uiEvent *)&out);
-        }
-    }
-    event_queue_add(ev);
-    return OK;
-}
-
 #define MOUSE_EVENT_FLUSHED UI_EVENT_MOUSE_MOVE
 
 void ui_purge_mouse_events(void) {

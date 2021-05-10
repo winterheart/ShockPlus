@@ -203,9 +203,6 @@ errtype uiReleaseSlabFocus(uiSlab *slab, LGRegion *r, ulong evmask);
 // polls the ui toolkit, dispatching all events.
 errtype uiPoll(void);
 
-// adds an event to the ui event queue. The event will be dispatched at the next uiPoll() call
-errtype uiQueueEvent(uiEvent *ev);
-
 /**
  * Dispatches an event right away, without queueing.
  * @param ev dispatching event
