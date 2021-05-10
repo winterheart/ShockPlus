@@ -1036,21 +1036,17 @@ uchar opanel_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
 // checks all options panel widgets to see if they want to deal.
 //
 uchar opanel_kb_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
-    int b;
-    short code = ev->cooked_key_data.code;
-
-    if (!(code & KB_FLAG_DOWN))
+    // WH That good one. There we need check SDL_TEXTINPUT for editable fields
+    if (ev->sdl_data.type == SDL_TEXTINPUT || ev->sdl_data.type == SDL_KEYDOWN) {
+        for (int b = 0; b < MAX_OPTION_BUTTONS; b++) {
+            if ((ev->type & OButtons[b].evmask) && OButtons[b].handler && OButtons[b].handler(ev, b))
+                return TRUE;
+        }
+        // if no-one else has hooked SDL_SCANCODE_ESCAPE, it defaults to closing the wrapper panel.
+        if (ev->sdl_data.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+            wrapper_panel_close(TRUE);
         return TRUE;
-
-    for (b = 0; b < MAX_OPTION_BUTTONS; b++) {
-        if ((ev->type & OButtons[b].evmask) && OButtons[b].handler && OButtons[b].handler(ev, b))
-            return TRUE;
     }
-    // if no-one else has hooked KEY_ESC, it defaults to closing
-    // the wrapper panel.
-    //
-    if ((code & 0xFF) == KEY_ESC)
-        wrapper_panel_close(TRUE);
     return TRUE;
 }
 #pragma enable_message(202)
