@@ -78,14 +78,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSE_DOWNS (MOUSE_LDOWN | MOUSE_RDOWN | MOUSE_CDOWN)
 
 // spoofs for calling kb callback to do stuff
-#define DO_ZOOMOUT KEY_PGUP
-#define DO_ZOOMIN  KEY_PGDN
-#define DO_RIGHT   KEY_RIGHT
-#define DO_LEFT    KEY_LEFT
-#define DO_UP      KEY_UP
-#define DO_DOWN    KEY_DOWN
-#define DO_QUIT    KEY_ESC
-//#define DO_MSG     KEY_ENTER
 #define DO_CHEAT    'f'
 #define DO_SCAN     'r'
 #define DO_CRITTER  'c'
@@ -117,9 +109,10 @@ frc *full_map_context;
 #define FULLMAP_CANVAS ((grs_canvas *)fr_get_canvas(full_map_context))
 // was full_game_fr_context
 
-#define FSMAP_OPP 0x8000
 // note this makes the init code 0b00010100000101, or 0x505
-static ushort btn_to_code[] = {DO_ZOOMIN, DO_ZOOMOUT, DO_RECENTER, DO_FULLMSG, DO_SECUR, DO_CRITTER, DO_SCAN, 0};
+#define FSMAP_OPP 0x8000
+
+// static ushort btn_to_code[] = {DO_ZOOMIN, DO_ZOOMOUT, DO_RECENTER, DO_FULLMSG, DO_SECUR, DO_CRITTER, DO_SCAN, 0};
 
 static ushort btn_to_amap[] = {
     0, 0, FSMAP_OPP | AMAP_TRACK_OBJ, AMAP_FULL_MSG, AMAP_SHOW_SEC, AMAP_SHOW_CRIT | AMAP_SHOW_ROB, AMAP_SHOW_SENS, 0};
@@ -483,19 +476,7 @@ uchar pend_check(void) {
     return FALSE;
 }
 
-#define hack_kb_callback(am, k) amap_kb_callback(am, k | KB_FLAG_DOWN)
-
-#define UP_ARROW_CODE    0x7E
-#define DOWN_ARROW_CODE  0x7D
-#define LEFT_ARROW_CODE  0x7B
-#define RIGHT_ARROW_CODE 0x7C
-
-#define KP_UP_CODE       0x5B
-#define KP_DOWN_CODE     0x54
-#define KP_LEFT_CODE     0x56
-#define KP_RIGHT_CODE    0x58
-
-uchar amap_scroll_handler(uiEvent *ev, LGRegion *reg, intptr_t v) {
+uchar amap_scroll_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     int elapsed, now;
     short code;
     curAMap *amptr = oAMap(MFD_FULLSCR_MAP);
@@ -824,19 +805,37 @@ uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
         map_scroll_code = 0;
         map_scroll_clicked = FALSE;
         switch (ev->key.keysym.scancode) {
-            // KLC      case KEY_PGUP:   case '[': if (!zoom_deal(amptr,BTN_ZOOMOUT)) exp=0; break;
-            // KLC      case KEY_PGDN:   case ']': if (!zoom_deal(amptr,BTN_ZOOMIN))  exp=0; break;
-            // KLC maybe put keyboard scrolling in later
-            // KLC      case KEY_RIGHT:  case 'l': map_scroll_code=AMAP_PAN_E; break;
-            // KLC      case KEY_LEFT:   case 'j': map_scroll_code=AMAP_PAN_W; break;
-            // KLC      case KEY_UP:     case 'i': map_scroll_code=AMAP_PAN_N; break;
-            // KLC      case KEY_DOWN:   case 'k': map_scroll_code=AMAP_PAN_S; break;
+        case SDL_SCANCODE_PAGEUP:
+        case SDL_SCANCODE_LEFTBRACKET:
+            if (!zoom_deal(amptr, BTN_ZOOMOUT))
+                exp = 0;
+            break;
+        case SDL_SCANCODE_PAGEDOWN:
+        case SDL_SCANCODE_RIGHTBRACKET:
+            if (!zoom_deal(amptr, BTN_ZOOMIN))
+                exp = 0;
+            break;
+        case SDL_SCANCODE_RIGHT:
+            // case SDL_SCANCODE_L:
+            map_scroll_code = AMAP_PAN_E;
+            break;
+        case SDL_SCANCODE_LEFT:
+            // case SDL_SCANCODE_J:
+            map_scroll_code = AMAP_PAN_W;
+            break;
+        case SDL_SCANCODE_UP:
+            // case SDL_SCANCODE_I:
+            map_scroll_code = AMAP_PAN_N;
+            break;
+        case SDL_SCANCODE_DOWN:
+            // case SDL_SCANCODE_K:
+            map_scroll_code = AMAP_PAN_S;
+            break;
         case SDL_SCANCODE_ESCAPE:
         case SDL_SCANCODE_Q:
             _new_mode = _last_mode;
             chg_set_flg(GL_CHG_LOOP);
             break;
-            // KLC      case KEY_BS:      edit_mapnote(amptr); break;
         case SDL_SCANCODE_BACKSPACE:
             obj_destroy(amptr->note_obj); // Delete the map note
             amptr->note_obj = 0;
