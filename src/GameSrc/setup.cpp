@@ -1048,11 +1048,13 @@ uchar intro_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
 }
 
 uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
-    int code = ev->cooked_key_data.code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
+    SDL_Keysym keycode = ev->sdl_data.key.keysym;
+    // int code = ev->cooked_key_data.code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
     char old_diff, old_setup_line = curr_setup_line, n = 0;
 
-    if (ev->cooked_key_data.code & KB_FLAG_DOWN) {
-        // If in the splash screen, advance
+    if (ev->sdl_data.type == SDL_KEYDOWN || ev->sdl_data.type == SDL_TEXTINPUT) {
+        // if (ev->cooked_key_data.code & KB_FLAG_DOWN) {
+        //  If in the splash screen, advance
         if (waiting_for_key) {
             waiting_for_key = false;
             return OK;
@@ -1060,10 +1062,10 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
 
         switch (setup_mode) {
         case SETUP_JOURNEY:
-            switch (code) {
-            case KEY_UP:
+            switch (keycode.scancode) {
+            case SDL_SCANCODE_UP:
                 n = NUM_SETUP_LINES - 2; // sneaky fallthrough action
-            case KEY_DOWN:
+            case SDL_SCANCODE_DOWN:
                 n++;
                 curr_setup_line = (curr_setup_line + n) % NUM_SETUP_LINES;
 #ifdef DEMO
@@ -1080,7 +1082,7 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                 journey_draw(curr_setup_line + 1);
                 break;
 
-            case KEY_ENTER:
+            case SDL_SCANCODE_RETURN:
                 if (!journey_lock) {
                     uiHideMouse(NULL);
                     gr_set_fcolor(SELECTED_COLOR);
@@ -1089,20 +1091,24 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                     journey_lock = FALSE;
                 }
                 break;
+            default:
+                break;
             }
             break;
 
         case SETUP_CREDITS:
-            credits_inp = code;
+            // FIXME what is that?
+            // credits_inp = code;
+            credits_inp = keycode.scancode;
             break;
 
         case SETUP_CONTINUE:
-            switch (code) {
-            case KEY_UP:
-            case KEY_LEFT:
+            switch (keycode.scancode) {
+            case SDL_SCANCODE_UP:
+            case SDL_SCANCODE_LEFT:
                 n = NUM_SAVE_SLOTS - 2;
-            case KEY_DOWN:
-            case KEY_RIGHT:
+            case SDL_SCANCODE_DOWN:
+            case SDL_SCANCODE_RIGHT:
                 n++;
                 old_diff = curr_sg;
                 curr_sg = (curr_sg + n) % NUM_SAVE_SLOTS;
@@ -1110,27 +1116,31 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                 draw_sg_slot(curr_sg);
                 break;
 
-            case KEY_ENTER:
+            case SDL_SCANCODE_RETURN:
                 load_that_thar_game(curr_sg);
                 break;
 
-            case KEY_ESC:
+            case SDL_SCANCODE_ESCAPE:
                 journey_draw(0);
+                break;
+            default:
                 break;
             }
             break;
 
         case SETUP_DIFFICULTY:
-            switch (code) {
-            case ALT('X'): // Don't print the X when user ALT-X's out of the game
-            case ALT('x'):
-                break;
+            INFO("%s: KEY is %d, %d, %d", __FUNCTION__, ev->sdl_data.key.type, ev->sdl_data.key.state,
+                 ev->sdl_data.key.keysym.scancode);
+            switch (keycode.scancode) {
+            // case ALT('X'): // Don't print the X when user ALT-X's out of the game
+            // case ALT('x'):
+            //     break;
 
-            case '-':
-            case KEY_LEFT:
+            // case SDL_SCANCODE_MINUS:
+            case SDL_SCANCODE_LEFT:
                 n = NUM_DIFF_CATEGORIES - 2; // note sneaky -2 for fallthrough
-            case '+':
-            case KEY_RIGHT:
+            // case SDL_SCANCODE_EQUALS:
+            case SDL_SCANCODE_RIGHT:
                 n++; // n now NDC-1 or 1
                 if (!start_selected) {
                     old_diff = player_struct.difficulty[curr_diff];
@@ -1144,11 +1154,11 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                 }
                 break;
 
-            case KEY_UP:
-            case (KEY_TAB | KB_FLAG_SHIFT):
+            case SDL_SCANCODE_UP:
+                // case (KEY_TAB | KB_FLAG_SHIFT):
                 n = NUM_DIFF_CATEGORIES - 2; // sneaky fallthrough
-            case KEY_DOWN:
-            case KEY_TAB:
+            case SDL_SCANCODE_DOWN:
+            case SDL_SCANCODE_TAB:
                 n++; // now -1 or 1
                 if (start_selected && n == 1) {
                     start_selected = FALSE;
@@ -1166,28 +1176,28 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                 difficulty_draw(FALSE);
                 break;
 
-            case KEY_ENTER:
+            case SDL_SCANCODE_RETURN:
                 go_and_start_the_game_already();
                 break;
 
-            case KEY_ESC:
+            case SDL_SCANCODE_ESCAPE:
                 journey_draw(0);
                 break;
 
-            default: {
+            default:
                 draw_username(0, player_struct.name);
                 n = strlen(player_struct.name);
-                short c = ev->cooked_key_data.code;
-                if (kb_isprint(c) && (n < sizeof(player_struct.name)) &&
-                    (((c & 0xff) >= 128 && (c & 0xff) <= 155) || ((c & 0xff) >= 160 && (c & 0xff) <= 165) ||
-                     strchr(valid_char_string, c & 0xFF) != NULL)) {
-                    player_struct.name[n] = (c & 0xFF);
+                // FIXME It's Unicode, we need to use wchar.h stuff here
+                char c = ev->sdl_data.text.text[0];
+
+                if (isprint(c) && (n < sizeof(player_struct.name)) && (strchr(valid_char_string, c) != NULL)) {
+                    player_struct.name[n] = c;
                     player_struct.name[n + 1] = '\0';
                 }
-                if (((c & 0xFF) == KEY_BS) && (n > 0))
+                if ((keycode.scancode == SDL_SCANCODE_BACKSPACE) && (n > 0))
                     player_struct.name[n - 1] = '\0';
                 draw_username(NORMAL_ENTRY_COLOR, player_struct.name);
-            } break;
+                break;
             }
             break;
         }
