@@ -589,10 +589,10 @@ void pump_events(void) {
                     // other cases are handled by text input event below
                     if (ev.key.keysym.sym < 32 || ev.key.keysym.sym > 126 || (mod & KMOD_CTRL) || (mod & KMOD_ALT)) {
                         keyEvent.state = KBS_DOWN;
-                        addKBevent(&keyEvent);
-
                         sshockKeyStates[c] = keyEvent.modifiers | KB_MOD_PRESSED;
                     }
+                    // add to queue regardless to ev.key.keysym.sym. The Great Event Dispatcher sort 'em all.
+                    addKBevent(&keyEvent);
                 } else {
                     // key up following text input event case below is handled here
 
