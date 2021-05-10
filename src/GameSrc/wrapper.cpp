@@ -186,16 +186,21 @@ typedef struct {
     void (*dealfunc)(ushort val);
 } opt_slider_state;
 
-// PUSHBUTTON WIDGETS:
-// the simplest widgets.  Calls pushfunc, passing in its own button ID,
-// upon mouse left-click upon it, or on a keyboard event corresponding
-// to keyeq.
-//
+/**
+ * Pushbutton widgets, the simplest widgets. Calls pushfunc, passing in its
+ * own button ID, upon mouse left-click upon it, or on a keyboard event
+ * corresponding to keyeq.
+ */
 typedef struct {
-    uchar keyeq;
+    /// Hotkey binded to button (usually first key of descrip)
+    SDL_Scancode keyeq;
+    /// Description of button (caption)
     Ref descrip;
+    /// Foreground color
     uchar fcolor;
+    /// Shadow color
     uchar shadow;
+    /// Function callback on mouse or keyboard event
     void (*pushfunc)(uchar butid);
 } opt_pushbutton_state;
 
@@ -209,7 +214,7 @@ typedef struct {
 // amount equal to its current value.
 //
 typedef struct {
-    uchar keyeq;
+    SDL_Scancode keyeq;
     uchar type;
     uchar num_opts;
     Ref optbase;
@@ -545,15 +550,23 @@ void pushbutton_draw_func(uchar butid) {
 
 uchar pushbutton_handler(uiEvent *ev, uchar butid) {
     if (((ev->type == UI_EVENT_MOUSE) && (ev->subtype & MOUSE_DOWN)) ||
-        ((ev->type == UI_EVENT_KBD_COOKED) &&
-         ((ev->cooked_key_data.code & 0xFF) == OButtons[butid].user.pushbutton_st.keyeq))) {
+        ((ev->sdl_data.type == SDL_KEYDOWN) &&
+         (ev->sdl_data.key.keysym.scancode == OButtons[butid].user.pushbutton_st.keyeq))) {
         OButtons[butid].user.pushbutton_st.pushfunc(butid);
         return TRUE;
     }
     return FALSE;
 }
 
-void pushbutton_init(uchar butid, uchar keyeq, Ref descrip, void (*pushfunc)(uchar butid), LGRect *r) {
+/**
+ * Initialize button
+ * @param butid id of button
+ * @param keyeq code of hotkey (usually this is first letter of descrip)
+ * @param descrip description (caption) of button
+ * @param pushfunc function callback bounded to button
+ * @param r rectangle that represents coordinates of button
+ */
+void pushbutton_init(uchar butid, SDL_Scancode keyeq, Ref descrip, void (*pushfunc)(uchar butid), LGRect *r) {
     opt_pushbutton_state *st = &OButtons[butid].user.pushbutton_st;
 
     OButtons[butid].rect = *r;
@@ -603,9 +616,13 @@ void textwidget_init(uchar butid, uchar color, Ref descrip, LGRect *r) {
     OButtons[butid].evmask = 0;
 }
 
-// a keywidget is just like a pushbutton, but invisible.
-//
-void keywidget_init(uchar butid, uchar keyeq, void (*pushfunc)(uchar butid)) {
+/**
+ * Initialize keywidget. A keywidget is just like a pushbutton, but invisible.
+ * @param butid id of button
+ * @param keyeq code of hotkey (usually this is first letter of descrip)
+ * @param pushfunc function callback bounded to button
+ */
+void keywidget_init(uchar butid, SDL_Scancode keyeq, void (*pushfunc)(uchar butid)) {
     opt_pushbutton_state *st = &OButtons[butid].user.pushbutton_st;
 
     OButtons[butid].evmask = UI_EVENT_KBD_COOKED;
@@ -721,7 +738,7 @@ void multi_init(uchar butid, uchar key, Ref descrip, Ref optbase, Ref feedbase, 
     st->optbase = optbase;
     st->feedbackbase = feedbase;
     st->type = type;
-    st->keyeq = key;
+    st->keyeq = static_cast<SDL_Scancode>(key);
     st->num_opts = num_opts;
     // note that in these settings, we don't care what size of
     // variable we're dealing with, 'cause we secretly know that
@@ -886,7 +903,7 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
             textlist_select_line(st, butid, line, TRUE);
         }
         return TRUE;
-    } else if (ev->sdl_data.type == SDL_KEYDOWN || ev->sdl_data.type == SDL_TEXTINPUT) {
+    } else if (ev->sdl_data.type == SDL_KEYDOWN) {
         SDL_Keysym key = ev->sdl_data.key.keysym;
 
         // FIXME It's Unicode, we need to use wchar.h stuff here
@@ -1040,8 +1057,7 @@ uchar opanel_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
 // checks all options panel widgets to see if they want to deal.
 //
 uchar opanel_kb_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
-    // WH That good one. There we need check SDL_TEXTINPUT for editable fields
-    if (ev->sdl_data.type == SDL_TEXTINPUT || ev->sdl_data.type == SDL_KEYDOWN) {
+    if (ev->sdl_data.type == SDL_KEYDOWN) {
         for (int b = 0; b < MAX_OPTION_BUTTONS; b++) {
             if ((ev->type & OButtons[b].evmask) && OButtons[b].handler && OButtons[b].handler(ev, b))
                 return TRUE;
@@ -1250,13 +1266,13 @@ void wrapper_init(void) {
     LGRect r;
     int i;
     char *keyequivs;
-
+    // REF_STR_KeyEquivs0 is "lsaiovrq"
     keyequivs = get_temp_string(REF_STR_KeyEquivs0);
 
     clear_obuttons();
     for (i = 0; i < 8; i++) {
         standard_button_rect(&r, i, 2, 3, 5);
-        pushbutton_init(i, keyequivs[i], REF_STR_WrapperText + i, wrapper_pushbutton_func, &r);
+        pushbutton_init(i, SDL_GetScancodeFromKey(keyequivs[i]), REF_STR_WrapperText + i, wrapper_pushbutton_func, &r);
     }
 #ifdef DEMO
     dim_pushbutton(LOAD_BUTTON);
@@ -1292,10 +1308,10 @@ void verify_screen_init(void (*verify)(uchar butid), slorker slork) {
     clear_obuttons();
 
     standard_button_rect(&r, 1, 2, 2, 5);
-    pushbutton_init(0, tolower(get_temp_string(REF_STR_VerifyText)[0]), REF_STR_VerifyText, verify, &r);
+    pushbutton_init(0, static_cast<SDL_Scancode>(tolower(get_temp_string(REF_STR_VerifyText)[0])), REF_STR_VerifyText, verify, &r);
 
     standard_button_rect(&r, 4, 2, 2, 5);
-    pushbutton_init(1, tolower(get_temp_string(REF_STR_VerifyText + 1)[0]), (REF_STR_VerifyText + 1), (void (*)(uchar))slork, &r);
+    pushbutton_init(1, SDL_GetScancodeFromKey(tolower(get_temp_string(REF_STR_VerifyText + 1)[0])), (REF_STR_VerifyText + 1), (void (*)(uchar))slork, &r);
 
     slork_init(2, slork);
 
@@ -1467,10 +1483,10 @@ void soundopt_screen_init() {
 
     standard_button_rect(&r, 5, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_MusicText + 2)[0]);
-    pushbutton_init(RETURN_BUTTON, retkey, REF_STR_MusicText + 2, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(retkey), REF_STR_MusicText + 2, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
     opanel_redraw(TRUE);
 }
 
@@ -1528,14 +1544,14 @@ void sound_screen_init(void) {
 
     standard_button_rect(&r, 2, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_AilThreeText + 2)[0]);
-    pushbutton_init(AUDIO_OPT_BUTTON, retkey, REF_STR_AilThreeText + 2, wrapper_pushbutton_func, &r);
+    pushbutton_init(AUDIO_OPT_BUTTON, SDL_GetScancodeFromKey(retkey), REF_STR_AilThreeText + 2, wrapper_pushbutton_func, &r);
 
     standard_button_rect(&r, 5, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_MusicText + 2)[0]);
-    pushbutton_init(RETURN_BUTTON, retkey, REF_STR_MusicText + 2, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(retkey), REF_STR_MusicText + 2, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1624,7 +1640,7 @@ void center_joy_pushbutton_func(uchar butid) {
 
     for (i = 0; i < MAX_OPTION_BUTTONS; i++) {
         if (i == butid)
-            keywidget_init(i, KEY_ENTER, center_joy_go);
+            keywidget_init(i, SDL_SCANCODE_RETURN, center_joy_go);
         else if (i != RETURN_BUTTON && i != QUIT_BUTTON)
             OButtons[i].evmask = 0;
     }
@@ -1688,7 +1704,7 @@ void joystick_screen_init(void) {
     i++;
 
     standard_button_rect(&r, i, 2, 2, 1);
-    pushbutton_init(i, keys[i], REF_STR_CenterJoy, center_joy_pushbutton_func, &r);
+    pushbutton_init(i, SDL_GetScancodeFromKey(keys[i]), REF_STR_CenterJoy, center_joy_pushbutton_func, &r);
     if (!joystick_count) {
         dim_pushbutton(i);
     }
@@ -1703,10 +1719,10 @@ void joystick_screen_init(void) {
     i++;
 
     standard_button_rect(&r, 5, 2, 2, 1);
-    pushbutton_init(RETURN_BUTTON, keys[i], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1745,7 +1761,7 @@ void input_screen_init(void) {
 
     standard_button_rect(&r, i, 2, 2, 1);
     r.ul.x -= 1;
-    pushbutton_init(i, keys[2], REF_STR_Joystick, joystick_button_func, &r);
+    pushbutton_init(i, SDL_GetScancodeFromKey(keys[2]), REF_STR_Joystick, joystick_button_func, &r);
     i++;
 
     standard_button_rect(&r, i, 2, 2, 1);
@@ -1755,10 +1771,10 @@ void input_screen_init(void) {
     i++;
 
     standard_button_rect(&r, 5, 2, 2, 1);
-    pushbutton_init(RETURN_BUTTON, keys[3], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1797,7 +1813,7 @@ void video_screen_init(void) {
 #ifdef SVGA_SUPPORT
     // video mode
     standard_button_rect(&r, i, 2, 2, 2);
-    pushbutton_init(SCREENMODE_BUTTON, keys[0], REF_STR_VideoText, wrapper_pushbutton_func, &r);
+    pushbutton_init(SCREENMODE_BUTTON, SDL_GetScancodeFromKey(keys[0]), REF_STR_VideoText, wrapper_pushbutton_func, &r);
     i++;
 #endif
 
@@ -1828,10 +1844,10 @@ void video_screen_init(void) {
 
     // return (fixed at position 5)
     standard_button_rect(&r, 5, 2, 2, 2);
-    pushbutton_init(RETURN_BUTTON, keys[3], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1857,7 +1873,7 @@ void screenmode_screen_init(void) {
         uchar mode_ok = FALSE;
         char j = 0;
         standard_button_rect(&r, i, 2, 2, 2);
-        pushbutton_init(i, keys[i], REF_STR_ScreenModeText + i, screenmode_change, &r);
+        pushbutton_init(i, SDL_GetScancodeFromKey(keys[i]), REF_STR_ScreenModeText + i, screenmode_change, &r);
         while ((grd_info.modes[j] != -1) && !mode_ok) {
             if (grd_info.modes[j] == svga_mode_data[i])
                 mode_ok = TRUE;
@@ -1870,10 +1886,10 @@ void screenmode_screen_init(void) {
     }
 
     standard_button_rect(&r, 5, 2, 2, 2);
-    pushbutton_init(RETURN_BUTTON, keys[2], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[2]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1916,10 +1932,10 @@ void options_screen_init(void) {
 
     standard_button_rect(&r, 5, 2, 2, 2);
     r.lr.x += 2;
-    pushbutton_init(RETURN_BUTTON, keys[i], REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1960,7 +1976,7 @@ void load_screen_init(void) {
                   BUTTON_COLOR, WHITE, BUTTON_COLOR + 2, 0, load_dealfunc, NULL);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
@@ -1987,7 +2003,7 @@ void save_screen_init(void) {
                   BUTTON_COLOR, WHITE, BUTTON_COLOR + 2, REF_STR_EnterSaveString, save_dealfunc, NULL);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
-    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ 'x', wrapper_pushbutton_func);
+    keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
 
     opanel_redraw(TRUE);
 }
