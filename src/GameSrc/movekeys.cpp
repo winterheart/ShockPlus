@@ -365,10 +365,13 @@ uchar motion_keycheck_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     short cnum, cval;
     int moveOK = TRUE;
 
-    if (gKeypadOverride) // if a keypad is showing
-    {
-        if (ev->poll_key_data.scancode >= 0x52 && ev->poll_key_data.scancode <= 0x5C) // and a keypad number was entered,
-            moveOK = FALSE;                               // don't move.
+    // if a keypad is showing
+    if (gKeypadOverride) {
+        if (ev->sdl_data.key.keysym.scancode >= SDL_SCANCODE_KP_1 &&
+            ev->sdl_data.key.keysym.scancode <= SDL_SCANCODE_KP_0) {
+            // and a keypad number was entered, don't move.
+            moveOK = FALSE;
+        }
     }
 
     if (moveOK) {
