@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lg.h"
 #include "mouse.h"
+#include "movekeys.h"
 #include "kb.h"
 #include "kbcook.h"
 #include "array.h"
@@ -477,11 +478,12 @@ uchar uiDispatchEvent(uiEvent *ev) {
     return FALSE;
 }
 
+// Seems to be unused
 errtype uiQueueEvent(uiEvent *ev) {
     // if this is a keyboard event, queue up earlier events.
     if (ev->type == UI_EVENT_KBD_RAW || ev->type == UI_EVENT_KBD_COOKED) {
         kbs_event kbe;
-        for (kbe = kb_next(); kbe.code != KBC_NONE; kbe = kb_next()) {
+        for (kbe = kb_next(); kbe.event.type != SDL_FIRSTEVENT; kbe = kb_next()) {
             uiEvent out;
             mouse_get_xy(&out.pos.x, &out.pos.y);
             out.sdl_data = kbe.event;
@@ -617,7 +619,17 @@ errtype uiSetKeyboardPolling(ubyte *codes) {
     return OK;
 }
 
-extern uchar sshockKeyStates[256];
+/// Convert kb.h mods into SDL_Keymods
+static SDL_Keymod inputModToKeyMod(uchar mod) {
+    SDL_Keymod ret = KMOD_NONE;
+    if (mod & KB_MOD_CTRL)
+        ret |= KMOD_CTRL;
+    if (mod & KB_MOD_SHIFT)
+        ret |= KMOD_SHIFT;
+    if (mod & KB_MOD_ALT)
+        ret |= KMOD_ALT;
+    return ret;
+}
 
 static ushort inputModToUImod(uchar mod) {
     ushort ret = 0;
@@ -633,7 +645,7 @@ static ushort inputModToUImod(uchar mod) {
     return ret;
 }
 
-/// Keyboard events creator
+/// Keyboard UI_EVENT_KBD_POLL events creator/injector
 // KLC - For Mac version, call GetKeys once at the beginning, then check
 // the results in the loop.  Fill in the "mods" field (ready for cooking)
 // before dispatching an event.
@@ -649,7 +661,10 @@ void ui_poll_keyboard(void) {
             ev.poll_key_data.action = KBS_DOWN;
             ev.poll_key_data.scancode = *key;
             ev.poll_key_data.mods = inputModToUImod(sshockKeyStates[*key]);
-            // FIXME: WH add ev.sdl_data
+            // Convert UI_EVENT_KBD_POLL into stubbed SDL_Event
+            ev.sdl_data.type = SDL_KEYDOWN;
+            ev.sdl_data.key.keysym.scancode = scan_on_motion[*key];
+            ev.sdl_data.key.keysym.mod = inputModToKeyMod(sshockKeyStates[*key]);
 
             uiDispatchEvent(&ev);
         }
@@ -852,7 +867,7 @@ errtype uiFlush(void) {
     mouse_flush();
 
     // ((kbe.event.type == SDL_KEYDOWN || kbe.event.type == SDL_KEYUP) && kbe.event.key.keysym.scancode != SDL_SCANCODE_UNKNOWN)
-    while (kbe.code != KBC_NONE) {
+    while (kbe.event.type != SDL_FIRSTEVENT) {
         ushort dummy;
         uchar result;
         kb_cook(kbe, &dummy, &result);
@@ -869,7 +884,7 @@ uchar uiCheckInput(void) {
     kbs_event kbe;
     ss_mouse_event mse;
     kbe = kb_next();
-    if (kbe.code != KBC_NONE) {
+    if (kbe.event.type != SDL_FIRSTEVENT) {
         ushort cooked;
         uchar res;
         kb_cook(kbe, &cooked, &res);

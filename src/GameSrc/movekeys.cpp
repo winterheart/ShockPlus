@@ -40,6 +40,7 @@ MOVE_KEYBIND MoveKeybinds[MAX_MOVE_KEYBINDS + 1];
 MOVE_KEYBIND MoveCyberKeybinds[MAX_MOVE_KEYBINDS + 1];
 
 static uchar motion_key_scancodes[256 + 1];
+SDL_Scancode scan_on_motion[256 + 1];
 static byte poll_controls[6];
 
 uchar parse_motion_key(ushort code, short *cnum, short *cval);
@@ -282,6 +283,25 @@ static int always_motion_poll[] = {
 void init_motion_polling(void) {
     int i, j = 0, code;
     uchar used[256];
+
+    memset(scan_on_motion, 0, 256);
+
+    // keep in sync with always_motion_poll[] from movekeys.c
+    scan_on_motion[CODE_UP] = SDL_SCANCODE_UP;
+    scan_on_motion[CODE_DOWN] = SDL_SCANCODE_DOWN;
+    scan_on_motion[CODE_LEFT] = SDL_SCANCODE_LEFT;
+    scan_on_motion[CODE_RIGHT] = SDL_SCANCODE_RIGHT;
+    scan_on_motion[CODE_KP_HOME] = SDL_SCANCODE_KP_7;
+    scan_on_motion[CODE_KP_UP] = SDL_SCANCODE_KP_8;
+    scan_on_motion[CODE_KP_PGUP] = SDL_SCANCODE_KP_9;
+    scan_on_motion[CODE_KP_LEFT] = SDL_SCANCODE_KP_4;
+    scan_on_motion[CODE_KP_5] = SDL_SCANCODE_KP_5;
+    scan_on_motion[CODE_KP_RIGHT] = SDL_SCANCODE_KP_6;
+    scan_on_motion[CODE_KP_END] = SDL_SCANCODE_KP_1;
+    scan_on_motion[CODE_KP_DOWN] = SDL_SCANCODE_KP_2;
+    scan_on_motion[CODE_KP_PGDN] = SDL_SCANCODE_KP_3;
+    scan_on_motion[CODE_KP_ENTER] = SDL_SCANCODE_KP_ENTER;
+    scan_on_motion[CODE_ENTER] = SDL_SCANCODE_RETURN;
 
     // keep track of which codes have already been added
     memset(used, 0, 256);

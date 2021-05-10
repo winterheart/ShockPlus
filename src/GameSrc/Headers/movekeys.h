@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MOVEKEYS_H
 #define MOVEKEYS_H
 
+#include <SDL.h>
+
 #include "event.h"
 
 #define MAX_MOVE_KEYBINDS  256
@@ -57,6 +59,7 @@ typedef struct MOVE_KEYBIND_STRUCT {int code, move;} MOVE_KEYBIND;
 
 extern MOVE_KEYBIND MoveKeybinds[MAX_MOVE_KEYBINDS + 1];
 extern MOVE_KEYBIND MoveCyberKeybinds[MAX_MOVE_KEYBINDS + 1];
+extern SDL_Scancode scan_on_motion[256 + 1];
 
 enum
 {
