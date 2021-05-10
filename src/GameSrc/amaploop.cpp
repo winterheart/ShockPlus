@@ -745,28 +745,13 @@ uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
     //   char codewas;
     int exp = 0xff; // will get zeroed in case default for codes we ignore
 
-    /*KLC - we're just forgetting most of the key equivalents for now
-
-       if (code & KB_FLAG_DOWN)					//KLC - we'll process on key down.
-       {
-          codewas=map_scroll_code;
-          map_scroll_code=0;
-          if(pend_check()) return TRUE;
-          if(!(codewas==0)) return TRUE;
-       }
-    */
-
     // If we're currently editing a message...
-
     if (cur_mapnote_ptr != NULL) {
-        if (ev->type == SDL_KEYDOWN || ev->type == SDL_TEXTINPUT) {
-            // If we've pressed Enter
-            if (ev->type == SDL_KEYDOWN) {
-                if (ev->key.keysym.scancode == SDL_SCANCODE_RETURN) {
-                    trail_sp_punt();                  // clear out any trailing spaces
-                    if (amptr->flags & AMAP_FULL_MSG) // switch out of editing loop
-                        chg_set_flg(AMAP_MAP_EV);
-                }
+        if (ev->type == SDL_KEYDOWN) {
+            if (ev->key.keysym.scancode == SDL_SCANCODE_RETURN) {
+                trail_sp_punt();
+                if (amptr->flags & AMAP_FULL_MSG)
+                    chg_set_flg(AMAP_MAP_EV);
 
                 if (cur_mapnote_ptr == cur_mapnote_base) {
                     // If the map note string is empty, then delete the map note
@@ -776,27 +761,34 @@ uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
                 } else
                     amap_str_grab(cur_mapnote_base);
                 clear_cur_mapnote();
-            } else if (ev->type == SDL_TEXTINPUT && isprint(ev->text.text[0])) {
-                // FIXME ^^^^ There is Unicode, need wchar.h stuff
-                // make sure it isnt too long
-                int clen = strlen(cur_mapnote_base) + 1;
-
-                if (amap_str_deref(cur_mapnote_base) + clen < AMAP_STRING_SIZE)
-                    if (clen < FSMAP_MAX_MSG) {
-                        if (*cur_mapnote_ptr != '\0')
-                            memcpy(cur_mapnote_ptr + 1, cur_mapnote_ptr, strlen(cur_mapnote_ptr));
-                        else
-                            *(cur_mapnote_ptr + 1) = '\0';
-                        *cur_mapnote_ptr++ = (char)ev->text.text[0];
+                // Kinda failing there, commented out for now
+                /* } else if (ev->key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
+                    // Removing symbols
+                    if (strlen(cur_mapnote_base) > 0) {
+                        *(cur_mapnote_ptr --) = '\0';
                     }
-            } else if (ev->key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
-                if (cur_mapnote_ptr > cur_mapnote_base)
-                    *--cur_mapnote_ptr = '\0';
-            } else
+                */
+            } else if (isprint(ev->key.keysym.sym)) {
+                // Adding symbols
+                size_t clen = strlen(cur_mapnote_base) + 1;
+
+                if (amap_str_deref(cur_mapnote_base) + clen < AMAP_STRING_SIZE) {
+                    if (clen < FSMAP_MAX_MSG) {
+                        if (*cur_mapnote_ptr == '\0')
+                            *(cur_mapnote_ptr + 1) = '\0';
+                        else
+                            memmove(cur_mapnote_ptr + 1, cur_mapnote_ptr, strlen(cur_mapnote_ptr));
+
+                        *cur_mapnote_ptr++ = (char)ev->key.keysym.sym;
+                    }
+                }
+            } else {
                 return FALSE;
+            }
             chg_set_flg(AMAP_MESSAGE_EV);
             if (amptr->flags & AMAP_FULL_MSG)
                 chg_set_flg(AMAP_MAP_EV);
+            return TRUE;
         }
         return TRUE;
     } else {
@@ -831,6 +823,7 @@ uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
             // case SDL_SCANCODE_K:
             map_scroll_code = AMAP_PAN_S;
             break;
+
         case SDL_SCANCODE_ESCAPE:
         case SDL_SCANCODE_Q:
             _new_mode = _last_mode;
@@ -852,14 +845,7 @@ uchar amap_kb_callback(curAMap *amptr, SDL_Event *ev) {
             exp = 0;
             break;
         }
-        /* KLC - not used any more
-              if (btn!=-1)
-                 if (!flags_deal(amptr,btn,todo)) exp=0;
-              if(map_scroll_code!=0) {
-                 map_scrolltime=*tmd_ticks;
-                 s_bf(BTN_RECENTER,AMAP_SET);
-              }
-        */
+
         if (exp) {
             chg_set_flg(AMAP_MAP_EV);
             return TRUE;
