@@ -157,6 +157,7 @@ set(MAC_SRC
 	src/MacSrc/Shock.cpp
 	src/MacSrc/Prefs.cpp
 	src/MacSrc/MacTune.cpp
+	src/MacSrc/SDLFunctions.cpp
 	src/MacSrc/SDLSound.cpp
 	src/MacSrc/Modding.cpp
 	src/MacSrc/OpenGL.cpp
