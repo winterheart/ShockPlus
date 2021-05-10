@@ -501,24 +501,26 @@ uchar amap_scroll_handler(uiEvent *ev, LGRegion *reg, intptr_t v) {
     curAMap *amptr = oAMap(MFD_FULLSCR_MAP);
 
     if (!map_scroll_code || !map_scroll_clicked) {
-        if (ev->type == UI_EVENT_KBD_POLL) {
-            code = ev->raw_key_data.scancode;
+        if (ev->sdl_data.type == SDL_KEYDOWN) {
+            code = ev->sdl_data.key.keysym.scancode;
             switch (code) {
-            case UP_ARROW_CODE:
-            case KP_UP_CODE:
+            case SDL_SCANCODE_UP:
+            case SDL_SCANCODE_KP_8:
                 map_scroll_code = AMAP_PAN_N;
                 break;
-            case DOWN_ARROW_CODE:
-            case KP_DOWN_CODE:
+            case SDL_SCANCODE_DOWN:
+            case SDL_SCANCODE_KP_2:
                 map_scroll_code = AMAP_PAN_S;
                 break;
-            case LEFT_ARROW_CODE:
-            case KP_LEFT_CODE:
+            case SDL_SCANCODE_LEFT:
+            case SDL_SCANCODE_KP_4:
                 map_scroll_code = AMAP_PAN_W;
                 break;
-            case RIGHT_ARROW_CODE:
-            case KP_RIGHT_CODE:
+            case SDL_SCANCODE_RIGHT:
+            case SDL_SCANCODE_KP_6:
                 map_scroll_code = AMAP_PAN_E;
+                break;
+            default:
                 break;
             }
         }
