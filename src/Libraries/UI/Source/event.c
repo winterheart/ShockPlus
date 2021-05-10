@@ -484,6 +484,7 @@ errtype uiQueueEvent(uiEvent *ev) {
         for (kbe = kb_next(); kbe.code != KBC_NONE; kbe = kb_next()) {
             uiEvent out;
             mouse_get_xy(&out.pos.x, &out.pos.y);
+            out.sdl_data = kbe.event;
             out.type = UI_EVENT_KBD_RAW;
             out.raw_key_data.scancode = kbe.code;
             out.raw_key_data.action = kbe.state;
@@ -608,6 +609,7 @@ void ui_dispatch_mouse_event(uiEvent *mout) {
 // KEYBOARD POLLING SETUP
 // ----------------------
 
+/// Polling keys array
 uchar *ui_poll_keys = NULL;
 
 errtype uiSetKeyboardPolling(ubyte *codes) {
@@ -631,6 +633,7 @@ static ushort inputModToUImod(uchar mod) {
     return ret;
 }
 
+/// Keyboard events creator
 // KLC - For Mac version, call GetKeys once at the beginning, then check
 // the results in the loop.  Fill in the "mods" field (ready for cooking)
 // before dispatching an event.
@@ -646,6 +649,7 @@ void ui_poll_keyboard(void) {
             ev.poll_key_data.action = KBS_DOWN;
             ev.poll_key_data.scancode = *key;
             ev.poll_key_data.mods = inputModToUImod(sshockKeyStates[*key]);
+            // FIXME: WH add ev.sdl_data
 
             uiDispatchEvent(&ev);
         }
@@ -739,6 +743,7 @@ errtype uiPoll(void) {
             kbs_event kbe;
             kbe.code = ev->raw_key_data.scancode;
             kbe.state = ev->raw_key_data.action;
+            kbe.event = ev->sdl_data;
             err = kb_cook(kbe, &cooked, &result);
             if (err != OK)
                 return err;
@@ -760,11 +765,12 @@ errtype uiPoll(void) {
             kbs_event kbe = kb_next();
             if (kbe.code != KBC_NONE) {
                 uchar eaten;
-                // Spew(DSRC_UI_Polling,("uiPoll(): got a keyboard event: <%d,%x>\n",kbe.state,kbe.code));
+                DEBUG("%s: got a keyboard event: <%d,%02x>", __FUNCTION__, kbe.state, kbe.code);
                 out.pos = mousepos;
                 out.type = UI_EVENT_KBD_RAW;
                 out.raw_key_data.scancode = kbe.code;
                 out.raw_key_data.action = kbe.state;
+                out.sdl_data = kbe.event;
                 eaten = uiDispatchEvent(&out);
                 if (!eaten) {
                     ushort cooked;
@@ -845,6 +851,7 @@ errtype uiFlush(void) {
     kbs_event kbe = kb_next();
     mouse_flush();
 
+    // ((kbe.event.type == SDL_KEYDOWN || kbe.event.type == SDL_KEYUP) && kbe.event.key.keysym.scancode != SDL_SCANCODE_UNKNOWN)
     while (kbe.code != KBC_NONE) {
         ushort dummy;
         uchar result;

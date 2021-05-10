@@ -30,13 +30,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the input library.
  */
 
+#include <SDL.h>
+
 #ifndef __KBS_H
 #define __KBS_H
 typedef struct {
-    uchar code;
-    uchar state;
-    uchar ascii;     // Added for Mac version
-    uchar modifiers; //   "    "   "     "
+    uchar code;         // SDL_Scancode
+    uchar state;        // Always SDL_KEYDOWN
+    uchar ascii;        // Contains code + modifiers combined code
+    uchar modifiers;    // SDL_Keymod
+    SDL_Event event;    // Oh yeah, train wreck goes full steam
 } kbs_event;
 #endif /* !__KBS_H */
 
@@ -120,6 +123,8 @@ extern char *kbd_lowmem_start;
 #define KBD_SIGLIST_END (KBD_SIGLIST_START + KBD_SIGLIST_SIZE)
 #define KBD_LOWBUF_SIZE (KBD_SIGLIST_END)
 #define KBD_HANDLER_START (KBD_LOWBUF_SIZE)
+
+// FIXME Remove this after migration to SDL_Keycode
 #define KBC_SHIFT_PREFIX (0x0e0)
 #define KBC_PAUSE_PREFIX (0x0e1)
 #define KBC_PAUSE_DOWN (0x0e11d)

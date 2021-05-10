@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
+#include <SDL.h>
+
 #include "lg.h"
 #include "lg_error.h"
 #include "slab.h"
@@ -47,6 +49,8 @@ typedef uiRawKeyData uiPollKeyData;
 typedef struct {
     short code; /* cooked keycode, chock full o' stuff */
 } uiCookedKeyData;
+
+typedef SDL_Event uiSDLData;
 
 // mouse events
 typedef struct {
@@ -73,6 +77,7 @@ typedef struct {
 typedef struct _ui_event {
     LGPoint pos;
     uint32_t type;
+    uiSDLData sdl_data;
     union {
         short subtype;
         uiRawKeyData raw_key_data;
@@ -201,8 +206,11 @@ errtype uiPoll(void);
 // adds an event to the ui event queue. The event will be dispatched at the next uiPoll() call
 errtype uiQueueEvent(uiEvent *ev);
 
-// Dispatches an event right away, without queueing. Returns
-// Whether or not the event was accepted by a handler.
+/**
+ * Dispatches an event right away, without queueing.
+ * @param ev dispatching event
+ * @return TRUE if event was accepted by handler.
+ */
 uchar uiDispatchEvent(uiEvent *ev);
 
 // Like uiDispatchEvent, but dispatches an event to a
@@ -219,11 +227,10 @@ errtype uiSetMouseMotionPolling(uchar poll);
 // Fills *ev with a mouse motion event reflecting the current mouse position.
 errtype uiMakeMotionEvent(uiEvent *ev);
 
-// Codes is a KBC_NONE terminated array of scancodes to be polled by the system.
+// Codes is a SDL_SCANCODE_UNKNOWN terminated array of scancodes to be polled by the system.
 // if a code is in the list, the specified key will generate one keyboard polling event
-// (type UI_EVENT_KBD_POLL) per call to uiPoll.  otherwise, no such event will be generated
+// (type UI_EVENT_KBD_POLL) per call to uiPoll. Otherwise, no such event will be generated
 // for this key.
-// defaults to NULL.
 errtype uiSetKeyboardPolling(uchar *codes);
 
 // Flushes all ui system input events.

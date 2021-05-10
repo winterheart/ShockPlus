@@ -492,11 +492,12 @@ void pump_events(void) {
         case SDL_KEYDOWN: {
             uchar c = sdlKeyCodeToSSHOCKkeyCode(ev.key.keysym.sym);
             if (c != KBC_NONE) {
-                kbs_event keyEvent = {0};
+                kbs_event keyEvent;
 
                 keyEvent.code = c;
                 keyEvent.ascii = 0;
                 keyEvent.modifiers = 0;
+                keyEvent.event = ev;
 
                 // https://wiki.libsdl.org/SDLKeycodeLookup
                 // Keycodes for keys with printable characters are represented by the
@@ -627,6 +628,7 @@ void pump_events(void) {
                     continue;
 
                 kbs_event keyEvent = {0};
+                keyEvent.event = ev;
 
                 keyEvent.modifiers = 0;
 
