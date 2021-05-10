@@ -1052,7 +1052,7 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     // int code = ev->cooked_key_data.code & ~(KB_FLAG_DOWN | KB_FLAG_2ND);
     char old_diff, old_setup_line = curr_setup_line, n = 0;
 
-    if (ev->sdl_data.type == SDL_KEYDOWN || ev->sdl_data.type == SDL_TEXTINPUT) {
+    if (ev->sdl_data.type == SDL_KEYDOWN) {
         // if (ev->cooked_key_data.code & KB_FLAG_DOWN) {
         //  If in the splash screen, advance
         if (waiting_for_key) {
@@ -1136,10 +1136,10 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
             // case ALT('x'):
             //     break;
 
-            // case SDL_SCANCODE_MINUS:
+            case SDL_SCANCODE_MINUS:
             case SDL_SCANCODE_LEFT:
                 n = NUM_DIFF_CATEGORIES - 2; // note sneaky -2 for fallthrough
-            // case SDL_SCANCODE_EQUALS:
+            case SDL_SCANCODE_EQUALS:
             case SDL_SCANCODE_RIGHT:
                 n++; // n now NDC-1 or 1
                 if (!start_selected) {
@@ -1188,7 +1188,7 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
                 draw_username(0, player_struct.name);
                 n = strlen(player_struct.name);
                 // FIXME It's Unicode, we need to use wchar.h stuff here
-                char c = ev->sdl_data.text.text[0];
+                char c = ev->sdl_data.key.keysym.sym;
 
                 if (isprint(c) && (n < sizeof(player_struct.name)) && (strchr(valid_char_string, c) != NULL)) {
                     player_struct.name[n] = c;
