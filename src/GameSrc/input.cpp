@@ -253,8 +253,10 @@ uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
     kb_flush_bios();
 #endif // INPUT_CHAINING
 
-    if (h->type == UI_EVENT_KBD_COOKED)
+    // Broad event types related to KB
+    if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP || h->sdl_data.type == SDL_TEXTINPUT) {
         return hotkey_dispatch(h->subtype) == OK;
+    }
     return FALSE;
 }
 
