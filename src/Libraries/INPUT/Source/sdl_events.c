@@ -476,6 +476,64 @@ uchar Ascii2Code[95] = {
     0x32  // ~
 };
 
+/**
+ * Converts key into "cooked" SystemShock codes
+ * @param key SDL_Keycode key
+ * @return cooked ascii code
+ */
+uint8_t sdlKeyToASCIICode(SDL_Keycode key) {
+    // https://wiki.libsdl.org/SDLKeycodeLookup
+    // Keycodes for keys with printable characters are represented by the
+    // character byte in parentheses. Keycodes without character representations
+    // are determined by their scancode bitwise OR-ed with 1<<30 (0x40000000).
+    switch (key) {
+    case SDLK_F1:
+        return (128 + 0);
+    case SDLK_F2:
+        return (128 + 1);
+    case SDLK_F3:
+        return (128 + 2);
+    case SDLK_F4:
+        return (128 + 3);
+    case SDLK_F5:
+        return (128 + 4);
+    case SDLK_F6:
+        return (128 + 5);
+    case SDLK_F7:
+        return (128 + 6);
+    case SDLK_F8:
+        return (128 + 7);
+    case SDLK_F9:
+        return (128 + 8);
+    case SDLK_F10:
+        return (128 + 9);
+    case SDLK_F11:
+        return (128 + 10);
+    case SDLK_F12:
+        return (128 + 11);
+    case SDLK_KP_DIVIDE:
+        return (128 + 12);
+    case SDLK_KP_MULTIPLY:
+        return (128 + 13);
+    case SDLK_KP_MINUS:
+        return (128 + 14);
+    case SDLK_KP_PLUS:
+        return (128 + 15);
+    case SDLK_KP_ENTER:
+        return (128 + 16);
+    case SDLK_KP_DECIMAL:
+        return (128 + 17);
+    case SDLK_KP_0:
+        return (128 + 18);
+    default:
+        if (key >= 0x08 && key <= 127) {
+            return key;
+        } else {
+            return 0;
+        }
+    }
+}
+
 void pump_events(void) {
     SDL_Event ev;
 
@@ -486,8 +544,8 @@ void pump_events(void) {
             exit(0); // TODO: I guess there is a better way.
             break;
 
-        // TODO: really also handle key up here? the mac code apparently didn't, but where else do
-        //       kbs_events with .state == KBS_UP come from?
+            // TODO: really also handle key up here? the mac code apparently didn't, but where else do
+            //       kbs_events with .state == KBS_UP come from?
         case SDL_KEYUP:
         case SDL_KEYDOWN: {
             uchar c = sdlKeyCodeToSSHOCKkeyCode(ev.key.keysym.sym);
@@ -499,76 +557,15 @@ void pump_events(void) {
                 keyEvent.modifiers = 0;
                 keyEvent.event = ev;
 
-                // https://wiki.libsdl.org/SDLKeycodeLookup
-                // Keycodes for keys with printable characters are represented by the
-                // character byte in parentheses. Keycodes without character representations
-                // are determined by their scancode bitwise OR-ed with 1<<30 (0x40000000).
-
-                if (ev.key.keysym.sym >= 0x08 && ev.key.keysym.sym <= 127)
-                    keyEvent.ascii = ev.key.keysym.sym;
-                else {
-                    // use these invented "ascii" codes for hotkey system
-                    // see MacSrc/Prefs.c
-                    switch (ev.key.keysym.sym) {
-                    case SDLK_F1:
-                        keyEvent.ascii = 128 + 0;
-                        break;
-                    case SDLK_F2:
-                        keyEvent.ascii = 128 + 1;
-                        break;
-                    case SDLK_F3:
-                        keyEvent.ascii = 128 + 2;
-                        break;
-                    case SDLK_F4:
-                        keyEvent.ascii = 128 + 3;
-                        break;
-                    case SDLK_F5:
-                        keyEvent.ascii = 128 + 4;
-                        break;
-                    case SDLK_F6:
-                        keyEvent.ascii = 128 + 5;
-                        break;
-                    case SDLK_F7:
-                        keyEvent.ascii = 128 + 6;
-                        break;
-                    case SDLK_F8:
-                        keyEvent.ascii = 128 + 7;
-                        break;
-                    case SDLK_F9:
-                        keyEvent.ascii = 128 + 8;
-                        break;
-                    case SDLK_F10:
-                        keyEvent.ascii = 128 + 9;
-                        break;
-                    case SDLK_F11:
-                        keyEvent.ascii = 128 + 10;
-                        break;
-                    case SDLK_F12:
-                        keyEvent.ascii = 128 + 11;
-                        break;
-                    case SDLK_KP_DIVIDE:
-                        keyEvent.ascii = 128 + 12;
-                        break;
-                    case SDLK_KP_MULTIPLY:
-                        keyEvent.ascii = 128 + 13;
-                        break;
-                    case SDLK_KP_MINUS:
-                        keyEvent.ascii = 128 + 14;
-                        break;
-                    case SDLK_KP_PLUS:
-                        keyEvent.ascii = 128 + 15;
-                        break;
-                    case SDLK_KP_ENTER:
-                        keyEvent.ascii = 128 + 16;
-                        break;
-                    case SDLK_KP_DECIMAL:
-                        keyEvent.ascii = 128 + 17;
-                        break;
-                    case SDLK_KP_0:
-                        keyEvent.ascii = 128 + 18;
-                        break;
+                int ch = SDL_GetKeyFromScancode(ev.key.keysym.scancode);
+                if (ev.key.keysym.sym >= 0x08 && ev.key.keysym.sym <= 127) {
+                    keyEvent.code = Ascii2Code[ch - 32];
+                    if (isprint(ch) && isupper(ch)) {
+                        ch = tolower(ch);
+                        keyEvent.modifiers |= KB_MOD_SHIFT;
                     }
                 }
+                keyEvent.ascii = sdlKeyToASCIICode(ev.key.keysym.sym);
 
                 Uint16 mod = ev.key.keysym.mod;
 
@@ -580,17 +577,12 @@ void pump_events(void) {
                     keyEvent.modifiers |= KB_MOD_ALT;
 
                 if (ev.key.state == SDL_PRESSED) {
-                    if (ev.key.keysym.sym == SDLK_RETURN && mod & KMOD_ALT) {
+                    keyEvent.state = KBS_DOWN;
+                    if (ev.key.keysym.sym == SDLK_RETURN && (mod & KMOD_ALT)) {
                         toggleFullScreen();
                         break;
                     }
-
-                    // handle non-printable or ctrl'd or alt'd keys here
-                    // other cases are handled by text input event below
-                    if (ev.key.keysym.sym < 32 || ev.key.keysym.sym > 126 || (mod & KMOD_CTRL) || (mod & KMOD_ALT)) {
-                        keyEvent.state = KBS_DOWN;
-                        sshockKeyStates[c] = keyEvent.modifiers | KB_MOD_PRESSED;
-                    }
+                    sshockKeyStates[c] = keyEvent.modifiers | KB_MOD_PRESSED;
                     // add to queue regardless to ev.key.keysym.sym. The Great Event Dispatcher sort 'em all.
                     addKBevent(&keyEvent);
                 } else {
@@ -613,42 +605,6 @@ void pump_events(void) {
                         else
                             sshockKeyStates[i] &= ~KB_MOD_SHIFT;
                     }
-            }
-        } break;
-
-        case SDL_TEXTINPUT: {
-            uint32_t len = strlen(ev.text.text);
-
-            // for every utf8 char in null-terminated string
-            for (uint32_t i = 0; i < len; i++) {
-                int ch = ev.text.text[i];
-
-                // ignore if non-printable key
-                if (!isprint(ch))
-                    continue;
-
-                kbs_event keyEvent = {0};
-                keyEvent.event = ev;
-
-                keyEvent.modifiers = 0;
-
-                // if uppercase, lower it and set shift modifier
-                if (isupper(ch)) {
-                    ch = tolower(ch);
-                    keyEvent.modifiers |= KB_MOD_SHIFT;
-                }
-
-                // get code for this printable ascii key
-                int c = Ascii2Code[ch - 32];
-
-                keyEvent.code = c;
-                keyEvent.ascii = ch;
-
-                // this is a key down event; key up will be handled in event case above
-                keyEvent.state = KBS_DOWN;
-                addKBevent(&keyEvent);
-
-                sshockKeyStates[c] = keyEvent.modifiers | KB_MOD_PRESSED;
             }
         } break;
 

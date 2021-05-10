@@ -254,7 +254,8 @@ uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
 #endif // INPUT_CHAINING
 
     // Broad event types related to KB
-    if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP || h->sdl_data.type == SDL_TEXTINPUT) {
+    if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP) {
+        DEBUG("%s: dispatching hotkey %d (SDL: %d, %d, %d)", __FUNCTION__ , h->subtype, h->sdl_data.key.type, h->sdl_data.key.state, h->sdl_data.key.keysym.scancode);
         return hotkey_dispatch(h->subtype) == OK;
     }
     return FALSE;

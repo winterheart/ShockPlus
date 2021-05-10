@@ -780,7 +780,7 @@ errtype uiPoll(void) {
             kbs_event kbe = kb_next();
             if (kbe.code != KBC_NONE) {
                 uchar eaten;
-                DEBUG("%s: got a keyboard event: <%d,%02x>", __FUNCTION__, kbe.state, kbe.code);
+                DEBUG("%s: got a keyboard event: %d, %d, %d", __FUNCTION__, kbe.event.key.type, kbe.event.key.state, kbe.event.key.keysym.scancode );
                 out.pos = mousepos;
                 out.type = UI_EVENT_KBD_RAW;
                 out.raw_key_data.scancode = kbe.code;
