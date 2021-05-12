@@ -631,8 +631,10 @@ void pump_events(void) {
                 mouseEvent.buttons |= down ? (1 << MOUSE_RBUTTON) : 0;
                 break;
 
-                // case SDL_BUTTON_MIDDLE: // TODO: is this MOUSE_CDOWN/UP ?
-                // break;
+            case SDL_BUTTON_MIDDLE:
+                mouseEvent.type = down ? MOUSE_CDOWN : MOUSE_CUP;
+                mouseEvent.buttons |= down ? (1 << MOUSE_CBUTTON) : 0;
+                break;
             }
 
             if (mouseEvent.type != 0) {
