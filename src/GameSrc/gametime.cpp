@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "edms.h"
 #include "gametime.h"
 #include "faketime.h"
 #include "player.h"

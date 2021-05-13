@@ -43,9 +43,6 @@ extern Q S[MAX_OBJ][7][4], I[MAX_OBJ][DOF_MAX];
 //	==========
 //	Nope.
 
-//	We need to link to c...
-//	=======================
-extern "C" {
 
 //	Here are the bridge routines to the models...
 //	=============================================
@@ -95,5 +92,3 @@ physics_handle EDMS_beam_weapon(fix X[3], fix D[3], fix kick, fix knock, fix siz
     //	==========================
     return ph;
 }
-
-} // End of extern "C" for the &^%$@% compiler...

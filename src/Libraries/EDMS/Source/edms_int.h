@@ -117,22 +117,16 @@ typedef int32_t object_number;
 #define physics_handle_to_object_number(ph) (ph2on[ph])
 #define object_number_to_physics_handle(on) (on2ph[on])
 
-extern "C" {
-
 void EDMS_init_handles(void);
 physics_handle EDMS_bind_object_number(object_number on);
 void EDMS_remap_object_number(object_number old, object_number nu);
 physics_handle EDMS_get_free_ph(void);
 void EDMS_release_object(physics_handle ph);
 
-}
-
 //	Terrain
 //	=======
 Q terrain(Q X, Q Y, int32_t deriv);                         // This calls Terrain()
 TerrainHit indoor_terrain(Q X, Q Y, Q Z, Q R, physics_handle ph, TFType type); // Indoor for Citadel, FBO, etc...
-
-extern "C" {
 
 fix Terrain(fix X, fix Y, int32_t deriv);                           // This is provided by the user...
 TerrainHit Indoor_Terrain(fix X, fix Y, fix Z, fix R, physics_handle ph, TFType type); // As is this...
@@ -167,7 +161,6 @@ typedef struct {
 
 bool FF_terrain(fix X, fix Y, fix Z, uchar fast, terrain_ff *TFF); // From Freefall...
 bool FF_raycast(fix x, fix y, fix z, fix *vec, fix range, fix *where_hit, terrain_ff *tff);
-}
 
 bool ff_terrain(Q X, Q Y, Q Z, uchar fast, terrain_ff *TFF); // For the refined...
 bool ff_raycast(Q x, Q y, Q z, Fixpoint *vec, Q range, Fixpoint *where_hit, terrain_ff *FFT);

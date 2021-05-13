@@ -30,10 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern "C" {
 #include "sdl_events.h"
-};
+}
 
 #include "weapons.h"
 #include "damage.h"
+#include "edms.h"
 #include "effect.h"
 #include "hand.h"
 #include "hudobj.h"

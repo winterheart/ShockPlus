@@ -306,11 +306,6 @@ include_directories(
 	${CMAKE_BINARY_DIR}/src/GameSrc/Headers
 )
 
-# Include magic header file, set struct packing size
-add_definitions(
-	-include precompiled.h
-)
-
 add_executable(shockplus
 	${GAME_SRC}
 	${MAC_SRC}

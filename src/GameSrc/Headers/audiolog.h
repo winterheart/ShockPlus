@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AUDIOLOG_H
 
 #include "lg_error.h"
+#include "lg_types.h"
 
 extern errtype audiolog_init();
 extern errtype audiolog_play(int email_id);

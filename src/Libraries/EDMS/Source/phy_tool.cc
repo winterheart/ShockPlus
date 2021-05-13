@@ -326,8 +326,6 @@ void EDMS_get_Euler_angles(Q &alpha, Q &beta, Q &gamma, int32_t object) {
     gamma *= -1;
 }
 
-extern "C" {
-
 #pragma require_prototypes off
 
 //      Call this to see if an object is asleep...
@@ -355,5 +353,3 @@ void EDMS_crystal_meth(physics_handle ph) {
 }
 
 #pragma require_prototypes on
-
-} // End of "Extern "C""...

@@ -57,10 +57,6 @@ typedef struct {
 //      ============================================
 Q old_state[6], new_state[6];
 
-//	We need to link to c...
-//	=======================
-extern "C" {
-
 //	Here are the bridge routines to the models...
 //	=============================================
 
@@ -324,5 +320,3 @@ fix EDMS_get_pelvis_damage(physics_handle ph, fix delta_t) {
 
     return fix_mul(delta_t, I[object][14].to_fix());
 }
-
-} // End of extern "C" for the &^%$@% compiler...

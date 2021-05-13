@@ -31,7 +31,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdbool.h>
 #include <stdint.h>
+extern "C" {
 #include "fix.h"
+}
 
 //	Max and Min
 //	===========
@@ -54,19 +56,12 @@ extern physics_handle on2ph[MAX_OBJ];
 
 //	Just in case...
 //	---------------
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 void EDMS_init_handles(void);
 physics_handle EDMS_bind_object_number(object_number on);
 void EDMS_remap_object_number(object_number old, object_number nu);
 physics_handle EDMS_get_free_ph(void);
 void EDMS_release_object(physics_handle ph);
-
-#ifdef __cplusplus
-}
-#endif
 
 //	Memory conserving stuff...
 //	==========================

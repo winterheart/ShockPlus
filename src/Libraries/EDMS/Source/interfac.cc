@@ -133,10 +133,6 @@ bool FF_terrain(fix X, fix Y, fix Z, uchar fast, terrain_ff *TFF) { return (true
 
 bool FF_raycast(fix x, fix y, fix z, fix *vec, fix range, fix *where_hit, terrain_ff *tff) { return (true); }
 
-//	We need to link to c...
-//	=======================
-extern "C" {
-
 //	Startup the mighty and perilous EDMS engine...
 //	==============================================
 void EDMS_startup(EDMS_data *D) {
@@ -740,5 +736,3 @@ physics_handle EDMS_get_free_ph(void) {
     //	Fun...
     //	======
 }
-
-} // End of extern "C" for the &^%$@% compiler...

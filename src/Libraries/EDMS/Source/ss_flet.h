@@ -26,10 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __SS_FLET_H
 #define __SS_FLET_H
 
-#if defined(__cplusplus)
-extern "C" {
-#endif // defined(__cplusplus)
-
 typedef struct {
     fix norm[3]; // unit normal
     fix att;     // attentuation
@@ -134,9 +130,5 @@ typedef enum tagTerrainHit {
     HIT_FACELET,
     MISS
 } TerrainHit;
-
-#if defined(__cplusplus)
-}
-#endif // defined(__cplusplus)
 
 #endif //

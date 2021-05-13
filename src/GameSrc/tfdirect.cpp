@@ -761,8 +761,6 @@ void tf_global_bcd_add(int flg, int param) {
 /* actual call
  * note us passing lots of annoying useless things on the stack and annoying everyone
  */
-extern "C" {
 TerrainHit Indoor_Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad, int ph, TFType type) {
     return tf_direct(fix_x, fix_y, fix_z, rad, ph, type);
-}
 }
