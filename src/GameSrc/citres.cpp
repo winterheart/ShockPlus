@@ -89,7 +89,6 @@ errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, LGRect *a
     *bmp = f->bm;
 
     // Copy the bits.
-    memcount += f->bm.w * f->bm.h; // FIXME is this needed any more?
     if (f->bm.type == BMT_RSD8) {
 	gr_rsd8_convert(&f->bm, bmp);
 	// gr_rsd8_convert uses its own buffer, so copy it back.

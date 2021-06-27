@@ -177,8 +177,6 @@ Ref text_bitmap_refs[NUM_TEXT_BITMAPS] = {REF_STR_WordZero, REF_STR_ScreenZero};
 grs_bitmap *text_bitmap_ptrs[NUM_TEXT_BITMAPS];
 grs_canvas text_canvases[NUM_TEXT_BITMAPS];
 
-int memcount = 0;
-
 errtype obj_init() {
     uchar c_class, c_subclass;
     int i, j, count, class_count = 0;

@@ -137,7 +137,6 @@ extern ObjID physics_handle_id[MAX_OBJ];
 extern int physics_handle_max;
 
 extern uchar cam_mode;
-extern int memcount;
 extern cams objmode_cam;
 extern uchar trigger_check;
 extern Id posture_bases[];
