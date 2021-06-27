@@ -26,20 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __MOVIE_H
 #define __MOVIE_H
 
-#ifndef __FIX_H
-#include "fix.h"
-#endif
-#ifndef __2D_H
 #include "2d.h"
-#endif
-#ifndef __RES_H
-#include "res.h"
-#endif
-#ifndef __CIRCBUFF_H
-#include "circbuff.h"
-#endif
-
 #include "afile.h"
+#include "fix.h"
+#include "res.h"
 
 /*
 #ifndef AIL_H
@@ -148,14 +138,6 @@ typedef struct {
 } MovieAudioBuffers;
 
 typedef struct {
-    CircBuff cb;            // circular data buffer
-    int32_t blockLen;       // # bytes to read in each block
-    int32_t ovfLen;         // # overflow bytes past circular buffer
-    MovieChunk *pCurrChunk; // ptr to current chunk to use
-    int32_t bytesLeft;      // bytes left to read
-} MovieBuffInfo;
-
-typedef struct {
     int32_t snd_in;
     int16_t nextBuff; // next buffer to load (0 or 1, -1 for none)
     int16_t smp_id;   // snd lib id of the current sample
@@ -168,7 +150,6 @@ typedef struct Movie_ {
     int32_t fileOff;                                // offset in file to start of movie
     grs_canvas *pcanvas;                            // ptr to canvas being played into
     fix tStart;                                     // time movie started
-    MovieBuffInfo bi;                               // movie buffering info
     MovieAudioState as;                             // current audio state for each channel
     uint8_t *pColorSet;                             // ptr to color set table (4x4 codec)
     int32_t lenColorSet;                            // length of color set table
@@ -184,15 +165,6 @@ typedef struct Movie_ {
 } Movie;
 
 //	Prototypes
-
-Movie *MoviePrepare(int32_t fd, uint8_t *buff, int32_t buffLen, int32_t blockLen);
-Movie *MoviePrepareRes(Id id, uint8_t *buff, int32_t buffLen, int32_t blockLen);
-void MovieReadAhead(Movie *pmovie, int32_t numBlocks);
-void MoviePlay(Movie *pmovie, grs_canvas *pcanvas);
-void MovieUpdate(Movie *pmovie);
-void MovieAdvance(Movie *pmovie);
-void MovieRestart(Movie *pmovie);
-void MovieKill(Movie *pmovie);
 
 #define TXTCB_FLAG_CENTER_X 0x01
 #define TXTCB_FLAG_CENTER_Y 0x02

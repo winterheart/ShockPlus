@@ -39,12 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __COMPOSEW_H
 #define __COMPOSEW_H
 
-#ifndef __2D_H
 #include "2d.h"
-#endif
-//#ifndef __RSD24_H
-//#include <rsd24.h>
-//#endif
 
 //	Prototypes
 
