@@ -26,12 +26,12 @@
 //		Rex E. Bradford
 
 /*
-* $Header: r:/prj/lib/src/dstruct/RCS/huffde.c 1.1 1994/08/22 17:13:01 rex Exp $
-* $Log: huffde.c $
+ * $Header: r:/prj/lib/src/dstruct/RCS/huffde.c 1.1 1994/08/22 17:13:01 rex Exp $
+ * $Log: huffde.c $
  * Revision 1.1  1994/08/22  17:13:01  rex
  * Initial revision
  *
-*/
+ */
 
 //============================================================================
 // Includes
@@ -53,9 +53,7 @@
 
 extern "C" {
 
-void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc,
-    int tokSize)
-{
+void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc, int tokSize) {
     uchar *pft;
     uint token, runCount;
     int runShift;
@@ -67,8 +65,7 @@ void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc,
 
     //	While still inside dest table, keep going
 
-    while (pft < (pFlashTab + lenTab))
-    {
+    while (pft < (pFlashTab + lenTab)) {
 
         //	Get next token, extract run count
 
@@ -77,12 +74,10 @@ void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc,
 
         //	Copy that many times into dest
 
-        while (runCount-- != 0)
-        {
+        while (runCount-- != 0) {
             memcpy(pft, &token, tokSize);
             pft += tokSize;
         }
     }
 }
-
 }

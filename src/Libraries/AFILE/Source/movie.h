@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	3. Actual chunks, as pointed at in MovieChunk[] array
 
 //	Movie chunk format
-#pragma pack(push,1)
+#pragma pack(push, 1)
 // FIXME bitfield and little-endian hell of madness...
 /*
 typedef struct {
@@ -86,7 +86,7 @@ typedef struct {
 #define MOVIE_FTABLE_HUFFTAB 1  // huffman table (compressed)
 
 //	Movie header layout
-#pragma pack(push,1)
+#pragma pack(push, 1)
 typedef struct {
     uint32_t magicId;        // 'MOVI' (MOVI_MAGIC_ID)
     int32_t numChunks;       // number of chunks in movie

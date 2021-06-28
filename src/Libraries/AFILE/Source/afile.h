@@ -75,9 +75,9 @@ typedef struct {
 struct Amethods_;
 
 typedef struct MFILE {
-	unsigned char *p;
-	int size;
-	int pos;
+    unsigned char *p;
+    int size;
+    int pos;
 } MFILE;
 
 typedef struct Afile_ {
@@ -103,13 +103,13 @@ typedef struct Amethods_ {
     int32_t (*f_ReadAudio)(Afile *paf, void *paudio);
     int32_t (*f_ReadReset)(Afile *paf);
     int32_t (*f_ReadClose)(Afile *paf);
-/*
+    /*
     int32_t (*f_WriteBegin)(Afile *paf);
     int32_t (*f_WriteAudio)(Afile *paf, void *paudio);
     int32_t (*f_WriteFrame)(Afile *paf, grs_bitmap *pbm, int32_t bmlength, fix time);
     int32_t (*f_WriteFramePal)(Afile *paf, Apalette *ppal);
     int32_t (*f_WriteClose)(Afile *paf);
-*/
+    */
 } Amethods;
 
 //	Function prototypes: reading anim files

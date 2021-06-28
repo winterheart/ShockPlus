@@ -21,12 +21,12 @@
 //		Rex E. Bradford
 
 /*
-* $Header: r:/prj/lib/src/dstruct/RCS/huff.h 1.1 1994/08/22 17:13:06 rex Exp $
-* $Log: huff.h $
+ * $Header: r:/prj/lib/src/dstruct/RCS/huff.h 1.1 1994/08/22 17:13:06 rex Exp $
+ * $Log: huff.h $
  * Revision 1.1  1994/08/22  17:13:06  rex
  * Initial revision
- * 
-*/
+ *
+ */
 
 #ifndef __HUFF_H
 #define __HUFF_H
@@ -38,11 +38,11 @@
 //	to build the tree.
 
 typedef struct _HuffNode {
-	uint token;					// token value
-	uint freq;						// frequency
-	struct _HuffNode *parent;	// ptr to parent node
-	struct _HuffNode *right;	// ptr to right node
-	struct _HuffNode *left;		// ptr to left node
+    uint token;               // token value
+    uint freq;                // frequency
+    struct _HuffNode *parent; // ptr to parent node
+    struct _HuffNode *right;  // ptr to right node
+    struct _HuffNode *left;   // ptr to left node
 } HuffNode;
 
 HuffNode *HuffBuild(HuffNode *htree, int numTerminals, int *pNumNodes);
@@ -53,8 +53,7 @@ HuffNode *HuffBuild(HuffNode *htree, int numTerminals, int *pNumNodes);
 //	as well.
 
 void HuffDump(HuffNode *htree, HuffNode *hroot, int numNodes);
-void HuffWalk(HuffNode *htree, HuffNode *hroot,
-	void (*func)(HuffNode *htree, HuffNode *hnode, uint code, int numBits));
+void HuffWalk(HuffNode *htree, HuffNode *hroot, void (*func)(HuffNode *htree, HuffNode *hnode, uint code, int numBits));
 void HuffPrintNode(HuffNode *htree, HuffNode *hnode, uint code, int numBits);
 
 //	To speed up decoding, "flash tables" are used.  Normally, a huffman
@@ -74,14 +73,13 @@ void HuffPrintNode(HuffNode *htree, HuffNode *hnode, uint code, int numBits);
 //	to 28 bits.  Remember to include the 4 numbits bits when calculating
 //	the width of your flash entries
 
-#define HUFF_DEFAULT_BITS_PRI	12
-#define HUFF_DEFAULT_BITS_SEC	4
+#define HUFF_DEFAULT_BITS_PRI 12
+#define HUFF_DEFAULT_BITS_SEC 4
 
-int HuffMakeFlashTables(HuffNode *htree, HuffNode *hroot, uchar *pFlashTab,
-	int pftLength, int tokSize, int bitsPri, int bitsSec);
+int HuffMakeFlashTables(HuffNode *htree, HuffNode *hroot, uchar *pFlashTab, int pftLength, int tokSize, int bitsPri,
+                        int bitsSec);
 void HuffPrintFlashTables(uchar *pFlashTab, uint length, int tokSize);
-int HuffCompressFlashTables(uchar *pFlashTab, uint length, int tokSize,
-	uint *pcBuff);
+int HuffCompressFlashTables(uchar *pFlashTab, uint length, int tokSize, uint *pcBuff);
 
 //	Flash tables must be decompressed to be used:
 
@@ -89,8 +87,7 @@ int HuffCompressFlashTables(uchar *pFlashTab, uint length, int tokSize,
 extern "C" {
 #endif
 
-void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc,
-	int tokSize);
+void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc, int tokSize);
 
 #ifdef __cplusplus
 }
@@ -101,22 +98,22 @@ void HuffExpandFlashTables(uchar *pFlashTab, uint lenTab, uint *pc,
 //	an output stream.  See huffde.h for decoding (reading) macros.
 
 typedef struct {
-	uchar *bits;			// ptr to huff-encoded bits
-	int ibit;				// bit # within current byte, 0-7
+    uchar *bits; // ptr to huff-encoded bits
+    int ibit;    // bit # within current byte, 0-7
 } HuffPtr;
 
-#define HuffResetWritePtr(ph,pbits) { \
-	(ph)->bits=(pbits);	\
-	(ph)->ibit=7;			\
-	*((ph)->bits)=0;		\
-}
+#define HuffResetWritePtr(ph, pbits) \
+    {                                \
+        (ph)->bits = (pbits);        \
+        (ph)->ibit = 7;              \
+        *((ph)->bits) = 0;           \
+    }
 
 void HuffEncode(HuffPtr *ph, uint code, int numBits);
 void HuffEncodeNode(HuffPtr *ph, HuffNode *hnode);
 
 #define HuffEndOutput(ph) ((ph)->bits++)
 
-#define HuffStreamLen(ph,pbase) ((ph)->bits - pbase)
+#define HuffStreamLen(ph, pbase) ((ph)->bits - pbase)
 
 #endif
-

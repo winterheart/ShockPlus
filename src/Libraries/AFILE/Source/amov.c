@@ -83,37 +83,36 @@ Amethods movMethods = {
     AmovReadAudio,    // f_ReadAudio
     AmovReadReset,
     AmovReadClose,
-/*
+    /*
     AmovWriteBegin,
     NULL, // f_WriteAudio
     AmovWriteFrame,
     NULL, // f_WriteFramePal
     AmovWriteClose,
-*/
+    */
 };
 
 #define MAX_MOV_FRAMES 4096
 
 #define MOV_TEMP_FILENAME "__movie_.tmp"
 
-//assumes count is 1
-int mfread(void *p, int size, MFILE *mf)
-{
-	if (mf->pos < 0 || size <= 0) return 0;
-	if (mf->pos + size > mf->size) size = mf->size - mf->pos;
-	if (size <= 0) return 0;
+// assumes count is 1
+int mfread(void *p, int size, MFILE *mf) {
+    if (mf->pos < 0 || size <= 0)
+        return 0;
+    if (mf->pos + size > mf->size)
+        size = mf->size - mf->pos;
+    if (size <= 0)
+        return 0;
 
-	memcpy(p, mf->p + mf->pos, size);
-	mf->pos += size;
+    memcpy(p, mf->p + mf->pos, size);
+    mf->pos += size;
 
-	return size;
+    return size;
 }
 
-//assumes origin is SEEK_SET
-void mfseek(MFILE *mf, int pos)
-{
-	mf->pos = pos;
-}
+// assumes origin is SEEK_SET
+void mfseek(MFILE *mf, int pos) { mf->pos = pos; }
 
 //	------------------------------------------------------
 //		READER METHODS
@@ -183,7 +182,7 @@ int32_t AmovReadHeader(Afile *paf) {
 //
 //	AmovReadFrame() reads the next frame.
 
-//filled when chunk contains subtitle data; used extern in cutsloop.c
+// filled when chunk contains subtitle data; used extern in cutsloop.c
 char EngSubtitle[256];
 char FrnSubtitle[256];
 char GerSubtitle[256];
@@ -267,8 +266,7 @@ NEXT_CHUNK:
             mfseek(paf->mf, pmi->pcurrChunk->offset);
             mfread(pmi->pal, 768, paf->mf);
             pmi->newPal = TRUE;
-        }
-        else if (pmi->pcurrChunk->flags & MOVIE_FPAL_CLEAR) {
+        } else if (pmi->pcurrChunk->flags & MOVIE_FPAL_CLEAR) {
             // Clear the bitmap data prior to decoding an iframe. Setting to 0
             // isn't ideal here since it's the transparency colour, but we don't
             // have a better candidate without searching the palette (which is
@@ -285,8 +283,7 @@ NEXT_CHUNK:
         pmi->pcurrChunk++;
         goto NEXT_CHUNK;
 
-    case MOVIE_CHUNK_TEXT:
-    {
+    case MOVIE_CHUNK_TEXT: {
         DEBUG("MOVIE_CHUNK_TEXT");
         mfseek(paf->mf, pmi->pcurrChunk->offset);
 
@@ -299,18 +296,22 @@ NEXT_CHUNK:
         mfread(&offset, sizeof(offset), paf->mf);
         mfseek(paf->mf, pmi->pcurrChunk->offset + offset);
 
-        for (i=0; i<sizeof(string)-1; i++)
-        {
+        for (i = 0; i < sizeof(string) - 1; i++) {
             mfread(&ch, sizeof(ch), paf->mf);
-            if (ch == 0) break;
+            if (ch == 0)
+                break;
             string[i] = ch;
         }
         string[i] = 0;
 
-        if (!memcmp(tag, "AREA", 4)) {} // "# # # # CLR" : left, top, right, bottom
-        else if (!memcmp(tag, "STD ", 4)) strcpy(EngSubtitle, string);
-        else if (!memcmp(tag, "FRN ", 4)) strcpy(FrnSubtitle, string);
-        else if (!memcmp(tag, "GER ", 4)) strcpy(GerSubtitle, string);
+        if (!memcmp(tag, "AREA", 4)) {
+        } // "# # # # CLR" : left, top, right, bottom
+        else if (!memcmp(tag, "STD ", 4))
+            strcpy(EngSubtitle, string);
+        else if (!memcmp(tag, "FRN ", 4))
+            strcpy(FrnSubtitle, string);
+        else if (!memcmp(tag, "GER ", 4))
+            strcpy(GerSubtitle, string);
 
         pmi->pcurrChunk++;
         goto NEXT_CHUNK;
@@ -357,7 +358,7 @@ int32_t AmovReadAudio(Afile *paf, void *paudio) {
             mfseek(paf->mf, pmi->pcurrChunk->offset);
             size = mfread(p, MOVIE_DEFAULT_BLOCKLEN, paf->mf);
             memcpy(((uint8_t *)paudio) + i, p, size);
-			if (size < MOVIE_DEFAULT_BLOCKLEN)
+            if (size < MOVIE_DEFAULT_BLOCKLEN)
                 memset(((uint8_t *)paudio) + i + size, 128,
                        MOVIE_DEFAULT_BLOCKLEN - size); // fill rest with silence (128)
             i += size;
@@ -366,12 +367,14 @@ int32_t AmovReadAudio(Afile *paf, void *paudio) {
     }
     free(p);
 
-	//prevent pop at end of audio playback
-	float vol = 1.0;
-	size = i;
-	i -= 512; if (i >= size) i = 0;
-	for (; i < size; i++, vol *= 0.8)
-		*((uint8_t *)paudio + i) = 128 + (uint8_t)((*((uint8_t *)paudio + i) - 128) * vol);
+    // prevent pop at end of audio playback
+    float vol = 1.0;
+    size = i;
+    i -= 512;
+    if (i >= size)
+        i = 0;
+    for (; i < size; i++, vol *= 0.8)
+        *((uint8_t *)paudio + i) = 128 + (uint8_t)((*((uint8_t *)paudio + i) - 128) * vol);
 
     return 0;
 }
@@ -398,8 +401,8 @@ int32_t AmovReadClose(Afile *paf) {
     free(pmi->pmc);
     free(pmi);
 
-	free(paf->mf->p);
-	free(paf->mf);
+    free(paf->mf->p);
+    free(paf->mf);
 
     return (0);
 }

@@ -28,8 +28,8 @@
 extern "C" {
 #endif
 
-void Draw4x4(uchar* p, int width, int height);
-void Draw4x4Reset(uchar* colorset, uchar* hufftab);
+void Draw4x4(uchar *p, int width, int height);
+void Draw4x4Reset(uchar *colorset, uchar *hufftab);
 
 #ifdef __cplusplus
 }

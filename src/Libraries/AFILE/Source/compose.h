@@ -57,7 +57,7 @@ void ComposeFlat24Add(grs_bitmap *pcompose, grs_bitmap *pbm);
 //	Specific diff routines (type is compose buffer type, not bm!)
 
 int32_t ComposeFlat8Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew, grs_bitmap *pbmDiff);
-//int32_t ComposeFlat24Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew, grs_bitmap *pbmDiff);
+// int32_t ComposeFlat24Diff(grs_bitmap *pcompose, grs_bitmap *pbmNew, grs_bitmap *pbmDiff);
 
 //	Specific convert routines (type is compose buffer type, not bm!)
 

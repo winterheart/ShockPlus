@@ -266,7 +266,7 @@ int32_t ComposeConvert(grs_bitmap *pcompose, grs_bitmap *pbm) {
     case BMT_FLAT8:
         return (ComposeFlat8Convert(pcompose, pbm));
     case BMT_FLAT24:
-        return(ComposeFlat24Convert(pcompose, pbm));
+        return (ComposeFlat24Convert(pcompose, pbm));
 
     default:
         WARN("%s: can't handle compose buffer type: %d", __FUNCTION__, pcompose->type);
@@ -309,7 +309,7 @@ CONVERT:
         gr_push_canvas(&cv);
         gr_bitmap(pcompose, 0, 0);
         gr_pop_canvas();
-        return(numPixels * 3);
+        return (numPixels * 3);
 
     default:
         printf("ComposeFlat8Convert: can't convert to bm type: %d\n", pbm->type);
