@@ -159,6 +159,7 @@ target_include_directories(2D PUBLIC
 		${CMAKE_SOURCE_DIR}/src/Libraries/2D/Source/GR
 		${CMAKE_SOURCE_DIR}/src/Libraries/2D/Source/RSD
 		${CMAKE_SOURCE_DIR}/src/Libraries/2D/Source/string
+		${CMAKE_SOURCE_DIR}/src/Libraries/DSTRUCT/Source
 	>
 	$<INSTALL_INTERFACE:include>
 	)

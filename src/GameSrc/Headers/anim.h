@@ -2,10 +2,10 @@
 #define ANIM_H
 
 
-#include "2dres.h"
 #include "fix.h"
 #include "rect.h"
 #include "region.h"
+#include "res.h"
 
 //      Animation event codes
 

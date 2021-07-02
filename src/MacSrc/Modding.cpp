@@ -17,10 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "2dres.h"
 #include "Modding.h"
 #include "lg.h"
 #include "lg_error.h"
+#include "res.h"
 
 #include <stdio.h>
 #include <dirent.h>

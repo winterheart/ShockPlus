@@ -91,4 +91,9 @@ extern const ResourceFormat RawFormat;
 extern const ResourceFormat RefTableFormat;
 #define FORMAT_REFTABLE (&RefTableFormat)
 
+// On-disc layout of a FrameDesc.
+extern const ResLayout FrameDescLayout;
+extern const ResourceFormat FrameDescFormat;
+#define FORMAT_FRAMEDESC (&FrameDescFormat)
+
 #endif // !defined(RESFORMAT_H)

@@ -49,9 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-#include "2d.h"
-#include "res.h"
-#include "../DSTRUCT/Source/rect.h"
+#include "GR/grs.h"
+#include "rect.h"
 
 #pragma pack(push,2)
 
@@ -67,12 +66,6 @@ typedef struct {
    int32_t pallOff;       // offset to pallette
                         // bitmap's bits follow immediately
 } FrameDesc;
-
-// On-disc layout of a FrameDesc.
-extern const ResLayout FrameDescLayout;
-extern const ResourceFormat FrameDescFormat;
-#define FORMAT_FRAMEDESC (&FrameDescFormat)
-
 
 #pragma pack(pop)
 

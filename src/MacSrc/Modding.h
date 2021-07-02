@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __MODDING_H
 #define __MODDING_H
 
+#include "lg_types.h"
+
 //--------------------
 // Defines
 //--------------------

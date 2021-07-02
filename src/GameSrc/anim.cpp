@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL.h>
 
 #include "Shock.h"
+#include "2dres.h"
 #include "anim.h"
 #include "cursors.h"
 #include "gr2ss.h"
