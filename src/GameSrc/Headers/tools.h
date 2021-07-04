@@ -56,10 +56,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // mouse tricks.
 errtype draw_raw_resource_bm(Ref id, int x, int y);
 
-// same thing, down to error handling. FIXME do we need both of these? (Or
-// indeed either.)
-errtype draw_raw_res_bm_temp(Ref id, int x, int y);
-
 // Draw a resource bitmap at the x,y coordinates, loading the pallet (if available)
 // and doing appropriate mouse tricks.
 void draw_hires_resource_bm(Ref id, int x, int y);

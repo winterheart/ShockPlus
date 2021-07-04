@@ -2144,7 +2144,7 @@ errtype draw_shodan_influence(MFD *mfd, uchar amt) {
     char *s = get_temp_string(SHODAN_FAILURE_STRING);
 
     amt = lg_min(NUM_SHODAN_MUGS - 1, amt >> SHODAN_INTERVAL_SHIFT);
-    draw_raw_res_bm_temp(REF_IMG_EmailMugShotBase + FIRST_SHODAN_MUG + amt, 0, 0);
+    draw_raw_resource_bm(REF_IMG_EmailMugShotBase + FIRST_SHODAN_MUG + amt, 0, 0);
 
     gr_set_font(static_cast<grs_font *>(ResLock(MFD_FONT)));
     gr_string_wrap(s, MFD_VIEW_WID);

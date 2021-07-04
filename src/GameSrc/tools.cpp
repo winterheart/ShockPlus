@@ -143,20 +143,8 @@ void draw_hires_halfsize_bm(Ref id, int x, int y) {
     RefUnlock(id);
 }
 
-errtype draw_raw_res_bm_temp(Ref id, int x, int y) {
-    FrameDesc *f = static_cast<FrameDesc *>(RefLock(id));
-    if (f == NULL) {
-	return ERR_FREAD;
-    }
-    ss_bitmap(&f->bm, x, y);
-    RefUnlock(id);
-    return OK;
-}
-
 errtype draw_raw_resource_bm(Ref id, int x, int y) {
-    FrameDesc *f;
-
-    f = static_cast<FrameDesc *>(RefLock(id));
+    FrameDesc *f = static_cast<FrameDesc *>(RefLock(id));
     if (f == NULL)
         critical_error(CRITERR_MEM | 9);
     ss_bitmap(&f->bm, x, y);
