@@ -136,8 +136,10 @@ void mfd_fixture_expose(MFD *mfd, ubyte control) {
             // Hey, this is all button code that's going to have to be
             // yanked out and moved elsewhere
             int ref = REF_IMG_On + ((FIXTURE_STATE == 0) ? 1 : 0);
-            short xoff = (BUTTON_STATE_W - res_bm_width(ref)) / 2;
-            short yoff = (BUTTON_STATE_H - res_bm_height(ref)) / 2;
+
+            LGPoint size = res_bm_size(ref);
+            short xoff = (BUTTON_STATE_W - size.x) / 2;
+            short yoff = (BUTTON_STATE_H - size.y) / 2;
 
             draw_res_bm(ref, BUTTON_STATE_X + xoff, BUTTON_STATE_Y + yoff);
             mfd_add_rect(BUTTON_STATE_X, BUTTON_STATE_Y, BUTTON_STATE_X + BUTTON_STATE_W,

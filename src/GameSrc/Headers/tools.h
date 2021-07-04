@@ -68,9 +68,8 @@ errtype draw_res_bm(Ref id, int x, int y);
 errtype draw_res_bm_core(Ref id, int x, int y, uchar scale);
 errtype draw_full_res_bm(Ref id, int x, int y, uchar fade_in);
 
-// Return the width or height of a resource bitmap.
-int res_bm_width(Ref id);
-int res_bm_height(Ref id);
+// Return the size of a resource bitmap.
+LGPoint res_bm_size(Ref id);
 
 // Draw a Text string to the screen, given a resource font pointer
 #define res_draw_text(font, text, x, y) res_draw_text_shadowed(font, text, x, y, FALSE)

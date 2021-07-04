@@ -216,7 +216,7 @@ bool do_plotware_hack(int hack_num, char *vbuf) {
 #define RIGHT_X (MFD_VIEW_WID - 2)
 #define PLOTWARE_PAGENUM (player_struct.mfd_func_data[PLOTWARE_MFD_FUNC][0])
 
-#define BUTTON_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_PrevPage) - 2)
+#define BUTTON_Y (MFD_VIEW_HGT - res_bm_size(REF_IMG_PrevPage).y - 2)
 
 void mfd_plotware_expose(MFD *mfd, ubyte control) {
     uchar full = control & MFD_EXPOSE_FULL;
@@ -281,11 +281,11 @@ void mfd_plotware_expose(MFD *mfd, ubyte control) {
             // Draw the page number
             get_string(REF_STR_pwPage0 + PLOTWARE_PAGENUM, buf, sizeof(buf));
             gr_string_size(buf, &w, &h);
-            mfd_draw_string(buf, (MFD_VIEW_WID - w) / 2, BUTTON_Y + (res_bm_height(REF_IMG_NextPage) - h) / 2,
-                            ITEM_COLOR, true);
+            LGPoint size = res_bm_size(REF_IMG_NextPage);
+            mfd_draw_string(buf, (MFD_VIEW_WID - w) / 2, BUTTON_Y + (size.y - h) / 2, ITEM_COLOR, true);
             // Draw the page buttons
             draw_raw_resource_bm(REF_IMG_PrevPage, LEFT_X, BUTTON_Y);
-            draw_raw_resource_bm(REF_IMG_NextPage, RIGHT_X - res_bm_width(REF_IMG_NextPage), BUTTON_Y);
+            draw_raw_resource_bm(REF_IMG_NextPage, RIGHT_X - size.x, BUTTON_Y);
         }
 
         ResUnlock(MFD_FONT);
@@ -332,8 +332,8 @@ errtype mfd_plotware_init(MFD_Func *f) {
     LGPoint bdims;
     LGRect r;
     errtype err;
-    bsize.x = res_bm_width(REF_IMG_PrevPage);
-    bsize.y = res_bm_height(REF_IMG_NextPage);
+    bsize.x = res_bm_size(REF_IMG_PrevPage).x;
+    bsize.y = res_bm_size(REF_IMG_NextPage).y;
     bdims.x = 2;
     bdims.y = 1;
     r.ul.x = LEFT_X;

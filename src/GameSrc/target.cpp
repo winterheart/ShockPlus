@@ -163,7 +163,7 @@ void mfd_target_expose(MFD *m, ubyte control) {
             if (version > 0) {
                 draw_raw_resource_bm(REF_IMG_PrevPage, 0, BUTTON_Y);
                 draw_raw_resource_bm(REF_IMG_NextPage, TEXT_RIGHT_X - PAGEBUTT_W, BUTTON_Y);
-                draw_raw_resource_bm(REF_IMG_Near, (TEXT_RIGHT_X + LEFT_MARGIN - res_bm_width(REF_IMG_Near)) / 2,
+                draw_raw_resource_bm(REF_IMG_Near, (TEXT_RIGHT_X + LEFT_MARGIN - res_bm_size(REF_IMG_Near).x) / 2,
                                      BUTTON_Y);
             }
             mfd_add_rect(0, 0, MFD_VIEW_WID, MFD_VIEW_HGT);
@@ -185,8 +185,9 @@ void mfd_target_expose(MFD *m, ubyte control) {
 #endif
             {
                 // KLC - chg for new art
-                x = SCONV_X(MFD_VIEW_WID) - res_bm_width(id) - SCONV_X(HP_BAR_MARGIN);
-                y = (SCONV_Y(MFD_VIEW_HGT) - res_bm_height(id)) / 2;
+                LGPoint size = res_bm_size(id);
+                x = SCONV_X(MFD_VIEW_WID) - size.x - SCONV_X(HP_BAR_MARGIN);
+                y = (SCONV_Y(MFD_VIEW_HGT) - size.y) / 2;
                 // draw_raw_res_bm_extract(id,x,y,MFD_EXTRACT_BUF);
                 draw_hires_resource_bm(id, x, y);
             }
@@ -235,7 +236,7 @@ void mfd_target_expose(MFD *m, ubyte control) {
                     // draw buttons
                     draw_raw_resource_bm(REF_IMG_PrevPage, 0, BUTTON_Y);
                     draw_raw_resource_bm(REF_IMG_NextPage, TEXT_RIGHT_X - PAGEBUTT_W, BUTTON_Y);
-                    draw_raw_resource_bm(REF_IMG_Near, (TEXT_RIGHT_X + LEFT_MARGIN - res_bm_width(REF_IMG_Near)) / 2,
+                    draw_raw_resource_bm(REF_IMG_Near, (TEXT_RIGHT_X + LEFT_MARGIN - res_bm_size(REF_IMG_Near).x) / 2,
                                          BUTTON_Y);
                 }
             }
@@ -546,7 +547,7 @@ void mfd_targetware_expose(MFD *mfd, ubyte control) {
     // mfd_item_micro_hires_expose(full,TARG_GOG_TRIPLE);
     draw_mfd_item_spew(REF_STR_wareSpew0 + STRINGS_PER_WARE * n, v);
     if (full) {
-        draw_raw_resource_bm(REF_IMG_TargetButton, (MFD_VIEW_WID - res_bm_width(REF_IMG_TargetButton)) / 2, BUTTON_Y);
+        draw_raw_resource_bm(REF_IMG_TargetButton, (MFD_VIEW_WID - res_bm_size(REF_IMG_TargetButton).x) / 2, BUTTON_Y);
         mfd_add_rect(0, 0, MFD_VIEW_WID - 1, MFD_VIEW_HGT - 1);
     }
     gr_pop_canvas();

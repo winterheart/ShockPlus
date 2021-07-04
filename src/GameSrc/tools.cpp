@@ -226,28 +226,13 @@ errtype draw_full_res_bm(Ref id, int x, int y, uchar fade_in) {
     return (OK);
 }
 
-int res_bm_width(Ref id) {
-    FrameDesc *f;
-    int n;
-
-    f = static_cast<FrameDesc *>(RefLock(id));
-    if (f == NULL)
+LGPoint res_bm_size(Ref id) {
+    FrameDesc *f = static_cast<FrameDesc *>(RefLock(id));
+    if (f == nullptr)
         critical_error(CRITERR_MEM | 9);
-    n = f->bm.w;
+    LGPoint point{.x = f->bm.w, .y = f->bm.h};
     RefUnlock(id);
-    return (n);
-}
-
-int res_bm_height(Ref id) {
-    FrameDesc *f;
-    int n;
-
-    f = static_cast<FrameDesc *>(RefLock(id));
-    if (f == NULL)
-        critical_error(CRITERR_MEM | 9);
-    n = f->bm.h;
-    RefUnlock(id);
-    return (n);
+    return point;
 }
 
 errtype res_draw_text_shadowed(Id id, char *text, int x, int y, uchar shadow) {

@@ -1832,13 +1832,12 @@ void games_expose_15(MFD *m, ubyte control) {
                 ss_rect(x, y, x + PUZZ15_TILE_SIZE, y + PUZZ15_TILE_SIZE);
                 // draw pretty bitmap
                 if (back) {
-                    int bx, by, bw, bh;
+                    int bx, by;
                     ss_safe_set_cliprect(x, y, x + PUZZ15_TILE_SIZE, y + PUZZ15_TILE_SIZE);
                     puzz15_xy((t == 0 ? MFD_PUZZLE_SQ : t) - 1, &bx, &by);
-                    bw = res_bm_width(back);
-                    bh = res_bm_height(back);
-                    draw_res_bm(back, PUZZ15_ULX + x - bx + (PUZZ15_WID - bw) / 2,
-                                PUZZ15_ULY + y - by + (PUZZ15_HGT - bh) / 2);
+                    LGPoint size = res_bm_size(back);
+                    draw_res_bm(back, PUZZ15_ULX + x - bx + (PUZZ15_WID - size.x) / 2,
+                                PUZZ15_ULY + y - by + (PUZZ15_HGT - size.y) / 2);
                     ss_safe_set_cliprect(0, 0, MFD_VIEW_WID, MFD_VIEW_HGT);
                 }
                 // draw number

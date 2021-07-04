@@ -395,7 +395,7 @@ void mfd_weapon_expose(MFD *m, ubyte control) {
         // Hopefully update-rects will take care of us..
         {
             int id = mfd_bmap_id(triple);
-            draw_res_bm(id, (MFD_VIEW_WID - res_bm_width(id)) / 2, WEAPON_ART_Y);
+            draw_res_bm(id, (MFD_VIEW_WID - res_bm_size(id).x) / 2, WEAPON_ART_Y);
             // draw_hires_resource_bm(id,
             //		(SCONV_X(MFD_VIEW_WID)-res_bm_width(id))/2, SCONV_Y(WEAPON_ART_Y));  // is this right?
         }
@@ -495,7 +495,6 @@ uchar mfd_weapon_expose_projectile(MFD *m, weapon_slot *ws, ubyte control) {
 static uchar cart_colors[MAX_CART_COLORS] = {GOOD_RED, 0x4b, GREEN_BASE + 2};
 
 void draw_ammo_button(int triple, short x, short y) {
-    short h;
     int id;
     int carts = player_struct.cartridges[CPTRIP(triple)];
     ubyte cnum = lg_min(MAX_CART_COLORS - 1, (carts - 1) / CARTRIDGE_BRACKET);
@@ -503,8 +502,7 @@ void draw_ammo_button(int triple, short x, short y) {
     // Draw the outline of an ammo box
     draw_res_bm(REF_IMG_BullFrame + lg_min(2, lg_max(3 - carts, 0)), x, y);
     id = mfd_bmap_id(triple);
-    h = res_bm_height(id);
-    draw_res_bm(id, x + 4, y + AMMO_BUTTON_H - 4 - h);
+    draw_res_bm(id, x + 4, y + AMMO_BUTTON_H - 4 - res_bm_size(id).y);
     // draw_hires_resource_bm(id, SCONV_X(x+4), SCONV_Y(y+AMMO_BUTTON_H-3)-h);
     if (carts > 0) {
         int cnt = carts % CARTRIDGE_BRACKET;
@@ -554,7 +552,7 @@ void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass, ubyte
     }
 
     if ((num_ammo_buttons == 0) && (ammo_count == 0)) {
-        draw_res_bm(REF_IMG_NoAmmo, (MFD_VIEW_WID - res_bm_width(REF_IMG_NoAmmo)) / 2, AMMO_BUTTON_Y);
+        draw_res_bm(REF_IMG_NoAmmo, (MFD_VIEW_WID - res_bm_size(REF_IMG_NoAmmo).x) / 2, AMMO_BUTTON_Y);
     }
     mfd_add_rect(0, AMMO_STRING_Y, MFD_VIEW_WID, MFD_VIEW_HGT);
     return;
@@ -644,20 +642,16 @@ void mfd_weapon_expose_beam(weapon_slot *ws, ubyte id, uchar Redraw) {
     if (does_overload) {
         // if beam weapon is not set to overload then draw overload button, otherwise say "overload enabled"
         if (Redraw && OVERLOAD_VALUE(ws->setting)) {
-            short w = res_bm_width(REF_IMG_BeamOverloadOn);
-
             draw_raw_resource_bm(REF_IMG_BeamOverloadOn, 1, OVERLOAD_BUTTON_Y);
-            mfd_add_rect(1, OVERLOAD_BUTTON_Y, 1 + w, MFD_VIEW_HGT);
+            mfd_add_rect(1, OVERLOAD_BUTTON_Y, 1 + res_bm_size(REF_IMG_BeamOverloadOn).x, MFD_VIEW_HGT);
 
             get_string(REF_STR_Overload, buf, ENERGY_TEXT_LEN);
             mfd_draw_string(buf, 1, SETTING_TEXT, MFD_BEAM_HOT, TRUE);
         } else {
-            short w = res_bm_width(REF_IMG_BeamOverload);
-
             if (Redraw) {
                 (ws->ammo < MINIMUM_OVERLOAD) ? draw_raw_resource_bm(REF_IMG_BeamOverload, 1, OVERLOAD_BUTTON_Y)
                                               : draw_raw_resource_bm(REF_IMG_BeamOverloadOff, 1, OVERLOAD_BUTTON_Y);
-                mfd_add_rect(1, OVERLOAD_BUTTON_Y, 1 + w, MFD_VIEW_HGT);
+                mfd_add_rect(1, OVERLOAD_BUTTON_Y, 1 + res_bm_size(REF_IMG_BeamOverload).x, MFD_VIEW_HGT);
                 get_string(REF_STR_EnergySetting, buf, ENERGY_TEXT_LEN);
                 mfd_draw_string(buf, 1, SETTING_TEXT, MFD_BEAM_READY, TRUE);
             }
@@ -744,10 +738,11 @@ uchar mfd_weapon_beam_handler(MFD *m, uiEvent *e) {
 
             if (ws->ammo < MINIMUM_OVERLOAD) {
                 // set up the rect for the overload button
-                r.ul.x = (MFD_VIEW_WID - res_bm_width(REF_IMG_NoAmmo)) / 2;
+                r.ul.x = (MFD_VIEW_WID - res_bm_size(REF_IMG_NoAmmo).x) / 2;
                 r.ul.y = OVERLOAD_BUTTON_Y;
-                r.lr.x = r.ul.x + res_bm_width(REF_IMG_BeamOverload);
-                r.lr.y = OVERLOAD_BUTTON_Y + res_bm_height(REF_IMG_BeamOverload);
+                LGPoint size = res_bm_size(REF_IMG_BeamOverload);
+                r.lr.x = r.ul.x + size.x;
+                r.lr.y = OVERLOAD_BUTTON_Y + size.y;
                 RECT_OFFSETTED_RECT(&r, m->rect.ul, &r);
 
                 // check if we clicked in the button
@@ -1002,7 +997,7 @@ void mfd_item_micro_expose(uchar full, int triple) {
         // Draw the appropriate weapon art
         id = mfd_bmap_id(triple);
         if (RefIndexValid((RefTable *)ResGet(REFID(id)), REFINDEX(id)))
-            draw_raw_resource_bm(id, (MFD_VIEW_WID - res_bm_width(id)) / 2, y);
+            draw_raw_resource_bm(id, (MFD_VIEW_WID - res_bm_size(id).x) / 2, y);
         else
             ResUnlock(REFID(id));
     }
@@ -1032,7 +1027,7 @@ void mfd_item_micro_hires_expose(uchar full, int triple) {
 
         id = mfd_bmap_id(triple);
         if (RefIndexValid((RefTable *)ResGet(REFID(id)), REFINDEX(id)))
-            draw_hires_resource_bm(id, (SCONV_X(MFD_VIEW_WID) - res_bm_width(id)) / 2, SCONV_Y(y));
+            draw_hires_resource_bm(id, (SCONV_X(MFD_VIEW_WID) - res_bm_size(id).x) / 2, SCONV_Y(y));
         else
             ResUnlock(REFID(id));
     }
@@ -1096,10 +1091,11 @@ void mfd_general_inv_expose(MFD *mfd, ubyte control, ObjID id, uchar full) {
     triple = ID2TRIP(id);
     mfd_item_micro_expose(full, triple);
     if (full && !(ObjProps[OPNUM(id)].flags & INVENTORY_GENERAL)) {
-        short x = (MFD_VIEW_WID - res_bm_width(TRASH_BUTTON)) / 2;
-        short y = (MFD_VIEW_HGT - res_bm_height(TRASH_BUTTON)) / 2;
+        LGPoint size = res_bm_size(TRASH_BUTTON);
+        short x = (MFD_VIEW_WID - size.x) / 2;
+        short y = (MFD_VIEW_HGT - size.y) / 2;
         draw_raw_resource_bm(TRASH_BUTTON, x, y);
-        mfd_add_rect(x, y, x + res_bm_width(TRASH_BUTTON), y + res_bm_height(TRASH_BUTTON));
+        mfd_add_rect(x, y, x + size.x, y + size.y);
     }
     if (objs[id].obclass == CLASS_SMALLSTUFF)
         spew = smallstuffSpews[objs[id].subclass];
@@ -1113,12 +1109,13 @@ uchar mfd_general_inv_handler(MFD *m, uiEvent *ev, int row) {
         return FALSE;
     if (!(ObjProps[OPNUM(id)].flags & INVENTORY_GENERAL)) {
         LGPoint pos = MakePoint(ev->pos.x - m->rect.ul.x, ev->pos.y - m->rect.ul.y);
-        short x = (MFD_VIEW_WID - res_bm_width(TRASH_BUTTON)) / 2;
-        short y = (MFD_VIEW_HGT - res_bm_height(TRASH_BUTTON)) / 2;
+        LGPoint size = res_bm_size(TRASH_BUTTON);
+        short x = (MFD_VIEW_WID - size.x) / 2;
+        short y = (MFD_VIEW_HGT - size.y) / 2;
         LGRect r;
         r.ul = r.lr = MakePoint(x, y);
-        r.lr.x += res_bm_width(TRASH_BUTTON);
-        r.lr.y += res_bm_height(TRASH_BUTTON);
+        r.lr.x += size.x;
+        r.lr.y += size.y;
         if (RECT_TEST_PT(&r, pos)) {
             int i;
             obj_destroy(id);
@@ -1429,12 +1426,10 @@ void mfd_lantern_setting(int setting) {
 
 errtype mfd_lanternware_init(MFD_Func *f) {
     int cnt = 0;
-    LGPoint bsize;
     LGPoint bdims;
     LGRect r;
     errtype err;
-    bsize.x = res_bm_width(REF_IMG_LitLamp0);
-    bsize.y = res_bm_height(REF_IMG_LitLamp0);
+    LGPoint bsize = res_bm_size(REF_IMG_LitLamp0);
     bdims.x = LAMP_VERSIONS;
     bdims.y = 1;
     r.ul.x = LANTERN_BARRAY_X;
@@ -1468,7 +1463,7 @@ void mfd_lanternware_expose(MFD *mfd, ubyte control) {
         draw_mfd_item_spew(REF_STR_wareSpew0 + STRINGS_PER_WARE * n, v);
     if (full || LAMP_SETTING(s) != LANTERN_LAST_SETTING(mfd->id) || LANTERN_LAST_VERSION(mfd->id) != v ||
         LANTERN_LAST_STATE(mfd->id) != (s & WARE_ON)) {
-        int xjump = LANTERN_BARRAY_WD - res_bm_width(REF_IMG_LitLamp0);
+        int xjump = LANTERN_BARRAY_WD - res_bm_size(REF_IMG_LitLamp0).x;
         int i;
         for (i = 0; i < v; i++) {
             int lit = i == LAMP_SETTING(s) && (s & WARE_ON);
@@ -1478,7 +1473,8 @@ void mfd_lanternware_expose(MFD *mfd, ubyte control) {
             draw_raw_resource_bm(id + i, x, LANTERN_BARRAY_Y);
             if (i == LAMP_SETTING(s)) {
                 gr_set_fcolor(GREEN_BASE + 2);
-                ss_box(x - 1, y - 1, x + res_bm_width(id + i) + 1, y + res_bm_height(id + i) + 1);
+                LGPoint size = res_bm_size(id + i);
+                ss_box(x - 1, y - 1, x + size.x + 1, y + size.y + 1);
             }
         }
         mfd_add_rect(LANTERN_BARRAY_X - 2, LANTERN_BARRAY_Y - 2, LANTERN_BARRAY_X + LANTERN_BARRAY_WD + 2,
@@ -1561,12 +1557,10 @@ void mfd_shield_setting(int setting) {
 
 errtype mfd_shield_init(MFD_Func *f) {
     int cnt = 0;
-    LGPoint bsize;
     LGPoint bdims;
     LGRect r;
     errtype err;
-    bsize.x = res_bm_width(REF_IMG_LitShield0);
-    bsize.y = res_bm_height(REF_IMG_LitShield0);
+    LGPoint bsize = res_bm_size(REF_IMG_LitShield0);
     bdims.x = SHIELD_SETTINGS;
     bdims.y = 1;
     r.ul.x = SHIELD_BARRAY_X;
@@ -1603,7 +1597,7 @@ void mfd_shieldware_expose(MFD *mfd, ubyte control) {
         int i;
         if (v >= SHIELD_VERSIONS) {
             int id = (s & WARE_ON) ? REF_IMG_LitShieldSuper : REF_IMG_UnlitShieldSuper;
-            draw_raw_resource_bm(id, SHIELD_BARRAY_X + (SHIELD_BARRAY_WD - res_bm_width(id)) / 2, SHIELD_BARRAY_Y);
+            draw_raw_resource_bm(id, SHIELD_BARRAY_X + (SHIELD_BARRAY_WD - res_bm_size(id).x) / 2, SHIELD_BARRAY_Y);
             mfd_add_rect(SHIELD_BARRAY_X, SHIELD_BARRAY_Y, SHIELD_BARRAY_X + SHIELD_BARRAY_WD, MFD_VIEW_WID);
         } else
             for (i = 0; i < v; i++) {
@@ -1673,12 +1667,10 @@ uchar mfd_motion_button_handler(MFD *mfd, LGPoint bttn, uiEvent *ev, void *data)
 
 errtype mfd_motion_init(MFD_Func *f) {
     int cnt = 0;
-    LGPoint bsize;
     LGPoint bdims;
     LGRect r;
     errtype err;
-    bsize.x = res_bm_width(REF_IMG_LitMotion0);
-    bsize.y = res_bm_height(REF_IMG_LitMotion0);
+    LGPoint bsize = res_bm_size(REF_IMG_LitMotion0);
     bdims.x = MOTION_BUTTONS;
     bdims.y = 1;
     r.ul.x = MOTION_BARRAY_X;
@@ -1978,7 +1970,8 @@ void mfd_bioware_expose(MFD *m, ubyte control) {
 
         if (full) {
             draw_res_bm(ref, 0, 0);
-            mfd_add_rect(0, 0, res_bm_width(ref), res_bm_height(ref));
+            LGPoint size = res_bm_size(ref);
+            mfd_add_rect(0, 0, size.x, size.y);
         }
 #ifdef BIOWARE_TITLE
         // Title

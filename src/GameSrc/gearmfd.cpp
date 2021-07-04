@@ -114,13 +114,13 @@ void mfd_gear_expose(MFD *mfd, ubyte control) {
             goto cleanup_et_return;
         } else {
             int id = MKREF(RES_mfdSpecial, button_bitmaps[objs[obj].info.type] + (gear_active(obj) ? 0 : 1));
-            short wid = res_bm_width(id);
-            short x = (MFD_VIEW_WID - wid) / 2;
+            LGPoint size = res_bm_size(id);
+            short x = (MFD_VIEW_WID - size.x) / 2;
 
             mfd_item_micro_expose(full, ID2TRIP(obj));
             draw_mfd_item_spew(REF_STR_gearSpew0 + objs[obj].info.type, 1);
             draw_res_bm(id, x, GEAR_BUTTON_Y);
-            mfd_add_rect(x, GEAR_BUTTON_Y, x + wid, MFD_VIEW_HGT);
+            mfd_add_rect(x, GEAR_BUTTON_Y, x + size.x, MFD_VIEW_HGT);
         }
 
         // on a full expose, make sure to draw everything
@@ -151,9 +151,9 @@ uchar mfd_gear_handler(MFD *m, uiEvent *e) {
     if (active >= 0 && active < NUM_GENERAL_SLOTS) {
         ObjID obj = player_struct.inventory[active];
         int id = MKREF(RES_mfdSpecial, button_bitmaps[objs[obj].info.type] + (gear_active(obj) ? 0 : 1));
-        short wid = res_bm_width(id);
-        r.ul.x = (MFD_VIEW_WID - wid) / 2;
-        r.lr.x = r.ul.x + wid;
+        LGPoint size = res_bm_size(id);
+        r.ul.x = (MFD_VIEW_WID - size.x) / 2;
+        r.lr.x = r.ul.x + size.x;
         RECT_OFFSETTED_RECT(&r, m->rect.ul, &r);
         if (RECT_TEST_PT(&r, e->pos)) {
             object_use(obj, TRUE, OBJ_NULL);

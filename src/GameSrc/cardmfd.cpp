@@ -86,8 +86,9 @@ void mfd_accesscard_expose(MFD *mfd, ubyte control) {
             mfd_draw_string(get_object_long_name(GENCARDS_TRIPLE, NULL, 0), 1, 1, GREEN_YELLOW_BASE, TRUE);
         }
         i = mfd_bmap_id(GENCARDS_TRIPLE);
-        draw_raw_resource_bm(i, (MFD_VIEW_WID - res_bm_width(i)) / 2,
-                             DISPLAY_TOP_MARGIN + (MFD_VIEW_HGT - DISPLAY_TOP_MARGIN - res_bm_height(i)) / 2);
+        LGPoint size = res_bm_size(i);
+        draw_raw_resource_bm(i, (MFD_VIEW_WID - size.x) / 2,
+                             DISPLAY_TOP_MARGIN + (MFD_VIEW_HGT - DISPLAY_TOP_MARGIN - size.y) / 2);
 
         // find the "access cards" object
         for (i = 0; i < NUM_GENERAL_SLOTS; i++) {

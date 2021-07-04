@@ -418,7 +418,7 @@ void wrapper_draw_background(short ulx, short uly, short lrx, short lry) {
 
 void slider_draw_func(uchar butid) {
     opt_slider_state *st = &(OButtons[butid].user.slider_st);
-    short w, h, sw;
+    short w, h;
     char *title;
 
 #ifdef SVGA_SUPPORT
@@ -427,7 +427,7 @@ void slider_draw_func(uchar butid) {
     gr2ss_override = OVERRIDE_ALL;
 #endif
 
-    sw = res_bm_width(OPT_SLIDER_BAR);
+    short sw = res_bm_size(OPT_SLIDER_BAR).x;
     gr_set_fcolor(st->color);
     title = get_temp_string(st->descrip);
     gr_string_size(title, &w, &h);
@@ -1135,15 +1135,12 @@ void standard_button_rect(LGRect *r, uchar butid, uchar lines, uchar ro, uchar m
 }
 
 void standard_slider_rect(LGRect *r, uchar butid, uchar ro, uchar mar) {
-    short sh, sw;
-
     standard_button_rect(r, butid, 2, ro, mar);
+    LGPoint size = res_bm_size(OPT_SLIDER_BAR);
 
-    sh = res_bm_height(OPT_SLIDER_BAR);
-    sw = res_bm_height(OPT_SLIDER_BAR);
-    r->ul.x += sw / 2;
-    r->lr.x -= sw / 2;
-    r->ul.y = r->lr.y - sh;
+    r->ul.x += size.x / 2;
+    r->lr.x -= size.x / 2;
+    r->ul.y = r->lr.y - size.y;
 }
 
 errtype wrapper_panel_close(uchar clear_message) {
@@ -2128,8 +2125,9 @@ errtype make_options_cursor(void) {
     uchar old_over = gr2ss_override;
     gr2ss_override = OVERRIDE_ALL;
 
-    orig_w = w = res_bm_width(REF_IMG_bmOptionCursor);
-    h = res_bm_height(REF_IMG_bmOptionCursor);
+    LGPoint size = res_bm_size(REF_IMG_bmOptionCursor);
+    orig_w = w = size.x;
+    h = size.y;
     ss_point_convert(&w, &h, FALSE);
     gr_init_bitmap(&option_cursor_bmap, svga_options_cursor_bits, BMT_FLAT8, BMF_TRANS, w, h);
     gr_make_canvas(&option_cursor_bmap, &cursor_canv);

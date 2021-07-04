@@ -968,7 +968,7 @@ void add_email_handler(LGRegion *r) {
 
 #define EMAIL_BARRAY_X 0
 #define EMAIL_BARRAY_WD (MFD_VIEW_WID)
-#define EMAIL_BARRAY_Y (MFD_VIEW_HGT - res_bm_height(REF_IMG_EmailButt0) - 2)
+#define EMAIL_BARRAY_Y (MFD_VIEW_HGT - res_bm_size(REF_IMG_EmailButt0).y - 2)
 
 static ubyte email_pages[] = {50, 7, 8};
 #define STRINGS_PER_WARE (REF_STR_wareSpew1 - REF_STR_wareSpew0)
@@ -1018,7 +1018,8 @@ void mfd_emailware_expose(MFD *mfd, ubyte control) {
             short x = EMAIL_BARRAY_WD * i / NUM_EMAIL_BUTTONS + EMAIL_BARRAY_X;
             short y = EMAIL_BARRAY_Y;
             draw_res_bm(id, x, y);
-            mfd_add_rect(x, y, x + res_bm_width(id), y + res_bm_height(id));
+            LGPoint point = res_bm_size(id);
+            mfd_add_rect(x, y, x + point.x, y + point.y);
             BUTTON_LIT_STATE(mfd->id, i) = lit;
         }
     }
@@ -1036,12 +1037,10 @@ uchar mfd_email_button_handler(MFD *m, LGPoint bttn, uiEvent *ev, void *data) {
 
 errtype mfd_emailware_init(MFD_Func *f) {
     int cnt = 0;
-    LGPoint bsize;
     LGPoint bdims;
     LGRect r;
     errtype err;
-    bsize.x = res_bm_width(REF_IMG_EmailButt0);
-    bsize.y = res_bm_height(REF_IMG_EmailButt0);
+    LGPoint bsize = res_bm_size(REF_IMG_EmailButt0);
     bdims.x = NUM_EMAIL_BUTTONS;
     bdims.y = 1;
     RECT_FILL(&r, EMAIL_BARRAY_X, EMAIL_BARRAY_Y, EMAIL_BARRAY_X + EMAIL_BARRAY_WD, EMAIL_BARRAY_Y + bsize.y)
