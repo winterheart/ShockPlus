@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #include "olhext.h"
 #include "str.h"
-#include "cit2d.h"
 #include "damage.h"
 
 #include "cybstrng.h"
@@ -288,7 +287,7 @@ void hud_update_lines(short x, short *y, short unused1, short unused2) {
                 if (full_game_3d)
                     use_y += FULLSCREEN_Y_OFFSET;
             }
-            res_draw_text_shadowed(RES_tinyTechFont, HUDLINE_BUFFER(i), use_x, use_y, TRUE);
+            res_draw_text(RES_tinyTechFont, HUDLINE_BUFFER(i), use_x, use_y, TRUE);
         } else
             hud_free_line(i);
 }

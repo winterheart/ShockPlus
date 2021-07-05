@@ -53,7 +53,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sfxlist.h" // same
 #include "citres.h"
 #include "weapons.h"
-#include "cit2d.h"
 #include "popups.h"
 #include "statics.h"
 #include "str.h"

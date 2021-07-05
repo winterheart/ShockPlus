@@ -37,7 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainloop.h"
 #include "wares.h"
 #include "lvldata.h"
-#include "cit2d.h"
 #include "fullscrn.h"
 #include "gr2ss.h"
 #include "gamestrn.h"

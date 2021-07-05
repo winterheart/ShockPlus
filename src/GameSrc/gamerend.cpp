@@ -48,7 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "str.h"
 #include "trigger.h"
 #include "bark.h"
-#include "cit2d.h"
 #include "damage.h"
 #include "diffq.h" // for time limit
 #include "effect.h"
@@ -261,8 +260,8 @@ void do_secret_fx(void) { // boy is this a hack....
         if (stage < 2)
             break;
         if (stage < 5) {
-            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE, 30, 20);
-            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 1, 50, 45);
+            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE, 30, 20, false);
+            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 1, 50, 45, false);
             break;
         }
         if (stage < 18) {
@@ -270,11 +269,11 @@ void do_secret_fx(void) { // boy is this a hack....
                 fr_global_mod_flag(FR_SFX_SHAKE, FR_SFX_MASK);
                 secret_render_fx++;
             }
-            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 2, 50, 30);
+            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 2, 50, 30, false);
             tmp_buf[0] = '0' + ((20 - stage) / 10);
             tmp_buf[1] = '0' + ((20 - stage) % 10);
-            res_draw_text(FAKEWIN_NUM_FONT, tmp_buf, 85, 45);
-            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 3, 95, 80);
+            res_draw_text(FAKEWIN_NUM_FONT, tmp_buf, 85, 45, false);
+            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 3, 95, 80, false);
             break;
         }
         if (stage < 22) {
@@ -294,7 +293,7 @@ void do_secret_fx(void) { // boy is this a hack....
                 secret_render_fx++;
             }
             gr_set_fcolor(RED_BASE + 6);
-            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 4, 75, 50);
+            res_draw_string(FAKEWIN_TEXT_FONT, FAKEWIN_STRING_BASE + 4, 75, 50, false);
             break;
         } else {
             secret_render_fx = 0;

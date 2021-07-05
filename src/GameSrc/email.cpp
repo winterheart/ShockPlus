@@ -42,7 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdgadg.h"
 #include "input.h"
 #include "emailbit.h"
-#include "cit2d.h"
 #include "criterr.h"
 
 #include "cybstrng.h"
@@ -406,7 +405,7 @@ void draw_more_string(int x, int y, uchar footermask) {
     gr_set_fcolor(MORE_COLOR);
 
     if (footermask & FOOTER_MORE_MASK)
-        res_draw_string(email_font, REF_STR_More, x + MESSAGE_X, y + MESSAGE_Y);
+        res_draw_string(email_font, REF_STR_More, x + MESSAGE_X, y + MESSAGE_Y, false);
 
     // This part of code is never used (no FOOTER_PAGE_MASK invocation)
     if (footermask & FOOTER_PAGE_MASK) {

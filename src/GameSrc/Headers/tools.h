@@ -50,6 +50,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RESTORE_CLIP(a, b, c, d) gr_set_cliprect((a), (b), (c), (d))
 
+#define FONT_IS_MONO(fontptr) ((fontptr)->id != 0xCCCC)
+
+#ifdef BROKEN_SAFE_CLIPRECT
+#define safe_set_cliprect(a, b, c, d)                             \
+    do {                                                          \
+        short _safe_x = a;                                        \
+        short _safe_y = b;                                        \
+        short _safe_p = c;                                        \
+        short _safe_q = d;                                        \
+        gr_safe_set_cliprect(_safe_x, _safe_y, _safe_p, _safe_q); \
+    } while (0)
+#else
+#define safe_set_cliprect(a, b, c, d) gr_safe_set_cliprect(a, b, c, d)
+#endif
+
 // Prototypes
 
 // Draw a resouce bitmap at the x,y coordinates, without doing any pallet or
@@ -67,12 +82,13 @@ errtype draw_full_res_bm(Ref id, int x, int y, uchar fade_in);
 // Return the size of a resource bitmap.
 LGPoint res_bm_size(Ref id);
 
+void draw_shadowed_string(char *s, short x, short y, bool shadow);
+
 // Draw a Text string to the screen, given a resource font pointer
-#define res_draw_text(font, text, x, y) res_draw_text_shadowed(font, text, x, y, FALSE)
-errtype res_draw_text_shadowed(Id id, char *text, int x, int y, uchar shadow);
+errtype res_draw_text(Id id, char *text, int x, int y, bool shadow);
 
 // Like res_draw_text, but takes a string number instead.
-errtype res_draw_string(Id font, int strid, int x, int y);
+errtype res_draw_string(Id font, int strid, int x, int y, bool shadow);
 
 // hmmm, why dont these work, eh
 // note the void's so we dont need LGRect.h in here, neat huh?

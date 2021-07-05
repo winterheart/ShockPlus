@@ -59,7 +59,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grenades.h"
 #include "mfdext.h"
 #include "olhext.h"
-#include "cit2d.h"
 #include "gr2ss.h"
 #include "hkeyfunc.h"
 #include "status.h"

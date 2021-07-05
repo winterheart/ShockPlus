@@ -47,10 +47,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hud.h"
 #include "canvchek.h"
 #include "palfx.h"
-#include "player.h"
 #include "str.h"
 #include "faketime.h"
-#include "cit2d.h"
 #include "view360.h"
 
 #include "OpenGL.h"
@@ -83,7 +81,7 @@ void strtoupper(char *text) {
 #ifdef SVGA_SUPPORT
 uchar shadow_scale = TRUE;
 #endif
-void draw_shadowed_string(char *s, short x, short y, uchar shadow) {
+void draw_shadowed_string(char *s, short x, short y, bool shadow) {
     LGPoint npt;
     ubyte color = gr_get_fcolor();
     npt.x = x;
@@ -223,14 +221,16 @@ LGPoint res_bm_size(Ref id) {
     return point;
 }
 
-errtype res_draw_text_shadowed(Id id, char *text, int x, int y, uchar shadow) {
+errtype res_draw_text(Id id, char *text, int x, int y, bool shadow) {
     gr_set_font(static_cast<grs_font *>(ResLock(id)));
     draw_shadowed_string(text, x, y, shadow);
     ResUnlock(id);
     return (OK);
 }
 
-errtype res_draw_string(Id font, int strid, int x, int y) { return res_draw_text(font, get_temp_string(strid), x, y); }
+errtype res_draw_string(Id font, int strid, int x, int y, bool shadow) {
+    return res_draw_text(font, get_temp_string(strid), x, y, shadow);
+}
 
 // have some god damn parameters
 // xc,yc is position, usually text center
@@ -422,7 +422,7 @@ errtype message_info(const char *info_text) {
             message_resend = FALSE;
             if ((!full_game_3d && !view360_message_obscured) || game_paused) {
                 gr_set_fcolor(WHITE);
-                res_draw_text_shadowed(RES_tinyTechFont, buf, x, y, full_game_3d);
+                res_draw_text(RES_tinyTechFont, buf, x, y, full_game_3d);
                 hud_unset(HUD_MSGLINE);
             } else if (full_game_3d || view360_message_obscured) {
                 if (buf[0] != '\0') {

@@ -39,7 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "shodan.h"
 #include "str.h"
 #include "fullscrn.h"
-#include "cit2d.h"
 #include "audiolog.h"
 #include "gr2ss.h"
 

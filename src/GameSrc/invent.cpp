@@ -57,8 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keydefs.h"
 #include "mfdext.h"
 #include "objbit.h"
-#include "fullscrn.h"
-#include "cit2d.h"
 #include "gr2ss.h"
 #include "criterr.h"
 #include "view360.h"

@@ -235,7 +235,7 @@ errtype difficulty_draw(uchar full) {
         else
             gr_set_fcolor(NORMAL_ENTRY_COLOR);
 
-        res_draw_string(RES_citadelFont, CATEGORY_STRING_BASE + i, diff_titles_x[i] + 12, diff_titles_y[i] + 2);
+        res_draw_string(RES_citadelFont, CATEGORY_STRING_BASE + i, diff_titles_x[i] + 12, diff_titles_y[i] + 2, false);
     }
 
     if (start_selected)
@@ -243,7 +243,7 @@ errtype difficulty_draw(uchar full) {
     else
         gr_set_fcolor(NORMAL_ENTRY_COLOR);
 
-    res_draw_string(RES_citadelFont, DIFF_START, DIFF_DONE_X1 + 13, DIFF_DONE_Y1 + 2);
+    res_draw_string(RES_citadelFont, DIFF_START, DIFF_DONE_X1 + 13, DIFF_DONE_Y1 + 2, false);
 
     if (full) {
         for (i = 0; i < 16; i++)
@@ -252,7 +252,7 @@ errtype difficulty_draw(uchar full) {
             draw_difficulty_description(i, NORMAL_ENTRY_COLOR);
 
         gr_set_fcolor(KEYBOARD_FOCUS_COLOR);
-        res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y);
+        res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y, false);
         draw_username(NORMAL_ENTRY_COLOR, player_struct.name);
     }
 
@@ -264,7 +264,7 @@ errtype difficulty_draw(uchar full) {
 errtype draw_username(int color, char *string) {
     gr_set_fcolor(color);
     uiHideMouse(&name_rect);
-    res_draw_text(RES_citadelFont, string, DIFF_NAME_TEXT_X, DIFF_NAME_Y);
+    res_draw_text(RES_citadelFont, string, DIFF_NAME_TEXT_X, DIFF_NAME_Y, false);
     uiShowMouse(&name_rect);
 
     return OK;
@@ -275,13 +275,13 @@ void flash_username(void) {
 
     uiHideMouse(&name_rect);
     gr_set_fcolor(SELECTED_COLOR - 4);
-    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y);
+    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y, false);
     flash_done = *tmd_ticks + FLASH_TIME;
     while (TickCount() < flash_done) {
         SDLDraw();
     }
     gr_set_fcolor(KEYBOARD_FOCUS_COLOR);
-    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y);
+    res_draw_string(RES_citadelFont, DIFF_NAME, DIFF_NAME_X, DIFF_NAME_Y, false);
     uiShowMouse(&name_rect);
 }
 
@@ -299,7 +299,7 @@ errtype draw_difficulty_description(int which_cat, int color) {
     if (color != -1)
         gr_set_fcolor(color);
     res_draw_string(RES_smallTechFont, DIFF_STRING_BASE + (which_cat * 4) + player_struct.difficulty[which_cat],
-                    COMPUTE_DIFF_STRING_X(which_cat), COMPUTE_DIFF_STRING_Y(which_cat));
+                    COMPUTE_DIFF_STRING_X(which_cat), COMPUTE_DIFF_STRING_Y(which_cat), false);
 
     return OK;
 }
@@ -314,7 +314,7 @@ errtype draw_difficulty_char(int char_num) {
     else
         gr_set_fcolor(NORMAL_ENTRY_COLOR);
     buff[0] = (char_num & 3) + '0';
-    res_draw_text(RES_citadelFont, buff, build_diff_x(char_num), build_diff_y(char_num));
+    res_draw_text(RES_citadelFont, buff, build_diff_x(char_num), build_diff_y(char_num), false);
     uiShowMouse(NULL);
 
     return OK;
@@ -394,7 +394,7 @@ errtype journey_draw(char part) {
                     col = UNAVAILABLE_COLOR;
             }
             gr_set_fcolor(col);
-            res_draw_string(RES_citadelFont, SETUP_STRING_BASE + i, JOURNEY_OPT_LEFT + 15, setup_tops[i] + 4);
+            res_draw_string(RES_citadelFont, SETUP_STRING_BASE + i, JOURNEY_OPT_LEFT + 15, setup_tops[i] + 4, false);
         }
     }
     uiShowMouse(NULL);
@@ -411,7 +411,7 @@ errtype journey_intro_func(uchar draw_stuff) {
     return OK;
 #else
     if (draw_stuff)
-        res_draw_string(RES_citadelFont, SETUP_STRING_BASE, JOURNEY_OPT_LEFT + 15, JOURNEY_OPT1_TOP + 2);
+        res_draw_string(RES_citadelFont, SETUP_STRING_BASE, JOURNEY_OPT_LEFT + 15, JOURNEY_OPT1_TOP + 2, false);
     uiShowMouse(NULL); // need to leave it hidden
 
     MacTuneKillCurrentTheme();
@@ -440,7 +440,7 @@ errtype journey_newgame_func(void) {
 
 errtype journey_difficulty_func(uchar draw_stuff) {
     if (draw_stuff)
-        res_draw_string(RES_citadelFont, SETUP_STRING_BASE + 1, JOURNEY_OPT_LEFT + 15, JOURNEY_OPT2_TOP + 2);
+        res_draw_string(RES_citadelFont, SETUP_STRING_BASE + 1, JOURNEY_OPT_LEFT + 15, JOURNEY_OPT2_TOP + 2, false);
     uiShowMouse(NULL);
     difficulty_draw(TRUE);
     compute_new_diff();
@@ -813,7 +813,7 @@ errtype draw_sg_slot(int slot_num) {
     ResUnlock(RES_smallTechFont); // was RES_CitadelFont
 
     res_draw_text(RES_smallTechFont, temp, SG_SLOT_X + SG_SLOT_OFFSET_X,
-                  SG_SLOT_Y + SG_SLOT_OFFSET_Y + (slot_num * SG_SLOT_HT));
+                  SG_SLOT_Y + SG_SLOT_OFFSET_Y + (slot_num * SG_SLOT_HT), false);
 
     uiShowMouse(NULL);
 
@@ -923,7 +923,7 @@ void go_and_start_the_game_already(void) {
 
     uiHideMouse(NULL);
     gr_set_fcolor(SELECTED_COLOR);
-    res_draw_string(RES_citadelFont, DIFF_START, DIFF_DONE_X1 + 13, DIFF_DONE_Y1 + 2);
+    res_draw_string(RES_citadelFont, DIFF_START, DIFF_DONE_X1 + 13, DIFF_DONE_Y1 + 2, false);
     uiShowMouse(NULL);
 
     journey_newgame_func();

@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "cit2d.h"
 #include "gr2ss.h"
 #include "frtypes.h"
 #include "frintern.h"
@@ -25,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "mouse.h"
 #include "str.h"
+#include "tools.h"
 
 #ifdef SVGA_SUPPORT
 uchar gr2ss_override = OVERRIDE_NONE;

@@ -255,7 +255,7 @@ void view360_render(void) {
             RECT_FILL(&r, basex + w + 2, basey - h - 2, basex + w + 2 + gr_string_width(buf), basey - h - 2 + h);
             if (!full_game_3d)
                 uiHideMouse(&r);
-            res_draw_text(RES_tinyTechFont, buf, r.ul.x, r.ul.y);
+            res_draw_text(RES_tinyTechFont, buf, r.ul.x, r.ul.y, false);
             if (!full_game_3d)
                 uiShowMouse(&r);
             ResUnlock(RES_tinyTechFont);

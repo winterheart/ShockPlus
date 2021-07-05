@@ -29,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mfdext.h"
 #include "mfddims.h"
 #include "colors.h"
-#include "cit2d.h"
 #include "fullscrn.h"
+#include "tools.h"
 
 // Includes for example mfd.
 #include <stdlib.h>

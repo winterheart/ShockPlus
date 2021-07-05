@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "wares.h"
 #include "objsim.h"
 #include "miscqvar.h"
-#include "cit2d.h"
 #include "diffq.h"
 #include "mfdgames.h"
 #include "softdef.h"
