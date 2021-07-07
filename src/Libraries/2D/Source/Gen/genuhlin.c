@@ -31,10 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 void gri_gen_uhline_fill(short x0, short y0, short x1, long c, long parm) {
-    short t;
-
     if (x0 > x1) {
-        t = x0;
+        short t = x0;
         x0 = x1;
         x1 = t;
     }

@@ -73,7 +73,8 @@ fix gr_clut_lit_tol = 2 * FIX_UNIT;
 gr_per_detail_level gr_per_detail_list[GR_NUM_PER_DETAIL_LEVELS] = {
     {0, 0, 4 * FIX_UNIT},
     {3, 4, 2 * FIX_UNIT},
-    {5, 5, 0}};
+    {5, 5, 0}
+};
 
 void gr_set_per_detail_level(int level) {
     flat8_per_ltol = gr_per_detail_list[level].ltol;

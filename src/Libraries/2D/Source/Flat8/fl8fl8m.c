@@ -43,11 +43,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "clip.h"
 #include "cnvdat.h"
 #include "fl8tf.h"
+#include "general.h"
 #include "grs.h"
 #include "lg.h"
 #include <string.h>
 
-extern int gen_flat8_bitmap(grs_bitmap *bm, short x, short y);
 int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten) {
     if (sten == NULL)
         return gen_flat8_bitmap(bm, x, y);
@@ -98,7 +98,6 @@ int gri_flat8_mask_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten) {
     return CLIP_NONE; /* actually, who knows? */
 }
 
-extern int gen_flat8_clut_bitmap(grs_bitmap *bm, short x, short y, uchar *clut);
 int gri_flat8_mask_fill_clut_bitmap(grs_bitmap *bm, short x, short y, grs_stencil *sten) {
     uchar *clut = (uchar *)(grd_gc.fill_parm);
     if (sten == NULL)

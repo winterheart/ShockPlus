@@ -38,17 +38,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 void gr_int_uelipse(int x0, int y0, int a, int b) {
-    int x;
-    int y;
-
-    fix24 a_sq, b_sq;
     fix24 d1, d2, t1, t2;
 
-    a_sq = (a * a) << 8;
-    b_sq = (b * b) << 8;
+    fix24 a_sq = (a * a) << 8;
+    fix24 b_sq = (b * b) << 8;
 
-    x = 0;
-    y = b;
+    int x = 0;
+    int y = b;
 
     /* d1 = b_sq - a_sq*b + a_sq/4 */
 

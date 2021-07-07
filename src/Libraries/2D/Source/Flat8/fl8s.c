@@ -33,15 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "poly.h"
 #include "tmapint.h"
 
-// globals
-long ADD_DEST_OFF;
-long ADD_DV_FRAC_OFF;
-long AND_BM_ROW_OFF;
-long ADD_SRC_OFF;
-long SET_REPS_OFF;
-long SET_OFFSET_OFF;
-long JMP_LOOP_MIDDLE_OFF;
-
 #define unroll_num 4
 #define unroll_log 2
 

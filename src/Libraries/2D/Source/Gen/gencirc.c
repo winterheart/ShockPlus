@@ -38,8 +38,6 @@ void gen_int_ucircle(short x0, short y0, short r) {
     b = fix_div(a, (grd_cap->aspect));
 
     gr_int_uelipse(x0, y0, fix_fint(a), fix_fint(b));
-
-    return;
 }
 
 int gen_int_circle(short x0, short y0, short r) {

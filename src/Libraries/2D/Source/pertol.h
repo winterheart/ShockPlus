@@ -36,8 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fix.h"
 
 typedef struct {
-   ubyte ltol, wftol;
-   fix cltol;
+   ubyte ltol;  // Linear tolerance
+   ubyte wftol; // Wall/Floor tolerance
+   fix cltol;   // Clut lighting tolerance
 } gr_per_detail_level;
 
 enum {

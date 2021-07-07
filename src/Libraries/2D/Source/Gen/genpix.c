@@ -32,8 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvdat.h"
 #include "grpix.h"
 
-void *grd_fill_upixel_func();
-
 /* understands fill type. */
 int gen_fill_pixel(long color, short x, short y) {
     if (x < grd_clip.left || x >= grd_clip.right || y < grd_clip.top || y >= grd_clip.bot)

@@ -45,24 +45,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    hold it, as it is, unclipped */
 void flat8_filter2_ubitmap(grs_bitmap *bm) {
     grs_rgb a;
-    int i, j;
-    uchar *src, *dst;
     uchar *c;
-    int ds;
-    int dd;
 
-    dst = grd_bm.bits;
-    src = bm->bits;
+    uchar *dst = grd_bm.bits;
+    uchar *src = bm->bits;
 
-    ds = 2 * bm->row - bm->w;
-    dd = grd_bm.row - grd_bm.w;
+    int ds = 2 * bm->row - bm->w;
+    int dd = grd_bm.row - grd_bm.w;
 
     /* variables
        a,src,dst,bm->row,grd_ipal,grd_bpal */
 
     /* Cycle through rows and do horizontal strips */
-    for (j = bm->h; j > 0; j -= 2) {
-        for (i = bm->w; i > 0; i -= 2) {
+    for (int j = bm->h; j > 0; j -= 2) {
+        for (int i = bm->w; i > 0; i -= 2) {
             a = (grd_bpal[*src] >> 2) & 0x3fc7f8ff;
             src++;
             a += (grd_bpal[*src] >> 2) & 0x3fc7f8ff;

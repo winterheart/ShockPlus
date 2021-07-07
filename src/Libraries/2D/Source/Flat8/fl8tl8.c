@@ -42,16 +42,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 void flat8_tluc8_ubitmap(grs_bitmap *bm, short x, short y) {
-    uchar *src;
-    uchar *dst;
     long w = bm->w;
     long h = bm->h;
     long i;
     long grow = grd_bm.row;
     long brow = bm->row;
 
-    src = bm->bits;
-    dst = grd_bm.bits + grow * y + x;
+    uchar *src = bm->bits;
+    uchar *dst = grd_bm.bits + grow * y + x;
 
     if (bm->flags & BMF_TRANS)
         while (h--) {

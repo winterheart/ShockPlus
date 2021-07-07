@@ -61,9 +61,7 @@ void gen_urect(short left, short top, short right, short bot) {
 /* draw a clipped, filled rectangle.  clip, then chain to the installed
    unclipped rectangle drawer.  returns clip code. */
 int gen_rect(short left, short top, short right, short bot) {
-    int r;
-
-    r = gr_clip_rect(&left, &top, &right, &bot);
+    int r = gr_clip_rect(&left, &top, &right, &bot);
     if (r != CLIP_ALL)
         gr_urect(left, top, right, bot);
     return r;

@@ -49,30 +49,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 void gen_int_udisk(short x0, short y0, short r) {
-    fix a, b, ratio;
-
     /* scale from 320x200 x-pixels */
-    ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
-    a = fix_mul((r << 16), ratio);
+    fix ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
+    fix a = fix_mul((r << 16), ratio);
 
     /* calculate equivalent b */
-    b = fix_div(a, (grd_cap->aspect));
+    fix b = fix_div(a, (grd_cap->aspect));
 
     gr_int_uoval(x0, y0, fix_fint(a), fix_fint(b));
 }
 
 /* this really should return a clip code */
 void gen_int_disk(short x0, short y0, short r) {
-    int c;
-
-    fix a, b, ratio;
-
     /* scale from 320x200 x-pixels */
-    ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
-    a = fix_mul((r << 16), ratio);
+    fix ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
+    fix a = fix_mul((r << 16), ratio);
 
     /* calculate equivalent b */
-    b = fix_div(a, (grd_cap->aspect));
+    fix b = fix_div(a, (grd_cap->aspect));
 
-    c = gr_int_oval(x0, y0, fix_fint(a), fix_fint(b));
+    gr_int_oval(x0, y0, fix_fint(a), fix_fint(b));
 }

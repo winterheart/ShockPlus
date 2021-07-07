@@ -36,9 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ========================================================================
 void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb) {
-    int h, v, endh, endv;
     uchar *src = srcb->bits, *dst = dstb->bits;
-    long srcAdd, dstAdd;
     ushort curpix, tempshort;
     uchar *local_grd_half_blend;
 
@@ -46,15 +44,15 @@ void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb) {
     if (!local_grd_half_blend)
         return;
 
-    srcAdd = (srcb->row - srcb->w) - 1;
-    dstAdd = dstb->row - (srcb->w << 1);
-    endh = srcb->w - 1;
-    endv = srcb->h;
+    long srcAdd = (srcb->row - srcb->w) - 1;
+    long dstAdd = dstb->row - (srcb->w << 1);
+    int endh = srcb->w - 1;
+    int endv = srcb->h;
 
-    for (v = 0; v < endv; v++) {
+    for (int v = 0; v < endv; v++) {
         curpix = *(short *)src;
         src += 2;
-        for (h = 0; h < endh; h++) {
+        for (int h = 0; h < endh; h++) {
             tempshort = curpix & 0xff00;
             tempshort |= local_grd_half_blend[curpix];
             *(ushort *)dst = tempshort;

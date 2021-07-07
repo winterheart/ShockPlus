@@ -52,19 +52,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "clpcon.h"
 #include "grlin.h"
 
-/* clipped vertical line with integral coordinates.  returns clip
-   code. */
+/* clipped vertical line with integral coordinates.  returns clip code. */
 
 int gen_vline(short x0, short y0, short y1) {
-    int r;
-
-    r = grd_vline_clip_fill(x0, y0, y1, gr_get_fcolor(), gr_get_fill_parm());
-
-    return r;
+    return grd_vline_clip_fill(x0, y0, y1, gr_get_fcolor(), gr_get_fill_parm());
 }
 
 int gri_vline_clip_fill(short x0, short y0, short y1, long c, long parm) {
-    short t;
     int r = CLIP_NONE;
 
     /* the clip code needs to be buried in here so that this can
@@ -72,7 +66,7 @@ int gri_vline_clip_fill(short x0, short y0, short y1, long c, long parm) {
      */
 
     if (y0 > y1) {
-        t = y0;
+        short t = y0;
         y0 = y1;
         y1 = t;
     }

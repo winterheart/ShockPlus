@@ -30,10 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    which in turn calls gr_set_upixel
 */
 void gri_gen_uvline_fill(short x0, short y0, short y1, long c, long parm) {
-    short t;
-
     if (y0 > y1) {
-        t = y0;
+        short t = y0;
         y0 = y1;
         y1 = t;
     }

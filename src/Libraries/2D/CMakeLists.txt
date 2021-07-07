@@ -131,7 +131,7 @@ set(2D_SRC
 	Source/Clip/clprect.c
 	Source/Clip/clpmono.c
 	Source/RSD/rsdcvt.c
-	Source/RSD/RSDUnpack.c
+		Source/RSD/rsdunpck.c
 	Source/string/chrsiz.c
 	Source/string/genchr.c
 	Source/string/genstr.c

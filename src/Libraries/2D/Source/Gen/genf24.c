@@ -44,9 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void gen_flat24_ubitmap(grs_bitmap *bm, short x0, short y0) {
     short x, y;
-    uchar *p, *lp;
+    uchar *lp;
 
-    p = bm->bits;
+    uchar *p = bm->bits;
     if (bm->flags & BMF_TRANS)
         for (y = y0; y < y0 + bm->h; y++) {
             lp = p;
@@ -65,14 +65,10 @@ void gen_flat24_ubitmap(grs_bitmap *bm, short x0, short y0) {
 }
 
 int gen_flat24_bitmap(grs_bitmap *bm, short x0, short y0) {
-    int r;
-    short w, h;
-    uchar *b;
-
-    b = bm->bits;
-    w = bm->w;
-    h = bm->h;
-    r = gr_clip_flat24_bitmap(bm, &x0, &y0);
+    uchar *b = bm->bits;
+    short w = bm->w;
+    short h = bm->h;
+    int r = gr_clip_flat24_bitmap(bm, &x0, &y0);
     if (r != CLIP_ALL)
         gr_flat24_ubitmap(bm, x0, y0);
     bm->bits = b;

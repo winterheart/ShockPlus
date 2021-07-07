@@ -55,22 +55,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 void flat8_flat8_ubitmap(grs_bitmap *bm, short x, short y) {
-    uchar *m_src;
-    uchar *m_dst;
     int w = bm->w;
     int h = bm->h;
-    int i;
-    int brow, grow;
 
-    brow = bm->row;
-    grow = grd_bm.row;
+    int brow = bm->row;
+    int grow = grd_bm.row;
 
-    m_src = bm->bits;
-    m_dst = grd_bm.bits + grow * y + x;
+    uchar *m_src = bm->bits;
+    uchar *m_dst = grd_bm.bits + grow * y + x;
 
     if (bm->flags & BMF_TRANS)
         while (h--) {
-            for (i = 0; i < w; i++)
+            for (int i = 0; i < w; i++)
                 if (m_src[i] != 0)
                     m_dst[i] = m_src[i];
             m_src += brow;

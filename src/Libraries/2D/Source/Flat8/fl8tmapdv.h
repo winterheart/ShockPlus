@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern fix fix_mul_asm_safe(fix a, fix b);
+#include "fix.h"
 #ifdef __cplusplus
 }
 #endif

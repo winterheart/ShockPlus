@@ -56,11 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    code. */
 
 int gen_hline(short x0, short y0, short x1) {
-    int r;
-
-    r = grd_hline_clip_fill(x0, y0, x1, gr_get_fcolor(), gr_get_fill_parm());
-
-    return r;
+    return grd_hline_clip_fill(x0, y0, x1, gr_get_fcolor(), gr_get_fill_parm());
 }
 
 int gri_hline_clip_fill(short x0, short y0, short x1, long c, long parm) {

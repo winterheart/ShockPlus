@@ -44,14 +44,14 @@ void gri_flat8_fill_clut_ubitmap(grs_bitmap *bm, short x, short y) {
 }
 
 void gri_flat8_clut_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl) {
-    uchar *src, *dst, *srcf;
+    uchar *srcf;
     short w = bm->w;
     short h = bm->h;
     int ds = bm->row - w;
     int dd = grd_bm.row - w;
 
-    src = bm->bits;
-    dst = grd_bm.bits + grd_bm.row * y + x;
+    uchar *src = bm->bits;
+    uchar *dst = grd_bm.bits + grd_bm.row * y + x;
 
     if (bm->flags & BMF_TRANS)
         while (h--) {
