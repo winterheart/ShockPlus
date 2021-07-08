@@ -1,6 +1,5 @@
 set(LG_SRC
 	Source/LOG/src/log.c
-	Source/memall.c
 	Source/stack.c
 	Source/tmpalloc.c
 	)
