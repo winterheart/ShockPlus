@@ -233,9 +233,9 @@ extern "C" {
 #define AXIS_RIGHT 1
 #define AXIS_UP 2
 #define AXIS_IN 3
-#define AXIS_LEFT -AXIS_RIGHT
-#define AXIS_DOWN -AXIS_UP
-#define AXIS_OUT -AXIS_IN
+#define AXIS_LEFT (-AXIS_RIGHT)
+#define AXIS_DOWN (-AXIS_UP)
+#define AXIS_OUT (-AXIS_IN)
 
 // vectors, points, matrices
 
@@ -448,7 +448,7 @@ void g3_rotate_delta_xz(g3s_vector *dest, fix dx, fix dz);
 void g3_rotate_delta_yz(g3s_vector *dest, fix dy, fix dz);
 void g3_rotate_delta_xy(g3s_vector *dest, fix dx, fix dy);
 void g3_rotate_delta_xyz(g3s_vector *dest, fix dx, fix dy, fix dz);
-// rotate a deltas - take just the spefified values
+// rotate a deltas - take just the specified values
 
 void g3_add_delta_v(g3s_phandle p, g3s_vector *delta);
 void g3_add_delta_x(g3s_phandle p, fix dx);
@@ -504,8 +504,8 @@ void g3_light_diff(g3s_phandle norm, g3s_phandle pos); // takes normal vector
 // MLA #pragma aux g3_light_diff "*" parm [eax] [edx] modify [eax edx ebx ecx
 // esi edi];
 
-void g3_light_spec(g3s_phandle norm,
-                   g3s_phandle pos); // takes norm and point position, lights point
+void g3_light_spec(g3s_phandle norm, g3s_phandle pos);
+// takes norm and point position, lights point
 // MLA #pragma aux g3_light_spec "*" parm [eax] [edx] modify [eax edx ebx ecx
 // esi edi];
 

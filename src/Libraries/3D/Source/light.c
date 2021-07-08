@@ -28,14 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 #include "globalv.h"
 #include "lg.h"
+#include "light.h"
 
-// prototypes
-void check_for_near(void);
-void scale_light_vec(void);
-void g3_light_obj(g3s_phandle norm, g3s_phandle pos);
-fix light_diff_raw(g3s_phandle src, g3s_phandle dest);
-fix light_spec_raw(g3s_phandle src, g3s_phandle dest);
-fix light_dands_raw(g3s_phandle src, g3s_phandle dest);
 
 // look ma, a zero vector
 g3s_phandle tmp1;
@@ -230,9 +224,7 @@ void g3_light_diff(g3s_phandle norm, g3s_phandle pos) {
 // esi and edi
 // ret eax
 fix light_diff_raw(g3s_phandle src, g3s_phandle dest) {
-    fix temp;
-
-    temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *)src);
+    fix temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *)src);
 
     // set lighting value in norm
     // test eax for negativity, zero if negative
@@ -271,9 +263,7 @@ void g3_light_spec(g3s_phandle norm, g3s_phandle pos) {
 // 2(s.l)(s.v) - (l.v)
 // take (s.l)
 fix light_spec_raw(g3s_phandle src, g3s_phandle dest) {
-    fix temp;
-
-    temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *)src);
+    fix temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *)src);
     if (temp < 0) {
         dest->i = _g3d_amb_light >> 4;
         return (dest->i);

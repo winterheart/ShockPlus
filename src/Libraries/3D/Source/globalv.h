@@ -134,19 +134,6 @@ extern fix _g3d_sdotv; //  fix     ?       ; surface vector dotted with view
 extern long _g3d_light_tab; //  dd      0       ; lighting table with 32 or 24
                             //  entries.  Should go from black to white,
 
-// stereo globals, read em and weep
-extern fix _g3d_eyesep_raw;      //  fix     0     ;raw 3d sep between eyes
-extern fix _g3d_eyesep;          //  fix     0     ;scaled eye sep between eyes
-extern long _g3d_stereo_base;    //   dd     0     ;stereo point offset, default
-                                 //   zero, means non
-extern long _g3d_stereo_list;    //   dd     0     ;start of stereo point list,
-                                 //   makes it easy to detect
-extern char _g3d_stereo;         //   db     0     ;stereo this frame
-extern long _g3d_rt_canv;        //   dd     0     ;pointer to right eye canvas
-extern long _g3d_rt_canv_bits;   //   dd     0     ;pointer to bits of rt canvas
-extern long _g3d_lt_canv_bits;   //   dd     0     ;pointer to bits of lt canvas
-extern long _g3d_stereo_tmp[14]; //   dd     14 dup (?) ;temporary point list
-
 // palette base for gouraud-shaded polys
 
 extern fix16 gouraud_base; //  sfix    ?

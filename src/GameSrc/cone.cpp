@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-#include "3dinterp.h"
 #include "clip.h"
 #include "cone.h"
 #include "map.h"
@@ -36,7 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frsetup.h"
 #include "frspans.h"
 #include "frflags.h"
-#include "tools.h"
 
 #define PRINT_PYRAMID
 

@@ -68,7 +68,7 @@ void g3_get_FOV(fixang *x, fixang *y) {
 fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height) {
     fix sin_val, cos_val;
     fix unscalezoom, temp1;
-    long templong;
+    int32_t templong;
 
     fix_sincos(angle, &sin_val, &cos_val);
     temp1 = fix_div(FIX_UNIT - cos_val, cos_val + FIX_UNIT);

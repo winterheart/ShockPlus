@@ -29,19 +29,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 #include "globalv.h"
 #include "lg.h"
+#include "polygon.h"
 #include "rgb.h"
+#include "vector.h"
 #include "OpenGL.h"
 
-// prototypes
-int check_and_draw_common(long c, int n_verts, g3s_phandle *p);
-int draw_poly_common(long c, int n_verts, g3s_phandle *p);
-int draw_line_common(g3s_phandle p0, g3s_phandle p1);
 
 #define GR_WIRE_POLY_LINE 6
 #define GR_WIRE_POLY_SLINE 7
 #define GR_WIRE_POLY_CLINE 8
-
-#define MAX_VERTS 100 // max for one poly
 
 // array of 2d points
 grs_vertex p_vlist[MAX_VERTS];
@@ -86,8 +82,6 @@ g3s_codes g3_check_codes(int n_verts, g3s_phandle *p) {
     retcode.and_ = andcode;
     return (retcode);
 }
-
-extern void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0, g3s_vector *v1, g3s_vector *v2);
 
 // takes 3 rotated points: eax,edx,ebx.
 // returns al=true (& s flag set) if facing. trashes all but ebp
@@ -168,11 +162,9 @@ int g3_draw_poly(long c, int n_verts, g3s_phandle *p) {
 
 int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
     if (use_opengl()) {
-        extern int opengl_draw_poly(long, int, g3s_phandle *, char);
         return opengl_draw_poly(c, n_verts, p, gour_flag);
     }
 
-    char andcode, orcode;
     g3s_phandle *old_p;
     int i;
     g3s_phandle *src;
@@ -183,8 +175,8 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
     poly_color = c;
 
     // first, go through points and get codes
-    andcode = 0xff;
-    orcode = 0;
+    char andcode = 0xff;
+    char orcode = 0;
     old_p = p;
 
     for (i = n_verts; i > 0; i--) {
@@ -260,16 +252,14 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
 // draw a point in 3-space. takes esi=point. returns al=drew.
 // trashes eax,edx,esi and if must project, ecx
 int g3_draw_point(g3s_phandle p) {
-    int sx, sy;
-
     if (p->codes)
         return CLIP_ALL;
 
     if ((p->p3_flags & PF_PROJECTED) == 0) // check if projected
         g3_project_point(p);
 
-    sx = (p->sx + 0x08000) >> 16; // round & get int part
-    sy = (p->sy + 0x08000) >> 16; // round & get int part
+    int sx = (p->sx + 0x08000) >> 16; // round & get int part
+    int sy = (p->sy + 0x08000) >> 16; // round & get int part
     return (((int (*)(short x, short y))grd_canvas_table[DRAW_POINT])(sx, sy));
 }
 

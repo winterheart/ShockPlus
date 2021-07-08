@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
-#include "3dinterp.h"
+#include "3d.h"
 #include "ai.h"
 #include "combat.h"
 #include "criterr.h"

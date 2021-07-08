@@ -126,12 +126,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "3d.h"
 #include "clip.h"
+#include "fl8p.h"
 #include "globalv.h"
 #include "lg.h"
-
-extern void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
+#include "polygon.h"
+#include "tmapfcn.h"
 
 // prototypes
 int do_tmap_tile(g3s_phandle upperleft, g3s_vector *u_vec, g3s_vector *v_vec, int nverts, g3s_phandle *vp,
@@ -141,10 +140,7 @@ int do_tmap(int n, g3s_phandle *vp, grs_bitmap *bm);
 int do_tmap_quad_tile(g3s_phandle *vp, grs_bitmap *bm, int width_count, int height_count);
 void calc_warp_matrix2(g3s_phandle upperleft, fix x10, fix x20, fix y10, fix y20, fix z10, fix z20, grs_bitmap *bm);
 int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm);
-int check_linear(int w);
-
-#define _bm_w 8
-#define _bm_h 10
+int check_linear(int n);
 
 void *tmap_func;
 grs_bitmap unpack_bm;
@@ -155,15 +151,6 @@ grs_tmap_info *ti_ptr = &ti;
 fix warp[9];
 
 long light_flag;
-
-// arrays of point handles, used in clipping
-extern g3s_phandle vbuf[];
-extern g3s_phandle _vbuf2[];
-
-// array of 2d points
-extern grs_vertex p_vlist[];
-extern grs_vertex *p_vpl[];
-extern long _n_verts;
 
 // tiles a texture map over an arbitarary polygon.
 // takes eax=upperleft, ebx=width, ecx=height, edx=nverts, esi=ptr to points,
@@ -206,21 +193,13 @@ int g3_draw_tmap_tile(g3s_phandle upperleft, g3s_vector *u_vec, g3s_vector *v_ve
 
 int do_tmap_tile(g3s_phandle upperleft, g3s_vector *u_vec, g3s_vector *v_vec, int nverts, g3s_phandle *vp,
                  grs_bitmap *bm) {
-    byte andcode, orcode;
     int i;
-    g3s_phandle *src;
     g3s_phandle tempHand;
-    fix x10;
-    fix y10;
-    fix z10;
-    fix x20;
-    fix y20;
-    fix z20;
 
     // get codes for this polygon
-    andcode = 0xff;
-    orcode = 0;
-    src = vp;
+    byte andcode = 0xff;
+    byte orcode = 0;
+    g3s_phandle *src = vp;
     for (i = nverts; i > 0; i--) {
         tempHand = *(src++);
         andcode &= tempHand->codes;
@@ -234,14 +213,14 @@ int do_tmap_tile(g3s_phandle upperleft, g3s_vector *u_vec, g3s_vector *v_vec, in
     // upper left handle of 0 means reuse old warp matrix.
 
     // store elements of u difference vector as 10 warp differences.
-    x10 = u_vec->gX;
-    y10 = u_vec->gY;
-    z10 = u_vec->gZ;
+    fix x10 = u_vec->gX;
+    fix y10 = u_vec->gY;
+    fix z10 = u_vec->gZ;
 
     // store elements of v difference vector as 20 warp differences.
-    x20 = v_vec->gX;
-    y20 = v_vec->gY;
-    z20 = v_vec->gZ;
+    fix x20 = v_vec->gX;
+    fix y20 = v_vec->gY;
+    fix z20 = v_vec->gZ;
 
     // do warp matrix calculations
     calc_warp_matrix2(upperleft, x10, x20, y10, y20, z10, z20, bm);
@@ -374,10 +353,6 @@ int g3_draw_tmap(int n, g3s_phandle *vp, grs_bitmap *bm) {
 }
 
 int do_tmap(int n, g3s_phandle *vp, grs_bitmap *bm) {
-    byte andcode, orcode;
-    int i;
-    g3s_phandle *src;
-    g3s_phandle tempHand;
     // convert RSD bitmap to normal
     if (bm->type == BMT_RSD8) {
         if (gr_rsd8_convert(bm, &unpack_bm) != GR_UNPACK_RSD8_OK)
@@ -387,11 +362,11 @@ int do_tmap(int n, g3s_phandle *vp, grs_bitmap *bm) {
     }
 
     // get codes for this polygon
-    andcode = 0xff;
-    orcode = 0;
-    src = vp;
-    for (i = n; i > 0; i--) {
-        tempHand = *(src++);
+    byte andcode = 0xff;
+    byte orcode = 0;
+    g3s_phandle *src = vp;
+    for (int i = n; i > 0; i--) {
+        g3s_phandle tempHand = *(src++);
         andcode &= tempHand->codes;
         orcode |= tempHand->codes;
     }
@@ -482,8 +457,7 @@ int do_tmap_quad_tile(g3s_phandle *vp, grs_bitmap *bm, int width_count, int heig
 }
 
 int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
-    int branch_to_copy = 0;
-    int hlog, wlog;
+    int branch_to_copy;
     g3s_phandle temphand;
     int i, temp;
     grs_vertex *cur_vert;
@@ -502,8 +476,8 @@ int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
         branch_to_copy = 1;
 
     // check if bitmap is power of 2
-    wlog = bm->wlog;
-    hlog = bm->hlog;
+    int wlog = bm->wlog;
+    int hlog = bm->hlog;
 
     if (((1 << wlog) != bm->w) || ((1 << hlog) != bm->h))
         return CLIP_ALL;
@@ -551,7 +525,6 @@ int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
         ((void (*)(grs_bitmap * bm, int n, grs_vertex **vpl, grs_tmap_info *ti)) tmap_func)(bm, _n_verts, p_vpl, &ti);
         return CLIP_NONE;
     } else {
-        extern fix gr_clut_lit_tol;
         int temp_n;
         fix imax, imin, temp_i;
         grs_vertex *temp_p_vlist;
@@ -592,7 +565,6 @@ int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
 
 // return 1 if punt (ignore Z), 0 if use it
 int check_linear(int n) {
-    extern ubyte flat8_per_ltol;
     g3s_phandle temphand;
     fix zmin, zmax;
     fix temp;

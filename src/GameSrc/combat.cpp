@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include "3dinterp.h"
 #include "combat.h"
 #include "cone.h"
 #include "objsim.h"

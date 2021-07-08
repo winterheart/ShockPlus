@@ -74,13 +74,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 #include "3d.h"
+#include "3d_bitmap.h"
 #include "globalv.h"
 #include "lg.h"
+#include "tmapfcn.h"
 #include "OpenGL.h"
-#include <stdbool.h>
 
-// need this from 2D lib
-extern int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 
 fix _g3d_bitmap_x_scale = 0x010000;
 fix _g3d_bitmap_y_scale = 0x010000;
@@ -101,8 +100,6 @@ grs_tmap_info tmap_info;
 char _g3d_enable_blend = 0;
 
 // prototypes
-bool SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-bool AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
 
 grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p);
 grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p);
@@ -378,7 +375,6 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
                     if (!use_opengl()) {
                         h_map(bm, 4, _g3d_bitmap_poly, &tmap_info);
                     } else {
-                        int opengl_bitmap(grs_bitmap * bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
                         opengl_bitmap(bm, 4, _g3d_bitmap_poly, &tmap_info);
                     }
                     return (_g3d_bitmap_poly);
@@ -387,11 +383,9 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
         }
     }
     tmap_info.tmap_type = (_g3d_light_flag << 1) + GRC_BILIN;
-    extern bool use_opengl();
     if (!use_opengl()) {
         h_map(bm, 4, _g3d_bitmap_poly, &tmap_info);
     } else {
-        int opengl_bitmap(grs_bitmap * bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
         opengl_bitmap(bm, 4, _g3d_bitmap_poly, &tmap_info);
     }
 
@@ -401,7 +395,7 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
 // subtract two longs, put the result in result, and return true if overflow
 // result = src-dest;
 bool SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest) {
-    long tempres;
+    int32_t tempres;
 
     *result = tempres = src - dest;
     if ((dest >= 0 && src < 0 && tempres >= 0) || (dest < 0 && src >= 0 && tempres < 0))
@@ -413,7 +407,7 @@ bool SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest) {
 // add two longs, put the result in result, and return true if overflow
 // result = src+dest;
 bool AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest) {
-    long tempres;
+    int32_t tempres;
 
     *result = tempres = src + dest;
     if ((dest >= 0 && src >= 0 && tempres < 0) || (dest < 0 && src < 0 && tempres >= 0))

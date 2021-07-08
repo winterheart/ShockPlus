@@ -81,15 +81,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //
 
-//#include <FixMath.h>
 #include "3d.h"
 #include "globalv.h"
 #include "lg.h"
-
-/*#define f1_0	 fixmake(1)
-#define f0_5	 fixmake(0,8000h)
-#define f0_25	 fixmake(0,4000h)
-*/
+#include "matrix.h"
 
 fix sinp;   // fix	?
 fix cosp;   // fix	?
@@ -108,12 +103,7 @@ fix d89; // fix	?
 fix den; // fix	?
 
 // prototypes
-void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int rotation_order);
-void process_view_matrix(void);
-void scale_view_matrix(void);
-void get_pyr_vector(g3s_vector *corners);
 
-int code_point(g3s_point *pt);
 
 void compute_XYZ(g3s_matrix *view_matrix);
 void compute_YXZ(g3s_matrix *view_matrix);
@@ -124,8 +114,16 @@ void compute_ZYX(g3s_matrix *view_matrix);
 void compute_invalid(g3s_matrix *view_matrix);
 
 // function table
-void (*rotation_table[])(g3s_matrix *) = {compute_XYZ, compute_YXZ,     compute_invalid, compute_YZX,
-                                          compute_XZY, compute_invalid, compute_ZXY,     compute_ZYX};
+void (*rotation_table[])(g3s_matrix *) = {
+    compute_XYZ,     //
+    compute_YXZ,     //
+    compute_invalid, // invalid
+    compute_YZX,     // not implemented
+    compute_XZY,     // not implemented
+    compute_invalid, // invalid
+    compute_ZXY,     // not implemented
+    compute_ZYX      // not implemented
+};
 
 // build the view matrix from view angles, etc.
 // takes esi=pos, ebx=angles, eax=zoom, ecx=rotation order

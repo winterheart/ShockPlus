@@ -80,9 +80,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 #include "globalv.h"
 #include "lg.h"
-//#include <String.h>
-//#include <_stdarg.h>
-//#include <stdarg.h>
+#include "light.h"
+#include "polygon.h"
 
 // prototypes;
 uchar *do_eof(uchar *);
@@ -127,14 +126,7 @@ uchar *do_uvlist(uchar *);
 uchar *do_tmap_op(uchar *);
 uchar *do_dbg(uchar *);
 
-extern int check_and_draw_common(long c, int n_verts, g3s_phandle *p);
-extern int draw_poly_common(long c, int n_verts, g3s_phandle *p);
-extern void g3_light_obj(g3s_phandle norm, g3s_phandle pos);
-
 void interpreter_loop(uchar *object);
-
-// globals
-extern char gour_flag; // gour flag for actual polygon drawer
 
 #define OP_EOF 0
 #define OP_JNORM 1
@@ -184,7 +176,7 @@ void *opcode_table[n_ops] = {
 };
 
 #define N_RES_POINTS 1000
-#define PARM_DATA_SIZE 4 * 100
+#define PARM_DATA_SIZE (4 * 100)
 
 #define N_VCOLOR_ENTRIES 32
 #define N_VPOINT_ENTRIES 32
@@ -652,7 +644,6 @@ uchar *do_getparms_i(uchar *opcode) {
 uchar *do_dbg(uchar *opcode) { return opcode + 8; }
 
 extern void (*g3_tmap_func)();
-extern int temp_poly(long c, int n, grs_vertex **vpl);
 
 uchar *do_tmap_op(uchar *opcode) {
     int count, count2;

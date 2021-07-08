@@ -45,9 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "globalv.h"
 #include "fix.h"
 #include "lg.h"
-
-// prototypes
-void g3_compute_normal_quick(g3s_vector *v, g3s_vector *v0, g3s_vector *v1, g3s_vector *v2);
+#include "vector.h"
 
 // adds two vectors:  edi = esi + ebx
 void g3_vec_add(g3s_vector *dest, g3s_vector *src1, g3s_vector *src2) {

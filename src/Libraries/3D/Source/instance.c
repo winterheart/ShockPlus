@@ -56,9 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "3d.h"
 #include "globalv.h"
 #include "lg.h"
-
-// externs
-extern void angles_2_matrix(g3s_angvec *angles, g3s_matrix *view_matrix, int rotation_order);
+#include "matrix.h"
 
 // prototypes
 uchar instance_x(fixang tx);

@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Point definition routines
 //
 
-//#include <FixMath.h>
 #include "3d.h"
+#include "3d_bitmap.h"
 #include "globalv.h"
 #include "lg.h"
 
@@ -40,10 +40,6 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
 #define xlate_rotate_point(v, x, y, z) \
     do_rotate(v->gX - _view_position.gX, v->gY - _view_position.gY, v->gZ - _view_position.gZ, x, y, z)
 
-extern int code_point(g3s_point *pt);
-extern char SubLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-extern bool AddLongWithOverflow(int32_t *result, int32_t src, int32_t dest);
-
 // for temp use in rotate_list, etc.
 g3s_codes g_codes;
 
@@ -51,14 +47,13 @@ g3s_codes g_codes;
 // assumes perspective mapper scale factor will be set to _scrw.
 g3s_phandle g3_rotate_norm(g3s_vector *v) {
     fix x, y, z;
-    fix temp, temp2, temp3;
     g3s_point *point;
 
     rotate_norm(v, &x, &y, &z);
 
-    temp = fix_div(z, _matrix_scale.gZ);
-    temp2 = fix_div(x, _matrix_scale.gX);
-    temp3 = fix_div(y, _matrix_scale.gY);
+    fix temp = fix_div(z, _matrix_scale.gZ);
+    fix temp2 = fix_div(x, _matrix_scale.gX);
+    fix temp3 = fix_div(y, _matrix_scale.gY);
 
     temp3 = -fix_mul_div(temp3, _scrw, _scrh); // because projecting negates too, of course. Grrr.
 
@@ -84,11 +79,7 @@ g3s_phandle g3_rotate_point(g3s_vector *v) {
 
 // matrix multiply and project a point. esi=vector, returns edi=point
 g3s_phandle g3_transform_point(g3s_vector *v) {
-    g3s_phandle tempH;
-
-    // printf("g3_transform_point\n");
-
-    tempH = g3_rotate_point(v);
+    g3s_phandle tempH = g3_rotate_point(v);
     g3_project_point(tempH);
     return (tempH);
 }
@@ -97,18 +88,16 @@ g3s_phandle g3_transform_point(g3s_vector *v) {
 // returns 0 if z<=0, 1 if z>0.
 // trashes eax,ecx,edx.
 int g3_project_point(g3s_phandle p) {
-    fix x, y, z, res;
-
     // check if this point is in front of the back plane.
-    z = p->gZ;
+    fix z = p->gZ;
     if (z <= 0)
         return 0;
-    x = p->gX;
-    y = p->gY;
+    fix x = p->gX;
+    fix y = p->gY;
 
     // point is in front of back plane---do projection.
     // project y coordinate.
-    res = fix_mul_div(y, _scrh, z);
+    fix res = fix_mul_div(y, _scrh, z);
     if (gOVResult) {
         p->codes |= CC_CLIP_OVERFLOW;
         return 1;
@@ -142,13 +131,12 @@ int g3_project_point(g3s_phandle p) {
 // takes esi=ptr to array of vectors, edi=ptr to list for point handles,
 // ecx=count
 g3s_codes g3_transform_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
-    int i;
     g3s_phandle temphand;
 
     g_codes.or_ = 0;
     g_codes.and_ = 0xff;
 
-    for (i = n; i > 0; i--) {
+    for (int i = n; i > 0; i--) {
         temphand = g3_transform_point(v++);
         g_codes.or_ |= temphand->codes;
         g_codes.and_ &= temphand->codes;
@@ -161,13 +149,12 @@ g3s_codes g3_transform_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
 // takes esi=ptr to array of vectors, edi=ptr to list for point handles,
 // ecx=count  returns bh=codes and, bl=codes or
 g3s_codes g3_rotate_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
-    int i;
     g3s_phandle temphand;
 
     g_codes.or_ = 0;
     g_codes.and_ = 0xff;
 
-    for (i = n; i > 0; i--) {
+    for (int i = n; i > 0; i--) {
         temphand = g3_rotate_point(v++);
         g_codes.or_ |= temphand->codes;
         g_codes.and_ &= temphand->codes;
@@ -179,13 +166,12 @@ g3s_codes g3_rotate_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
 
 // takes esi=ptr to array of point handles, ecx=count
 g3s_codes g3_project_list(short n, g3s_phandle *point_list) {
-    int i;
     g3s_phandle temphand;
 
     g_codes.or_ = 0;
     g_codes.and_ = 0xff;
 
-    for (i = n; i > 0; i--) {
+    for (int i = n; i > 0; i--) {
         temphand = *(point_list++);
         g_codes.or_ |= temphand->codes;
         g_codes.and_ &= temphand->codes;

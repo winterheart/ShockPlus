@@ -41,6 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
+
+#include "globalv.h"
 #include "star.h"
 
 #include "OpenGL.h"
@@ -74,10 +76,6 @@ int std_color_base, std_color_range;
 // gamma-correct star colors
 uchar std_alias_color_table[256];
 #endif
-
-extern g3s_vector _matrix_scale;
-extern g3s_phandle _vbuf2;
-extern int _n_verts;
 
 // prototypes
 fix mag2_point(g3s_phandle p);

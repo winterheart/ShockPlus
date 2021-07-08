@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
-#include "3dinterp.h"
+#include "3d.h"
 // pretty cool set of header files, eh?
 #include "tfdirect.h" // ditto, yep yep yep
 #include "ss_flet.h"  // for everything, basically, constants mostly

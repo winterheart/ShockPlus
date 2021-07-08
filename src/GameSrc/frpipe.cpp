@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
-#include "3dinterp.h"
+#include "3d.h"
 #include "map.h"
 #include "mapflags.h"
 #include "frsubclp.h"
@@ -105,12 +105,22 @@ int set_texture_i(g3s_phandle phd, int trans_off, int flrciel, int hgt);
 int set_null_vrtx(g3s_phandle phd, int trans_off, int flrciel, int hgt);
 #endif
 
+// clang-format off
 // see header file for defines/layout graph
-uchar quad_code_to_mask_2[] = {FMK_NW | FMK_EW | FMK_WW,         FMK_NW | FMK_WW, FMK_NW | FMK_EW,
-                               FMK_EW | FMK_NW | FMK_SW,         FMK_EW | FMK_NW, FMK_EW | FMK_SW,
-                               FMK_SW | FMK_EW | FMK_WW,         FMK_SW | FMK_EW, FMK_SW | FMK_WW,
-                               FMK_WW | FMK_NW | FMK_SW,         FMK_WW | FMK_SW, FMK_WW | FMK_NW,
-                               FMK_EW | FMK_WW | FMK_SW | FMK_NW};
+uchar quad_code_to_mask_2[] = {
+    FMK_NW | FMK_EW | FMK_WW,
+    FMK_NW | FMK_WW,
+    FMK_NW | FMK_EW,
+    FMK_EW | FMK_NW | FMK_SW,
+    FMK_EW | FMK_NW,
+    FMK_EW | FMK_SW,
+    FMK_SW | FMK_EW | FMK_WW,
+    FMK_SW | FMK_EW, FMK_SW | FMK_WW,
+    FMK_WW | FMK_NW | FMK_SW,
+    FMK_WW | FMK_SW, FMK_WW | FMK_NW,
+    FMK_EW | FMK_WW | FMK_SW | FMK_NW
+};
+// clang-format on
 
 static char diag_moves[4][2] = {{1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 static short diag_map_moves[4] = {static_cast<int16_t>(0xdead), static_cast<int16_t>(0xbeef),
