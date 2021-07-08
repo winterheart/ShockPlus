@@ -26,6 +26,7 @@ void pump_events(void);
 void get_mouselook_vel(int *vx, int *vy);
 void set_mouse_chaos(short dx, short dy);
 void middleize_mouse(void);
+void sdl_mouse_init(void);
 
 extern bool fullscreenActive;
 

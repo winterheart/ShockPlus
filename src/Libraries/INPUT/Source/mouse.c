@@ -43,10 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ¥¥¥Note:  The mouse position will always be returned in *local* coordinates,
 // that is, local to the main game window.
 
-#include <SDL.h>
-
-#include "error.h"
 #include "mouse.h"
+#include "sdl_events.h"
 #include "tickcount.h"
 
 typedef struct _mouse_state {
@@ -288,7 +286,6 @@ errtype mouse_init(short mone, short mtwo) {
     */
     //	Initialize mouse state variables
 
-    extern void sdl_mouse_init(void);
     sdl_mouse_init();
 
     mouseQueueIn = 0;
