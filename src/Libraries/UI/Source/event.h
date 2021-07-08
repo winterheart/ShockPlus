@@ -245,6 +245,8 @@ uchar uiCheckInput(void);
 // Sets the current slab.
 errtype uiInit(uiSlab *slab);
 
+errtype ui_init_focus_chain(uiSlab *slab);
+
 // shuts down the ui toolkit.
 void uiShutdown(void);
 

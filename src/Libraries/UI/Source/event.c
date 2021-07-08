@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <SDL.h>
 
+#include "frcursors.h"
 #include "lg.h"
 #include "mouse.h"
 #include "movekeys.h"
@@ -48,7 +49,7 @@ void ui_dispatch_mouse_event(uiEvent *mout);
 void ui_poll_keyboard(void);
 void ui_pop_up_keys(void);
 LGPoint ui_poll_mouse_position(void);
-errtype ui_init_focus_chain(uiSlab *slab);
+
 
 // ---------------------
 // HANDLER CHAIN DEFINES
@@ -707,9 +708,6 @@ errtype uiPoll(void) {
     uchar kbdone = FALSE;
     uchar msdone = FALSE;
     LGPoint mousepos = last_mouse;
-    extern LGPoint LastCursorPos;
-    extern struct _cursor *LastCursor;
-    extern void ui_update_cursor(LGPoint pos);
 
 #define BURN_QUEUE
 #ifdef BURN_QUEUE
@@ -899,7 +897,6 @@ errtype uiInit(uiSlab *slab) {
 }
 
 void uiShutdown(void) {
-    extern errtype ui_shutdown_cursors(void);
     ui_shutdown_cursors();
     mouse_shutdown();
     kb_close();

@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 
 #include "cursors.h"
+#include "event.h"
 #include "region.h"
 #include "slist.h"
 
@@ -139,7 +140,6 @@ errtype region_create(LGRegion *parent, LGRegion *ret, LGRect *r, int z, int eve
 
 errtype region_destroy(LGRegion *reg, uchar draw) {
     LGRegion *curp, *lastp, *nextp;
-    extern errtype uiShutdownRegionHandlers(LGRegion * r);
 
     // Make us disappear
     region_remove(reg, draw);
@@ -519,7 +519,6 @@ void region_propagate_callback(LGRegion *reg, ulong callback_code, LGRect *arg_r
     LGRegion *curp;
     RectCallback fn;
     LGRect new_rect, abs_rect;
-    extern errtype uiHideMouse(LGRect * r), uiShowMouse(LGRect * r);
 
     switch (callback_code) {
     case SAVEUNDER_CB:

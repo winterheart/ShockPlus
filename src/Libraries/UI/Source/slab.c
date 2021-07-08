@@ -16,6 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+#include "event.h"
+#include "frcursors.h"
 #include "lg.h"
 #include "slab.h"
 
@@ -64,8 +67,6 @@ errtype ui_init_slabs(void) {
 
 errtype uiMakeSlab(uiSlab *slab, LGRegion *cursor_reg, LGCursor *default_cursor) {
     errtype err;
-    extern errtype ui_init_focus_chain(uiSlab * slab);
-    extern errtype ui_init_cursor_stack(uiSlab * slab, LGCursor * default_cursor);
 
     slab->creg = cursor_reg;
     err = ui_init_focus_chain(slab);
