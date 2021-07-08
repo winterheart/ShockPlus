@@ -97,7 +97,6 @@ ubyte vmail_len[NUM_VMAIL] = {
 uchar copied_background = FALSE;
 grs_bitmap *vmail_background = NULL;
 
-#pragma disable_message(202)
 void vmail_intro(LGRect *area, ubyte flags)
 {
    if (flags & BEFORE_ANIM_BITMAP)
@@ -106,13 +105,11 @@ void vmail_intro(LGRect *area, ubyte flags)
          gr_bitmap(vmail_background, 0, 0);
    }
 }
-#pragma enable_message(202)
 
 // --------------------------------------------------------------------
 //
 //
 
-#pragma disable_message(202)
 void vmail_anim_end(ActAnim *paa, AnimCode ancode, AnimCodeData *pdata)
 {
 #ifdef PLAYTEST
@@ -123,13 +120,11 @@ void vmail_anim_end(ActAnim *paa, AnimCode ancode, AnimCodeData *pdata)
 #endif
    current_vmail = -1;
 }
-#pragma enable_message(202)
 
 // --------------------------------------------------------------------
 //
 //
 
-#pragma disable_message(202)
 void vmail_start_anim_end(ActAnim *paa, AnimCode ancode, AnimCodeData *pdata)
 {
 #ifdef PLAYTEST
@@ -140,7 +135,6 @@ void vmail_start_anim_end(ActAnim *paa, AnimCode ancode, AnimCodeData *pdata)
 #endif
    current_vmail = -1;
 }
-#pragma enable_message(202)
 
 #define EARLY_EXIT ((errtype)200)
 
@@ -223,7 +217,6 @@ errtype play_vmail_intro(uchar use_texture_buffer)
 // play_vmail()
 //
 
-#pragma disable_message(202)
 errtype play_vmail(byte vmail_no)
 {
    LGPoint    animloc = {VINTRO_X, VINTRO_Y};
@@ -455,10 +448,9 @@ errtype play_vmail(byte vmail_no)
 
    return(OK);
 }
-#pragma enable_message(202)
 
 byte test_vmail = 0;
-#pragma disable_message(202)
+
 uchar shield_test_func(short keycode, ulong context, void* data)
 {
    int   i;
@@ -471,14 +463,11 @@ uchar shield_test_func(short keycode, ulong context, void* data)
    vmail_wait_for_input = TRUE;
    return(TRUE);
 }
-#pragma enable_message(202)
 
 #ifdef PLAYTEST
-#pragma disable_message(202)
 uchar shield_off_func(short keycode, ulong context, void* data)
 {
    return(TRUE);
 }
-#pragma enable_message(202)
 
 #endif

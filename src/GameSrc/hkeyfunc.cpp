@@ -90,14 +90,11 @@ uchar yes_3d = TRUE;
 extern uchar properties_changed;
 
 #ifdef PLAYTEST
-#pragma disable_message(202)
 uchar maim_player(ushort keycode, uint32_t context, intptr_t data) {
     player_struct.hit_points = 5;
     return TRUE;
 }
-#pragma enable_message(202)
 
-#pragma disable_message(202)
 uchar salt_the_player(ushort keycode, uint32_t context, intptr_t data) {
     if (config_get_raw(CFG_HKEY_GO, NULL, 0)) {
         player_struct.hit_points = 255;
@@ -139,13 +136,11 @@ uchar give_player_hotkey(ushort keycode, uint32_t context, intptr_t data) {
     return TRUE;
 }
 
-#pragma enable_message(202)
 #endif
 
 #ifdef PLAYTEST
 uchar new_cone_clip = TRUE;
 
-#pragma disable_message(202)
 uchar change_clipper(ushort keycode, uint32_t context, intptr_t data) {
     extern errtype render_run(void);
     new_cone_clip = !new_cone_clip;
@@ -156,10 +151,8 @@ uchar change_clipper(ushort keycode, uint32_t context, intptr_t data) {
     render_run();
     return TRUE;
 }
-#pragma enable_message(202)
 #endif
 
-#pragma disable_message(202)
 uchar quit_key_func(ushort keycode, uint32_t context, intptr_t data) {
 #ifndef GAMEONLY
     extern uchar possible_change;
@@ -920,7 +913,5 @@ uchar res_cache_usage_func(ushort keycode, uint32_t context, intptr_t data) {
     return (TRUE);
 }
 #endif
-
-#pragma enable_message(202)
 
 #endif // NOT_YET

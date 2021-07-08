@@ -960,7 +960,6 @@ schar mlimbs_get_crossfade_status(int pieceID) {
 //		to actual execute its code, when next it is called.
 //
 ////////////////////////////////////////////////////////////////
-#pragma disable_message(202)
 void cdecl mlimbs_callback(snd_midi_parms *mprm, unsigned trigger_value) {
     if (trigger_value) {
         mlimbs_update_requests = TRUE;
@@ -981,7 +980,6 @@ void cdecl mlimbs_callback(snd_midi_parms *mprm, unsigned trigger_value) {
         }
     }
 }
-#pragma enable_message(202)
 
 #ifdef COW
 // the key, here, is we need to update all sequences which are done
@@ -1060,11 +1058,9 @@ void mlimbs_reassign_channels(void) {
     } while (1);
 }
 
-#pragma disable_message(202)
 LONG cdecl mlimbs_timbre_callback(MDI_DRIVER *mdi, LONG bank, LONG patch) { // dont allow the timbre to load
     return 1;
 }
-#pragma enable_message(202)
 
 ////////////////////////////////////////////////////////////////
 //	mlimbs_timer_callback

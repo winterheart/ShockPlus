@@ -479,9 +479,7 @@ void flip_setup(int wall_code) {
 // im gonna spend my whole life alone
 
 // tabs_int_wall
-//#pragma disable_message(202)
 static void _fr_null_int_wall(int wall_id) {}
-//#pragma enable_message(202)
 
 static void _fr_flat_int_wall(int wall_id) {
     WallsToPts *wpt = &wall_pts[wall_id];
@@ -590,9 +588,7 @@ static void _fr_cspace_full_int_wall(int wall_id) {
 
 // this takes a wacky hgt data set
 // uses _fdt_wallid, _fdt_lcore, _fdt_rcore
-//#pragma disable_message(202)
 static void _fr_null_ext_wall(fix pt_list[4][2]) {}
-//#pragma enable_message(202)
 
 static void _fr_flat_ext_wall(
     fix pt_list[4][2]) { // note we do this out of order so we can have left left right right, ie. note their indicies
@@ -982,7 +978,6 @@ static void _fr_tmap_lit_ceil(void) {
     _fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
-//#pragma disable_message(202)
 static void _fr_cspace_wire_ceil(void) {
     int i, pt_code, loopcnt = 1;
     g3s_phandle *pb;
@@ -1024,7 +1019,6 @@ static void _fr_cspace_full_ceil(void) {
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
     _fr_sdbg(STATS, _frp.stats.ceil++);
 }
-//#pragma enable_message(202)
 
 // reoptimize these to _NOT_ do all the boneheaded stuff
 

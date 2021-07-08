@@ -214,7 +214,6 @@ uchar fr_objslew_moveone(Obj *cobj, ObjID objnum, int which, int how, uchar conf
 }
 
 // to physics teleport or not
-//#pragma disable_message(202)
 uchar fr_objslew_setone(int which, int l_new) {
     switch (which) {
     case EYE_HEADH:
@@ -238,7 +237,6 @@ uchar fr_objslew_setone(int which, int l_new) {
     }
     return TRUE;
 }
-//#pragma enable_message(202)
 
 /* KLC - not used
 uchar fr_objslew_tele_to(Obj *, int , int )

@@ -139,7 +139,6 @@ int munge_val(int val, int range, int delta) {
     cface[2] = cube_pt[c]; cface[2]->uv.u = 0;     cface[2]->uv.v = 0x100; \
     cface[3] = cube_pt[d]; cface[3]->uv.u = 0x100; cface[3]->uv.v = 0x100
 
-//#pragma disable_message(202)
 void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, int z) {
     g3s_phandle cube_pt[8], cface[4];
     g3s_vector cube_vec;
@@ -317,9 +316,7 @@ void _fr_draw_polyobj(void *model_ptr, uchar use_lighting) {
         gr_set_fill_type(cur_ft);
 #endif
 }
-//#pragma enable_message(202)
 
-//#pragma disable_message(202)
 void gen_seed_vec(g3s_vector *gpt_vec, int seed, int scale, int deviant) {
     deviant = (1 << deviant) - 1;
     if (seed != 0) {
@@ -452,11 +449,8 @@ void draw_ice(void) {
     g3_free_list(8, xplo_pts);
     g3_end_object();
 }
-//#pragma enable_message(202)
 
-//#pragma disable_message(202)
 void draw_ice_wall(void) { int size_x = 0x8000, size_y = 0x8000; }
-//#pragma enable_message(202)
 
 void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, uchar dblface, uchar use_lighting) {
     int t_off_l, t_off_r;
@@ -577,7 +571,6 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, uchar 
 // so we dont need to carry it around till it works
 
 // note this always has show_obj's p for p and _fdt_dist for dist.. perhaps shouldnt pass them
-//#pragma disable_message(202)
 void _fr_draw_bitmap(grs_bitmap *draw_bm, int dist, int sc, int anch_x, int anch_y) {
 #ifdef SMOOTH_BITMAPS
     grs_canvas tmp_can;
@@ -625,7 +618,6 @@ void _fr_draw_bitmap(grs_bitmap *draw_bm, int dist, int sc, int anch_x, int anch
     }
     g3_free_point(anchor);
 }
-    //#pragma enable_message(202)
 
 #define FAUBJ_BULLET_HACK (NUM_OBJ_RENDER_TYPES)
 #define ADD_IT (0)

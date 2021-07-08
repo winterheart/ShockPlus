@@ -310,7 +310,6 @@ void second_format(int sec_remain, char *s) {
 
 #define BIG_BUF
 
-#pragma disable_message(202)
 uchar gifdump_func(short keycode, ulong context, void *data) {
     unsigned char *temp_buf;
     int giffp;
@@ -330,7 +329,6 @@ uchar gifdump_func(short keycode, ulong context, void *data) {
     }
     return (TRUE);
 }
-#pragma enable_message(202)
 
 #endif // NOT_YET
 
@@ -468,9 +466,7 @@ errtype message_box(char *box_text) {
 
 #ifdef NOT_YET // later, dude
 
-#pragma disable_message(202)
 uchar confirm_box(char *confirm_text) { return (TRUE); }
-#pragma enable_message(202)
 
 FILE *fopen_gen(char *fname, char *t) {
     Datapath gen_path;

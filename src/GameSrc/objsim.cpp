@@ -2312,7 +2312,6 @@ errtype obj_floor_func(ObjID id) {
 #ifdef NOT_YET // later
 
 #ifdef PLAYTEST
-#pragma disable_message(202)
 uchar global_settle_func(short keycode, ulong context, void *data) {
     ObjID oid;
     message_info("settling all objects.");
@@ -2713,7 +2712,6 @@ errtype obj_level_munge() {
 
     return (OK);
 }
-#pragma enable_message(202)
 #endif
 
 #ifdef LOUD_REFRESH

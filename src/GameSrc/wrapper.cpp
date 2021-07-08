@@ -746,13 +746,11 @@ void multi_init(uchar butid, uchar key, Ref descrip, Ref optbase, Ref feedbase, 
     st->curval = var;
 }
 
-#pragma disable_message(202)
 uchar keyslork_handler(uiEvent *ev, uchar butid) {
     slorker *slork = &OButtons[butid].user.sl;
 
     return ((*slork)(butid));
 }
-#pragma enable_message(202)
 
 void slork_init(uchar butid, slorker slork) {
     memset(&OButtons[butid].rect, 0, sizeof(LGRect));
@@ -1029,7 +1027,6 @@ void textlist_init(uchar butid, char *text, uchar numblocks, uchar blocksiz, uch
 // checks all options panel widgets which enclose point of mouse
 // event to see if they want to deal with it.
 //
-#pragma disable_message(202)
 uchar opanel_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     int b;
     uiEvent mev = *ev;
@@ -1067,7 +1064,6 @@ uchar opanel_kb_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     }
     return TRUE;
 }
-#pragma enable_message(202)
 
 extern uiSlab *uiCurrentSlab;
 void clear_obuttons() {
@@ -1280,7 +1276,6 @@ void wrapper_init(void) {
     // THE VERIFY SCREEN: Initialization, handlers
     //
 
-#pragma disable_message(202)
 void quit_verify_pushbutton_handler(uchar butid) { really_quit_key_func(0, 0, 0); }
 
 uchar quit_verify_slorker(uchar butid) {
@@ -1295,7 +1290,6 @@ uchar save_verify_slorker(uchar butid) {
     wrapper_panel_close(TRUE);
     return TRUE;
 }
-#pragma enable_message(202)
 
 void verify_screen_init(void (*verify)(uchar butid), slorker slork) {
     LGRect r;
@@ -1366,7 +1360,6 @@ void recompute_audiolog_level(ushort vol) {
 }
 #endif
 
-#pragma disable_message(202)
 void digi_toggle_deal(ushort offon) {
     int vol;
     vol = (sfx_on) ? 100 : 0;
@@ -1415,8 +1408,6 @@ static void midi_output_dealfunc(ushort val) {
     soundopt_screen_init();
     (void)val;
 }
-
-#pragma enable_message(202)
 
 #define SLIDER_OFFSET_3 0
 void soundopt_screen_init() {
@@ -1620,11 +1611,9 @@ void joysens_dealfunc(ushort joysens_qvar) {
     inpJoystickSens = QVAR_TO_JOYSENS(joysens_qvar);
 }
 
-#pragma disable_message(202)
 void center_joy_go(uchar butid) {
     joystick_screen_init();
 }
-#pragma enable_message(202)
 
 void center_joy_pushbutton_func(uchar butid) {
     int i;
@@ -1670,11 +1659,9 @@ void mousehand_dealfunc(ushort lefty) {
     // mouse_set_lefty(lefty);
 }
 
-#pragma disable_message(202)
 void olh_dealfunc(ushort olh) {
     toggle_olh_func(0, 0, 0);
 }
-#pragma enable_message(202)
 
 ushort wrap_joy_type = 0;
 ushort high_joy_flags;
@@ -1722,9 +1709,7 @@ void joystick_screen_init(void) {
     opanel_redraw(TRUE);
 }
 
-#pragma disable_message(202)
 void joystick_button_func(uchar butid) { joystick_screen_init(); }
-#pragma enable_message(202)
 
 void input_screen_init(void) {
     LGRect r;
@@ -1935,18 +1920,15 @@ void options_screen_init(void) {
     opanel_redraw(TRUE);
 }
 
-#pragma disable_message(202)
 uchar wrapper_options_func(ushort keycode, uint32_t context, intptr_t data) {
     wrapper_start(wrapper_init);
     return (OK);
 }
-#pragma enable_message(202);
 
 //
 // THE LOAD GAME SCREEN: Initialization, update funcs
 //
 
-#pragma disable_message(202)
 void load_dealfunc(uchar butid, uchar index) {
     begin_wait();
     Poke_SaveName(index);
@@ -1962,7 +1944,6 @@ void load_dealfunc(uchar butid, uchar index) {
     // spoof_mouse_event();
     wrapper_panel_close(TRUE);
 }
-#pragma enable_message(202)
 
 void load_screen_init(void) {
     clear_obuttons();
@@ -2095,7 +2076,6 @@ errtype do_savegame_guts(uchar slot) {
 
     //#endif // NOT_YET
 
-#pragma disable_message(202)
 uchar wrapper_region_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     /*if (global_fullmap->cyber)
     {
@@ -2112,7 +2092,6 @@ uchar wrapper_region_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     }
     return FALSE;
 }
-#pragma enable_message(202)
 
 errtype make_options_cursor(void) {
     char *s;
@@ -2180,7 +2159,6 @@ errtype wrapper_create_mouse_region(LGRegion *root) {
 }
 
 //#ifdef NOT_YET //
-#pragma disable_message(202)
 uchar saveload_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
 #ifdef DEMO
     return (TRUE);
@@ -2198,6 +2176,5 @@ uchar demo_quit_func(ushort keycode, uint32_t context, intptr_t data) {
     string_message_info(REF_STR_QuitConfirm);
     return (TRUE);
 }
-#pragma enable_message(202)
 
 //#endif // NOT_YET

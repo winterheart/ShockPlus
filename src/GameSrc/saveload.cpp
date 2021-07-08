@@ -475,7 +475,6 @@ extern uchar init_done;
 extern int loadcount;
 
 #ifdef SUPPORT_9_TO_10
-#pragma disable_message(202)
 void convert_map_element_9_10(oMapElem *ome, MapElem *me, int x, int y)
 {
    me->tiletype=ome->tiletype;
@@ -517,10 +516,8 @@ void convert_map_element_9_10(oMapElem *ome, MapElem *me, int x, int y)
    me->rinfo.rotceil=0;
    me->rinfo.flicker=0;
 }
-#pragma enable_message(202)
 #endif
 
-#pragma disable_message(202)
 void convert_map_element_10_11(oMapElem *ome, MapElem *me, int x, int y)
 {
    me_tiletype_set(me,ome_tiletype(ome));
@@ -551,7 +548,6 @@ void convert_map_element_10_11(oMapElem *ome, MapElem *me, int x, int y)
    me_hazard_rad_set(me,0);
    me->flick_qclip=0;
 }
-#pragma enable_message(202)
 
 void convert_cit_map(oFullMap *omp, FullMap **mp)
 {

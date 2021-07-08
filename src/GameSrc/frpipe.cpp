@@ -189,7 +189,6 @@ int fr_pipe_freemem(void) { _fr_ret; }
 /* called at the beginning of every frame, sets up 3d variables for the world
  * also sets up the globals used in the clippers
  */
-//#pragma disable_message(202)
 int fr_pipe_start(int rad) {
     _fr_x_cen = coor(EYE_X) >> (8 + MAP_SH);
     _fr_y_cen = coor(EYE_Y) >> (8 + MAP_SH);
@@ -216,7 +215,6 @@ int fr_pipe_start(int rad) {
 
     _fr_ret;
 }
-//#pragma enable_message(202)
 
 /* cleanup any memory or variable space used by the pipeline */
 int fr_pipe_end(void) {

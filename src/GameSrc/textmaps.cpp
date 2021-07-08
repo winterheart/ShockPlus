@@ -559,7 +559,6 @@ errtype texture_crunch_go(void) {
 
 #ifdef TEXTURE_ANNIHILATION
 #define NUM_DEMO_TEXTURES 32
-#pragma disable_message(202)
 uchar salvation_list[GAME_TEXTURES];
 uchar texture_annihilate_func(ushort keycode, uint32_t context, intptr_t data) {
     int fn;
@@ -606,5 +605,4 @@ uchar texture_annihilate_func(ushort keycode, uint32_t context, intptr_t data) {
 
     return (TRUE);
 }
-#pragma enable_message(202)
 #endif

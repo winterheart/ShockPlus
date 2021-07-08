@@ -454,7 +454,6 @@ void game_fr_startup(void) {
 
 void game_fr_shutdown(void) {}
 
-//#pragma disable_message(202)
 void game_fr_reparam(int is_128s, int full_scrn, int show_all) {
     if (is_128s != -1)
         fr_get_tmap = is_128s ? game_fr_tmap_128 : game_fr_tmap_64;
@@ -475,7 +474,6 @@ void game_redrop_rad(int rad_mod) {
     _frp.view.drop_rad[1] = _frp.view.odrop_rad[1] + rad_mod;
     _frp.view.drop_rad[2] = _frp.view.odrop_rad[2] + rad_mod;
 }
-//#pragma enable_message(202)
 
 // errtype is icky
 void change_detail_level(byte new_level) { _fr_global_detail = new_level; }

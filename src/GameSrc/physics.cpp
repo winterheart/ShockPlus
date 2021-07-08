@@ -1120,10 +1120,8 @@ void grow_facelet(fix r, fix flet[NUM_POINTS][3]) {
 typedef fix pt3d[3];
 #endif
 
-#pragma disable_message(202)
 uchar FF_terrain(fix X, fix Y, fix Z, uchar fast, void *TFF) { return (TRUE); }
 uchar FF_raycast(fix x, fix y, fix z, fix vec[3], fix range, fix where_hit[3], terrain_ff *tff) { return (TRUE); }
-#pragma disable_message(202)
 
 // ?????
 void Terrain(fix fix_x, fix fix_y, fix fix_z, fix rad) {}

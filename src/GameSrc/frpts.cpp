@@ -92,7 +92,6 @@ int fr_pts_freemem(void) {
     _fr_ret;
 }
 
-//#pragma disable_message(202)
 int fr_pts_resize(int x, int y) // x, y
 {
 #ifdef MAP_RESIZING
@@ -108,7 +107,6 @@ int fr_pts_resize(int x, int y) // x, y
 #endif
     _fr_ret;
 }
-//#pragma enable_message(202)
 
 // something goofy used by renderer
 void dumb_hack_for_now(int x, int y);

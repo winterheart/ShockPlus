@@ -224,7 +224,6 @@ void stop_terrain_elevator_sound(short sem)
 
 #ifdef NOT_YET //
 
-#pragma disable_message(202)
 int digifx_volume_shift(short x, short y, short z, short phi, short theta, int basevol) {
     int retval;
     // Note that "x" is really the object ID of the thing we care about
@@ -257,7 +256,6 @@ int digifx_pan_shift(short x, short y, short z, short phi, short theta) {
     Spew(DSRC_AUDIO_Testing, ("Modified PAN value=%d\n", retval));
     return (retval);
 }
-#pragma enable_message(202)
 
 #endif // NOT_YET
 
