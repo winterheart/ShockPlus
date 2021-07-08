@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ////#include <conio.h>
 #include "edms_int.h" //This is the object type library. It is universal.
 #include "idof.h"
+#include "intrsect.h"
 
 //	Super secret Church-Blackley Boundary Condition Descriptor (BCD)...
 //	===================================================================
@@ -60,7 +61,6 @@ static Q V_ceiling[3], V_floor[3], V_wall[3];
 //	==================================
 extern EDMS_Argblock_Pointer A;
 extern Q S[MAX_OBJ][7][4], I[MAX_OBJ][DOF_MAX];
-extern int32_t no_no_not_me[MAX_OBJ];
 
 //	Functions...
 //	============
@@ -106,10 +106,6 @@ void pelvis_idof(int32_t object) {
     //      To do the head motion, collisions, and climbing...
     //      --------------------------------------------------
     void get_head_of_death(int32_t), get_body_of_death(int32_t), do_climbing(int32_t object);
-
-    //	Call me instead of having special code everywhere...
-    //	====================================================
-    extern void shall_we_dance(int32_t object, Q &result0, Q &result1, Q &result2);
 
     pelvis_is_climbing = false;
 
@@ -678,10 +674,6 @@ int32_t make_pelvis(Q init_state[6][3], Q params[10]) {
     //	======================
     int32_t object_number = -1, // Three guesses...
         error_code = -1;    // Guilty until...
-
-    //	We need ignorable coordinates...
-    //	================================
-    extern void null_function(int);
 
     //	First find out which object we're going to be...
     //	================================================

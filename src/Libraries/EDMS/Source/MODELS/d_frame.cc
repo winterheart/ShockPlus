@@ -23,8 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //	Jon Blackley, May 14, 1994
 //	==========================
 
+#include "d_f_2.h"
 #include "edms_int.h" //This is the model type library. It is universal.
 #include "edms_mod.h"
+#include "intrsect.h"
 
 #define EDMS_CYBER_CURRENT_ALIGN .06
 
@@ -37,22 +39,10 @@ extern Q EDMS_CYBER_FLOW1X;
 extern Q EDMS_CYBER_FLOW2X;
 extern Q EDMS_CYBER_FLOW3X;
 
-extern int32_t EDMS_BCD;
-
 //	Here are the internal degrees of freedom.  First we get the aerodynamic forces
 //	from the (external) aero model, then the interactions and solid B/C here...
 //	===========================================================================
 void dirac_frame_idof(int32_t object) {
-
-    //      Here's the real work...
-    //      -----------------------
-    extern void dirac_mechanicals(int32_t object, Q F[3], Q T[3]);
-    extern void shall_we_dance(int32_t object, Q &result0, Q &result1, Q &result2);
-
-    //      For alignment...
-    //      ----------------
-    extern void mech_localize(Q &X, Q &Y, Q &Z);
-    extern void mech_globalize(Q &X, Q &Y, Q &Z);
     Q F_T[3];
 
     Q e0, e1, e2, e3, // For speed plus beauty!
@@ -189,10 +179,6 @@ int32_t make_Dirac_frame(Q init_state[6][3], Q params[10]) {
     //	======================
     int32_t object_number = -1, // Three guesses...
         error_code = -1;    // Guilty until...
-
-    //	We need ignorable coordinates...
-    //	================================
-    extern void null_function(int32_t);
 
     Q sin_alpha = 0, cos_alpha = 0, sin_beta = 0, cos_beta = 0, sin_gamma = 0, cos_gamma = 0;
 

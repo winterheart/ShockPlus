@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <conio.h>
 #include "edms_int.h" //This is the object type library. It is universal.
 #include "idof.h"
+#include "intrsect.h"
 //#ifdef EDMS_SHIPPABLE
 ////#include <mout.h>
 //#endif
@@ -38,12 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <dpmi.h>
 #include "ss_flet.h"
 //}
-
-//	State information and utilities...
-//	==================================
-extern EDMS_Argblock_Pointer A;
-extern Q S[MAX_OBJ][7][4], I[MAX_OBJ][DOF_MAX];
-extern int32_t no_no_not_me[MAX_OBJ];
 
 #define SOLITION_FRAME_CNT
 
@@ -87,11 +82,6 @@ const Q wt_pos = 0.001, wt_neg = -wt_pos;
 //	Here are the internal degrees of freedom:
 //	=========================================
 void robot_idof(int32_t object) {
-
-    //	Call me instead of having special code everywhere...
-    //	====================================================
-    extern void shall_we_dance(int object, Q &result0, Q &result1, Q &result2);
-
     A00 = A[object][0][0]; // Dereference NOW!
     A10 = A[object][1][0];
     A20 = A[object][2][0];
@@ -454,10 +444,6 @@ int32_t make_robot(Q init_state[6][3], Q params[10]) {
     //	======================
     int32_t object_number = -1, // Three guesses...
         error_code = -1;    // Guilty until...
-
-    //	We need ignorable coordinates...
-    //	================================
-    extern void null_function(int32_t);
 
     //	First find out which object we're going to be...
     //	================================================

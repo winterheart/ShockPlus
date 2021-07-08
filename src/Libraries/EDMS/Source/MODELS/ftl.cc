@@ -43,13 +43,12 @@ extern int32_t EDMS_integrating;
 
 extern int32_t alarm_clock[MAX_OBJ];
 
-physics_handle object_check(uint32_t data_word, Q size, Q range, int32_t exclude, int32_t steps,
-                            Q &dist); // Checks for hits...
+// Checks for hits...
+physics_handle object_check(uint32_t data_word, Q size, Q range, int32_t exclude, int32_t stepper, Q &dist);
 
 //	Here is the high velocity weapon primitive...
 //	=============================================
 physics_handle EDMS_cast_projectile(Q *X, Q D[3], Q kick, Q knock, Q size, Q range, int32_t exclude, int32_t shooter) {
-    extern Q PELVIS;
     int32_t stepper = 0,
         max_step = (2 * range / size).to_int(), // samples per meter...
         victim_on = 0, shooter_on = 0, object_pointer = 0, i = 0;

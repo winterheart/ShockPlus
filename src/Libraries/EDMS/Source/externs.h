@@ -160,4 +160,6 @@ extern uint32_t test_bitmask;
 // int check_for_hit( int other_object ); // are_you_there must be called first!
 // has been turned into a macro in edms_int.h!
 
+void null_function(int32_t);
+
 #endif // __EXTERNS_H

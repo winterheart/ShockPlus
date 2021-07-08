@@ -17,9 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef D_F_FACE_H_
-#define D_F_FACE_H_
+#ifndef INTERFAC_H
+#define INTERFAC_H
 
-fix *EDMS_Dirac_basis(void);
+void EDMS_kill_object(physics_handle ph);
 
-#endif // D_F_FACE_H_
+#endif // INTERFAC_H

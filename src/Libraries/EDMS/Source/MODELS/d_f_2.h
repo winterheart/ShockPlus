@@ -17,9 +17,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef D_F_FACE_H_
-#define D_F_FACE_H_
+#ifndef D_F_2_H
+#define D_F_2_H
 
-fix *EDMS_Dirac_basis(void);
+#include <stdint.h>
 
-#endif // D_F_FACE_H_
+#include "fixpp.h"
+
+void dirac_mechanicals(int32_t object, Q F[3], Q T[3]);
+
+void mech_globalize(Q &X, Q &Y, Q &Z);
+
+void mech_localize(Q &X, Q &Y, Q &Z);
+
+#endif // D_F_2_H

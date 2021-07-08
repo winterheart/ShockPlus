@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "edms_int.h"
 #include "idof.h"
+#include "intrsect.h"
 
 //#ifdef EDMS_SHIPPABLE
 ////#include <mout.h>
@@ -32,12 +33,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //              Collision wakeups go here...
 //              ----------------------------
 extern int32_t alarm_clock[MAX_OBJ];
-extern int32_t no_no_not_me[MAX_OBJ];
 
 bool do_work(int32_t object, int32_t other_object, Q my_rad, Q your_rad, Fixpoint *my_pos, Fixpoint *other_pos,
              Q &result0, Q &result1, Q &result2);
 
-void shall_we_dance(int32_t object, Q &result0, Q &result1, Q &result2);
 
 //	Call me instead of having special code everywhere...
 //	====================================================

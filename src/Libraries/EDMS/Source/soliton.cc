@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include <iostream>
 #include "edms_int.h" //Object types, END conventions, etc.
 #include "idof.h"
+#include "interfac.h"
 #include "physhand.h"
 #include "lg.h"
 
@@ -48,8 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HashSpew(a) Spewpp(DSRC_EDMS_Hash, a)
 
 Q S[MAX_OBJ][7][4]; // State stream... Accessable to all...
-
-extern void EDMS_kill_object(physics_handle ph);
 
 //	==============
 //	INTERNAL STUFF
@@ -108,8 +107,6 @@ bool A_is_active = false;
 //	out-of scope models or complex aggregate or articulated objects.  Well, let's see...
 //	====================================================================================
 void soliton_lite(Q timestep) {
-    extern void robot_idof(int32_t), pelvis_idof(int32_t);
-
     int32_t object = 0;
     int32_t coord = 0;
     Q *S_Object;
@@ -470,7 +467,6 @@ void soliton_vector_holistic(Q /*timestep*/) {}
 //	get soliton running...
 //	======================
 void EDMS_initialize(EDMS_data *D) {
-    extern uint32_t data[EDMS_DATA_SIZE][EDMS_DATA_SIZE];
     int32_t object = 0, coord = 0, deriv = 0;
     const Q collision_size = EDMS_DATA_SIZE;
 
@@ -643,8 +639,6 @@ void collision_wakeup(int32_t object) {
 
     Q *utility_save;
     void (*idof_function_save)(int);
-
-    extern void inventory_and_statistics();
 
     // Save me, save me...
     // ===================

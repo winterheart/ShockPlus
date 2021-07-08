@@ -52,8 +52,6 @@ extern int32_t EDMS_integrating;
 // into macros.
 //
 void generic_write_object(int32_t object, EDMS_Argblock_Pointer state) {
-    extern void (*EDMS_off_playfield)(physics_handle caller);
-
     Q q_hash_x = hash_scale * state[object][DOF_X][0];
     Q q_hash_y = hash_scale * state[object][DOF_Y][0];
 

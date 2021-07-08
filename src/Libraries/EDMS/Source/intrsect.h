@@ -17,9 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef D_F_FACE_H_
-#define D_F_FACE_H_
+#ifndef INTRSECT_H
+#define INTRSECT_H
 
-fix *EDMS_Dirac_basis(void);
+void shall_we_dance(int32_t object, Q &result0, Q &result1, Q &result2);
 
-#endif // D_F_FACE_H_
+#endif // INTRSECT_H
