@@ -821,7 +821,7 @@ errtype load_current_map(Id id_num) {
     char *dst_ptr = global_fullmap->sched[0].queue.vec;
     ResExtract(id_num + idx++, FORMAT_RAW, dst_ptr);
 
-    // KLC��� Big hack!  Force the schedule to growable.
+    // KLC Big hack!  Force the schedule to growable.
     global_fullmap->sched[0].queue.grow = TRUE;
 
     REF_READ(id_num, idx++, loved_textures);
@@ -833,7 +833,7 @@ errtype load_current_map(Id id_num) {
     */
     map_set_default(global_fullmap);
 
-    /*���  Leave conversion from old objects out for now
+    /*  Leave conversion from old objects out for now
 
        // Now set up for object conversion if necessary
        convert_from = -1;
@@ -1324,8 +1324,8 @@ obj_out:
         if (object_version > 9) {
             // Regenerate physics state from player_state here
         }
-        //���      if (music_on && (score_playing != ELEVATOR_ZONE))
-        //���        load_score_for_location(PLAYER_BIN_X,PLAYER_BIN_Y);
+        //      if (music_on && (score_playing != ELEVATOR_ZONE))
+        //        load_score_for_location(PLAYER_BIN_X,PLAYER_BIN_Y);
     }
 
 out:
@@ -1364,7 +1364,7 @@ out:
     // KLC   physics_warmup();
 
     end_wait();
-    /*���   {
+    /*   {
           extern void spoof_mouse_event();
           spoof_mouse_event();
        }

@@ -62,7 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-//��� For now
+// For now
 //#define DBG_ON		1
 
 #include <stdbool.h>
