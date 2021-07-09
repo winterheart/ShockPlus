@@ -19,6 +19,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install libglu1-mesa-dev libsdl2-dev libsdl2-mixer-dev
       - name: Generate compile-commands.json
+        env:
+          CC: gcc
+          CXX: g++
         run: |
           cmake -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENGL=ON -DENABLE_FLUIDSYNTH=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
       - name: SonarCloud Scan
