@@ -59,7 +59,7 @@ void gr_font_char_size(grs_font *font, char c, short *width, short *height) {
 
     if ((uchar)c < font->min || (uchar)c > font->max)
         return;
-    off_tab = font->off_tab;
+    off_tab = (short *)font->off_tab;
     offset = off_tab[(uchar)c - font->min];
     if ((uchar)c < font->min || (uchar)c > font->max)
         *width = 0;

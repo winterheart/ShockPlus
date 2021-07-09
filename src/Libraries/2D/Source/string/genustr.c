@@ -67,7 +67,7 @@ void gen_font_ustring(grs_font *f, char *s, short x0, short y0) {
     uchar c;           /* current character */
 
     char_buf = (uchar *)f + f->buf;
-    offset_tab = f->off_tab;
+    offset_tab = (short *)f->off_tab;
     gr_init_bitmap(&bm, NULL, (f->id == 0xcccc) ? BMT_FLAT8 : BMT_MONO, BMF_TRANS, 0, f->h);
     bm.row = f->w;
 

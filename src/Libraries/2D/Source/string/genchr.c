@@ -64,7 +64,7 @@ int gen_font_char(grs_font *f, char c, short x, short y) {
     if ((uchar)c > f->max || (uchar)c < f->min)
         return CLIP_ALL;
     data_buf = (uchar *)f + f->buf;
-    off_tab = f->off_tab;
+    off_tab = (short *)f->off_tab;
     offset = off_tab[(uchar)c - f->min];
     gr_init_bitmap(&bm, NULL, (f->id == 0xcccc) ? BMT_FLAT8 : BMT_MONO,
         BMF_TRANS, off_tab[(uchar)c - f->min + 1] - offset, f->h);

@@ -63,7 +63,7 @@ void gr_font_string_size(grs_font *font, char *string, short *width, short *heig
     short h_str;       /* height of string */
     uchar c;           /* current character */
 
-    offset_tab = font->off_tab;
+    offset_tab = (short *)font->off_tab;
     h_str = font->h;
     while ((c = (uchar)(*string++)) != '\0') {
         if (c == CHAR_SOFTSP)

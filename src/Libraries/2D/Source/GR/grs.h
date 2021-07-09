@@ -106,7 +106,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "fix.h"
 
-// FIXME pragma pack
 #pragma pack(push, 2)
 
 /* system information structure. */
@@ -181,20 +180,18 @@ typedef union {
 
 // Font.
 typedef struct {
-    ushort id;
-    char dummy1[34];
-    short min;
-    short max;
-    char dummy2[32];
-    int32_t cotptr;
-    int32_t buf;
-    short w;
-    short h;
-    short off_tab[1];
+    ushort id;        // font type. 0 for monochrome, 0xCCCC for color
+    char dummy1[34];  // unused
+    short min;        // first available character (included)
+    short max;        // last available character (included)
+    char dummy2[32];  // unused
+    int32_t cotptr;   // offset to array (max - min + 1) of X-offsets (see off_tab[] below). Width of character are
+                      // calculated as diff from next and current value
+    int32_t buf;      // offset to bitmap that holds glyphs
+    short w;          // width of bitmap
+    short h;          // height of bitmap
+    short *off_tab[]; // pointer to character offsets
 } grs_font;
-
-// Access to fonts in resources.
-#define FORMAT_FONT FORMAT_RAW
 
 /* structure for drawing context.  the context contains data about which
    color, font attributes, filling attributes, and an embedded clipping

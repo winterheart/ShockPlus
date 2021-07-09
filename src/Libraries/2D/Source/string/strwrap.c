@@ -68,7 +68,7 @@ static short *pCharPixOff; // ptr to char offset table, with pfont->minch
 #define CHARPTR(pfont, c) (&pfont->bits[pCharPixOff[(uchar)c] >> 3])
 #define CHARWIDTH(pfont, c) (pCharPixOff[(uchar)c + 1] - pCharPixOff[(uchar)c])
 
-#define FONT_SETFONT(pfont) (pCharPixOff = &(pfont)->off_tab[0] - (pfont)->min)
+#define FONT_SETFONT(pfont) (pCharPixOff = (short *)(&(pfont)->off_tab[0] - (pfont)->min))
 
 /**
  * FontWrapText() inserts wrapping codes into text.
