@@ -303,31 +303,31 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                                  // CLUT_HFLIP_TLUC8_UBITMAP
     gr_null,                                  // CLUT_HFLIP_TLUC8_BITMAP
     /* bitmap horizontal doubling. */
-    gr_null,                                // DOUBLE_H_DEVICE_UBITMAP
-    gr_null,                                // DOUBLE_H_DEVICE_BITMAP
-    gr_null,                                // DOUBLE_H_MONO_UBITMAP
-    gr_null,                                // DOUBLE_H_MONO_BITMAP
-    (ptr_type)gr_not_imp,                   // DOUBLE_H_FLAT8_UBITMAP // WH: was flat8_flat8_h_double_ubitmap
-    gr_null,                                // DOUBLE_H_FLAT8_BITMAP
-    gr_null,                                // DOUBLE_H_FLAT24_UBITMAP
-    gr_null,                                // DOUBLE_H_FLAT24_BITMAP
-    gr_null,                                // DOUBLE_H_RSD8_UBITMAP
-    gr_null,                                // DOUBLE_H_RSD8_BITMAP
-    gr_null,                                // DOUBLE_H_TLUC8_UBITMAP
-    gr_null,                                // DOUBLE_H_TLUC8_BITMAP
+    gr_null,    // DOUBLE_H_DEVICE_UBITMAP
+    gr_null,    // DOUBLE_H_DEVICE_BITMAP
+    gr_null,    // DOUBLE_H_MONO_UBITMAP
+    gr_null,    // DOUBLE_H_MONO_BITMAP
+    gr_not_imp, // DOUBLE_H_FLAT8_UBITMAP // WH: was flat8_flat8_h_double_ubitmap
+    gr_null,    // DOUBLE_H_FLAT8_BITMAP
+    gr_null,    // DOUBLE_H_FLAT24_UBITMAP
+    gr_null,    // DOUBLE_H_FLAT24_BITMAP
+    gr_null,    // DOUBLE_H_RSD8_UBITMAP
+    gr_null,    // DOUBLE_H_RSD8_BITMAP
+    gr_null,    // DOUBLE_H_TLUC8_UBITMAP
+    gr_null,    // DOUBLE_H_TLUC8_BITMAP
     /* bitmap vertical doubling. */
-    gr_null,                                // DOUBLE_V_DEVICE_UBITMAP
-    gr_null,                                // DOUBLE_V_DEVICE_BITMAP
-    gr_null,                                // DOUBLE_V_MONO_UBITMAP
-    gr_null,                                // DOUBLE_V_MONO_BITMAP
-    (ptr_type)flat8_flat8_v_double_ubitmap, // DOUBLE_V_FLAT8_UBITMAP
-    gr_null,                                // DOUBLE_V_FLAT8_BITMAP
-    gr_null,                                // DOUBLE_V_FLAT24_UBITMAP
-    gr_null,                                // DOUBLE_V_FLAT24_BITMAP
-    gr_null,                                // DOUBLE_V_RSD8_UBITMAP
-    gr_null,                                // DOUBLE_V_RSD8_BITMAP
-    gr_null,                                // DOUBLE_V_TLUC8_UBITMAP
-    gr_null,                                // DOUBLE_V_TLUC8_BITMAP
+    gr_null,    // DOUBLE_V_DEVICE_UBITMAP
+    gr_null,    // DOUBLE_V_DEVICE_BITMAP
+    gr_null,    // DOUBLE_V_MONO_UBITMAP
+    gr_null,    // DOUBLE_V_MONO_BITMAP
+    gr_not_imp, // DOUBLE_V_FLAT8_UBITMAP // WH: was flat8_flat8_v_double_ubitmap
+    gr_null,    // DOUBLE_V_FLAT8_BITMAP
+    gr_null,    // DOUBLE_V_FLAT24_UBITMAP
+    gr_null,    // DOUBLE_V_FLAT24_BITMAP
+    gr_null,    // DOUBLE_V_RSD8_UBITMAP
+    gr_null,    // DOUBLE_V_RSD8_BITMAP
+    gr_null,    // DOUBLE_V_TLUC8_UBITMAP
+    gr_null,    // DOUBLE_V_TLUC8_BITMAP
     /* bitmap horizontal and vertical doubling. */
     gr_null, // DOUBLE_HV_DEVICE_UBITMAP
     gr_null, // DOUBLE_HV_DEVICE_BITMAP
@@ -342,18 +342,18 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null, // DOUBLE_HV_TLUC8_UBITMAP
     gr_null, // DOUBLE_HV_TLUC8_BITMAP
     /* bitmap smooth horizontal doubling. */
-    gr_null,                                       // SMOOTH_DOUBLE_H_DEVICE_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_DEVICE_BITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_MONO_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_MONO_BITMAP
-    (ptr_type)flat8_flat8_smooth_h_double_ubitmap, // SMOOTH_DOUBLE_H_FLAT8_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_FLAT8_BITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_FLAT24_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_FLAT24_BITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_RSD8_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_RSD8_BITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_TLUC8_UBITMAP
-    gr_null,                                       // SMOOTH_DOUBLE_H_TLUC8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_DEVICE_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_DEVICE_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_MONO_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_MONO_BITMAP
+    gr_not_imp, // SMOOTH_DOUBLE_H_FLAT8_UBITMAP // WH: was flat8_flat8_smooth_h_double_ubitmap
+    gr_null,    // SMOOTH_DOUBLE_H_FLAT8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_FLAT24_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_FLAT24_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_RSD8_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_RSD8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_TLUC8_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_H_TLUC8_BITMAP
     /* bitmap smooth vertical doubling. */
     gr_null, // SMOOTH_DOUBLE_V_DEVICE_UBITMAP
     gr_null, // SMOOTH_DOUBLE_V_DEVICE_BITMAP

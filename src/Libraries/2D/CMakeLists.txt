@@ -88,7 +88,6 @@ set(2D_SRC
 	Source/Flat8/fl8ft.c
 	Source/Flat8/fl8rsd8.c
 	Source/Flat8/fl8f.c
-	Source/Flat8/fl8bldbl.c
 	Source/Flat8/fl8clear.c
 	Source/Flat8/fl8p.c
 	Source/Flat8/fl8wclin.c

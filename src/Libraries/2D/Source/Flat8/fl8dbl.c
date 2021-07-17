@@ -32,43 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ------------------------------------------------------------------------
 // PowerPC routines
 // ------------------------------------------------------------------------
-// ========================================================================
-
-// ========================================================================
-void flat8_flat8_smooth_h_double_ubitmap(grs_bitmap *srcb, grs_bitmap *dstb) {
-    uchar *src = srcb->bits, *dst = dstb->bits;
-    ushort curpix, tempshort;
-    uchar *local_grd_half_blend;
-
-    local_grd_half_blend = grd_half_blend;
-    if (!local_grd_half_blend)
-        return;
-
-    long srcAdd = (srcb->row - srcb->w) - 1;
-    long dstAdd = dstb->row - (srcb->w << 1);
-    int endh = srcb->w - 1;
-    int endv = srcb->h;
-
-    for (int v = 0; v < endv; v++) {
-        curpix = *(short *)src;
-        src += 2;
-        for (int h = 0; h < endh; h++) {
-            tempshort = curpix & 0xff00;
-            tempshort |= local_grd_half_blend[curpix];
-            *(ushort *)dst = tempshort;
-            dst += 2;
-            curpix = (curpix << 8) | *(src++);
-        }
-
-        // double last pixel
-        curpix >>= 8;
-        *(dst++) = curpix;
-        *(dst++) = curpix;
-
-        src += srcAdd;
-        dst += dstAdd;
-    }
-}
 
 // ========================================================================
 // src = eax, dest = edx
