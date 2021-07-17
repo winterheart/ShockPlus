@@ -60,7 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // MLA #pragma off (unreferenced)
 
-#define fix_make_nof(x) fix_make(x, 0x0000)
 #define macro_get_ipal(r, g, b) (long)((r >> 19) & 0x1f) | ((g >> 14) & 0x3e0) | ((b >> 9) & 0x7c00)
 
 void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
@@ -149,9 +148,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r0, 0);
             g = fix_make(g0, 0);
             b = fix_make(b0, 0);
-            dr = fix_div(fix_make_nof(r1 - r0), dx);
-            dg = fix_div(fix_make_nof(g1 - g0), dx);
-            db = fix_div(fix_make_nof(b1 - b0), dx);
+            dr = fix_div(fix_make(r1 - r0, 0), dx);
+            dg = fix_div(fix_make(g1 - g0, 0), dx);
+            db = fix_div(fix_make(b1 - b0, 0), dx);
 
             p = grd_bm.bits + grd_bm.row * (fix_int(y0)); /* set canvas ptr */
 
@@ -166,9 +165,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r1, 0);
             g = fix_make(g1, 0);
             b = fix_make(b1, 0);
-            dr = fix_div(fix_make_nof(r0 - r1), dx);
-            dg = fix_div(fix_make_nof(g0 - g1), dx);
-            db = fix_div(fix_make_nof(b0 - b1), dx);
+            dr = fix_div(fix_make(r0 - r1, 0), dx);
+            dg = fix_div(fix_make(g0 - g1, 0), dx);
+            db = fix_div(fix_make(b0 - b1, 0), dx);
 
             p = grd_bm.bits + grd_bm.row * (fix_int(y0));
         }
@@ -218,9 +217,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r0, 0);
             g = fix_make(g0, 0);
             b = fix_make(b0, 0);
-            dr = fix_div(fix_make_nof(r1 - r0), dy);
-            dg = fix_div(fix_make_nof(g1 - g0), dy);
-            db = fix_div(fix_make_nof(b1 - b0), dy);
+            dr = fix_div(fix_make(r1 - r0, 0), dy);
+            dg = fix_div(fix_make(g1 - g0, 0), dy);
+            db = fix_div(fix_make(b1 - b0, 0), dy);
 
             p = grd_bm.bits + grd_bm.row * y0;
 
@@ -235,9 +234,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r1, 0);
             g = fix_make(g1, 0);
             b = fix_make(b1, 0);
-            dr = fix_div(fix_make_nof(r0 - r1), dy);
-            dg = fix_div(fix_make_nof(g0 - g1), dy);
-            db = fix_div(fix_make_nof(b0 - b1), dy);
+            dr = fix_div(fix_make(r0 - r1, 0), dy);
+            dg = fix_div(fix_make(g0 - g1, 0), dy);
+            db = fix_div(fix_make(b0 - b1, 0), dy);
 
             p = grd_bm.bits + grd_bm.row * y0;
         }
@@ -277,9 +276,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r0, 0);
             g = fix_make(g0, 0);
             b = fix_make(b0, 0);
-            dr = fix_div(fix_make_nof(r1 - r0), dx);
-            dg = fix_div(fix_make_nof(g1 - g0), dx);
-            db = fix_div(fix_make_nof(b1 - b0), dx);
+            dr = fix_div(fix_make(r1 - r0, 0), dx);
+            dg = fix_div(fix_make(g1 - g0, 0), dx);
+            db = fix_div(fix_make(b1 - b0, 0), dx);
 
             p = grd_bm.bits + grd_bm.row * y0; /* set canvas ptr */
 
@@ -294,9 +293,9 @@ void gri_flat8_ucline_norm(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
             r = fix_make(r1, 0);
             g = fix_make(g1, 0);
             b = fix_make(b1, 0);
-            dr = fix_div(fix_make_nof(r0 - r1), dx);
-            dg = fix_div(fix_make_nof(g0 - g1), dx);
-            db = fix_div(fix_make_nof(b0 - b1), dx);
+            dr = fix_div(fix_make(r0 - r1, 0), dx);
+            dg = fix_div(fix_make(g0 - g1, 0), dx);
+            db = fix_div(fix_make(b0 - b1, 0), dx);
 
             p = grd_bm.bits + grd_bm.row * y0;
         }

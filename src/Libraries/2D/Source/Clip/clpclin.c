@@ -28,16 +28,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     gr_xxx canvas table x,y routines.
  */
 
-#include <stdlib.h>
 #include "clpcon.h"
 #include "clpfcn.h"
-#include "grrend.h"
 #include "rgb.h"
-#include "scrdat.h"
 #include "clpltab.h"
 #include "lg.h"
-
-#define fix_make_nof(x) fix_make(x, 0x0000)
 
 /* The amount of copying into and out of vertex's is quite
    disgusting.
@@ -75,9 +70,9 @@ int gri_cline_clip(grs_vertex *v0, grs_vertex *v1) {
     pixels = lg_max(fix_abs(y1 - y0), fix_abs(x1 - x0));
 
     if (pixels != 0) {
-        dr = fix_div(fix_make_nof(r1 - r0), pixels);
-        dg = fix_div(fix_make_nof(g1 - g0), pixels);
-        db = fix_div(fix_make_nof(b1 - b0), pixels);
+        dr = fix_div(fix_make(r1 - r0, 0), pixels);
+        dg = fix_div(fix_make(g1 - g0, 0), pixels);
+        db = fix_div(fix_make(b1 - b0, 0), pixels);
     }
 
     r = gr_clip_fix_line(&x0, &y0, &x1, &y1);
