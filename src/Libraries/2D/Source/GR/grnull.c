@@ -37,4 +37,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <lg.h>
 
 void gr_null(void) {}
-void gr_not_imp(void) { DEBUG("%s: Graphics function not implemented", __FUNCTION__); }
+void gr_not_imp(void) { WARN("%s: Graphics function not implemented", __FUNCTION__); }

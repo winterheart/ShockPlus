@@ -44,34 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum { POLY, SPOLY, CPOLY, TPOLY, STPOLY };
 
 // prototypes
-void temp_upoint(short x, short y);
-void temp_point(short x, short y);
-void temp_flat8_mask_bitmap(grs_bitmap *bm, int x, int y, grs_stencil *sten);
-void temp_flat8_clut_ubitmap(grs_bitmap *bm, int x, int y, uchar *cl);
-void temp_tluc8_ubitmap(grs_bitmap *bm, int x, int y);
-void temp_per_map(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_per_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut);
-void temp_clut_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut);
-void temp_lit_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_lit_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_clut_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-void temp_scale_umap(grs_bitmap *bm, short x, short y, short w, short h);
-void temp_clut_scale_umap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
 int gri_scale_clip(grs_vertex *v0, grs_vertex *v1);
-
-void temp_rsd8_ubitmap(grs_bitmap *bm, int x, int y);
-void temp_rsd8_bitmap(grs_bitmap *bm, int x, int y);
 
 void temp_upoint(short x, short y) { gr_fill_upixel(grd_gc.fcolor, x, y); }
 
