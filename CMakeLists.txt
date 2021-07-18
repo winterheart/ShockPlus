@@ -154,7 +154,6 @@ add_subdirectory(src/Libraries/)
 set(MAC_SRC
 	src/MacSrc/ShockBitmap.cpp
 	src/MacSrc/InitMac.cpp
-	src/MacSrc/Shock.cpp
 	src/MacSrc/Prefs.cpp
 	src/MacSrc/MacTune.cpp
 	src/MacSrc/SDLFunctions.cpp
@@ -303,12 +302,18 @@ include_directories(
 	src/Libraries/VOX/Source
 	src/MacSrc
 	src/MusicSrc
+	src/ShockSrc
 	${CMAKE_BINARY_DIR}/src/GameSrc/Headers
+)
+
+set(ShockSrc
+	src/ShockSrc/Shock.cpp
 )
 
 add_executable(shockplus
 	${GAME_SRC}
 	${MAC_SRC}
+	${ShockSrc}
 )
 
 # MINGW additional linker options

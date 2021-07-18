@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cnvtab.h"
 #include "fcntab.h"
 #include "lintab.h"
-#include "../../../MacSrc/Shock.h"
+#include "../../../ShockSrc/Shock.h"
 
 // NOTE!
 //
