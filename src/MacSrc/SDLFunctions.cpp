@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "InitMac.h"
 #include "OpenGL.h"
 #include "Prefs.h"
+#include "SDLFunctions.h"
 #include "ShockBitmap.h"
 #include "Shock.h"
 

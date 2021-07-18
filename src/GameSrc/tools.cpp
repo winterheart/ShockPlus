@@ -52,6 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "view360.h"
 
 #include "OpenGL.h"
+#include "SDLFunctions.h"
 #include "Shock.h"
 
 //------------

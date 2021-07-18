@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <cstdio>
 
+#include "SDLFunctions.h"
 #include "Shock.h"
 #include "InitMac.h"
 #include "ShockBitmap.h"
@@ -69,6 +70,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "view360.h"
 #include "vox.h"
 #include "shock_version.h" // for system shock version number
+
+
 
 extern "C" {
 #include "rgb.h"

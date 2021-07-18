@@ -40,6 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #endif
 
+#include "SDLFunctions.h"
+
 #include "2dres.h"
 #include "archiveformat.h"
 #include "setup.h"

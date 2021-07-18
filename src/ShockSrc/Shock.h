@@ -34,16 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 int main(int argc, char **argv);
 
-void InitSDL();
-#ifdef __cplusplus
-extern "C" {
-#endif
-void SetSDLPalette(int index, int count, uchar *pal);
-#ifdef __cplusplus
-}
-#endif
 
-void SDLDraw();
 void CaptureMouse(bool capture);
 bool CheckArgument(char *name);
 

@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <SDL.h>
 
+#include "SDLFunctions.h"
 #include "Shock.h"
 #include "init.h"
 #include "palette.h"

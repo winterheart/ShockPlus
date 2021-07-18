@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "SDLFunctions.h"
 #include "Shock.h"
 #include "2dres.h"
 #include "anim.h"
