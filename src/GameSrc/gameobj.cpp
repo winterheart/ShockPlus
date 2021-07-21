@@ -127,17 +127,33 @@ int munge_val(int val, int range, int delta) {
 
 #define LIGHT_3D_OBJS
 
-#define setup_face(a, b, c, d)                                             \
-    cface[0] = cube_pt[a]; cface[0]->uv.u = 0;     cface[0]->uv.v = 0;     \
-    cface[1] = cube_pt[b]; cface[1]->uv.u = 0x100; cface[1]->uv.v = 0;     \
-    cface[2] = cube_pt[c]; cface[2]->uv.u = 0x100; cface[2]->uv.v = 0x100; \
-    cface[3] = cube_pt[d]; cface[3]->uv.u = 0;     cface[3]->uv.v = 0x100
+#define setup_face(a, b, c, d) \
+    cface[0] = cube_pt[a];     \
+    cface[0]->uv.u = 0;        \
+    cface[0]->uv.v = 0;        \
+    cface[1] = cube_pt[b];     \
+    cface[1]->uv.u = 0x100;    \
+    cface[1]->uv.v = 0;        \
+    cface[2] = cube_pt[c];     \
+    cface[2]->uv.u = 0x100;    \
+    cface[2]->uv.v = 0x100;    \
+    cface[3] = cube_pt[d];     \
+    cface[3]->uv.u = 0;        \
+    cface[3]->uv.v = 0x100
 
-#define setup_rface(a, b, c, d)                                            \
-    cface[0] = cube_pt[a]; cface[0]->uv.u = 0x100; cface[0]->uv.v = 0;     \
-    cface[1] = cube_pt[b]; cface[1]->uv.u = 0x0;   cface[1]->uv.v = 0x000; \
-    cface[2] = cube_pt[c]; cface[2]->uv.u = 0;     cface[2]->uv.v = 0x100; \
-    cface[3] = cube_pt[d]; cface[3]->uv.u = 0x100; cface[3]->uv.v = 0x100
+#define setup_rface(a, b, c, d) \
+    cface[0] = cube_pt[a];      \
+    cface[0]->uv.u = 0x100;     \
+    cface[0]->uv.v = 0;         \
+    cface[1] = cube_pt[b];      \
+    cface[1]->uv.u = 0x0;       \
+    cface[1]->uv.v = 0x000;     \
+    cface[2] = cube_pt[c];      \
+    cface[2]->uv.u = 0;         \
+    cface[2]->uv.v = 0x100;     \
+    cface[3] = cube_pt[d];      \
+    cface[3]->uv.u = 0x100;     \
+    cface[3]->uv.v = 0x100
 
 void _fr_draw_parm_cube(grs_bitmap *side_bm, grs_bitmap *oth_bm, int x, int y, int z) {
     g3s_phandle cube_pt[8], cface[4];
@@ -533,9 +549,11 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, uchar 
         fpoly_rend(col_val, 4, plst);
         gr_set_fill_type(cur_ft);
     } else if (use_opengl()) {
-        if (draw_bm != NULL) opengl_light_tmap(4, plst, draw_bm);
+        if (draw_bm != NULL)
+            opengl_light_tmap(4, plst, draw_bm);
     } else {
-        if (draw_bm != NULL) g3_light_tmap(4, plst, draw_bm);
+        if (draw_bm != NULL)
+            g3_light_tmap(4, plst, draw_bm);
     }
     if (dblface) // draw the bleeding backside, nudge nudge
     {
@@ -559,9 +577,11 @@ void _fr_draw_tmtile(grs_bitmap *draw_bm, int col_val, g3s_phandle *plst, uchar 
                 fpoly_rend(col_val, 4, plst);
                 gr_set_fill_type(cur_ft);
             } else if (use_opengl()) {
-                if (draw_bm != NULL) opengl_light_tmap(4, plst, draw_bm);
+                if (draw_bm != NULL)
+                    opengl_light_tmap(4, plst, draw_bm);
             } else {
-                if (draw_bm != NULL) g3_light_tmap(4, plst, draw_bm);
+                if (draw_bm != NULL)
+                    g3_light_tmap(4, plst, draw_bm);
             }
         }
     }
@@ -968,8 +988,9 @@ void show_obj(ObjID cobjid) {
                     (player_struct.level != DIEGO_DEATH_BATTLE_LEVEL)) {
                     grs_bitmap tele_bm;
                     uchar line, *srcp, *dstp, *trgp;
-                    tpdata = get_critter_bitmap_fast(cobjid, ID2TRIP(cobjid), get_crit_posture(_fr_cobj->specID), 0,
-                                                     (ubyte)view, &ref, &anch);
+                    ref = ref_from_critter_data(cobjid, ID2TRIP(cobjid), get_crit_posture(_fr_cobj->specID), 0,
+                                                (ubyte)view);
+                    tpdata = lock_bitmap_from_ref_anchor(ref, &anch);
                     gr_rsd8_convert(tpdata, &tpdata_temp);
                     tpdata = &tpdata_temp;
                     memcpy(&tele_bm, tpdata, sizeof(grs_bitmap));
@@ -985,13 +1006,15 @@ void show_obj(ObjID cobjid) {
                     memcpy(dstp, srcp, trgp - srcp);
 
                     _fr_draw_bitmap(&tele_bm, _fdt_dist, FALSE, anch.ul.x, anch.ul.y);
-                    release_critter_bitmap_fast(ref);
+                    RefUnlock(ref);
                     return;
                 }
                 break;
             }
             // bitmask out the lighting stuff
-            tpdata = get_critter_bitmap_obj_fast(cobjid, view, &ref, &anch);
+            ref = ref_from_critter_data(cobjid, ID2TRIP(cobjid), get_crit_posture(ID2SPEC(cobjid)),
+                                        objs[cobjid].info.current_frame, view);
+            tpdata = lock_bitmap_from_ref_anchor(ref, &anch);
             switch (ID2TRIP(cobjid)) {
             case INVISO_CRIT_TRIPLE:
 #ifdef TRANSLUCENT_INVISOS
@@ -1006,7 +1029,7 @@ void show_obj(ObjID cobjid) {
                 break;
             }
             _fr_draw_bitmap(tpdata, _fdt_dist, 0, anch.ul.x, anch.ul.y);
-            release_critter_bitmap_fast(ref);
+            RefUnlock(ref);
         } else {
             tpdata = bitmaps_3d[o3drep + view];
             _fr_draw_bitmap(tpdata, _fdt_dist, 0, -1, -1);
@@ -1052,14 +1075,17 @@ void show_obj(ObjID cobjid) {
             }
             switch (ID2TRIP(cobjid)) {
             case SUPERSCREEN_TRIPLE:
-                if (tpdata != NULL) scale = 7 - tpdata->wlog;
+                if (tpdata != NULL)
+                    scale = 7 - tpdata->wlog;
                 break;
             case TMAP_TRIPLE:
             case BIGSCREEN_TRIPLE:
-                if (tpdata != NULL) scale = 6 - tpdata->wlog;
+                if (tpdata != NULL)
+                    scale = 6 - tpdata->wlog;
                 break;
             case SCREEN_TRIPLE:
-                if (tpdata != NULL) scale = 5 - tpdata->wlog;
+                if (tpdata != NULL)
+                    scale = 5 - tpdata->wlog;
                 break;
             }
             switch (ID2TRIP(cobjid)) {
@@ -1162,10 +1188,9 @@ void show_obj(ObjID cobjid) {
                             uchar c = CyberCritterProps[SCNUM(cobjid)].alt_vcolors[foog], nc;
                             int hp_state;
                             int denom = ObjProps[objtrip].hit_points;
-                            if (denom == 0) denom = 1;
-                            hp_state =
-                                256 * 14 -
-                                ((256 * 14 * _fr_cobj->info.current_hp / denom) & (~0xff));
+                            if (denom == 0)
+                                denom = 1;
+                            hp_state = 256 * 14 - ((256 * 14 * _fr_cobj->info.current_hp / denom) & (~0xff));
                             if (hp_state > 0xf00)
                                 hp_state = 0xf00;
                             else if (hp_state < 0)
