@@ -110,7 +110,6 @@ void _fr_facelet_init(void);
 int _fr_do_light(g3s_phandle work, int hgt_code);
 #endif
 
-#ifndef __FRTERR_SRC
 // map/world data layout
 #ifdef __3D_H
 extern fix16 _fr_sfuv_list[];
@@ -125,8 +124,6 @@ extern int _fdt_x, _fdt_y, _fdt_mask, _fdt_dist, _fdt_pbase;
 extern MapElem *_fdt_mptr;
 #endif
 #endif
-
-#endif // __FRINTERN_H
 
 // she flew low above the highway
 // and i saw the wind

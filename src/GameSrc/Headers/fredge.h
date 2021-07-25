@@ -45,7 +45,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int get_edge_code(void *mp, int edge);
 char *map_get_edge(void *mp, int edge, int ceil_p);
 
-#ifndef __FRTERR_SRC
 // left val, right val, "sum" val
 extern char edge_vals[3];
-#endif

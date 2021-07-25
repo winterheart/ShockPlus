@@ -42,11 +42,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SC_RIGHT_END  3
 #define SC_VEC_COUNT  4
 
-#ifndef __FRCLIP_SRC
 extern ushort sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];
 extern ushort *cur_sc_ptr;
 extern uint cur_sc_reg;
-#endif
 
 #define SC_FACE_MASK 0x0003
 #define SC_INTR_MASK (~SC_FACE_MASK) //#define SC_INTR_MASK 0xFFFC

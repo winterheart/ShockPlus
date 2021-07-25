@@ -37,8 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  reaches the bottom it triggers on change bit 3 and calls the switch code
  */
 
-#define __MAINLOOP_SRC
-
 #include <stdio.h>
 
 #include "InitMac.h"

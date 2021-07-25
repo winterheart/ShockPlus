@@ -23,8 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/25 08:22:19 $
  */
 
-#define __GAMEREND_SRC
-
 #include <stdlib.h>
 
 #include "tools.h"
@@ -82,6 +80,7 @@ uchar use_ir_hack(void);
 void draw_single_static_line(uchar *line_base, int lx, int rx, int c_base);
 void draw_line_static(grs_bitmap *stat_dest, int dens1, int color1);
 
+uchar fr_solidfr_color;
 int secret_render_fx = 0;
 ulong secret_sfx_time;
 short vhold_shift = 0;

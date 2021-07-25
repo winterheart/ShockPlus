@@ -62,11 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FR_SOLIDFR_SLDCLR  (2u << FR_SOLIDFR_SHFT)
 #define FR_SOLIDFR_SLDKEEP (3u << FR_SOLIDFR_SHFT)
 
-#ifndef __GAMEREND_SRC
 extern uchar fr_solidfr_color;
-#else
-uchar fr_solidfr_color;
-#endif
 
 // Cool warping effects on the screen, and other draw hacks
 #define FR_SFX_NONE     (0u << FR_SFX_SHFT)

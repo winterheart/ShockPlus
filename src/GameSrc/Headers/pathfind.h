@@ -43,12 +43,7 @@ typedef struct {
     uchar moves[NUM_PATH_STEPS / 4]; // each char holds 4 steps, so we need 16 of 'em
 } Path;
 
-#ifdef __PATHFIND_SRC
-Path paths[MAX_PATHS];
-ushort used_paths = 0;
-#else
 extern Path paths[MAX_PATHS];
 extern ushort used_paths;
-#endif
 
 #define path_length(x) (paths[(x)].num_steps)

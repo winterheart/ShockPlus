@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#define __WEAPONS_SRC
-
 #include <string.h>
 
 extern "C" {
@@ -75,6 +73,10 @@ extern "C" {
 #define FATIGUE_ACCURACY_RATIO 400
 
 // char ammo_type_letters[] = "stnths mphssb  ";
+
+ubyte handart_show = 0;
+ubyte handart_remainder = 0;
+uchar handart_fire = FALSE;
 
 uchar muzzle_fire_light;
 short mouse_attack_x = -1;

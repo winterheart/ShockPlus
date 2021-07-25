@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#define __PHYSICS_SRC
-
 #include <stdlib.h>
 #include <string.h>
 

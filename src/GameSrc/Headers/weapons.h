@@ -70,17 +70,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define set_shield_rate(X) (player_struct.shield_absorb_rate = (X))
 #define get_shield_rate(X) (player_struct.shield_absorb_rate)
 
-#ifdef __WEAPONS_SRC
-ubyte handart_show = 0;
-ubyte handart_remainder = 0;
-uchar handart_fire = FALSE;
-#else
 extern ubyte handart_show;
 extern ubyte handart_remainder;
 extern uchar handart_fire;
 // extern handart_frame_info handart_info[NUM_HANDART_ANIM][HANDART_FRAMES];
-extern ubyte weapon_to_handart[NUM_GUN];
-#endif
 
 // Prototypes
 // Get the name of a weapon, given its type and subtype

@@ -23,8 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/09/06 23:44:56 $
  */
 
-#define __PATHFIND_SRC
-
 #include <assert.h>
 #include <string.h>
 
@@ -39,6 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objbit.h"
 #include "cybmem.h"
 #include "doorparm.h"
+
+Path paths[MAX_PATHS];
+ushort used_paths;
 
 //------------
 //  PROTOTYPES

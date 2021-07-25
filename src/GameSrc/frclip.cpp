@@ -63,8 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * fix objclip to set correct bits of subclip, next switch it to flick_qclip
  */
 
-#define __FRCLIP_SRC
-
 #include <stdlib.h>
 #include <string.h>
 

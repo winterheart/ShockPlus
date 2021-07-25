@@ -46,17 +46,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "rnd.h"
 
-#ifdef __CYBRND_SRC
-RNDSTREAM_STD(damage_rnd);
-RNDSTREAM_STD(grenade_rnd);
-RNDSTREAM_STD(obj_make_rnd);
-RNDSTREAM_STD(effect_rnd);
-#else
 extern RndStream damage_rnd;
 extern RndStream grenade_rnd;
 extern RndStream obj_make_rnd;
 extern RndStream effect_rnd;
-#endif
 
 // so i feel like using prime numbers - got a problem with that????
 #define DAMAGE_SEED 23

@@ -46,12 +46,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#define __CYBRND_SRC
-
 #include "cybrnd.h"
 #include "tickcount.h"
 
-RNDSTREAM_STD(start_rnd);
+RndStream damage_rnd = {0, RndLc16, RndLc16Seed};
+RndStream grenade_rnd = {0, RndLc16, RndLc16Seed};
+RndStream obj_make_rnd = {0, RndLc16, RndLc16Seed};
+RndStream effect_rnd = {0, RndLc16, RndLc16Seed};
+
+RndStream start_rnd = {0, RndLc16, RndLc16Seed};
 
 void rnd_init(void) {
     long random_seed;
