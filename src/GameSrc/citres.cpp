@@ -36,21 +36,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 errtype master_load_bitmap_from_res(grs_bitmap *bmp, Id id_num, int i, LGRect *anchor, uchar *p);
 
 grs_bitmap *lock_bitmap_from_ref_anchor(Ref r, LGRect *anchor) {
-    FrameDesc *f;
     if (r == 0)
-        return (NULL);
-    f = static_cast<FrameDesc *>(RefLock(r));
-    if (f == NULL) {
-        //      Warning(("Could not lock bitmap %d!",r));
-        return (NULL);
+        return nullptr;
+    FrameDesc *f = static_cast<FrameDesc *>(RefLock(r));
+    if (f == nullptr) {
+        WARN("%s: Could not lock bitmap %x!", __FUNCTION__, r);
+        return nullptr;
     }
     f->bm.bits = (uchar *)(f + 1);
-    if (anchor != NULL)
+    if (anchor != nullptr)
         *anchor = f->anchorArea;
-    //   DBG((DSRC_GFX_Anim),
-    //   {
-    //      ss_bitmap(&(f->bm),0,0);
-    //   });
     return (&(f->bm));
 }
 
