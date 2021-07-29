@@ -52,11 +52,11 @@ extern grs_bitmap *_vtext_tab[];
 #define g3_set_vtext(vtext_id, text_ptr) _vtext_tab[vtext_id] = (grs_bitmap *)(text_ptr);
 
 // flags for polygon draw type
-extern uchar itrp_gour_flg, itrp_wire_flag, itrp_check_flg;
+//extern uchar itrp_gour_flg, itrp_wire_flag, itrp_check_flg;
 
-#define g3_set_gour_flag(x) itrp_gour_flag = x
-#define g3_set_wire_flag(x) itrp_wire_flag = x
-#define g3_set_check_flag(x) itrp_check_flag = x
+//#define g3_set_gour_flag(x) itrp_gour_flag = x
+//#define g3_set_wire_flag(x) itrp_wire_flag = x
+//#define g3_set_check_flag(x) itrp_check_flag = x
 
 #ifdef __cplusplus
 }

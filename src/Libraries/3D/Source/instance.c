@@ -82,19 +82,6 @@ char *cstack_ptr = context_stack;
 
 long cstack_depth;
 
-// takes esi=position. No orientation, just offset
-uchar g3_start_object(g3s_vector *p) // position only (no orientation)
-{
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    return -1; // success
-}
 
 // takes esi=position, ecx=rotation order, angles=eax,ebx,edx
 uchar g3_start_object_angles_xyz(g3s_vector *p, fixang tx, fixang ty, fixang tz, int rotation_order) {
@@ -108,13 +95,6 @@ uchar g3_start_object_angles_xyz(g3s_vector *p, fixang tx, fixang ty, fixang tz,
     temp_angles.tz = tz;
 
     return (start_obj_common(p, &temp_angles, rotation_order));
-}
-
-// takes esi=position, edi=orientation vector, ecx=rotation order
-uchar g3_start_object_angles_v(g3s_vector *p, g3s_angvec *o, int rotation_order) {
-    if (save_context())
-        return 0;
-    return (start_obj_common(p, o, rotation_order));
 }
 
 // takes esi=position, edi=orientation vector, ecx=rotation order
@@ -291,102 +271,6 @@ uchar instance_z(fixang tz) {
     vm3 = temp3;
 
     // we're done
-    return -1; // ok!
-}
-
-// rotate around the specified axes. angles = ebx edx. esi=position
-uchar g3_start_object_angles_xy(g3s_vector *p, fixang tx, fixang ty, int rotation_order) {
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    if ((rotation_order & 1) == 0) // check xy order
-    {
-        instance_x(tx);
-        return (instance_y(ty));
-    } else {
-        instance_y(ty);
-        return (instance_x(tx));
-    }
-}
-
-// rotate around the specified axes. angles = ebx edx. esi=position
-uchar g3_start_object_angles_xz(g3s_vector *p, fixang tx, fixang tz, int rotation_order) {
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    if ((rotation_order & 2) == 0) // check xz order
-    {
-        instance_x(tx);
-        return (instance_z(tz));
-    } else {
-        instance_z(tz);
-        return (instance_x(tx));
-    }
-}
-
-// rotate around the specified axes. angles = ebx edx. esi=position
-uchar g3_start_object_angles_yz(g3s_vector *p, fixang ty, fixang tz, int rotation_order) {
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    if ((rotation_order & 4) == 0) // check yz order
-    {
-        instance_y(ty);
-        return (instance_z(tz));
-    } else {
-        instance_z(tz);
-        return (instance_y(ty));
-    }
-}
-
-// rotate around the specified axes. angles = ebx edx. esi=position
-uchar g3_start_object_angles_zy(g3s_vector *p, fixang ty, fixang tz, int rotation_order) {
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    instance_z(tz);
-    return (instance_y(ty));
-}
-
-// takes esi=position, edi=object matrix
-uchar g3_start_object_matrix(g3s_vector *p, g3s_matrix *m) {
-    g3s_matrix temp_matrix;
-
-    if (save_context())
-        return 0;
-
-    // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
-
-    // rotate view vector through instance matrix
-    g3_vec_rotate(&_view_position, &_view_position, m);
-
-    // copy to temp matrix, since instance routine transposes in place
-    g3_copy_transpose(&temp_matrix, m);
-    instance_matrix(&temp_matrix, &view_matrix);
-
     return -1; // ok!
 }
 

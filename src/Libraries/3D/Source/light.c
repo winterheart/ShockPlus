@@ -36,23 +36,6 @@ g3s_phandle tmp1;
 g3s_phandle tmp2;
 g3s_vector zero_vec = {0, 0, 0};
 
-// sets a light vector in source space directly
-// this light vector has to be in user space so we can dot it with
-// other vector
-// g3_set_light_src(g3s_vector *l)
-// takes eax, trashes esi,edi
-void g3_set_light_src(g3s_vector *l) { _g3d_light_src = *l; }
-
-// This should be called after a frames' angles and stuff have been
-// set, does not need to be done per object
-// void g3_eval_vec_light(void)
-// Means you should be not near
-void g3_eval_vec_light(void) {
-    // needs to be rotated through view matrix
-    g3_vec_rotate(&_g3d_light_vec, &_g3d_light_src, &_wtoo_matrix);
-    scale_light_vec();
-}
-
 // should be normalized already
 // multiply by _g3d_diff_light
 // to set light intensity
@@ -60,19 +43,6 @@ void scale_light_vec(void) {
     _g3d_light_vec.gX = fix_mul(_g3d_light_vec.gX, _g3d_diff_light);
     _g3d_light_vec.gY = fix_mul(_g3d_light_vec.gY, _g3d_diff_light);
     _g3d_light_vec.gZ = fix_mul(_g3d_light_vec.gZ, _g3d_diff_light);
-}
-
-// transforms local light source into viewer coords in anticipation
-// of calling g3_eval_loc_light.  Saves a transformation don't you know
-// ideally you'd want to transform the view vec and light vec into
-// object coords.  That way you wouldn't have to transform their normals
-// at all.  The new 3d should provide inverse transforms.  That way things
-// could be lit more cheaply
-void g3_trans_loc_light(void) {
-    g3s_phandle p;
-
-    p = g3_rotate_point(&_g3d_light_src);
-    _g3d_light_trans = *(g3s_vector *)p;
 }
 
 // evaluates light point relative to another point, src is in world coords
@@ -141,39 +111,6 @@ void g3_eval_ldotv(void) {
     _g3d_ldotv = g3_vec_dotprod(&_g3d_light_vec, &_g3d_view_vec);
 }
 
-// Evaluates and sets light vectors as necessary at the start of
-// an object.  Does view vec if SPEC is set.  Transforms light
-// vector or point depending how LOC_LIGHT is set.  Use this if
-// both light and view will be modelled as far.  In fact, make
-// sure both are set as far, or you will be sorry.
-// Evaluates at the object center.  If necessary, evaluates the
-// ldotv for light and view
-// void g3_eval_light_obj_cen(void)
-// this could be optimized a bit more when both spec
-// both spec and diff is true
-// this should do eval vec as well, basically everything
-void g3_eval_light_obj_cen(void) {
-    DEBUG("%s: Call Mark if you see this", __FUNCTION__);
-
-    // MLA - this routine is buggy as far as I can tell, it doesn't work at all
-    // edi is never set or just happens to be set right, or it always falls
-    // through the first test (non_local)
-}
-
-// set your view to be straight ahead, use when using specular,
-// and after the light has been evaluated.  This is ultra cheap hack
-// to get view vector for a whole scene, just points straight in
-void g3_eval_view_ahead(void) {
-    // this is in view coords, need in
-    // object coords, this won't work
-    _g3d_view_vec.gX = 0;
-    _g3d_view_vec.gY = 0;
-    _g3d_view_vec.gZ = -0x01000;
-
-    // now eval ldotv, hm.
-    _g3d_ldotv = -_g3d_light_vec.gZ;
-}
-
 // check to see if local stuff has to get set and
 // set it if necessary
 // takes args in tmp1,tmp2
@@ -197,28 +134,6 @@ void check_for_near(void) {
     g3_eval_ldotv();
 }
 
-// void g3_light_diff(g3s_phandle norm,g3s_phandle pos)//
-// takes normal vector transformed, dots with the light vec,
-// puts light val in norm,
-// takes args in [eax,edx]
-void g3_light_diff(g3s_phandle norm, g3s_phandle pos) {
-    // push eax if not gouraud, or edx if, so we know
-    // whether to light the normal or the point
-    // maybe we could make this self modifying based
-    // on a light type setter, if this is slow
-
-    // MLA - whatever, I made it normal C code
-
-    tmp1 = norm;
-    tmp2 = pos;
-    check_for_near();
-
-    if ((_g3d_light_type & LT_GOUR) == 0)
-        light_diff_raw(tmp1, norm);
-    else
-        light_diff_raw(tmp1, pos);
-}
-
 // raw version
 // dot product with normal
 // esi and edi
@@ -234,29 +149,6 @@ fix light_diff_raw(g3s_phandle src, g3s_phandle dest) {
     temp >>= 4;             // convert to fix16, consider row 16 normal
     dest->i = temp;
     return (temp);
-}
-
-// void g3_light_spec(g3s_phandle norm,g3s_phandle pos)//
-// takes norm and point position, lights point
-// could both be the same, of course [eax,edx]
-void g3_light_spec(g3s_phandle norm, g3s_phandle pos) {
-    // push eax if not gouraud, or edx if, so we know
-    // whether to light the normal or the point
-    // maybe we could make this self modifying based
-    // on a light type setter, if this is slow
-
-    // MLA - whatever, I made it normal C code
-
-    // save norm and pos off so we don't push and
-    // pop them forever
-    tmp1 = norm;
-    tmp2 = pos;
-    check_for_near();
-
-    if ((_g3d_light_type & LT_GOUR) == 0)
-        light_spec_raw(tmp1, norm);
-    else
-        light_spec_raw(tmp1, pos);
 }
 
 // pure specular lighting is equal to
@@ -294,21 +186,6 @@ fix light_spec_raw(g3s_phandle src, g3s_phandle dest) {
 
     dest->i = temp >> 4; // convert to fix16, consider row 16 normal
     return (temp);
-}
-
-// void g3_light_dands(g3s_phandle norm,g3s_phandle pos)//
-// lights with both diff and spec
-//[eax,edx]
-void g3_light_dands(g3s_phandle norm, g3s_phandle pos) {
-    // MLA - same stuff as before, changed to C....
-    tmp1 = norm;
-    tmp2 = pos;
-    check_for_near();
-
-    if ((_g3d_light_type & LT_GOUR) == 0)
-        light_dands_raw(tmp1, norm);
-    else
-        light_dands_raw(tmp1, pos);
 }
 
 // raw version of dands without local checking
@@ -414,11 +291,3 @@ void g3_light_obj(g3s_phandle norm, g3s_phandle pos) {
     freepnt(norm_point);
     freepnt(pos_point);
 }
-
-// generic list gronker, farms these points out
-// call this inside an object or inside a frame
-// at any rate, the points need to have been
-// transformed
-// g3_light_list(int n,g3s_phandle *norm,g3s_phandle *pos)
-//  [eax,edx,ebx]
-void g3_light_list(int n, g3s_phandle *norm, g3s_phandle *pos) {}

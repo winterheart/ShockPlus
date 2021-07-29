@@ -115,20 +115,6 @@ void g3_set_bitmap_scale(fix u_scale, fix v_scale) {
     // _g3d_bitmap_y_iscale = fix64_div(fix64_make(1, 0), _g3d_bitmap_y_scale);
 }
 
-grs_vertex **g3_full_light_bitmap(grs_bitmap *bm, grs_vertex **p) {
-    _g3d_light_flag = 1;
-    _g3d_bitmap_poly = p;
-    return (do_bitmap(bm, (g3s_phandle)p));
-}
-
-grs_vertex **g3_full_light_anchor_bitmap(grs_bitmap *bm, grs_vertex **p, short u_anchor, short v_anchor) {
-    _g3d_light_flag = 1;
-    _g3d_bitmap_u_anchor = u_anchor;
-    _g3d_bitmap_v_anchor = v_anchor;
-    _g3d_bitmap_poly = p;
-    return (g3_bitmap_common(bm, (g3s_phandle)p));
-}
-
 grs_vertex **g3_light_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, short u_anchor, short v_anchor) {
     _g3d_light_flag = 2;
     _g3d_bitmap_u_anchor = u_anchor;
@@ -145,20 +131,6 @@ grs_vertex **g3_light_bitmap(grs_bitmap *bm, g3s_phandle p) {
     return (do_bitmap(bm, p));
 }
 
-grs_vertex **g3_anchor_bitmap(grs_bitmap *bm, g3s_phandle p, short u_anchor, short v_anchor) {
-    _g3d_light_flag = 0;
-    _g3d_bitmap_u_anchor = u_anchor;
-    _g3d_bitmap_v_anchor = v_anchor;
-    _g3d_bitmap_poly = vpl;
-    return (g3_bitmap_common(bm, p));
-}
-
-grs_vertex **g3_bitmap(grs_bitmap *bm, g3s_phandle p) {
-    _g3d_light_flag = 0;
-    _g3d_bitmap_poly = vpl;
-    return (do_bitmap(bm, p));
-}
-
 grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p) {
     _g3d_bitmap_u_anchor = bm->w >> 1;
     _g3d_bitmap_v_anchor = bm->h - 1;
@@ -166,12 +138,10 @@ grs_vertex **do_bitmap(grs_bitmap *bm, g3s_phandle p) {
 }
 
 grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
-    fix tempF, tempF2;
+    fix tempF;
     int32_t tempL, tempL2;
-    int16_t tempS, tempS2;
     fix sintemp, costemp;
     grs_vertex *tempG1, *tempG2;
-    fix tempResult;
     int32_t bm_w, bm_h;
     fix dx, dy;
 
@@ -207,10 +177,7 @@ grs_vertex **g3_bitmap_common(grs_bitmap *bm, g3s_phandle p) {
     }
 
     // compute polygon for bitmap
-    // args: ebx=bank, esi=bitmap, edi=anchor pt.
-    // gb_compute_poly:
-
-    fix_sincos((fixang)tempF, &sintemp, &costemp); //    call    fix_sincos
+    fix_sincos((fixang)tempF, &sintemp, &costemp);
 
     tempL = p->gZ;
 

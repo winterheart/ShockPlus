@@ -209,17 +209,6 @@ int g3_alloc_list(int n, g3s_phandle *p) {
     return n;
 }
 
-// allocate one point, returning handle in ax
-g3s_phandle g3_alloc_point(void) {
-    g3s_point *tempPtr;
-
-    if (!first_free)
-        return (0L);
-    tempPtr = first_free;
-    first_free = tempPtr->next;
-    return (tempPtr);
-}
-
 // free the point in eax. trashes ebx
 // adds to free list
 void g3_free_point(g3s_phandle p) {
@@ -238,19 +227,3 @@ void g3_free_list(int n_points, g3s_phandle *p) {
         first_free = tempPtr;
     }
 }
-
-// make a duplicate of a point. takes esi, returns edi. trashes ebx,ecx
-// makes copy of a point
-g3s_phandle g3_dup_point(g3s_phandle p) {
-    g3s_point *destPtr;
-
-    destPtr = first_free;
-    first_free = destPtr->next;
-
-    g3_copy_point(destPtr, p);
-
-    return (destPtr);
-}
-
-// copy point at esi to one at edi. trashes esi,ecx
-void g3_copy_point(g3s_phandle dest, g3s_phandle src) { *dest = *src; }

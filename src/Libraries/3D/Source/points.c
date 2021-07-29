@@ -43,29 +43,6 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
 // for temp use in rotate_list, etc.
 g3s_codes g_codes;
 
-// rotate a normal or gradient vector. esi=vector, returns edi=point, bl=codes.
-// assumes perspective mapper scale factor will be set to _scrw.
-g3s_phandle g3_rotate_norm(g3s_vector *v) {
-    fix x, y, z;
-    g3s_point *point;
-
-    rotate_norm(v, &x, &y, &z);
-
-    fix temp = fix_div(z, _matrix_scale.gZ);
-    fix temp2 = fix_div(x, _matrix_scale.gX);
-    fix temp3 = fix_div(y, _matrix_scale.gY);
-
-    temp3 = -fix_mul_div(temp3, _scrw, _scrh); // because projecting negates too, of course. Grrr.
-
-    getpnt(point);
-    point->gX = temp2;
-    point->gY = temp3;
-    point->gZ = temp;
-    point->p3_flags = 0;
-
-    return (point);
-}
-
 g3s_phandle g3_rotate_point(g3s_vector *v) {
     g3s_point *point;
 
@@ -146,51 +123,6 @@ g3s_codes g3_transform_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
     return (g_codes);
 }
 
-// takes esi=ptr to array of vectors, edi=ptr to list for point handles,
-// ecx=count  returns bh=codes and, bl=codes or
-g3s_codes g3_rotate_list(short n, g3s_phandle *dest_list, g3s_vector *v) {
-    g3s_phandle temphand;
-
-    g_codes.or_ = 0;
-    g_codes.and_ = 0xff;
-
-    for (int i = n; i > 0; i--) {
-        temphand = g3_rotate_point(v++);
-        g_codes.or_ |= temphand->codes;
-        g_codes.and_ &= temphand->codes;
-
-        *(dest_list++) = temphand;
-    }
-    return (g_codes);
-}
-
-// takes esi=ptr to array of point handles, ecx=count
-g3s_codes g3_project_list(short n, g3s_phandle *point_list) {
-    g3s_phandle temphand;
-
-    g_codes.or_ = 0;
-    g_codes.and_ = 0xff;
-
-    for (int i = n; i > 0; i--) {
-        temphand = *(point_list++);
-        g_codes.or_ |= temphand->codes;
-        g_codes.and_ &= temphand->codes;
-
-        g3_project_point(temphand);
-    }
-
-    return (g_codes);
-}
-
-// takes esi=ptr to array of vectors, edi=ptr to dest vectors
-g3s_phandle g3_rotate_light_norm(g3s_vector *v) {
-    g3s_point *point;
-
-    getpnt(point);
-    do_rotate(v->gX, v->gY, v->gZ, &point->gX, &point->gY, &point->gZ);
-    return (point);
-}
-
 // takes esi=ptr to normal vector. returns in <ecx,esi,eax>. trashes all regs
 void rotate_norm(g3s_vector *v, fix *x, fix *y, fix *z) { do_norm_rotate(v->gX, v->gY, v->gZ, x, y, z); }
 
@@ -241,140 +173,12 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz) {
     *rz = fix64_to_fix(r);
 }
 
-// rotate an x delta. takes edi=dest vector, eax=dx
-// trashes eax,ebx,edx
-void g3_rotate_delta_x(g3s_vector *dest, fix dx) {
-    dest->gX = fix_mul(dx, vm1);
-    dest->gY = fix_mul(dx, vm2);
-    dest->gZ = fix_mul(dx, vm3);
-}
-
-// rotate a y delta. takes edi=dest vector, eax=dy
-// trashes eax,ebx,edx
-void g3_rotate_delta_y(g3s_vector *dest, fix dy) {
-    dest->gX = fix_mul(dy, vm4);
-    dest->gY = fix_mul(dy, vm5);
-    dest->gZ = fix_mul(dy, vm6);
-}
-
-// rotate a z delta. takes edi=dest vector, eax=dz
-// trashes eax,ebx,edx
-void g3_rotate_delta_z(g3s_vector *dest, fix dz) {
-    dest->gX = fix_mul(dz, vm7);
-    dest->gY = fix_mul(dz, vm8);
-    dest->gZ = fix_mul(dz, vm9);
-}
-
-// rotate an xz delta. takes edi=dest vector, eax=dx, ebx=dz
-// trashes eax,ebx,edx
-void g3_rotate_delta_xz(g3s_vector *dest, fix dx, fix dz) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dx, vm1) + fix64_mul(dz, vm7);
-    dest->gX = fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dx, vm2) + fix64_mul(dz, vm8);
-    dest->gY = fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dx, vm3) + fix64_mul(dz, vm9);
-    dest->gZ = fix64_to_fix(r);
-}
-
-// rotate an xy delta. takes edi=dest vector, eax=dx, ebx=dy
-// trashes eax,ebx,edx
-void g3_rotate_delta_xy(g3s_vector *dest, fix dx, fix dy) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dx, vm1) + fix64_mul(dy, vm4);
-    dest->gX = fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dx, vm2) + fix64_mul(dy, vm5);
-    dest->gY = fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dx, vm3) + fix64_mul(dy, vm6);
-    dest->gZ = fix64_to_fix(r);
-}
-
-// rotate a yz delta. takes edi=dest vector, eax=dy, ebx=dz
-// trashes eax,ebx,edx
-void g3_rotate_delta_yz(g3s_vector *dest, fix dy, fix dz) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dy, vm4) + fix64_mul(dz, vm7);
-    dest->gX = fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dy, vm5) + fix64_mul(dz, vm8);
-    dest->gY = fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dy, vm6) + fix64_mul(dz, vm9);
-    dest->gZ = fix64_to_fix(r);
-}
-
-// rotate a delta vector. takes edi=dest, eax,ebx,ecx=dx,dy,dz
-// trashes all but ebp,edi
-void g3_rotate_delta_xyz(g3s_vector *dest, fix dx, fix dy, fix dz) {
-    do_rotate(dx, dy, dz, &dest->gX, &dest->gY, &dest->gZ);
-}
-
-// rotate a delta vector. takes edi=dest, esi=src
-// trashes all but ebp,edi
-void g3_rotate_delta_v(g3s_vector *dest, g3s_vector *src) {
-    do_rotate(src->gX, src->gY, src->gZ, &dest->gX, &dest->gY, &dest->gZ);
-}
-
-// like add_delta, but creates and returns a new point
-// takes esi=src, ebx=delta, returns edi=new point
-// trashes eax,ebx
-g3s_phandle g3_copy_add_delta_v(g3s_phandle src, g3s_vector *delta) {
-    g3s_point *point;
-
-    getpnt(point);
-    point->gX = src->gX + delta->gX;
-    point->gY = src->gY + delta->gY;
-    point->gZ = src->gZ + delta->gZ;
-    point->p3_flags = 0;
-    code_point(point);
-    return (point);
-}
-
-// adds a delta vector (created by rotate delta) to a point
-// takes edi=point, esi=delta. clears projected bit, computes codes
-// trashes eax,esi,bl
-void g3_add_delta_v(g3s_phandle p, g3s_vector *delta) {
-    p->gX += delta->gX;
-    p->gY += delta->gY;
-    p->gZ += delta->gZ;
-
-    p->p3_flags &= ~PF_PROJECTED;
-    code_point(p);
-}
-
 // add an x delta to a point. takes edi=point, eax=dx
 // trashes eax,ebx,edx
 void g3_add_delta_x(g3s_phandle p, fix dx) {
     p->gX += fix_mul(vm1, dx);
     p->gY += fix_mul(vm2, dx);
     p->gZ += fix_mul(vm3, dx);
-    p->p3_flags &= ~PF_PROJECTED;
-
-    code_point(p);
-}
-
-// add a y delta to a point. takes edi=point, eax=dy
-// trashes eax,ebx,edx
-void g3_add_delta_y(g3s_phandle p, fix dy) {
-    p->gX += fix_mul(vm4, dy);
-    p->gY += fix_mul(vm5, dy);
-    p->gZ += fix_mul(vm6, dy);
     p->p3_flags &= ~PF_PROJECTED;
 
     code_point(p);
@@ -388,84 +192,6 @@ void g3_add_delta_z(g3s_phandle p, fix dz) {
     p->gZ += fix_mul(vm9, dz);
     p->p3_flags &= ~PF_PROJECTED;
 
-    code_point(p);
-}
-
-// add an xy delta to a point. takes edi=point, eax=dx, ebx=dy
-// trashes eax,ebx,ecx,edx,esi
-void g3_add_delta_xy(g3s_phandle p, fix dx, fix dy) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dx, vm1) + fix64_mul(dy, vm4);
-    p->gX += fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dx, vm2) + fix64_mul(dy, vm5);
-    p->gY += fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dx, vm3) + fix64_mul(dy, vm6);
-    p->gZ += fix64_to_fix(r);
-
-    p->p3_flags &= ~PF_PROJECTED;
-    code_point(p);
-}
-
-// add an xz delta to a point. takes edi=point, eax=dx, ebx=dz
-// trashes eax,ebx,ecx,edx,esi
-void g3_add_delta_xz(g3s_phandle p, fix dx, fix dz) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dx, vm1) + fix64_mul(dz, vm7);
-    p->gX += fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dx, vm2) + fix64_mul(dz, vm8);
-    p->gY += fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dx, vm3) + fix64_mul(dz, vm9);
-    p->gZ += fix64_to_fix(r);
-
-    p->p3_flags &= ~PF_PROJECTED;
-    code_point(p);
-}
-
-// add an yz delta to a point. takes edi=point, eax=dy, ebx=dz
-// trashes eax,ebx,ecx,edx,esi
-void g3_add_delta_yz(g3s_phandle p, fix dy, fix dz) {
-    int64_t r;
-
-    // first column
-    r = fix64_mul(dy, vm4) + fix64_mul(dz, vm7);
-    p->gX += fix64_to_fix(r);
-
-    // second column
-    r = fix64_mul(dy, vm5) + fix64_mul(dz, vm8);
-    p->gY += fix64_to_fix(r);
-
-    // third column
-    r = fix64_mul(dy, vm6) + fix64_mul(dz, vm9);
-    p->gZ += fix64_to_fix(r);
-
-    p->p3_flags &= ~PF_PROJECTED;
-    code_point(p);
-}
-
-// add an xyz delta to a point. takes edi=point, eax=dx, ebx=dy, ecx=dz
-// trashes eax,ebx,ecx,edx,esi
-void g3_add_delta_xyz(g3s_phandle p, fix dx, fix dy, fix dz) {
-    fix rx, ry, rz;
-
-    do_rotate(dx, dy, dz, &rx, &ry, &rz);
-
-    p->gX += rx;
-    p->gY += ry;
-    p->gZ += rz;
-
-    p->p3_flags &= ~PF_PROJECTED;
     code_point(p);
 }
 
@@ -622,24 +348,6 @@ g3s_phandle g3_copy_add_delta_yz(g3s_phandle src, fix dy, fix dz) {
     // third column
     r = fix64_mul(dy, vm6) + fix64_mul(dz, vm9);
     point->gZ = src->gZ + fix64_to_fix(r);
-
-    point->p3_flags = 0;
-    code_point(point);
-    return (point);
-}
-
-// like add_delta, but creates and returns a new point in edi
-// add an xyz delta to a point. takes edi=point, eax=dx, ebx=dy, ecx=dz
-// trashes eax,ebx,ecx,edx,esi
-g3s_phandle g3_copy_add_delta_xyz(g3s_phandle src, fix dx, fix dy, fix dz) {
-    g3s_point *point;
-
-    getpnt(point);
-    do_rotate(dx, dy, dz, &point->gX, &point->gY, &point->gZ);
-
-    point->gX += src->gX;
-    point->gY += src->gY;
-    point->gZ += src->gZ;
 
     point->p3_flags = 0;
     code_point(point);

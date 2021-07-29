@@ -44,23 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "globalv.h"
 #include "lg.h"
 
-// returns current field of view. returns ax=x FOV, bx=y FOV
-// trashes eax,ebx,ecx,edx,edi
-// formula is fov = acos( (x-z) / (x+z) ) where x,z are the matrix scale values
-void g3_get_FOV(fixang *x, fixang *y) {
-    fix X2, Y2, Z2;
-
-    Z2 = fix_mul(_matrix_scale.gZ, _matrix_scale.gZ); // get z squared
-
-    // compute y
-    Y2 = fix_mul(_matrix_scale.gY, _matrix_scale.gY); // get y squared
-    *y = fix_acos(fix_div(Y2 - Z2, Y2 + Z2));
-
-    // compute x
-    X2 = fix_mul(_matrix_scale.gX, _matrix_scale.gX); // get z squared
-    *x = fix_acos(fix_div(X2 - Z2, X2 + Z2));
-}
-
 // returns zoom for a desired FOV.
 // takes bx=FOV angle, al=axis ('X' or 'Y'), ecx=window width, edx=window height
 // returns in eax. trashes all but ebp

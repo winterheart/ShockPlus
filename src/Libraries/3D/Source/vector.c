@@ -82,14 +82,6 @@ fix g3_vec_dotprod(g3s_vector *v0, g3s_vector *v1) {
     return fix64_to_fix(result);
 }
 
-// compute normalized surface normal from three points.
-// takes edi=dest, eax,edx,ebx = points. fills in [edi].
-// trashes eax,ebx,ecx,edx,esi
-void g3_compute_normal(g3s_vector *norm, g3s_vector *v0, g3s_vector *v1, g3s_vector *v2) {
-    g3_compute_normal_quick(norm, v0, v1, v2);
-    g3_vec_normalize(norm); // now normalize
-}
-
 // normalizes the vector at esi. trashes all but esi,ebp
 void g3_vec_normalize(g3s_vector *v) {
     fix temp;

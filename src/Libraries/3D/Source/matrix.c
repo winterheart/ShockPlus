@@ -384,31 +384,12 @@ void g3_vec_rotate(g3s_vector *dest, g3s_vector *src, g3s_matrix *m) {
     dest->gZ = fix64_to_fix(r);
 }
 
-// transpose a matrix at esi in place
-// trashes eax
+// transpose a matrix at esi in place trashes eax
 void g3_transpose(g3s_matrix *m) // transpose in place
 {
     SwapFix(m->m2, m->m4);
     SwapFix(m->m3, m->m7);
     SwapFix(m->m6, m->m8);
-}
-
-// transpose the matrix at esi into matrix at edi
-// trashes eax
-void g3_copy_transpose(g3s_matrix *dest, g3s_matrix *src) // copy and transpose
-{
-    dest->m1 = src->m1;
-    dest->m5 = src->m5;
-    dest->m9 = src->m9;
-
-    dest->m2 = src->m4;
-    dest->m4 = src->m2;
-
-    dest->m3 = src->m7;
-    dest->m7 = src->m3;
-
-    dest->m6 = src->m8;
-    dest->m8 = src->m6;
 }
 
 // MLA- oh no I've got LookingGlass disease, I'm making multi-line #defines!
@@ -417,15 +398,6 @@ fix mxm_mul(fix s1_1, fix s1_2, fix s1_3, fix s2_1, fix s2_2, fix s2_3) {
     int64_t r = fix64_mul(s1_1, s2_1) + fix64_mul(s1_2, s2_2) + fix64_mul(s1_3, s2_3);
     return fix64_to_fix(r);
 }
-/*
-#define mxm_mul(dst, s1_1, s1_2, s1_3, s2_1, s2_2, s2_3)        \
-  {                                                             \
-    int64_t r = fix64_mul(src1->s1_1, src2->s2_1) +             \
-                fix64_mul(src1->s1_2, src2->s2_2) +             \
-                fix64_mul(src1->s1_3, src2->s2_3);              \
-    dest->dst = fix64_to_fix(r);                                \
-  }
-*/
 
 // matrix by matrix multiply:  ebx = esi * edi
 // does ebx = edi * esi
