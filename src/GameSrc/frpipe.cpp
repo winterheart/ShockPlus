@@ -64,6 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frsubclp.h"
 
 #include "frintern.h"
+#include "frpipe.h"
 #include "frspans.h"
 #include "frtables.h"
 #include "frquad.h"
@@ -72,8 +73,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fr3d.h" // for coor
 
 #include "refstuf.h"
-
-#include "OpenGL.h"
 
 // tell me tell me what you're after
 // cause i just want to get there faster
@@ -87,10 +86,6 @@ uchar *cone_span_list;
 int _fr_x_cen, _fr_y_cen; /* center tile for eye */
 
 // static uchar cyber_on;
-
-/*
-static uchar hack_off;
-*/
 
 #ifdef _FR_TILEMAP
 static int tile_x, tile_y; /* tilemap x,y */
@@ -132,7 +127,6 @@ static char diag_dirsets[4][2] = {{2, 1}, {3, 2}, {0, 3}, {1, 0}};
 void _fr_init_slopes(int zshf);
 void do_seen_pass(void);
 void draw_dir_dir(int dir, int st, int len);
-int fr_pipe_go_3(void);
 
 extern fix outer_wall[3][4][2];
 
@@ -288,7 +282,7 @@ extern ushort frpipe_dist; // furtherest walking distance away
 uchar quad_order_lists[8][4] = {QoL(S, W, E, N), QoL(W, S, N, E), QoL(W, N, S, E), QoL(N, W, E, S),
                                 QoL(N, E, W, S), QoL(E, N, S, W), QoL(E, S, N, W), QoL(S, E, W, N)};
 
-int fr_pipe_go_3(void) {
+int fr_pipe_go_3() {
 
     //_fr_x_cen = fix_make(0, 2);
 

@@ -48,6 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "frpipe.h"
 #include "frsetup.h"
 #include "frtypes.h"
 #include "frintern.h"
@@ -59,9 +60,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef AUDIOLOGS
 #include "audiolog.h"
 #endif
-
-int fr_pipe_go_2(void);
-int fr_pipe_go_3(void);
 
 extern uchar _g3d_enable_blend;
 

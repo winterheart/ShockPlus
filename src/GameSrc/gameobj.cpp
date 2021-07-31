@@ -68,10 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffq.h"
 #endif
 
-#ifdef NEW_2d
-#include "double.h"
-#endif
-
 #include "OpenGL.h"
 
 #define VOXEL_PIX_DIST_BASE (fix_make(0, 0x1000))
@@ -376,7 +372,7 @@ void do_xplodamatron(int frame, int severity, int seed, int col1, int col2) {
 }
 
 // should be deviant some day
-void gen_tetra(g3s_phandle *xplo_pts, fix size, int ii, int color) {
+void gen_tetra(g3s_phandle *xplo_pts, fix size, int deviant, int color) {
     int i;
     g3s_vector xplo_vec;
     fix annoying_val = fix_mul(size, fix_make(1, 71 * 65536 / 100)); // 1/2 * 6/root3, in dougs head, = 1.71???

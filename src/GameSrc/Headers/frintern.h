@@ -52,7 +52,9 @@ int fr_send_view(void);
 
 #ifdef __FRTYPES_H
 extern fauxrend_context *_fr, *_sr;
-#endif // only know about context itself if you already include types
+#endif
+// only know about context itself if you already include types
+
 extern uint _fr_curflags, _fr_glob_flags;
 extern uchar *_fr_clut_list[4];
 
@@ -60,7 +62,6 @@ extern uchar *_fr_clut_list[4];
 // pipe setup and control
 int fr_pipe_resize(int x, int y, int z, void *mptr);
 int fr_pipe_start(int rad);
-int fr_pipe_go(void);
 int fr_pipe_end(void);
 int fr_pipe_freemem(void);
 
@@ -71,8 +72,6 @@ extern int _fr_x_cen, _fr_y_cen;
 int fr_pts_frame_start(void);
 int fr_pts_resize(int x, int y);
 int fr_pts_freemem(void);
-int fr_pts_update(int y, int lx, int rx);
-int fr_pts_setup(int pt_code); // must call before update
 
 #ifdef __3D_H
 extern g3s_phandle *_fr_ptbase, *_fr_ptnext;
@@ -105,7 +104,6 @@ extern ushort fr_col_to_obj[256];
 void fr_draw_tile(void);
 void fr_terr_frame_start(void);
 void fr_terr_frame_end(void);
-void _fr_facelet_init(void);
 #ifdef __3D_H
 int _fr_do_light(g3s_phandle work, int hgt_code);
 #endif
