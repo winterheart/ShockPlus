@@ -47,7 +47,7 @@ long poly_color;
 
 // arrays of point handles, used in clipping
 g3s_phandle vbuf[MAX_VERTS];
-g3s_phandle _vbuf2[MAX_VERTS];
+g3s_phandle vbuf2[MAX_VERTS];
 
 // for surface normal check
 g3s_vector temp_vector;
@@ -145,12 +145,12 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
     // BlockMove(p,vbuf,n_verts<<2);
     memmove(vbuf, p, n_verts * sizeof *p);
 
-    n_verts = g3_clip_polygon(n_verts, vbuf, _vbuf2);
+    n_verts = g3_clip_polygon(n_verts, vbuf, vbuf2);
     if (!n_verts)
         return CLIP_ALL;
 
     // now, copy 2d points to buffer for polygon draw, projecting if neccesary
-    src = _vbuf2;
+    src = vbuf2;
     dest = p_vlist;
 
     for (i = 0; i < n_verts; i++) {
@@ -170,7 +170,7 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
     {
         if (gour_flag >= 4) // cpoly
         {
-            src = _vbuf2;
+            src = vbuf2;
             dest = p_vlist;
             for (i = 0; i < n_verts; i++) {
                 src_pt = *(src++);
@@ -183,7 +183,7 @@ int draw_poly_common(long c, int n_verts, g3s_phandle *p) {
             }
         } else // spoly
         {
-            src = _vbuf2;
+            src = vbuf2;
             dest = p_vlist;
             for (i = 0; i < n_verts; i++) {
                 src_pt = *(src++);
@@ -228,11 +228,11 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
 
     vbuf[0] = p0;
     vbuf[1] = p1;
-    if (g3_clip_line(vbuf, _vbuf2) == 16)
+    if (g3_clip_line(vbuf, vbuf2) == 16)
         return CLIP_ALL;
 
-    p0 = _vbuf2[0];
-    p1 = _vbuf2[1];
+    p0 = vbuf2[0];
+    p1 = vbuf2[1];
     code0 = p0->codes;
     code1 = p1->codes;
 
@@ -381,9 +381,9 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
 // takes esi=point on surface, edi=surface normal (can be unnormalized)
 // trashes eax,ebx,ecx,edx. returns al=true & sign set, if facing
 bool g3_check_normal_facing(g3s_vector *v, g3s_vector *normal) {
-    int64_t result = fix64_mul(v->gX - _view_position.gX, normal->gX) +
-                     fix64_mul(v->gY - _view_position.gY, normal->gY) +
-                     fix64_mul(v->gZ - _view_position.gZ, normal->gZ);
+    int64_t result = fix64_mul(v->gX - view_position.gX, normal->gX) +
+                     fix64_mul(v->gY - view_position.gY, normal->gY) +
+                     fix64_mul(v->gZ - view_position.gZ, normal->gZ);
 
     return (fix64_int(result) < 0);
 }

@@ -38,7 +38,7 @@ void do_rotate(fix x, fix y, fix z, fix *rx, fix *ry, fix *rz);
 
 // void xlate_rotate_point(g3s_vector *v, fix *x, fix *y, fix *z);
 #define xlate_rotate_point(v, x, y, z) \
-    do_rotate(v->gX - _view_position.gX, v->gY - _view_position.gY, v->gZ - _view_position.gZ, x, y, z)
+    do_rotate(v->gX - view_position.gX, v->gY - view_position.gY, v->gZ - view_position.gZ, x, y, z)
 
 // for temp use in rotate_list, etc.
 g3s_codes g_codes;
@@ -74,25 +74,25 @@ int g3_project_point(g3s_phandle p) {
 
     // point is in front of back plane---do projection.
     // project y coordinate.
-    fix res = fix_mul_div(y, _scrh, z);
+    fix res = fix_mul_div(y, scrh, z);
     if (gOVResult) {
         p->codes |= CC_CLIP_OVERFLOW;
         return 1;
     }
     res = -res;
-    if (AddLongWithOverflow(&res, res, _biasy)) {
+    if (AddLongWithOverflow(&res, res, biasy)) {
         p->codes |= CC_CLIP_OVERFLOW;
         return 1;
     }
     p->sy = res;
 
     // now project x point
-    res = fix_mul_div(x, _scrw, z);
+    res = fix_mul_div(x, scrw, z);
     if (gOVResult) {
         p->codes |= CC_CLIP_OVERFLOW;
         return 1;
     }
-    if (AddLongWithOverflow(&res, res, _biasx)) {
+    if (AddLongWithOverflow(&res, res, biasx)) {
         p->codes |= CC_CLIP_OVERFLOW;
         return 1;
     }

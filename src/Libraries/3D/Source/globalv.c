@@ -54,34 +54,35 @@ g3s_point *first_free = 0; //   dd      0       ;ptr to first free pnt
 g3s_matrix unscaled_matrix; // g3s_matrix <>   ;unscaled & unadjusted
 
 // note: view_matrix and view_position must remain in this order!
-g3s_matrix view_matrix;    // g3s_matrix <>
-g3s_vector _view_position; // g3s_vector <>
-fix _view_zoom;            // fix     ?
-fix view_heading;          // fix     ?
-fix view_pitch;            // fix     ?
-fix view_bank;             // fix     ?
+g3s_matrix view_matrix;   // g3s_matrix <>
+g3s_vector view_position; // g3s_vector <>
+fix view_zoom;            // fix     ?
+fix view_heading;         // fix     ?
+fix view_pitch;           // fix     ?
+fix view_bank;            // fix     ?
 
 // are to save inverse object to world matrix and position
 // to go from world to object, take Ax + a (like in real 3d)
-g3s_matrix _wtoo_matrix;   //  g3s_matrix <>
-g3s_vector _wtoo_position; //  g3s_vector <>
+g3s_matrix wtoo_matrix;   //  g3s_matrix <>
+g3s_vector wtoo_position; //  g3s_vector <>
 
 fix pixel_ratio; //  fix     ?       ;copy from 2d drv_cap
 
-long window_width;  //  dd      ?
-long window_height; //  dd      ?
+int32_t window_width;  //  dd      ?
+int32_t window_height; //  dd      ?
 
-long ww2; //  dd      ?       ;one-half widht,height
-long wh2; //  dd      ?       ;..for texture mapper
+// one-half width, height for texture mapper
+int32_t ww2;
+int32_t wh2;
 
-long _scrw; //  dd      ?       ;need to do double-word mul
-long _scrh; //	dd      ?
+int32_t scrw; // need to do double-word mul
+int32_t scrh; //
 
-fix _biasx; //	fix     ?
-fix _biasy; // fix     ?
+fix biasx; //	fix     ?
+fix biasy; // fix     ?
 
-g3s_vector _matrix_scale;  //  <>   ;how the columns are scaled
-g3s_vector horizon_vector; //  <>   ;info for drawing the horizon
+g3s_vector matrix_scale;   // how the columns are scaled
+g3s_vector horizon_vector; // info for drawing the horizon
 
 // clang-format off
 // this tables tells you many bits to shift to get zero
@@ -112,52 +113,44 @@ uchar shift_table[256] = {
 // these vars describe the translation from the user's coordinate system
 // to our coordinate system
 
-long up_axis; // dd      ?
+int32_t up_axis; // dd      ?
 
 // which axis is our x,y,z?
-long axis_x; //  dd      ?
-long axis_z; //  dd      ?
-long axis_y; //  dd      ?
+int32_t axis_x; //  dd      ?
+int32_t axis_z; //  dd      ?
+int32_t axis_y; //  dd      ?
 
 // offset into matrix of axis which is x,y,z
-long axis_x_ofs; //      dd      ?
-long axis_z_ofs; //      dd      ?
-long axis_y_ofs; //      dd      ?
+int32_t axis_x_ofs; //      dd      ?
+int32_t axis_z_ofs; //      dd      ?
+int32_t axis_y_ofs; //      dd      ?
 
 char axis_swap_flag; // 			db      ?
 char axis_neg_flag;  //			db      ?
 
 // Lighting globals
-char _g3d_light_type = 0; // db      0       ; The lighting type, see above
+char g3d_light_type = 0; // The lighting type, see above
 
-fix _g3d_amb_light = 0;        // fix    0       ; amount of ambient light
-fix _g3d_diff_light = 0x10000; // fix    10000h  ; intensity of light source
-fix _g3d_spec_light = 0;       // fix    0       ; amount of spec light
-fix _g3d_flash = 0;            // fix    0       ; specular flash point below which none is applied
+fix g3d_amb_light = 0;        // amount of ambient light
+fix g3d_diff_light = 0x10000; // intensity of light source
+fix g3d_spec_light = 0;       // amount of spec light
+fix g3d_flash = 0;            // specular flash point below which none is applied
 // note that specular light is used to provide a "flash" mostly
 // so you can artificially inflate it a bit, or we could try
 // funny functions to make it "flash" only within a certain
 // range.
 
-g3s_vector _g3d_light_src;   //  g3s_vector      <>      ; light source, either
-                             //  local or vector
-g3s_vector _g3d_light_trans; //  g3s_vector   		<>      ; point
-                             //  source in view coords
-g3s_vector _g3d_light_vec;   //  g3s_vector      <>      ; current light vector,
-                             //  computed from src and flag
+g3s_vector g3d_light_src;   // light source, either local or vector
+g3s_vector g3d_light_trans; // point source in view coords
+g3s_vector g3d_light_vec;   // current light vector, computed from src and flag
 
-g3s_vector _g3d_view_vec; //  g3s_vector      <>      ; current viewing vector,
-                          //  may have to be computed periodically
+g3s_vector g3d_view_vec; // current viewing vector, may have to be computed periodically
 
-fix _g3d_ldotv; //  fix     ?       ; light vector dotted with view vector (for
-                //  specular only)
-fix _g3d_sdotl; //  fix     ?       ; surface vector dotted with light vector
-                //  (for diffuse and spec)
-fix _g3d_sdotv; //  fix     ?       ; surface vector dotted with view vector
-                //  (ostensibly jnorm)
+fix g3d_ldotv; // light vector dotted with view vector (for specular only)
+fix g3d_sdotl; // surface vector dotted with light vector (for diffuse and spec)
+fix g3d_sdotv; // surface vector dotted with view vector (ostensibly jnorm)
 
-long _g3d_light_tab = 0; //  dd      0       ; lighting table with 32 or 24
-                         //  entries.  Should go from black to white,
+int32_t g3d_light_tab = 0; // lighting table with 32 or 24 entries.  Should go from black to white,
 
 // palette base for gouraud-shaded polys
 

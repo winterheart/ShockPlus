@@ -231,9 +231,9 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     // lighting stuff, params are on the stack
     // so don't sweat it
     // set fill type so 2d can light the thang
-    if ((_g3d_light_type & (LT_SPEC | LT_DIFF)) != 0) {
+    if ((g3d_light_type & (LT_SPEC | LT_DIFF)) != 0) {
         gr_set_fill_type(FILL_CLUT);
-        if (_g3d_light_type == LT_DIFF)
+        if (g3d_light_type == LT_DIFF)
             opcode_table[OP_JNORM] = &do_ldjnorm;
         else
             opcode_table[OP_JNORM] = &do_ljnorm;
@@ -249,27 +249,27 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     scale = *(short *)(object_ptr - 2);
     if (scale) {
         if (scale > 0) {
-            _view_position.gX >>= scale;
-            _view_position.gY >>= scale;
-            _view_position.gZ >>= scale;
+            view_position.gX >>= scale;
+            view_position.gY >>= scale;
+            view_position.gZ >>= scale;
         } else {
             int temp;
 
             scale = -scale;
 
-            temp = (((ulong)_view_position.gX) >> 16); // get high 16 bits
+            temp = (((ulong)view_position.gX) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
                 return;                                // overflow
-            temp = (((ulong)_view_position.gY) >> 16); // get high 16 bits
+            temp = (((ulong)view_position.gY) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
                 return;                                // overflow
-            temp = (((ulong)_view_position.gZ) >> 16); // get high 16 bits
+            temp = (((ulong)view_position.gZ) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
                 return; // overflow
 
-            _view_position.gX <<= scale;
-            _view_position.gY <<= scale;
-            _view_position.gZ <<= scale;
+            view_position.gX <<= scale;
+            view_position.gY <<= scale;
+            view_position.gZ <<= scale;
         }
     }
 
@@ -281,7 +281,7 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
             freepnt(resbuf[i]);
 
     // set lighting back to how it was
-    if ((_g3d_light_type & (LT_SPEC | LT_DIFF)) != 0) {
+    if ((g3d_light_type & (LT_SPEC | LT_DIFF)) != 0) {
         gr_set_fill_type(FILL_NORM);
         opcode_table[OP_JNORM] = &do_jnorm;
     }
@@ -682,14 +682,14 @@ uchar *do_ldjnorm(uchar *opcode) {
     fix temp;
 
     if (g3_check_normal_facing((g3s_vector *)(opcode + 16), (g3s_vector *)(opcode + 4))) {
-        temp = g3_vec_dotprod(&_g3d_light_vec, (g3s_vector *)(opcode + 4));
+        temp = g3_vec_dotprod(&g3d_light_vec, (g3s_vector *)(opcode + 4));
         temp <<= 1;
         if (temp < 0)
             temp = 0;
-        temp += _g3d_amb_light;
+        temp += g3d_amb_light;
         temp >>= 4;
         temp &= 0x0ffffff00;
-        temp += _g3d_light_tab;
+        temp += g3d_light_tab;
         gr_set_fill_parm(temp);
 
         return opcode + 28;

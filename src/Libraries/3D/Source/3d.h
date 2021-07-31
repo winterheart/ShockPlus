@@ -328,16 +328,6 @@ typedef struct g3s_point {
 #define LT_TABSIZE 24    // size of the shading table
 #define LT_BASELIT 15    // table entry of normal intensity (before saturating)
 
-extern fix scrw, scrh;
-extern fix biasx, biasy;
-
-extern ubyte g3d_light_type;
-extern fix g3d_amb_light, g3d_diff_light, g3d_spec_light;
-extern fix g3d_ldotv, g3d_sdotl, g3d_sdotv, g3d_flash;
-extern ubyte *g3d_light_tab;
-extern g3s_vector g3d_light_src, g3d_light_trans;
-extern g3s_vector g3d_view_vec, g3d_light_vec;
-
 // DG: my compiler was not happy about the names "or" and "and", so I appended a _
 typedef struct g3s_codes {
     byte or_;
@@ -459,7 +449,7 @@ bool g3_check_normal_facing(g3s_vector *v, g3s_vector *normal);
 bool g3_check_poly_facing(g3s_phandle p0, g3s_phandle p1, g3s_phandle p2);
 // takes 3 rotated points on poly
 
-fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height);
+fix g3_get_zoom(char axis, fixang angle, int user_window_width, int user_window_height);
 // returns zoom factor to achieve the desired view angle. axis is 'y' or 'x'
 
 void g3_get_view_pyramid(g3s_vector *corners);

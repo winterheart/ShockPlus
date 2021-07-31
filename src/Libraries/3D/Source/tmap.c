@@ -246,7 +246,7 @@ int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
     // BlockMove(vp,vbuf,n*4);
     memmove(vbuf, vp, n * sizeof *vbuf);
 
-    _n_verts = n = g3_clip_polygon(n, vbuf, _vbuf2);
+    _n_verts = n = g3_clip_polygon(n, vbuf, vbuf2);
     if (n == 0)
         return CLIP_ALL;
     if (ti.tmap_type >= GRC_CLUT_BILIN + 2)
@@ -267,7 +267,7 @@ int draw_tmap_common(int n, g3s_phandle *vp, grs_bitmap *bm) {
     // now, copy 2d points to buffer for tmap call, projecting if neccesary
     //	for (i=n-1; i--; i>=0)
     for (i = 0; i < n; i++) {
-        temphand = _vbuf2[i];
+        temphand = vbuf2[i];
         p_vpl[i] = cur_vert = &p_vlist[i];
 
         // check if this point has been projected
@@ -349,7 +349,7 @@ int check_linear(int n) {
     fix temp;
     g3s_phandle *temp_vbuf2;
 
-    temp_vbuf2 = _vbuf2;
+    temp_vbuf2 = vbuf2;
     n--;
     temphand = temp_vbuf2[n];
     zmax = zmin = temphand->gZ;

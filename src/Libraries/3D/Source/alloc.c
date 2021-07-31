@@ -145,12 +145,12 @@ void g3_start_frame(void) {
     //>>>>>>> 1.15
     // set up window vars
     window_width = grd_canvas->bm.w;
-    _biasx = _scrw = window_width << 15;
-    ww2 = _scrw >> 16;
+    biasx = scrw = window_width << 15;
+    ww2 = scrw >> 16;
 
     window_height = grd_canvas->bm.h;
-    _biasy = _scrh = window_height << 15;
-    wh2 = _scrh >> 16;
+    biasy = scrh = window_height << 15;
+    wh2 = scrh >> 16;
 
     // mark all points as free
     if (n_points) {

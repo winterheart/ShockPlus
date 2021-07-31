@@ -34,7 +34,7 @@ extern char gour_flag; // gour flag for actual polygon drawer
 
 // arrays of point handles, used in clipping
 extern g3s_phandle vbuf[];
-extern g3s_phandle _vbuf2[];
+extern g3s_phandle vbuf2[];
 
 // prototypes
 int check_and_draw_common(long c, int n_verts, g3s_phandle *p);

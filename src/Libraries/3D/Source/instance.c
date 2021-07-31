@@ -102,22 +102,22 @@ uchar start_obj_common(g3s_vector *p, g3s_angvec *o, int rotation_order) {
     g3s_matrix temp_matrix;
 
     // compute new context
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
+    view_position.gX -= p->gX;
+    view_position.gY -= p->gY;
+    view_position.gZ -= p->gZ;
 
     // copy obj offset to world to obj structure
     // used for lighting, dude
-    _wtoo_position = *p;
+    wtoo_position = *p;
 
     angles_2_matrix(o, &temp_matrix, rotation_order);
 
     // rotate view vector through instance matrix
-    g3_vec_rotate(&_view_position, &_view_position, &temp_matrix);
+    g3_vec_rotate(&view_position, &view_position, &temp_matrix);
 
     // save off to the obj_to_world matrix
     // untransposed, to get inverse
-    _wtoo_matrix = temp_matrix;
+    wtoo_matrix = temp_matrix;
 
     g3_transpose(&temp_matrix); // transpose esi in place
     instance_matrix(&temp_matrix, &view_matrix);
@@ -144,9 +144,9 @@ uchar g3_start_object_angles_y(g3s_vector *p, fixang ty) {
         return 0;
 
     // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
+    view_position.gX -= p->gX;
+    view_position.gY -= p->gY;
+    view_position.gZ -= p->gZ;
 
     return (instance_y(ty));
 }
@@ -160,13 +160,13 @@ uchar instance_y(fixang ty) {
     fix_sincos(ty, &sin_y, &cos_y);
 
     // rotate viewer vars
-    r = fix64_mul(_view_position.gX, cos_y) - fix64_mul(_view_position.gZ, sin_y);
+    r = fix64_mul(view_position.gX, cos_y) - fix64_mul(view_position.gZ, sin_y);
     temp1 = fix64_to_fix(r);
 
-    r = fix64_mul(_view_position.gX, sin_y) + fix64_mul(_view_position.gZ, cos_y);
+    r = fix64_mul(view_position.gX, sin_y) + fix64_mul(view_position.gZ, cos_y);
 
-    _view_position.gX = temp1;
-    _view_position.gZ = fix64_to_fix(r);
+    view_position.gX = temp1;
+    view_position.gZ = fix64_to_fix(r);
 
     // now modify matrix
     temp1 = update_ms(cos_y, vm1, sin_y, vm7);
@@ -190,9 +190,9 @@ uchar g3_start_object_angles_x(g3s_vector *p, fixang tx) {
         return 0;
 
     // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
+    view_position.gX -= p->gX;
+    view_position.gY -= p->gY;
+    view_position.gZ -= p->gZ;
 
     return (instance_x(tx));
 }
@@ -206,12 +206,12 @@ uchar instance_x(fixang tx) {
     fix_sincos(tx, &sin_x, &cos_x);
 
     // rotate viewer vars
-    r = fix64_mul(_view_position.gZ, sin_x) + fix64_mul(_view_position.gY, cos_x);
+    r = fix64_mul(view_position.gZ, sin_x) + fix64_mul(view_position.gY, cos_x);
     temp1 = fix64_to_fix(r);
 
-    r = fix64_mul(_view_position.gZ, cos_x) - fix64_mul(_view_position.gY, sin_x);
-    _view_position.gY = temp1;
-    _view_position.gZ = fix64_to_fix(r);
+    r = fix64_mul(view_position.gZ, cos_x) - fix64_mul(view_position.gY, sin_x);
+    view_position.gY = temp1;
+    view_position.gZ = fix64_to_fix(r);
 
     // now modify matrix
 
@@ -236,9 +236,9 @@ uchar g3_start_object_angles_z(g3s_vector *p, fixang tz) {
         return 0;
 
     // compute new view position
-    _view_position.gX -= p->gX;
-    _view_position.gY -= p->gY;
-    _view_position.gZ -= p->gZ;
+    view_position.gX -= p->gX;
+    view_position.gY -= p->gY;
+    view_position.gZ -= p->gZ;
 
     return (instance_z(tz));
 }
@@ -252,12 +252,12 @@ uchar instance_z(fixang tz) {
     fix_sincos(tz, &sin_z, &cos_z);
 
     // rotate viewer vars
-    r = fix64_mul(_view_position.gY, sin_z) + fix64_mul(_view_position.gX, cos_z);
+    r = fix64_mul(view_position.gY, sin_z) + fix64_mul(view_position.gX, cos_z);
     temp1 = fix64_to_fix(r);
 
-    r = fix64_mul(_view_position.gY, cos_z) - fix64_mul(_view_position.gX, sin_z);
-    _view_position.gX = temp1;
-    _view_position.gY = fix64_to_fix(r);
+    r = fix64_mul(view_position.gY, cos_z) - fix64_mul(view_position.gX, sin_z);
+    view_position.gX = temp1;
+    view_position.gY = fix64_to_fix(r);
 
     // now modify matrix
     temp1 = update_m(cos_z, vm1, sin_z, vm4);
@@ -285,7 +285,7 @@ uchar save_context(void) {
     // save current context
     *(g3s_matrix *)cstack_ptr = view_matrix;
     cstack_ptr += sizeof(g3s_matrix);
-    *(g3s_vector *)cstack_ptr = _view_position;
+    *(g3s_vector *)cstack_ptr = view_position;
     cstack_ptr += sizeof(g3s_vector);
 
     return 0;
@@ -298,9 +298,9 @@ void g3_scale_object(fix s) {
     // scale vm by scale, and divide view_position
     // down by scale
 
-    _view_position.gX = fix_div(_view_position.gX, s);
-    _view_position.gY = fix_div(_view_position.gY, s);
-    _view_position.gZ = fix_div(_view_position.gZ, s);
+    view_position.gX = fix_div(view_position.gX, s);
+    view_position.gY = fix_div(view_position.gY, s);
+    view_position.gZ = fix_div(view_position.gZ, s);
 
     // scale vm up by scale
     vm1 = fix_mul(vm1, s);
@@ -321,7 +321,7 @@ void g3_end_object(void) {
     cstack_depth--;
 
     cstack_ptr -= sizeof(g3s_vector);
-    _view_position = *(g3s_vector *)cstack_ptr;
+    view_position = *(g3s_vector *)cstack_ptr;
     cstack_ptr -= sizeof(g3s_matrix);
     view_matrix = *(g3s_matrix *)cstack_ptr;
 }

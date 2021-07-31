@@ -128,8 +128,8 @@ void (*rotation_table[])(g3s_matrix *) = {
 // build the view matrix from view angles, etc.
 // takes esi=pos, ebx=angles, eax=zoom, ecx=rotation order
 void g3_set_view_angles(g3s_vector *pos, g3s_angvec *angles, int rotation_order, fix zoom) {
-    _view_zoom = zoom; // mov	_view_zoom,eax	;save zoom
-    _view_position = *pos;
+    view_zoom = zoom; // mov	_view_zoom,eax	;save zoom
+    view_position = *pos;
 
     view_pitch = angles->tx;
     view_heading = angles->ty;
@@ -142,8 +142,8 @@ void g3_set_view_angles(g3s_vector *pos, g3s_angvec *angles, int rotation_order,
 // build the view matrix from an object matrix
 // takes esi=pos, ebx=matrix, eax=zoom
 void g3_set_view_matrix(g3s_vector *pos, g3s_matrix *m, fix zoom) {
-    _view_zoom = zoom;
-    _view_position = *pos;
+    view_zoom = zoom;
+    view_position = *pos;
     view_matrix = *m;
 
     process_view_matrix();
@@ -290,43 +290,43 @@ void scale_view_matrix(void) {
     fix temp_fix;
 
     // set matrix scale vector based on zoom
-    _matrix_scale.gX = FIX_UNIT; // use 1.0 as defaults
-    _matrix_scale.gY = FIX_UNIT;
-    _matrix_scale.gZ = FIX_UNIT;
+    matrix_scale.gX = FIX_UNIT; // use 1.0 as defaults
+    matrix_scale.gY = FIX_UNIT;
+    matrix_scale.gZ = FIX_UNIT;
 
-    if (_view_zoom <= FIX_UNIT)
-        _matrix_scale.gZ = _view_zoom;
+    if (view_zoom <= FIX_UNIT)
+        matrix_scale.gZ = view_zoom;
     else
-        _matrix_scale.gY = _matrix_scale.gX = fix_div(FIX_UNIT, _view_zoom);
+        matrix_scale.gY = matrix_scale.gX = fix_div(FIX_UNIT, view_zoom);
 
     // scale set matrix scale vector based on window and pixel ratio
     temp_long = fix_mul_div(window_height, pixel_ratio, window_width);
 
     if (temp_long <= FIX_UNIT)
-        _matrix_scale.gX = fix_mul(_matrix_scale.gX, temp_long);
+        matrix_scale.gX = fix_mul(matrix_scale.gX, temp_long);
     else
-        _matrix_scale.gY = fix_div(_matrix_scale.gY, temp_long);
+        matrix_scale.gY = fix_div(matrix_scale.gY, temp_long);
 
     // now actually scale the matrix
-    temp_fix = _matrix_scale.gX;
+    temp_fix = matrix_scale.gX;
     vm1 = fix_mul(vm1, temp_fix);
     vm4 = fix_mul(vm4, temp_fix);
     vm7 = fix_mul(vm7, temp_fix);
 
-    temp_fix = _matrix_scale.gY;
+    temp_fix = matrix_scale.gY;
     vm2 = fix_mul(vm2, temp_fix);
     vm5 = fix_mul(vm5, temp_fix);
     vm8 = fix_mul(vm8, temp_fix);
 
-    temp_fix = _matrix_scale.gZ;
+    temp_fix = matrix_scale.gZ;
     vm3 = fix_mul(vm3, temp_fix);
     vm6 = fix_mul(vm6, temp_fix);
     vm9 = fix_mul(vm9, temp_fix);
 
     // scale horizon vector
-    horizon_vector.gX = fix_mul(fix_mul(_matrix_scale.gY, _matrix_scale.gZ), horizon_vector.gX);
-    horizon_vector.gY = fix_mul(fix_mul(_matrix_scale.gX, _matrix_scale.gZ), horizon_vector.gY);
-    horizon_vector.gZ = fix_mul(fix_mul(_matrix_scale.gX, _matrix_scale.gY), horizon_vector.gZ);
+    horizon_vector.gX = fix_mul(fix_mul(matrix_scale.gY, matrix_scale.gZ), horizon_vector.gX);
+    horizon_vector.gY = fix_mul(fix_mul(matrix_scale.gX, matrix_scale.gZ), horizon_vector.gY);
+    horizon_vector.gZ = fix_mul(fix_mul(matrix_scale.gX, matrix_scale.gY), horizon_vector.gZ);
 }
 
 // takes point in edi, set codes in point, returns codes in bl

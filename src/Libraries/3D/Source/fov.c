@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // takes bx=FOV angle, al=axis ('X' or 'Y'), ecx=window width, edx=window height
 // returns in eax. trashes all but ebp
 
-fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height) {
+fix g3_get_zoom(char axis, fixang angle, int user_window_width, int user_window_height) {
     fix sin_val, cos_val;
     fix unscalezoom, temp1;
     int32_t templong;
@@ -64,7 +64,7 @@ fix g3_get_zoom(char axis, fixang angle, int window_width, int window_height) {
     pixel_ratio = grd_cap->aspect;
 
     // get matrix scale value for given window size
-    templong = fix_mul_div(window_height, pixel_ratio, window_width);
+    templong = fix_mul_div(user_window_height, pixel_ratio, user_window_width);
     // window and pixrat scaling affects y. see if y FOV requested
     if (templong <= FIX_UNIT) {
         if (axis != 'X')

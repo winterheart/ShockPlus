@@ -124,13 +124,13 @@ extern int star_num_projected;
 fix mag2_point(g3s_phandle p) {
     fix a, f;
 
-    a = fix_div(p->gX, _matrix_scale.gX);
+    a = fix_div(p->gX, matrix_scale.gX);
     f = fix_mul(a, a);
 
-    a = fix_div(p->gY, _matrix_scale.gY);
+    a = fix_div(p->gY, matrix_scale.gY);
     f += fix_mul(a, a);
 
-    a = fix_div(p->gZ, _matrix_scale.gZ);
+    a = fix_div(p->gZ, matrix_scale.gZ);
     f += fix_mul(a, a);
 
     return f;
