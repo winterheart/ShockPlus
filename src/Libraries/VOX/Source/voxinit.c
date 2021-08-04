@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 /*
  * $Source: n:/project/lib/src/vox/RCS/voxinit.c $
@@ -28,10 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Log: voxinit.c $
  * Revision 1.2  1994/04/21  12:00:59  jaemz
  * Added vxd_maxd to facilitate bounds checking in debug version
- * 
+ *
  * Revision 1.1  1994/04/21  10:52:54  jaemz
  * Initial revision
- * 
+ *
  */
 
 #include <stdlib.h>
@@ -52,36 +52,30 @@ int vxd_maxd;
 // pass it the maximum pixel dimension of any of the
 // voxel objects you anticipate drawing
 // returns TRUE for success, FALSE if unable to allocate
-uchar vx_init(int max_depth)
-{
-   zdxdz = (fix *)malloc(2 * max_depth * sizeof(fix));
-   zdydz = zdxdz + max_depth;
+bool vx_init(int max_depth) {
+    zdxdz = (fix *)malloc(2 * max_depth * sizeof(fix));
+    zdydz = zdxdz + max_depth;
 
-   #ifdef DBG_ON
-   vxd_maxd = max_depth;
-   #endif
+#ifdef DBG_ON
+    vxd_maxd = max_depth;
+#endif
 
-   if (zdxdz == NULL) return FALSE;
-   return TRUE;
+    if (zdxdz == NULL)
+        return false;
+    return true;
 }
 
-void vx_close()
-{
-   free(zdxdz);
+void vx_close() { free(zdxdz); }
+
+// Der, this could be a macro, and maybe should be
+void vx_init_vox(vxs_vox *v, fix pix_dist, fix pix_size, int depth, grs_bitmap *col, grs_bitmap *ht) {
+    v->pix_dist = pix_dist;
+    v->pix_size = pix_size;
+
+    v->col = col;
+    v->ht = ht;
+
+    v->w = col->w;
+    v->h = col->h;
+    v->d = depth;
 }
-
-// Der, this could be a macro, and
-// maybe should be
-void vx_init_vox(vxs_vox *v,fix pix_dist,fix pix_size,int depth,grs_bitmap *col,grs_bitmap *ht)
-{
-   v->pix_dist = pix_dist;
-   v->pix_size = pix_size;
-
-   v->col = col;
-   v->ht = ht;
-
-   v->w = col->w;
-   v->h = col->h;
-   v->d = depth;
-}
-
