@@ -49,6 +49,10 @@ if(ENABLE_OPENGL)
 	endif(MINGW)
 endif(ENABLE_OPENGL)
 
+find_package(yaml-cpp REQUIRED)
+list(APPEND SHOCK_INCLUDES ${YAML_CPP_INCLUDE_DIR})
+list(APPEND SHOCK_LIBRARIES ${YAML_CPP_LIBRARIES})
+
 find_package(SDL2 REQUIRED)
 list(APPEND SHOCK_INCLUDES ${SDL2_INCLUDE_DIRS})
 list(APPEND SHOCK_LIBRARIES ${SDL2_LIBRARIES})
@@ -307,6 +311,8 @@ include_directories(
 )
 
 set(ShockSrc
+	src/ShockSrc/Engine/OptionInfo.cpp
+	src/ShockSrc/Engine/Options.cpp
 	src/ShockSrc/Shock.cpp
 )
 
