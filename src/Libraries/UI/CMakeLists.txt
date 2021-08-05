@@ -1,7 +1,7 @@
 set(UI_SRC
 	Source/curdrw.c
 	Source/cursors.c
-	Source/event.c
+	Source/event_ui.c
 	Source/hotkey.c
 	Source/region.c
 	Source/slab.c

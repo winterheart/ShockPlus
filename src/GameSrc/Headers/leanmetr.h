@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef LEANMETR_H
 #define LEANMETR_H
 
-#include "event.h"
+#include "event_ui.h"
 #include "lg_types.h"
 
 // ---------

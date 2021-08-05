@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "array.h"
 #include "rect.h"
 #include "slab.h"
-#include "event.h"
+#include "event_ui.h"
 #include "vmouse.h"
 
 // ---------------------

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
-#include "event.h"
+#include "event_ui.h"
 
 #define MAX_MOVE_KEYBINDS  256
 
