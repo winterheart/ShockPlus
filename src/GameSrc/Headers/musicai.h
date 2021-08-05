@@ -185,7 +185,6 @@ extern uchar wait_flag;
 extern int next_mode, ai_cycle;
 extern uchar music_card;
 extern uchar music_on;
-extern uchar /*sfx_card, */ sfx_on;
 extern int cur_digi_channels;
 extern int transition_count;
 extern uint32_t last_real_time;

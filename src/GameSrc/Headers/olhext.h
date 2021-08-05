@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 //#define OLH_QBIT 0x91
-extern uchar olh_active;
 extern uchar olh_overlay_on;
 
 void olh_do_hudobjs(short xl, short yl);

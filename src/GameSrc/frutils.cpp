@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include "frsetup.h"
+#include "Engine/Options.h"
 #include "frutils.h"
 #include "gr2ss.h"
 #include "Shock.h"
@@ -106,7 +106,7 @@ void Fast_FullScreen_Copy(grs_bitmap *bm) { gr_bitmap(bm, 0, 0); }
 // Doubling routines
 
 void FastSlotDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h) {
-    if (SkipLines) {
+    if (ShockPlus::Options::enableSkipLines) {
         gr_clear(0xFF);
         // BlitLargeAlignSkip(bm->bits, destCanvas->bm.row, destCanvas->bm.bits, w, h + 1, bm->row);
     } else {
@@ -126,7 +126,7 @@ void Fast_FullScreen_Double(grs_bitmap *bm, long w, long h) {
 */
 
 void FastFullscreenDouble2Canvas(grs_bitmap *bm, grs_canvas *destCanvas, long w, long h) {
-    if (SkipLines) {
+    if (ShockPlus::Options::enableSkipLines) {
         gr_clear(0xFF);
         // BlitLargeAlignSkip(bm->bits, destCanvas->bm.row, destCanvas->bm.bits, w, h + 1, bm->row);
     } else {

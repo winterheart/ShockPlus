@@ -26,7 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Source code for inventory manipulation / display
 
-#include <string.h>
+#include <cstring>
+
+#include "Engine/Options.h"
 
 #include "2dres.h"
 #include "email.h"
@@ -2223,7 +2225,7 @@ uchar pagebutton_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
         LGCursor *c = &invent_bttn_cursor;
         LGPoint offset = {0, -1};
 
-        if ((page_button_state[cnum] == BttnDummy) || !popup_cursors)
+        if ((page_button_state[cnum] == BttnDummy) || !ShockPlus::Options::showTooltipMessages)
             c = NULL;
         last_invent_cnum = cnum;
 #ifdef SVGA_SUPPORT

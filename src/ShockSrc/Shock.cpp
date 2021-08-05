@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 #include <SDL.h>
 
+#include "Engine/Options.h"
+
 #include "InitMac.h"
 #include "Modding.h"
 #include "OpenGL.h"
@@ -58,9 +60,6 @@ SDL_Renderer *renderer;
 
 SDL_AudioDeviceID device;
 
-int num_args;
-char **arg_values;
-
 //--------------------
 //  Prototypes
 //--------------------
@@ -69,16 +68,8 @@ char **arg_values;
 //		Main function.
 //------------------------------------------------------------------------------------
 int main(int argc, char **argv) {
-    // Save the arguments for later
-
-    num_args = argc;
-    arg_values = argv;
-
-    // FIXME externalize this
-    log_set_quiet(0);
-    log_set_level(LOG_INFO);
-
-    INFO("Logger initialized");
+    if (!ShockPlus::Options::init(argc, argv))
+        return EXIT_FAILURE;
 
     // init mac managers
 
@@ -86,18 +77,11 @@ int main(int argc, char **argv) {
 
     // Initialize the preferences file.
 
-    SetDefaultPrefs();
-    LoadPrefs();
-
     // see Prefs.c
     CreateDefaultKeybindsFile(); // only if it doesn't already exist
     // even if keybinds file still doesn't exist, defaults will be set here
     LoadHotkeyKeybinds();
     LoadMoveKeybinds();
-
-    // Process some startup arguments
-
-    bool show_splash = !CheckArgument("-nosplash");
 
     // CC: Modding support! This is so exciting.
 
@@ -114,9 +98,10 @@ int main(int argc, char **argv) {
     gr_clear(0xFF);
 
     // Draw the splash screen
-
-    INFO("Showing splash screen");
-    splash_draw(show_splash);
+    if (ShockPlus::Options::showSplash) {
+        INFO("Showing splash screen");
+        splash_draw(true);
+    }
 
     // Start in the Main Menu loop
 
@@ -132,17 +117,4 @@ int main(int argc, char **argv) {
     stop_music();
 
     return 0;
-}
-
-bool CheckArgument(char *arg) {
-    if (arg == nullptr)
-        return false;
-
-    for (int i = 1; i < num_args; i++) {
-        if (strcmp(arg_values[i], arg) == 0) {
-            return true;
-        }
-    }
-
-    return false;
 }

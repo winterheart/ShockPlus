@@ -122,8 +122,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <stdlib.h> // I HATE THIS
+#include <cstdlib> // I HATE THIS
 
+#include "Engine/Options.h"
 #include "3d.h"
 #include "frcamera.h"
 #include "fr3d.h"
@@ -132,7 +133,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frshipm.h"
 #include "frflags.h"
 #include "frparams.h"
-#include "frsetup.h"
 #include "player.h"
 #include "frutils.h"
 #include "fullscrn.h"
@@ -154,10 +154,6 @@ uchar (*fr_obj_block)(void *vmptr, uchar *_sclip, int *loc);
 void (*fr_clip_start)(uchar headnorth);
 void (*fr_rend_start)(void);
 grs_bitmap *(*fr_get_tmap)(void);
-
-// Set by machine type
-bool DoubleSize = false;
-bool SkipLines = false;
 
 int (*_fr_glob_draw_call)(void *dest_canvas, void *dest_bm, int x, int y, int flags) = NULL;
 void (*_fr_glob_horizon_call)(void *dest_bm, int flags) = NULL;
@@ -184,7 +180,7 @@ fauxrend_parameters _frp = {
     {0, 0, 0, 0}};
 int _fr_last_detail = -1;
 int _fr_default_detail = 0;
-int _fr_global_detail = 3;
+//int _fr_global_detail = 3;
 #define FR_USE_GLOBAL_DETAIL 4
 
 //======== global initialization
@@ -593,7 +589,7 @@ int fr_prepare_view(frc *view) {
 
     _fr_curflags = _fr_glob_flags | _fr->flags; // for now, simply merge
     if (_fr->detail == FR_USE_GLOBAL_DETAIL)
-        det = _fr_global_detail;
+        det = ShockPlus::Options::videoDetail;
     else
         det = _fr->detail;
     if (_fr_last_detail != det)
@@ -648,7 +644,7 @@ int fr_start_view(void) {
     viewer_orientation.head = ang(EYE_H);
 
     if (_fr->detail == FR_USE_GLOBAL_DETAIL)
-        detail = _fr_global_detail;
+        detail = ShockPlus::Options::videoDetail;
     else
         detail = _fr->detail;
     if (use_opengl()) {
@@ -784,7 +780,7 @@ int fr_send_view(void) {
     }
 
     // Determine if it's okay to double (it's not okay when rendering the 360 view).
-    ok_to_double = (DoubleSize && !view360_is_rendering);
+    ok_to_double = (ShockPlus::Options::halfResolution && !view360_is_rendering);
 
     // If double sizing, double-size the rendered bitmap onto the intermediate buffer,
     // before doing any overlays.  Don't do it if rendering the 360 view.

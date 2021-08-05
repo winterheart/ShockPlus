@@ -26,10 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  support for render functions and tools, such as mouse and so on
  */
 
+#include "Engine/Options.h"
 #include "3dinterp.h"
 #include "map.h"
 #include "frintern.h"
-#include "frsetup.h"
 #include "fullscrn.h"
 #include "gamerend.h"
 #include "textmaps.h"
@@ -54,7 +54,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // or have a separate fritrfce or something
 // rather than externing everything a couple of 30 lines down
 
-#include "rendtool.h"
 #include "frtypes.h" // so we get _fr, so we can get size + canvas and all
 #include "frparams.h"
 #include "frflags.h"
@@ -174,7 +173,7 @@ void rend_mouse_hide(void) {
         mouselocked = 1;
         MouseLock++; // keep mouse locked while we blit
 
-        if (DoubleSize && !view360_is_rendering) // If double-sizing, then draw the cursor in the
+        if (ShockPlus::Options::halfResolution && !view360_is_rendering) // If double-sizing, then draw the cursor in the
         {                                        // temporary doubled canvas.
             CursorCanvas = &gDoubleSizeOffCanvas;
             if (!full_game_3d) // In slot view, adjust the cursor position.
@@ -476,7 +475,7 @@ void game_redrop_rad(int rad_mod) {
 }
 
 // errtype is icky
-void change_detail_level(byte new_level) { _fr_global_detail = new_level; }
+void change_detail_level(byte new_level) { ShockPlus::Options::videoDetail = static_cast<ShockPlus::Options::VideoDetail>(new_level); }
 
 void set_global_lighting(short l_lev) { _frp.lighting.global_mod += l_lev; }
 

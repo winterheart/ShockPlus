@@ -25,10 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
-#include "Prefs.h"
+#include "Engine/Options.h"
 
 #include "ai.h"
 #include "audiolog.h"
@@ -56,7 +56,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objsim.h"
 #include "objstuff.h"
 #include "objuse.h"
-#include "olhext.h"
 #include "otrip.h"
 #include "physics.h"
 #include "player.h"
@@ -1102,10 +1101,8 @@ errtype trap_questbit_func(int p1, int p2, int p3, int p4) {
 
     if (p1 == 0x2091) // KLC - special hack for auto shutoff of on-line help.
     {
-        olh_active = FALSE; // KLC - this is kept in a global now.
-
-        gShockPrefs.goOnScreenHelp = FALSE; // Yeah, got to update this one too and
-        SavePrefs();                        // save the prefs out to disk.
+        ShockPlus::Options::showOnScreenHelp = false; // Yeah, got to update this one too and save the prefs out to disk.
+        ShockPlus::Options::save();
         return (OK);
     }
 

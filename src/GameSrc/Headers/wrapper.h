@@ -97,10 +97,6 @@ errtype wrapper_create_mouse_region(LGRegion *root);
 extern char save_game_name[];
 extern char comments[NUM_SAVE_SLOTS + 1][SAVE_COMMENT_LEN];
 
-extern uchar curr_vol_lev;
-extern uchar curr_sfx_vol;
-extern uchar curr_alog_vol;
-
 #ifdef SVGA_SUPPORT
 extern uchar wrapper_screenmode_hack;
 #endif

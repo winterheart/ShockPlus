@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/28 08:38:42 $
  */
 
+#include "Engine/Options.h"
 #include "criterr.h"
 #include "objects.h"
 #include "player.h"
@@ -53,14 +54,14 @@ char priorities[NUM_DIGI_FX];
 int digi_timer_id;
 void start_asynch_digi_fx() {
 #ifdef ASYNCH_DIGI
-    if (sfx_on)
+    if (ShockPlus::Options::enableSFX)
         tm_activate_process(digi_timer_id);
 #endif
 }
 
 void stop_asynch_digi_fx() {
 #ifdef ASYNCH_DIGI
-    if (sfx_on)
+    if (ShockPlus::Options::enableSFX)
         tm_deactivate_process(digi_timer_id);
 #endif
 }
@@ -69,10 +70,10 @@ void stop_asynch_digi_fx() {
 
 errtype stop_digi_fx() {
 #ifdef AUDIOLOGS
-    if (audiolog_setting)
+    if (ShockPlus::Options::alogPlayback)
         audiolog_stop();
 #endif
-    if (sfx_on) {
+    if (ShockPlus::Options::enableSFX) {
         snd_kill_all_samples();
         sound_frame_update();
     }
@@ -179,7 +180,7 @@ uchar set_sample_pan_gain(snd_digi_parms *sdp) {
                                    objs[PLAYER_OBJ].loc.h << 8);
     } else if (sdp->snd_ref == 0) { // audiolog
                                     // following is temp      sdp->vol=curr_alog_vol;
-        sdp->vol = curr_alog_vol;
+        sdp->vol = ShockPlus::Options::voiceVolume;
         snd_sample_reload_parms(sdp);
         return (FALSE);
     } else {
@@ -195,7 +196,7 @@ uchar set_sample_pan_gain(snd_digi_parms *sdp) {
      */
     if (vol == VOL_FULL)
         vol = 127;
-    vol = vol * curr_sfx_vol / 100;
+    vol = vol * ShockPlus::Options::sfxVolume / 100;
     sdp->vol = vol * temp_vol / VOL_FULL;
     snd_sample_reload_parms(sdp);
     return (FALSE);
@@ -272,7 +273,7 @@ int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort 
     int retval, real_code = sfx_code, len;
     uchar *addr;
 
-    if (!sfx_on)
+    if (!ShockPlus::Options::enableSFX)
         return -2;
     if ((sfx_code == -1) || (sfx_code == 255))
         return -1; // why do we call this with things we dont use?
@@ -304,7 +305,7 @@ int play_digi_fx_master(int sfx_code, int num_loops, ObjID id, ushort x, ushort 
 #ifdef AUDIOLOGS
     if (sfx_code != real_code) {
         s_dprm.data = 0;
-        s_dprm.vol = volumes[sfx_code] * curr_sfx_vol / 100;
+        s_dprm.vol = volumes[sfx_code] * ShockPlus::Options::sfxVolume / 100;
     } else
 #endif
     {

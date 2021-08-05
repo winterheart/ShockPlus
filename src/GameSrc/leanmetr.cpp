@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "Engine/Options.h"
 #include "2dres.h"
 #include "MODELS/pelvis.h"
 #include "faketime.h"
@@ -32,7 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "player.h"
 #include "criterr.h"
 #include "froslew.h"
-#include "frsetup.h"
 #include "fullscrn.h"
 #include "leanmetr.h"
 #include "objsim.h"
@@ -584,7 +584,7 @@ void zoom_to_lean_meter(void) {
     current_meter_region = PICK_METER_REGION(full_game_3d);
     RECT_MOVE(&end, MakePoint(LEANOMETER_X(), LEANOMETER_Y()));
     mouse_get_xy(&pos.x, &pos.y);
-    if (!DoubleSize)
+    if (!ShockPlus::Options::halfResolution)
         ss_point_convert(&(pos.x), &(pos.y), TRUE);
     RECT_MOVE(&start, pos);
     zoom_rect(&start, &end);

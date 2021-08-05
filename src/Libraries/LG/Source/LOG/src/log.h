@@ -8,6 +8,10 @@
 #ifndef LOG_H
 #define LOG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -28,7 +32,7 @@ typedef struct {
 typedef void (*log_LogFn)(log_Event *ev);
 typedef void (*log_LockFn)(bool lock, void *udata);
 
-enum { LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
+enum LogLevel { LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
 
 #define log_trace(...) log_log(LOG_TRACE, __FILE__, __LINE__, __VA_ARGS__)
 #define log_debug(...) log_log(LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
@@ -45,5 +49,9 @@ int log_add_callback(log_LogFn fn, void *udata, int level);
 int log_add_fp(FILE *fp, int level);
 
 void log_log(int level, const char *file, int line, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

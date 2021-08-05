@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
 
+#include "Engine/Options.h"
 #include "Shock.h"
 #include "Prefs.h"
 
@@ -39,7 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "physics.h"
 #include "setup.h"
 #include "tickcount.h"
-#include "tools.h"
 #include "weapons.h"
 
 #include "Xmi.h"
@@ -734,7 +734,7 @@ errtype music_init() {
     #endif
        }
     */
-    if (gShockPrefs.soBackMusic) {
+    if (ShockPlus::Options::enableSound) {
         //	if (music_card)
         //	{
         if (MacTuneInit() == 0) // If no error, go ahead and start up.
@@ -743,8 +743,8 @@ errtype music_init() {
             mlimbs_AI_init();
         } else // else turn off the music globals and prefs
         {
-            gShockPrefs.soBackMusic = FALSE;
-            SavePrefs();
+            ShockPlus::Options::enableSound = false;
+            ShockPlus::Options::save();
             music_on = mlimbs_on = FALSE;
         }
         //	}

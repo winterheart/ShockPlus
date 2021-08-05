@@ -23,14 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/25 08:14:55 $
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstring>
+#include <cctype>
+
+#include "Engine/Options.h"
 
 #include "2dres.h"
-#include "Prefs.h"
 #include "fullscrn.h"
-#include "hotkey.h"
 #include "invdims.h"
 #include "invent.h"
 #include "mfdint.h"
@@ -299,7 +299,7 @@ void email_intercept(void) {
     read_email(0, intercept_hack_num);
     shodan_sfx_go = TRUE;
 #ifdef AUDIOLOGS
-    if (!audiolog_setting)
+    if (!ShockPlus::Options::alogPlayback)
 #endif
     {
         if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
@@ -755,7 +755,7 @@ void mfd_emailmug_expose(MFD *mfd, ubyte control) {
         }
 
 #ifdef AUDIOLOGS
-        if (!audiolog_setting)
+        if (!ShockPlus::Options::alogPlayback)
 #endif
             if (shodan_sfx_go) {
                 if (!digi_fx_playing(SFX_SHODAN_STRONG, NULL))
@@ -844,7 +844,7 @@ void read_email(Id new_base, int num) {
     errtype alog_rv = ERR_NOEFFECT;
 #endif
     // KLC - use a global preference now   ubyte terseness = player_struct.terseness;
-    ubyte terseness = gShockPrefs.goMsgLength;
+    ubyte terseness = ShockPlus::Options::messageFormat; // gShockPrefs.goMsgLength;
 
     email_curr_page = 0;
     if (new_base != 0)
@@ -875,7 +875,7 @@ void read_email(Id new_base, int num) {
     if (inventory_page >= 0)
         old_invent_page = inventory_page;
 #ifdef AUDIOLOGS
-    if ((alog_rv != OK) || (audiolog_setting == 2)) {
+    if ((alog_rv != OK) || (ShockPlus::Options::alogPlayback == ShockPlus::Options::ALOG_BOTH)) {
 #endif
         inventory_draw_new_page(INV_EMAILTEXT_PAGE);
         next_text_line = 0;
@@ -901,7 +901,7 @@ void read_email(Id new_base, int num) {
         if (mug_num >= BASE_VMAIL) // video email
         {
 #ifdef AUDIOLOGS
-            if ((alog_rv != OK) || (audiolog_setting == 2)) {
+            if ((alog_rv != OK) || (ShockPlus::Options::alogPlayback == ShockPlus::Options::ALOG_BOTH)) {
 #endif
                 // draw the text for the vmail before playing vmail
                 email_draw_text(current_email_base + current_email, current_email_base == EMAIL_BASE_ID);
@@ -936,7 +936,7 @@ void read_email(Id new_base, int num) {
         }
     }
 #ifdef AUDIOLOGS
-    if ((alog_rv != OK) || (audiolog_setting == 2)) {
+    if ((alog_rv != OK) || (ShockPlus::Options::alogPlayback == ShockPlus::Options::ALOG_BOTH)) {
 #endif
         email_draw_text(current_email_base + current_email, current_email_base == EMAIL_BASE_ID);
 #ifdef AUDIOLOGS

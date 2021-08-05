@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "Engine/Options.h"
+
 #include "froslew.h"
 #include "leanmetr.h"
 #include "mainloop.h"
@@ -58,7 +60,7 @@ void mouse_look_physics() {
     } else {
         // player head controls
         mvelx *= -mlook_hsens;
-        mvely *= (gShockPrefs.goInvertMouseY ? mlook_vsens : -mlook_vsens);
+        mvely *= (ShockPlus::Options::invertMouseY ? mlook_vsens : -mlook_vsens);
 
         if (mvely != 0) {
             // Moving the eye up angle is easy

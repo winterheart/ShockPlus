@@ -23,8 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/21 21:40:54 $
  */
 
-#include <string.h>
+#include <cstring>
 
+#include "Engine/Options.h"
 #include "audiolog.h"
 #include "objwpn.h"
 #include "physics.h"
@@ -96,7 +97,7 @@ errtype init_player(Player *pplr) {
     memmove(pplr->difficulty, &tmpdiff, 4);
 
     // Set appropriate non-zero things.
-    pplr->detail_level = _fr_global_detail;
+    pplr->detail_level = ShockPlus::Options::videoDetail;
     pplr->level = 1;
     for (i = 0; i < NUM_LEVELS; i++)
         pplr->initial_shodan_vals[i] = -1;
@@ -133,7 +134,7 @@ errtype init_player(Player *pplr) {
         j = (RndRange(&effect_rnd, 0, 9) << 8) | (RndRange(&effect_rnd, 0, 9) << 4) | RndRange(&effect_rnd, 0, 9);
         QUESTVAR_SET(REACTOR_COMBO_QVAR + 1, j);
     }
-    QUESTVAR_SET(LANGUAGE_QVAR, which_lang);
+    QUESTVAR_SET(LANGUAGE_QVAR, ShockPlus::Options::language);  // TODO: unuse this
 
     pplr->fatigue_regen = 0;
     pplr->fatigue_regen_base = 100;

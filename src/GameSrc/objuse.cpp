@@ -23,9 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/28 06:38:32 $
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
+#include "Engine/Options.h"
 #include "ai.h"
 #include "amap.h"
 #include "audiolog.h"
@@ -39,7 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effect.h"
 #include "email.h"
 #include "faketime.h"
-#include "frsetup.h"
 #include "fullscrn.h"
 #include "gamestrn.h"
 #include "gr2ss.h"
@@ -104,7 +104,7 @@ void zoom_mfd(int mfd, bool shifted) {
         mouse_look_off();
 
     ucp = use_cursor_pos;
-    if (!DoubleSize)
+    if (!ShockPlus::Options::halfResolution)
         ss_point_convert(&ucp.x, &ucp.y, TRUE);
     RECT_MOVE(&start, ucp);
     mfd_zoom_rect(&start, mfd);

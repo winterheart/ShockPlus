@@ -39,8 +39,6 @@ extern bool audiolog_playing(int email_id);
 extern uchar audiolog_cancel_func(ushort keycode, uint32_t context, intptr_t data);
 
 extern int curr_alog;
-extern uchar audiolog_setting;
 extern char secret_pending_hack;
-extern char which_lang;
 
 #endif

@@ -33,9 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef AUDIOLOGS
 #include "audiolog.h"
 #endif
-#include "popups.h"
+
 #include "olhext.h"
-#include "frsetup.h"
 #include "fullscrn.h"
 #include "hkeyfunc.h"
 #include "hotkey.h"
@@ -53,250 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------
 //  Filenames
 //--------------------
-static const char *PREFS_FILENAME = "prefs.txt";
 static const char *KEYBINDS_FILENAME = "keybinds.txt";
-
-//--------------------
-//  Globals
-//--------------------
-ShockPrefs gShockPrefs;
-char which_lang;
-uchar sfx_on = TRUE;
-
-//--------------------
-//  Externs
-//--------------------
-
-static const char *PREF_LANGUAGE = "language";
-static const char *PREF_CAPTUREMOUSE = "capture-mouse";
-static const char *PREF_INVERTMOUSEY = "invert-mousey";
-static const char *PREF_MUSIC_VOL = "music-volume";
-static const char *PREF_SFX_VOL = "sfx-volume";
-static const char *PREF_ALOG_VOL = "alog-volume";
-static const char *PREF_VIDEOMODE = "video-mode";
-static const char *PREF_HALFRES = "half-resolution";
-static const char *PREF_DETAIL = "detail";
-static const char *PREF_USE_OPENGL = "use-opengl";
-static const char *PREF_TEX_FILTER = "texture-filter";
-static const char *PREF_ONSCR_HELP = "onscreen-help";
-static const char *PREF_GAMMA = "gamma";
-static const char *PREF_MSG_LENGTH = "message-length";
-static const char *PREF_ALOG_SETTING = "alog-setting";
-static const char *PREF_MIDI_BACKEND = "midi-backend";
-static const char *PREF_MIDI_OUTPUT = "midi-output";
-
-//--------------------------------------------------------------------
-//	  Initialize the preferences to their default settings.
-//--------------------------------------------------------------------
-void SetDefaultPrefs(void) {
-
-    gShockPrefs.prefVer = 0;
-    gShockPrefs.prefPlayIntro = 1; // First time through, play the intro
-    gShockPrefs.goPopupLabels = true;
-    gShockPrefs.soBackMusic = true;
-#ifdef USE_FLUIDSYNTH
-    gShockPrefs.soMidiBackend = 2; // default to fluidsynth when available
-#else
-    gShockPrefs.soMidiBackend = 0; // default to adlmidi
-#endif
-    gShockPrefs.soMidiOutput = 0; // default to zero
-    gShockPrefs.soSoundFX = true;
-    gShockPrefs.doUseQD = false;
-
-    // saved in prefs file
-
-    gShockPrefs.goLanguage = 0; // English
-    gShockPrefs.goCaptureMouse = true;
-    gShockPrefs.goInvertMouseY = false;
-    gShockPrefs.soMusicVolume = 75;
-    gShockPrefs.soSfxVolume = 100;
-    gShockPrefs.soAudioLogVolume = 100;
-    gShockPrefs.doVideoMode = 3;
-    gShockPrefs.doResolution = 0; // High-res.
-    gShockPrefs.doDetail = 3;     // Max detail.
-    gShockPrefs.doUseOpenGL = false;
-    gShockPrefs.doTextureFilter = 0; // unfiltered
-    gShockPrefs.goOnScreenHelp = true;
-    gShockPrefs.doGamma = 29;    // Default gamma (29 out of 100).
-    gShockPrefs.goMsgLength = 0; // Normal
-    audiolog_setting = 1;
-
-    SetShockGlobals();
-}
-
-static char *GetPrefsPathFilename(void) {
-    static char filename[512];
-
-    FILE *f = fopen(PREFS_FILENAME, "r");
-    if (f != NULL) {
-        fclose(f);
-        strcpy(filename, PREFS_FILENAME);
-    } else {
-        char *p = SDL_GetPrefPath("Interrupt", "SystemShock");
-        snprintf(filename, sizeof(filename), "%s%s", p, PREFS_FILENAME);
-        SDL_free(p);
-    }
-
-    return filename;
-}
-
-static char *trim(char *s) {
-    while (*s && isspace(*s))
-        s++;
-    char *c = &s[strlen(s) - 1];
-    while (c >= s && isspace(*c))
-        *(c--) = '\0';
-    return s;
-}
-
-static bool is_true(const char *s) {
-    return strcasecmp(s, "yes") == 0 || strcasecmp(s, "true") == 0 || strcmp(s, "1") == 0;
-}
-
-//--------------------------------------------------------------------
-//	  Locate the preferences file and load them to set our global pref settings.
-//--------------------------------------------------------------------
-int16_t LoadPrefs(void) {
-    FILE *f = fopen(GetPrefsPathFilename(), "r");
-    if (!f) {
-        // file can't be open, write default preferences
-        return SavePrefs();
-    }
-
-    char line[64];
-    while (fgets(line, sizeof(line), f)) {
-        char *eq = strchr(line, '=');
-        if (!eq)
-            continue;
-        *eq = '\0';
-
-        const char *key = trim(line);
-        const char *value = trim(eq + 1);
-
-        if (strcasecmp(key, PREF_LANGUAGE) == 0) {
-            int lang = atoi(value);
-            if (lang >= 0 && lang <= 2)
-                gShockPrefs.goLanguage = lang;
-        } else if (strcasecmp(key, PREF_CAPTUREMOUSE) == 0) {
-            gShockPrefs.goCaptureMouse = is_true(value);
-        } else if (strcasecmp(key, PREF_INVERTMOUSEY) == 0) {
-            gShockPrefs.goInvertMouseY = is_true(value);
-        } else if (strcasecmp(key, PREF_MUSIC_VOL) == 0) {
-            int vol = atoi(value);
-            if (vol >= 0 && vol <= 100) {
-                gShockPrefs.soBackMusic = vol > 0;
-                gShockPrefs.soMusicVolume = vol;
-            }
-        } else if (strcasecmp(key, PREF_SFX_VOL) == 0) {
-            int vol = atoi(value);
-            if (vol >= 0 && vol <= 100) {
-                gShockPrefs.soSoundFX = vol > 0;
-                gShockPrefs.soSfxVolume = vol;
-            }
-        } else if (strcasecmp(key, PREF_ALOG_VOL) == 0) {
-            int vol = atoi(value);
-            if (vol >= 0 && vol <= 100)
-                gShockPrefs.soAudioLogVolume = vol;
-        } else if (strcasecmp(key, PREF_VIDEOMODE) == 0) {
-            int mode = atoi(value);
-            if (mode >= 0 && mode <= 4)
-                gShockPrefs.doVideoMode = mode;
-        } else if (strcasecmp(key, PREF_HALFRES) == 0) {
-            gShockPrefs.doResolution = is_true(value);
-        } else if (strcasecmp(key, PREF_DETAIL) == 0) {
-            int detail = atoi(value);
-            if (detail >= 0 && detail <= 3)
-                gShockPrefs.doDetail = detail;
-        } else if (strcasecmp(key, PREF_USE_OPENGL) == 0) {
-            gShockPrefs.doUseOpenGL = is_true(value);
-        } else if (strcasecmp(key, PREF_TEX_FILTER) == 0) {
-            int mode = atoi(value);
-            if (mode >= 0 && mode <= 1)
-                gShockPrefs.doTextureFilter = (short)mode;
-        } else if (strcasecmp(key, PREF_ONSCR_HELP) == 0) {
-            gShockPrefs.goOnScreenHelp = is_true(value);
-        } else if (strcasecmp(key, PREF_GAMMA) == 0) {
-            int gamma = atoi(value);
-            if (gamma < 10)
-                gamma = 10;
-            if (gamma > 100)
-                gamma = 100;
-            gShockPrefs.doGamma = gamma;
-        } else if (strcasecmp(key, PREF_MSG_LENGTH) == 0) {
-            int ml = atoi(value);
-            if (ml >= 0 && ml <= 1)
-                gShockPrefs.goMsgLength = ml;
-        } else if (strcasecmp(key, PREF_ALOG_SETTING) == 0) {
-            int as = atoi(value);
-            if (as >= 0 && as <= 2)
-                audiolog_setting = as;
-        } else if (strcasecmp(key, PREF_MIDI_BACKEND) == 0) {
-            int mb = atoi(value);
-            if (mb >= 0 && mb <= 2)
-                gShockPrefs.soMidiBackend = (short)mb;
-        } else if (strcasecmp(key, PREF_MIDI_OUTPUT) == 0) {
-            int mo = atoi(value);
-            if (mo >= 0)
-                gShockPrefs.soMidiOutput = (short)mo;
-        }
-    }
-
-    fclose(f);
-    SetShockGlobals();
-    return 0;
-}
-
-//--------------------------------------------------------------------
-//	  Save global settings in the preferences file.
-//--------------------------------------------------------------------
-int16_t SavePrefs(void) {
-    INFO("Saving preferences");
-
-    FILE *f = fopen(GetPrefsPathFilename(), "w");
-    if (!f) {
-        printf("ERROR: Failed to open preferences file\n");
-        return -1;
-    }
-
-    fprintf(f, "%s = %d\n", PREF_LANGUAGE, which_lang);
-    fprintf(f, "%s = %s\n", PREF_CAPTUREMOUSE, gShockPrefs.goCaptureMouse ? "yes" : "no");
-    fprintf(f, "%s = %s\n", PREF_INVERTMOUSEY, gShockPrefs.goInvertMouseY ? "yes" : "no");
-    fprintf(f, "%s = %d\n", PREF_MUSIC_VOL, curr_vol_lev);
-    fprintf(f, "%s = %d\n", PREF_SFX_VOL, sfx_on ? curr_sfx_vol : 0);
-    fprintf(f, "%s = %d\n", PREF_ALOG_VOL, curr_alog_vol);
-    fprintf(f, "%s = %d\n", PREF_VIDEOMODE, mode_id);
-    fprintf(f, "%s = %s\n", PREF_HALFRES, DoubleSize ? "yes" : "no");
-    fprintf(f, "%s = %d\n", PREF_DETAIL, _fr_global_detail);
-    fprintf(f, "%s = %s\n", PREF_USE_OPENGL, gShockPrefs.doUseOpenGL ? "yes" : "no");
-    fprintf(f, "%s = %d\n", PREF_TEX_FILTER, gShockPrefs.doTextureFilter);
-    fprintf(f, "%s = %s\n", PREF_ONSCR_HELP, gShockPrefs.goOnScreenHelp ? "yes" : "no");
-    fprintf(f, "%s = %d\n", PREF_GAMMA, gShockPrefs.doGamma);
-    fprintf(f, "%s = %d\n", PREF_MSG_LENGTH, gShockPrefs.goMsgLength);
-    fprintf(f, "%s = %d\n", PREF_ALOG_SETTING, audiolog_setting);
-    fprintf(f, "%s = %d\n", PREF_MIDI_BACKEND, gShockPrefs.soMidiBackend);
-    fprintf(f, "%s = %d\n", PREF_MIDI_OUTPUT, gShockPrefs.soMidiOutput);
-    fclose(f);
-    return 0;
-}
-
-//--------------------------------------------------------------------
-//  Set the corresponding Shock globals from the prefs structure.
-//--------------------------------------------------------------------
-static void SetShockGlobals(void) {
-    popup_cursors = gShockPrefs.goPopupLabels;
-    olh_active = gShockPrefs.goOnScreenHelp;
-    which_lang = gShockPrefs.goLanguage;
-
-    sfx_on = gShockPrefs.soSoundFX;
-    curr_vol_lev = gShockPrefs.soMusicVolume;
-    curr_sfx_vol = gShockPrefs.soSfxVolume;
-    curr_alog_vol = gShockPrefs.soAudioLogVolume;
-
-    mode_id = gShockPrefs.doVideoMode;
-    DoubleSize = (gShockPrefs.doResolution == 1); // Set this True for low-res.
-    SkipLines = gShockPrefs.doUseQD;
-    _fr_global_detail = gShockPrefs.doDetail;
-}
 
 //************************************************************************************
 
@@ -573,7 +329,7 @@ static char *GetKeybindsPathFilename(void) {
 
 // all hotkey initialization and hotkey_add()s are done in this function
 // also handles setting fire keybinds
-void LoadHotkeyKeybinds(void) {
+void LoadHotkeyKeybinds() {
     FILE *f;
     char temp[512], *p;
     const char *string;
@@ -872,7 +628,7 @@ static struct {
 
                      {NULL, 0}};
 
-void LoadMoveKeybinds(void) {
+void LoadMoveKeybinds() {
     FILE *f;
     char temp[512], *p, move_used[NUM_MOVES];
     const char *string;
@@ -1084,7 +840,7 @@ static void WriteMoveName(int move, FILE *f) {
 }
 
 // create default keybinds file if it doesn't already exist
-void CreateDefaultKeybindsFile(void) {
+void CreateDefaultKeybindsFile() {
     FILE *f;
     char *filename = GetKeybindsPathFilename();
     int i, ch;

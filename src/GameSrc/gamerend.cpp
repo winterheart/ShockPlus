@@ -23,7 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/25 08:22:19 $
  */
 
-#include <stdlib.h>
+#include <cstdlib>
+
+#include "Engine/Options.h"
 
 #include "tools.h"
 
@@ -35,7 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cybstrng.h" // for resurrect text
 #include "gamestrn.h"
 #include "gamescr.h"
-#include "frsetup.h"
 #include "game_screen.h"
 #include "mainloop.h"
 #include "musicai.h"
@@ -283,9 +284,9 @@ void do_secret_fx(void) { // boy is this a hack....
                 mfd_change_slot(MFD_RIGHT, MFD_INFO_SLOT);
 // KLC-duplicate mail               add_email_datamunge(FAKEWIN_EMAIL_MUNGE, FALSE);
 #ifdef AUDIOLOGS
-                if (audiolog_setting)
+                if (ShockPlus::Options::alogPlayback)
                     audiolog_play(FAKEWIN_EMAIL_MUNGE);
-                if (audiolog_setting != 1)
+                if (ShockPlus::Options::alogPlayback != ShockPlus::Options::ALOG_SPEECH)
 #endif
                     read_email(RES_paper0, FAKEWIN_PAPER);
                 fr_global_mod_flag(0, FR_SFX_MASK);
@@ -353,7 +354,7 @@ void gamesys_render_effects(void) {
             {
                 mx = mouse_attack_x;
                 my = mouse_attack_y;
-                if (!DoubleSize)
+                if (!ShockPlus::Options::halfResolution)
                     ss_point_convert(&mx, &my, TRUE);
                 else
                     ui_mouse_get_xy(&mx, &my);
@@ -381,7 +382,7 @@ void gamesys_render_effects(void) {
                                 if ((dat->id == beam_effect_id) && beam_effect_id) {
                                     mx = (dat->xl + dat->xh) / 2;
                                     my = (dat->yl + dat->yh) / 2;
-                                    if (DoubleSize) {
+                                    if (ShockPlus::Options::halfResolution) {
                                         mx *= 2;
                                         my *= 2;
                                     }
@@ -559,7 +560,7 @@ int gamesys_draw_func(void *fake_dest_canvas, void *fake_dest_bm, int x, int y, 
             orig_h = dest_bm->h;
 
             // KLC - adjust x and y if in doublesize mode.
-            if (DoubleSize) {
+            if (ShockPlus::Options::halfResolution) {
                 x *= 2;
                 y *= 2;
                 if (y > 0)

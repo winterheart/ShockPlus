@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Includes for example mfd.
 
+#include "Engine/Options.h"
+
 #include "2dres.h"
 #include "bark.h"
 #include "mfdext.h"
@@ -128,7 +130,7 @@ void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color) {
     mfd_bark_color = color;
     mfd_bark_mug = mug_id;
 #ifdef AUDIOLOGS
-    if ((audiolog_setting) && (REFID(string_id) == RES_traps))
+    if ((ShockPlus::Options::alogPlayback) && (REFID(string_id) == RES_traps))
         alog_rv = audiolog_bark_play(string_id - REF_STR_TrapZeroMessage);
 #else
     if ((mug_id >= FIRST_SHODAN_BARK) && (mug_id <= FIRST_SHODAN_BARK + NUM_SHODAN_MUGS - 1))
@@ -136,7 +138,7 @@ void long_bark(ObjID speaker_id, uchar mug_id, int string_id, ubyte color) {
 #endif
 
 #ifdef AUDIOLOGS
-    if ((alog_rv != OK) || (audiolog_setting == 2))
+    if ((alog_rv != OK) || (ShockPlus::Options::alogPlayback == ShockPlus::Options::ALOG_BOTH))
 #endif
     {
         mfd_notify_func(MFD_BARK_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);
