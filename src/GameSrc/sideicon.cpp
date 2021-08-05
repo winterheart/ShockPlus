@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Engine/Options.h"
 
-#include "event.h"
 #include "game_screen.h"
 #include "sideicon.h"
 #include "sideart.h"

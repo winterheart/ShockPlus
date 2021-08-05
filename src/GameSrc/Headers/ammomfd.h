@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef AMMOMFD_H
 #define AMMOMFD_H
 
-#include "event.h"
+#include "event_ui.h"
 #include "mfdint.h"
 
 void mfd_ammo_expose(ubyte control);

@@ -167,14 +167,6 @@ void store_x_span(int y, int lx, int rx) {
         span_right(y, c_span) = rx;
     }
     _fr_sdbg(VECSPEW, mprintf("Put %d->%d at span %d of %d\n", lx, rx, c_span, y));
-
-#ifdef _FR_TILEMAP
-    if (fr_highlights) {
-        LGPoint p;
-        for (p.x = lx, p.y = y; p.x <= rx; p.x++)
-            TileMapSetHighlight(NULL, p, 0, TRUE);
-    }
-#endif // _FR_TILEMAP
 }
 
 void _fr_sclip_line(MapElem *sp_base, int len, int val) {

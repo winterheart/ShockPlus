@@ -36,7 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "invpages.h"
 #include "gamescr.h"
 #include "mainloop.h"
-#include "event.h"
 #include "hkeyfunc.h"
 #include "gamewrap.h"
 #include "colors.h"

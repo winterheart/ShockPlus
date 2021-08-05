@@ -37,7 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "musicai.h"
 #include "colors.h"
-#include "event.h"
 #include "gamestrn.h"
 #include "game_screen.h"
 #include "hotkey.h"

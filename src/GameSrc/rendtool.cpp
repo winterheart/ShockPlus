@@ -57,7 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frtypes.h" // so we get _fr, so we can get size + canvas and all
 #include "frparams.h"
 #include "frflags.h"
-#include "tilemap.h"
 #include "fr3d.h"
 #include "frquad.h"
 
@@ -147,8 +146,6 @@ grs_bitmap *game_fr_tmap_64(void);
 grs_bitmap *game_fr_tmap_full(void);
 void game_rend_start(void);
 void game_fr_clip_start(uchar headnorth);
-
-void fauxrend_camera_setfunc(TileCamera *tc);
 
 // Note that I have fixed this so that the cursor does not flicker.
 // It just works.  Note its simplistic beauty.	I love this job.
@@ -486,14 +483,6 @@ void rendedit_process_tilemap(FullMap *fmap, LGRect *r, uchar newMap) {
     if (newMap)
         fr_compile_restart(fmap);
     fr_compile_rect(fmap, r->ul.x, r->ul.y, r->lr.x, r->lr.y, FALSE);
-}
-
-// lets move this to the tilemap, eh?
-void fauxrend_camera_setfunc(TileCamera *tc) {
-    tc->x = last_coor(EYE_X);
-    tc->y = last_coor(EYE_Y);
-    tc->theta = last_ang(EYE_H) - FIXANG_PI / 2;
-    tc->show = TRUE;
 }
 
 extern fauxrend_context *_sr;

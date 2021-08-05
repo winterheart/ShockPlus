@@ -87,9 +87,6 @@ int _fr_x_cen, _fr_y_cen; /* center tile for eye */
 
 // static uchar cyber_on;
 
-#ifdef _FR_TILEMAP
-static int tile_x, tile_y; /* tilemap x,y */
-#endif
 
 #ifdef PIPE_POINTUP
 // set_point_parms
@@ -186,18 +183,6 @@ int fr_pipe_freemem(void) { _fr_ret; }
 int fr_pipe_start(int rad) {
     _fr_x_cen = coor(EYE_X) >> (8 + MAP_SH);
     _fr_y_cen = coor(EYE_Y) >> (8 + MAP_SH);
-#ifdef _FR_TILEMAP
-    {
-        LGPoint p;
-        TileMapGetCursor(NULL, &p);
-        tile_x = p.x;
-        tile_y = p.y;
-        if (fr_highlights) {
-            TileMapClearHighlights(NULL);
-            TileMapRedrawSquares(NULL, NULL);
-        }
-    }
-#endif // _FR_TILEMAP
 #ifdef NOT_IMPLEMENTED
 // hack_off=fr_detail_master; if (hack_off==3) hack_off=2;
 #endif
