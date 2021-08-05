@@ -34,13 +34,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NUM_HOTKEYS 50 // an arbitrary constant
 
 // Hotkey contexts
-#define DEMO_CONTEXT  0x01
-#define EDIT_CONTEXT  0x02
+#define DEMO_CONTEXT 0x01
+#define EDIT_CONTEXT 0x02
 #define CYBER_CONTEXT 0x04
 #define SETUP_CONTEXT 0x08
 #define MWORK_CONTEXT 0x10
-#define SVGA_CONTEXT  0x20
-#define AMAP_CONTEXT  0x40
+#define SVGA_CONTEXT 0x20
+#define AMAP_CONTEXT 0x40
 #define EVERY_CONTEXT 0xFFFFFFFF
 
 // input modes
@@ -66,18 +66,18 @@ void alloc_cursor_bitmaps(void);
  */
 void free_cursor_bitmaps();
 
-void input_chk(void);
+void input_chk();
 // uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata);
-void shutdown_input(void);
-void init_input(void);
+void shutdown_input();
+void init_input();
 void install_motion_mouse_handler(LGRegion *r, frc *fr);
 void install_motion_keyboard_handler(LGRegion *r);
 void look_at_object(ObjID id);
 uchar posture_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
-void pop_cursor_object(void);
+void pop_cursor_object();
 void push_cursor_object(short id);
 void reload_motion_cursors(uchar cyber);
-void reset_input_system(void);
+void reset_input_system();
 
 char *get_object_lookname(ObjID id, char use_string[], int sz);
 
@@ -87,9 +87,9 @@ uchar toggle_opengl_func(ushort keycode, uint32_t context, intptr_t data);
 
 uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data);
 
-void SetMotionCursorForMouseXY(void);
+void SetMotionCursorForMouseXY();
 
-uchar citadel_check_input(void);
+uchar citadel_check_input();
 
 // -------
 // GLOBALS
@@ -105,7 +105,7 @@ extern uchar fire_slam;
 extern uchar left_down_jump;
 extern uchar weapon_button_up;
 extern LGCursor object_cursor;
-extern uchar checking_mouse_button_emulation;
+extern bool checking_mouse_button_emulation;
 extern LGPoint use_cursor_pos;
 extern grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 

@@ -40,7 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "colors.h"
 #include "cybstrng.h"
 #include "doorparm.h"
-#include "drugs.h"
 #include "emailbit.h"
 #include "faketime.h"
 #include "fatigue.h"
@@ -56,7 +55,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grenades.h"
 #include "hotkey.h"
 #include "invent.h"
-#include "leanmetr.h"
 #include "mainloop.h"
 #include "movekeys.h"
 #include "objbit.h"
@@ -77,8 +75,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "weapons.h"
 #include "mouselook.h"
 #include "OpenGL.h"
-
-#define CHECK_FOR_A_PACKET
 
 // -------
 // DEFINES
@@ -105,7 +101,7 @@ static ushort mouse_constrain_bits = 0;
 #define RBUTTON_CONSTRAIN_BIT MOUSE_RDOWN
 #define LOCK_CONSTRAIN_BIT 0x8000
 
-typedef struct _3d_mouse_stuff {
+typedef struct mouse3d_stuff {
     uchar ldown;
     uchar rdown;
     int lastsect;
@@ -131,8 +127,6 @@ Ref motion_cursor_ids[] = {
 LGCursor motion_cursors[NUM_MOTION_CURSORS];
 grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 
-static uchar posture_keys[NUM_POSTURES] = {'t', 'g', 'b'};
-
 int input_cursor_mode = INPUT_NORMAL_CURSOR;
 int throw_oomph = 5;
 
@@ -140,21 +134,15 @@ fix inpJoystickSens = FIX_UNIT;
 
 LGPoint use_cursor_pos;
 
-#ifdef RCACHE_TEST
-extern uchar res_cache_usage_func(ushort keycode, uint32_t context, intptr_t data);
-#endif
-// extern uchar texture_annihilate_func(ushort keycode, uint32_t context, intptrr_t data);
-
 // and joysticks, heck, why be efficient
 uchar joystick_count = 0;
 
 // -------------
 //  PROTOTYPES
 // -------------
-void handle_keyboard_fatigue(void);
-void poll_mouse(void);
-uchar eye_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
-
+void handle_keyboard_fatigue();
+void poll_mouse();
+// uchar eye_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
 
 int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move, int *lastsect);
 void view3d_dclick(LGPoint pos, frc *fr, bool shifted);
@@ -163,17 +151,16 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data);
 uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data);
 void use_object_in_3d(ObjID obj, bool shifted);
 
-uchar MacResFunc(ushort keycode, uint32_t context, intptr_t data);
-uchar MacSkiplinesFunc(ushort keycode, uint32_t context, intptr_t data);
+// uchar MacResFunc(ushort keycode, uint32_t context, intptr_t data);
+// uchar MacSkiplinesFunc(ushort keycode, uint32_t context, intptr_t data);
 
-//EXTERN FUNCTIONS
-
+// EXTERN FUNCTIONS
 
 // -------------
 // INPUT POLLING
 // -------------
 
-void handle_keyboard_fatigue(void) {
+void handle_keyboard_fatigue() {
     byte cval;
     physics_get_one_control(KEYBD_CONTROL_BANK, CONTROL_YVEL, &cval);
     if (cval > 0) {
@@ -191,10 +178,10 @@ void handle_keyboard_fatigue(void) {
 
 // Sends a motion event to the 3d view.
 
-uchar view3d_got_event = FALSE;
+bool view3d_got_event = false;
 
-void poll_mouse(void) {
-    if (_current_view != NULL) {
+void poll_mouse() {
+    if (_current_view != nullptr) {
         uiEvent ev;
         uiMakeMotionEvent(&ev);
         ev.type = UI_EVENT_USER_DEFINED;
@@ -204,70 +191,59 @@ void poll_mouse(void) {
     }
 }
 
-uchar checking_mouse_button_emulation = FALSE;
-uchar mouse_button_emulated = FALSE;
+bool checking_mouse_button_emulation = false;
+bool mouse_button_emulated = false;
 
-uchar citadel_check_input(void) {
+uchar citadel_check_input() {
     if (uiCheckInput())
-        return (TRUE);
+        return true;
 
     if (checking_mouse_button_emulation)
-        mouse_button_emulated = FALSE;
+        mouse_button_emulated = false;
 
     // if we're suppose to emulate a mouse button - let's do it!
     if (mouse_button_emulated)
-        return (TRUE);
-    return (FALSE);
+        return true;
+    return false;
 }
 
-void input_chk(void) {
+void input_chk() {
     setup_motion_polling();
-    view3d_got_event = FALSE;
+    view3d_got_event = false;
     uiPoll();
     if (!view3d_got_event)
         poll_mouse();
-
-    // KLC - not needed on MAC   kb_flush_bios();
-    // KLC - not needed on MAC   mouse_set_velocity(0,0);
 
     process_motion_keys();
     handle_keyboard_fatigue();
 }
 
 uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
-
-    LGRegion *dummy2;
-    intptr_t dummy3;
-    dummy2 = r;
-    dummy3 = udata;
-
 #ifdef INPUT_CHAINING
     kb_flush_bios();
 #endif // INPUT_CHAINING
 
     // Broad event types related to KB
     if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP) {
-        DEBUG("%s: dispatching hotkey %d (SDL: %d, %d, %d)", __FUNCTION__ , h->subtype, h->sdl_data.key.type, h->sdl_data.key.state, h->sdl_data.key.keysym.scancode);
+        DEBUG("%s: dispatching hotkey %d (SDL: %d, %d, %d)", __FUNCTION__, h->subtype, h->sdl_data.key.type,
+              h->sdl_data.key.state, h->sdl_data.key.keysym.scancode);
         return hotkey_dispatch(h->subtype) == OK;
     }
-    return FALSE;
+    return false;
 }
 
 uchar posture_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
-#ifndef NO_DUMMIES
-    uint32_t dummy;
-    dummy = context + keycode;
-#endif
     return player_set_posture((unsigned int)data) == OK;
 }
 
+/*
 uchar eye_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
     byte eyectl = player_get_eye();
     int r = 1 + (player_struct.drug_status[DRUG_REFLEX] > 0 && !global_fullmap->cyber);
 
     if (data == 0) {
         player_set_eye(0);
-        return TRUE;
+        return true;
     }
     for (; r > 0; r--) {
         if (data < 0) {
@@ -283,8 +259,9 @@ uchar eye_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
         }
     }
     player_set_eye(eyectl);
-    return TRUE;
+    return true;
 }
+*/
 
 #define EYE_POLLING
 #ifndef EYE_POLLING
@@ -307,15 +284,8 @@ static ushort eye_dn_keys[] = {
 #define NUM_EYE_DN_KEYS (sizeof(eye_dn_keys) / sizeof(ushort))
 #endif // !EYE_POLLING
 
-static ushort eye_lvl_keys[] = {
-    'f',
-    'F',
-};
-
-#define NUM_EYE_LVL_KEYS (sizeof(eye_lvl_keys) / sizeof(ushort))
 // -------------------------------------
 // INITIALIZATION
-uchar toggle_profile(ushort keycode, uint32_t context, intptr_t data);
 #ifdef PLAYTEST
 extern uchar automap_seen(ushort keycode, uint32_t context, intptr_t data);
 extern uchar maim_player(ushort keycode, uint32_t context, intptr_t data);
@@ -324,65 +294,49 @@ extern uchar give_player_hotkey(ushort keycode, uint32_t context, intptr_t data)
 extern uchar change_clipper(ushort keycode, uint32_t context, intptr_t data);
 #endif
 
-#define ckpoint_input(val) Spew(DSRC_TESTING_Test0, ("ii %s @%d\n", val, *tmd_ticks));
-
-void reload_motion_cursors(uchar cyber)
-{
-
-  for (int i = 0; i < NUM_MOTION_CURSORS; i++)
-  {
-    grs_bitmap *bm = &motion_cursor_bitmaps[i];
-    if (bm->bits != NULL)
-    {
-      free(bm->bits);
-      memset(bm, 0, sizeof(grs_bitmap));
-    }
-  }
-
-  if (!cyber)
-  {
-    for (int i = 0; i < NUM_MOTION_CURSORS; i++)
-    {
-      grs_bitmap *bm = &motion_cursor_bitmaps[i];
-      if (motion_cursor_ids[i] != 0)
-        load_res_bitmap_cursor(&motion_cursors[i], bm, motion_cursor_ids[i], TRUE);
+void reload_motion_cursors(uchar cyber) {
+    for (int i = 0; i < NUM_MOTION_CURSORS; i++) {
+        grs_bitmap *bm = &motion_cursor_bitmaps[i];
+        if (bm->bits != nullptr) {
+            free(bm->bits);
+            memset(bm, 0, sizeof(grs_bitmap));
+        }
     }
 
-    // slam the cursor color back to it's childhood colors
-    cursor_color_offset = RED_BASE + 4;
+    if (!cyber) {
+        for (int i = 0; i < NUM_MOTION_CURSORS; i++) {
+            grs_bitmap *bm = &motion_cursor_bitmaps[i];
+            if (motion_cursor_ids[i] != 0)
+                load_res_bitmap_cursor(&motion_cursors[i], bm, motion_cursor_ids[i], true);
+        }
 
-    SetMotionCursorsColorForActiveWeapon();
-  }
-  else
-  {
-    for (int i = 0; i < NUM_CYBER_CURSORS; i++)
-    {
-      grs_bitmap *bm = &motion_cursor_bitmaps[i];
-      load_res_bitmap_cursor(&motion_cursors[i], bm, CYBER_CURSOR_BASE + i, TRUE);
+        // slam the cursor color back to it's childhood colors
+        cursor_color_offset = RED_BASE + 4;
+
+        SetMotionCursorsColorForActiveWeapon();
+    } else {
+        for (int i = 0; i < NUM_CYBER_CURSORS; i++) {
+            grs_bitmap *bm = &motion_cursor_bitmaps[i];
+            load_res_bitmap_cursor(&motion_cursors[i], bm, CYBER_CURSOR_BASE + i, true);
+        }
     }
-  }
 }
 
-void free_cursor_bitmaps(void)
-{
-  //reload_motion_cursors() does everything now
+void free_cursor_bitmaps() {
+    // reload_motion_cursors() does everything now
 }
 
-void alloc_cursor_bitmaps(void)
-{
-  //reload_motion_cursors() does everything now
+void alloc_cursor_bitmaps() {
+    // reload_motion_cursors() does everything now
 
-  //I would just like to point out that this function
-  //was a good example of what were they thinking?
+    // I would just like to point out that this function
+    // was a good example of what were they thinking?
 }
 
-bool gShowFrameCounter = false;
-bool gShowMusicGlobals = false;
+// bool gShowFrameCounter = false;
+// bool gShowMusicGlobals = false;
 
-uchar MacQuitFunc(ushort keycode, uint32_t context, intptr_t data) {
-    return TRUE;
-}
-
+/*
 uchar MacResFunc(ushort keycode, uint32_t context, intptr_t data) {
     ShockPlus::Options::halfResolution = !ShockPlus::Options::halfResolution;
     change_svga_screen_mode();
@@ -395,26 +349,30 @@ uchar MacResFunc(ushort keycode, uint32_t context, intptr_t data) {
     }
     ShockPlus::Options::save();
 
-    return TRUE;
+    return true;
 }
+*/
 
+/*
 uchar MacSkiplinesFunc(ushort keycode, uint32_t context, intptr_t data) {
-    if (!ShockPlus::Options::halfResolution) // Skip lines only applies in double-size mode.
-    {
+    // Skip lines only applies in double-size mode.
+    if (!ShockPlus::Options::halfResolution) {
         message_info("Skip lines works only in low-res mode.");
-        return FALSE;
+        return false;
     }
     ShockPlus::Options::enableSkipLines = !ShockPlus::Options::enableSkipLines;
     ShockPlus::Options::save();
-    return TRUE;
+    return true;
 }
+*/
 
 uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data) {
     char msg[32];
     char detailStr[8];
     fauxrend_context *_frc = (fauxrend_context *)svga_render_context;
 
-    if (_frc->detail == 4) // Adjust for that global detail nonsense.
+    // Adjust for that global detail nonsense.
+    if (_frc->detail == 4)
         _frc->detail = ShockPlus::Options::videoDetail;
 
     _frc->detail++; // Cycle through the detail levels.
@@ -425,8 +383,8 @@ uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data) {
     // Update and save our prefs.
     ShockPlus::Options::save();
 
-    switch (_frc->detail) // Show a nice, informative message.
-    {
+    // Show a nice, informative message.
+    switch (_frc->detail) {
     case ShockPlus::Options::VIDEO_DETAIL_MIN:
         strcpy(detailStr, "Min");
         break;
@@ -441,87 +399,41 @@ uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data) {
     }
     sprintf(msg, "Detail level: %s", detailStr);
     message_info(msg);
-    return TRUE;
+    return true;
 }
-
-/*
-// Temporary function.  Remove for final build
-
-uchar temp_FrameCounter_func(ushort keycode, uint32_t context, intptr_t data)
-{
-        gShowFrameCounter = !gShowFrameCounter;
-
-        if (gShowFrameCounter)
-                message_info("Frame counter on.");
-        else
-                message_info("Frame counter off.");
-}
-
-// end temp functions
-*/
-
-/*
-uchar MacHelpFunc(ushort keycode, uint32_t context, intptr_t data) {
-    if (music_on) // Setup the environment for doing Mac stuff.
-        MacTuneKillCurrentTheme();
-    uiHideMouse(NULL);
-    status_bio_end();
-
-    // CopyBits(&gMainWindow->portBits, &gMainOffScreen.bits->portBits, &gActiveArea, &gOffActiveArea, srcCopy, 0L);
-
-    SS_ShowCursor();
-
-    // ShowShockHelp();
-
-    SetPort(gMainWindow); // Update area behind the alert
-    // BeginUpdate(gMainWindow);
-
-    // CopyBits(&gMainOffScreen.bits->portBits, &gMainWindow->portBits, &gOffActiveArea, &gActiveArea, srcCopy, 0L);
-
-    // EndUpdate(gMainWindow);
-
-    HideCursor(); // go back to Shock.
-    uiShowMouse(NULL);
-    status_bio_start();
-    if (music_on)
-        MacTuneStartCurrentTheme();
-
-    return TRUE;
-}
-*/
 
 uchar toggle_opengl_func(ushort keycode, uint32_t context, intptr_t data) {
     toggle_opengl();
-    return TRUE;
+    return true;
 }
 
-void init_input(void) {
+void init_input() {
     uiDoubleClickDelay = 8;
     uiDoubleClickTime = 45;
-    uiDoubleClicksOn[MOUSE_LBUTTON] = TRUE; // turn on left double clicks
-    uiAltDoubleClick = TRUE;
+    uiDoubleClicksOn[MOUSE_LBUTTON] = true; // turn on left double clicks
+    uiAltDoubleClick = true;
 
     alloc_cursor_bitmaps();
-    reload_motion_cursors(FALSE);
+    reload_motion_cursors(false);
 }
 
-void shutdown_input(void) {
+void shutdown_input() {
     hotkey_shutdown();
     kb_flush_bios();
 
-    //   kb_clear_state(0x1d, 3);
-    //   kb_clear_state(0x9d, 3);
-    //   kb_clear_state(0x38, 3);
-    //   kb_clear_state(0xb8, 3);
+    // kb_clear_state(0x1d, 3);
+    // kb_clear_state(0x9d, 3);
+    // kb_clear_state(0x38, 3);
+    // kb_clear_state(0xb8, 3);
 }
 
-    // ------------------------
-    // 3D VIEW/MOTION INTERFACE
-    // ------------------------
+// ------------------------
+// 3D VIEW/MOTION INTERFACE
+// ------------------------
 
-    // -------
-    // DEFINES
-    // -------
+// -------
+// DEFINES
+// -------
 
 #define VIEW_LSIDE 0
 #define VIEW_HCENTER 1
@@ -553,23 +465,23 @@ LGCursor object_cursor;
 // ------------------------------------------------------------------------------
 // view3d_rightbutton_handler deals with firing/throwing objects in 3d.
 
-uchar mouse_jump_ui = TRUE;
-uchar fire_slam = FALSE;
-uchar left_down_jump = FALSE;
+uchar mouse_jump_ui = true;
+uchar fire_slam = false;
+uchar left_down_jump = false;
 
-void reset_input_system(void) {
+void reset_input_system() {
     if (fire_slam) {
         if (full_game_3d)
             uiPopSlabCursor(&fullscreen_slab);
         else
             uiPopSlabCursor(&main_slab);
-        fire_slam = FALSE;
+        fire_slam = false;
     }
     mouse_unconstrain();
 }
 
 #define DROP_REGION_Y(reg) ((reg)->abs_y + 7 * RectHeight((reg)->r) / 8)
-uchar weapon_button_up = TRUE;
+uchar weapon_button_up = true;
 
 // ---------
 // INTERNALS
@@ -578,103 +490,94 @@ uchar weapon_button_up = TRUE;
 // -------------------------------------------------------------------------------------------
 // CalcMotionCurOffset gets cursor position offset data for
 //   SetMotionCursorForMouseXY() and view3d_mouse_input()
+void CalcMotionCurOffset(uchar cyber, LGRegion *reg, short *cx, short *cy, short *cw, short *ch, short *x, short *y) {
+    if (ShockPlus::Options::halfResolution) {
+        (*x) *= 2;
+        (*y) *= 2;
+    }
 
-void CalcMotionCurOffset(uchar cyber, LGRegion *reg, short *cx, short *cy, short *cw, short *ch, short *x, short *y)
-{
-  if (ShockPlus::Options::halfResolution)
-  {
-    (*x) *= 2;
-    (*y) *= 2;
-  }
-
-  if (!cyber)
-  {
-    (*cx) = reg->abs_x + RectWidth(reg->r) / 2;
-    (*cy) = reg->abs_y + 2 * RectHeight(reg->r) / 3;
-    (*cw) = RectWidth(reg->r) * CENTER_WD_N / CENTER_WD_D;
-    (*ch) = RectHeight(reg->r) * CENTER_HT_N / CENTER_HT_D;
-  }
-  else
-  {
-    (*cx) = reg->abs_x + RectWidth(reg->r) / 2;
-    (*cy) = reg->abs_y + RectHeight(reg->r) / 2;
-    (*cw) = RectWidth(reg->r) * CENTER_WD_N / CYBER_CENTER_WD_D;
-    (*ch) = RectHeight(reg->r) * CENTER_HT_N / CYBER_CENTER_HT_D;
-  }
+    if (!cyber) {
+        (*cx) = reg->abs_x + RectWidth(reg->r) / 2;
+        (*cy) = reg->abs_y + 2 * RectHeight(reg->r) / 3;
+        (*cw) = RectWidth(reg->r) * CENTER_WD_N / CENTER_WD_D;
+        (*ch) = RectHeight(reg->r) * CENTER_HT_N / CENTER_HT_D;
+    } else {
+        (*cx) = reg->abs_x + RectWidth(reg->r) / 2;
+        (*cy) = reg->abs_y + RectHeight(reg->r) / 2;
+        (*cw) = RectWidth(reg->r) * CENTER_WD_N / CYBER_CENTER_WD_D;
+        (*ch) = RectHeight(reg->r) * CENTER_HT_N / CYBER_CENTER_HT_D;
+    }
 
 #ifdef SVGA_SUPPORT
-  ss_point_convert(cx, cy, FALSE);
-  ss_point_convert(cw, ch, FALSE);
+    ss_point_convert(cx, cy, false);
+    ss_point_convert(cw, ch, false);
 #endif
 
-  (*x) -= (*cx);
-  (*y) -= (*cy);
+    (*x) -= (*cx);
+    (*y) -= (*cy);
 }
 
 // -------------------------------------------------------------------------------------------
 // SetMotionCursorForMouseXY sets motion cursor for current mouse x,y position
-
 // Used to set cursor to weapon color immediately without having to move the mouse
+void SetMotionCursorForMouseXY() {
+    if (global_fullmap->cyber)
+        return;
 
-// called at end of:
-//    fullscreen_start()     fullscrn.c
-//    screen_start()         screen.c
+    int cnum;
 
-void SetMotionCursorForMouseXY(void)
-{
-  if (global_fullmap->cyber) return;
+    LGRegion *reg;
 
-  int cnum;
+    if (full_game_3d)
+        reg = fullview_region;
+    else
+        reg = mainview_region;
 
-  LGRegion *reg;
+    if (mlook_enabled)
+        cnum = VIEW_HCENTER | VIEW_VCENTER;
+    else {
+        short cx, cy, cw, ch, x, y;
 
-  if (full_game_3d)
-    reg = fullview_region;
-  else
-    reg = mainview_region;
+        mouse_get_xy(&x, &y);
 
+        CalcMotionCurOffset(false, reg, &cx, &cy, &cw, &ch, &x, &y);
 
-  if (mlook_enabled)
-    cnum = VIEW_HCENTER | VIEW_VCENTER;
-  else
-  {
-    short cx, cy, cw, ch, x, y;
+        if (x < -cw)
+            cnum = VIEW_LSIDE;
+        else if (x > cw)
+            cnum = VIEW_RSIDE;
+        else
+            cnum = VIEW_HCENTER;
 
-    mouse_get_xy(&x, &y);
+        if (y < -ch)
+            cnum |= VIEW_TOP;
+        else if (y > ch)
+            cnum |= VIEW_BOTTOM;
+        else
+            cnum |= VIEW_VCENTER;
+    }
 
-    CalcMotionCurOffset(FALSE, reg, &cx, &cy, &cw, &ch, &x, &y);
+    LGCursor *c = &motion_cursors[cnum];
 
-    if      (x < -cw) cnum = VIEW_LSIDE;
-    else if (x >  cw) cnum = VIEW_RSIDE;
-    else              cnum = VIEW_HCENTER;
-  
-    if      (y < -ch) cnum |= VIEW_TOP;
-    else if (y >  ch) cnum |= VIEW_BOTTOM;
-    else              cnum |= VIEW_VCENTER;
-  }
-
-  LGCursor *c = &motion_cursors[cnum];
-
-  if (reg == fullview_region)
-    uiSetGlobalDefaultCursor(c);
-  else
-    uiSetRegionDefaultCursor(reg, c);
+    if (reg == fullview_region)
+        uiSetGlobalDefaultCursor(c);
+    else
+        uiSetRegionDefaultCursor(reg, c);
 }
 
 // -------------------------------------------------------------------------------------------
 // view3d_mouse_input sets/unsets physics controls based on mouse position in 3d
-
 // return whether any control was applied
-int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
-                       int *lastsect) { // do we really recompute these every frame?? couldnt we have a context or
-                                        // something... something, a call to reinit, something
-    static int dougs_goofy_hack = FALSE;
+int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move, int *lastsect) {
+    // do we really recompute these every frame?? couldnt we have a context or something...
+    // something, a call to reinit, something
+    static int dougs_goofy_hack = false;
 
     int cnum = 0;
     byte xvel = 0;
     byte yvel = 0;
     byte xyrot = 0;
-    uchar thrust = FALSE;
+    uchar thrust = false;
     uchar cyber = global_fullmap->cyber && time_passes;
 
     short cx, cy, cw, ch, x, y;
@@ -685,11 +588,11 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
     CalcMotionCurOffset(cyber, reg, &cx, &cy, &cw, &ch, &x, &y);
 
     // ok, the idea here is to make sure single left click doesnt move, or at least tells you whats up...
-    if ((dougs_goofy_hack == FALSE) && move) {
-        dougs_goofy_hack = TRUE;
-        move = FALSE;
+    if ((dougs_goofy_hack == false) && move) {
+        dougs_goofy_hack = true;
+        move = false;
     } else if (!move)
-        dougs_goofy_hack = FALSE;
+        dougs_goofy_hack = false;
 
     if (x < -cw) {
         cnum = VIEW_LSIDE;
@@ -723,7 +626,7 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
 #endif // CYBER_ROLL_REGION
             }
         } else {
-            if ((thrust = ((cnum == VIEW_HCENTER) && move)) == TRUE)
+            if ((thrust = ((cnum == VIEW_HCENTER) && move)) == true)
                 physics_set_one_control(MOUSE_CONTROL_BANK, CONTROL_ZVEL, MAX_JUMP_CONTROL);
 
             cnum += CYBER_VIEW_CENTER;
@@ -733,10 +636,10 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
             short ycntl = (-ch - y) * CONTROL_MAX_VAL / (cy - ch - reg->abs_y);
             if (move) {
                 int f = PLAYER_FATIGUE;
-                if (ycntl + f > CONTROL_MAX_VAL) { // compute new mouse cursor position
-                    int newy;
+                if (ycntl + f > CONTROL_MAX_VAL) {
+                    // compute new mouse cursor position
                     f = lg_max(CONTROL_MAX_VAL - f, SPRINT_CONTROL_THRESHOLD);
-                    newy = f * (ch + reg->abs_y - cy) / CONTROL_MAX_VAL - ch + cy;
+                    int newy = f * (ch + reg->abs_y - cy) / CONTROL_MAX_VAL - ch + cy;
                     ycntl = (ycntl + f) / 2;
                     // put the cursor between here and there
                     if (newy > pos.y)
@@ -774,7 +677,7 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
 
     if (*lastsect != cnum) {
         LGCursor *c = &motion_cursors[cnum];
-        //      Warning(("hey, cursor num = %d!\n",cnum));
+        // Warning(("hey, cursor num = %d!\n",cnum));
 
         // set the cursor to the motion cursor
         if (reg == fullview_region)
@@ -798,10 +701,11 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
 void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
     LGPoint aimpos = ev->pos;
 
-    if (ShockPlus::Options::halfResolution)                        // If double sizing, convert the y to 640x480, then
-        aimpos.y = SCONV_Y(aimpos.y) >> 1; // half it.  The x stays as is.
+    // If double sizing, convert the y to 640x480, then half it. The x stays as is.
+    if (ShockPlus::Options::halfResolution)
+        aimpos.y = SCONV_Y(aimpos.y) >> 1;
     else
-        ss_point_convert(&(aimpos.x), &(aimpos.y), FALSE);
+        ss_point_convert(&(aimpos.x), &(aimpos.y), false);
 
     // Don't do nuthin if we're in a hack camera
     if (hack_takeover)
@@ -811,23 +715,23 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
         if (!data->rdown)
             data->lastright = aimpos;
         else
-            data->rdown = FALSE;
-        left_down_jump = FALSE;
-        weapon_button_up = TRUE;
+            data->rdown = false;
+        left_down_jump = false;
+        weapon_button_up = true;
         if (fire_slam) {
             if (full_game_3d)
                 uiPopSlabCursor(&fullscreen_slab);
             else
                 uiPopSlabCursor(&main_slab);
-            fire_slam = FALSE;
+            fire_slam = false;
         }
     }
 
     if (ev->mouse_data.action & MOUSE_RDOWN) {
-        data->rdown = TRUE;
+        data->rdown = true;
         data->lastright = aimpos;
         left_down_jump = data->ldown && !global_fullmap->cyber;
-        //      view3d_constrain_mouse(r,RBUTTON_CONSTRAIN_BIT);
+        // view3d_constrain_mouse(r,RBUTTON_CONSTRAIN_BIT);
     }
 
     /*
@@ -843,21 +747,21 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
 
     switch (input_cursor_mode) {
     case INPUT_NORMAL_CURSOR:
-        if (!global_fullmap->cyber && (player_struct.fire_rate == 0) &&
-	    !(ev->mouse_data.action & MOUSE_RDOWN))
+        if (!global_fullmap->cyber && (player_struct.fire_rate == 0) && !(ev->mouse_data.action & MOUSE_RDOWN))
             break;
         if (left_down_jump)
             break;
         if (data->rdown) {
             // printf("FIRE WEAPON!\n");
-            if (fire_player_weapon(&aimpos, r, weapon_button_up) && (ev->mouse_data.action & MOUSE_RDOWN) && !fire_slam) {
+            if (fire_player_weapon(&aimpos, r, weapon_button_up) && (ev->mouse_data.action & MOUSE_RDOWN) &&
+                !fire_slam) {
                 if (full_game_3d)
                     uiPushSlabCursor(&fullscreen_slab, &fire_cursor);
                 else
                     uiPushSlabCursor(&main_slab, &fire_cursor);
-                fire_slam = TRUE;
+                fire_slam = true;
             }
-            weapon_button_up = FALSE;
+            weapon_button_up = false;
         }
         break;
     case INPUT_OBJECT_CURSOR:
@@ -865,9 +769,10 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
             fix vel = throw_oomph * FIX_UNIT;
             short dropy = DROP_REGION_Y(r);
             short y = aimpos.y;
-            //         if (convert_use_mode != 0)
-            if (ShockPlus::Options::halfResolution)                  // If double sizing, convert the y to 640x480, then
-                dropy = SCONV_Y(dropy) >> 1; // half it.  The x stays as is.
+            // if (convert_use_mode != 0)
+            // If double sizing, convert the y to 640x480, then half it. The x stays as is.
+            if (ShockPlus::Options::halfResolution)
+                dropy = SCONV_Y(dropy) >> 1;
             else
                 dropy = SCONV_Y(dropy);
             if (y >= dropy && data->lastright.y >= dropy) {
@@ -875,9 +780,9 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
             }
             if (player_throw_object(object_on_cursor, aimpos.x, y, data->lastright.x, data->lastright.y, vel)) {
                 pop_cursor_object();
-                uiShowMouse(NULL); // KLC - added to make sure new cursor shows.
+                uiShowMouse(nullptr); // KLC - added to make sure new cursor shows.
             }
-            data->rdown = FALSE;
+            data->rdown = false;
         }
         break;
     }
@@ -885,9 +790,7 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
 
 // ----------------------------------------------------------------
 // use_object_in_3d deals with double-clicking on an object in the 3d
-
 uchar check_object_dist(ObjID obj1, ObjID obj2, fix crit) {
-    uchar retval = FALSE;
     fix critrad = ID2radius(obj2);
     fix dx = fix_from_obj_coord(objs[obj1].loc.x) - fix_from_obj_coord(objs[obj2].loc.x);
     fix dy = fix_from_obj_coord(objs[obj1].loc.y) - fix_from_obj_coord(objs[obj2].loc.y);
@@ -895,7 +798,7 @@ uchar check_object_dist(ObjID obj1, ObjID obj2, fix crit) {
     if (-dz > critrad / 2 && -dz < critrad + FIX_UNIT / 4) {
         crit *= 2;
     }
-    retval = fix_fast_pyth_dist(dx, dy) < crit;
+    bool retval = fix_fast_pyth_dist(dx, dy) < crit;
     if (retval) {
         retval = -(critrad * 2 + crit / 2) < dz && dz < crit / 2 + critrad * 2;
     }
@@ -905,9 +808,9 @@ uchar check_object_dist(ObjID obj1, ObjID obj2, fix crit) {
 #define TELE_ROD_DIST 16 // 16 feet
 
 void use_object_in_3d(ObjID obj, bool shifted) {
-    uchar success = FALSE;
+    bool success = false;
     ObjID telerod = OBJ_NULL;
-    uchar showname = FALSE;
+    bool showname = false;
     int mode = USE_MODE(obj);
     char buf[80];
     Ref usemode = ID_NULL;
@@ -971,7 +874,7 @@ void use_object_in_3d(ObjID obj, bool shifted) {
 
         if (!check_object_dist(obj, PLAYER_OBJ, MAX_PICKUP_DIST)) {
             string_message_info(REF_STR_PickupTooFar);
-            showname = FALSE;
+            showname = false;
             break;
         }
         // yank the object out of the map.
@@ -986,22 +889,22 @@ void use_object_in_3d(ObjID obj, bool shifted) {
             objs[obj].info.ph = -1;
         }
         // Put it on the cursor
-        //         showname = TRUE;
+        // showname = true;
         push_cursor_object(obj);
 
         if (objs[obj].obclass == CLASS_GRENADE)
             grenade_contact(obj, INT_MAX);
 
         if (shifted) {
-            absorb_object_on_cursor(0, 0, 0); //parameters unused
-        }
-        else
+            absorb_object_on_cursor(0, 0, 0); // parameters unused
+        } else {
             mouse_look_off();
+        }
 
-        success = TRUE;
+        success = true;
     } break;
     case USE_USE_MODE:
-        showname = FALSE;
+        showname = false;
         if (objs[obj].obclass != CLASS_CRITTER && ID2TRIP(obj) != MAPNOTE_TRIPLE &&
             !check_object_dist(obj, PLAYER_OBJ, MAX_USE_DIST)) {
             string_message_info(REF_STR_UseTooFar);
@@ -1009,17 +912,17 @@ void use_object_in_3d(ObjID obj, bool shifted) {
         }
 
         ObjectUseShifted = shifted;
-        if (!object_use(obj, FALSE, object_on_cursor)) {
+        if (!object_use(obj, false, object_on_cursor)) {
             if (objs[obj].obclass != CLASS_DOOR)
                 goto cantuse;
             else
-                showname = TRUE;
+                showname = true;
         }
         if (telerod != OBJ_NULL) {
             object_on_cursor = telerod;
             use_distance_mod -= TELE_ROD_DIST;
         }
-        success = TRUE;
+        success = true;
 
         break;
     cantuse:
@@ -1038,7 +941,6 @@ void use_object_in_3d(ObjID obj, bool shifted) {
 
 //-------------------------------------------------------------------------
 // look_at_object prints a descriptive string of the object in the message line
-
 // these are just cribbed here from email.c...
 #define EMAIL_BASE_ID RES_email0
 #define TITLE_IDX 1
@@ -1115,8 +1017,7 @@ char *get_object_lookname(ObjID id, char use_string[], int sz) {
         switch (ID2TRIP(id)) {
         case PERSCARD_TRIPLE: {
             char buf[50];
-            int acc, len;
-            acc = objSmallstuffs[objs[id].specID].data1;
+            int acc = objSmallstuffs[objs[id].specID].data1;
 #define PERSONAL_BITS_SHIFT 24
             // get rid of all but personal access bits
             get_object_long_name(ID2TRIP(id), use_string, sz);
@@ -1128,7 +1029,7 @@ char *get_object_lookname(ObjID id, char use_string[], int sz) {
                 ref++;
             ref = MKREF(RES_accessCards, (ref << 1) + 1);
             get_string(ref, buf, sizeof(buf));
-            len = strlen(buf);
+            int len = strlen(buf);
             while (!isspace(buf[len]) && len > 0)
                 len--;
             if (isspace(buf[len])) {
@@ -1145,7 +1046,8 @@ char *get_object_lookname(ObjID id, char use_string[], int sz) {
         }
     } break;
     case CLASS_HARDWARE: {
-        sprintf(use_string, "%s v%d", get_object_long_name(ID2TRIP(id), NULL, sz), objHardwares[objs[id].specID].version);
+        sprintf(use_string, "%s v%d", get_object_long_name(ID2TRIP(id), nullptr, sz),
+                objHardwares[objs[id].specID].version);
         return (use_string);
     }
     case CLASS_CRITTER: {
@@ -1159,18 +1061,18 @@ char *get_object_lookname(ObjID id, char use_string[], int sz) {
             mod_refid = REF_STR_Stunned;
         if (mod_refid != -1) {
             get_string(mod_refid, temp, 128);
-            sprintf(use_string, temp, get_object_long_name(usetrip, NULL, 0));
+            sprintf(use_string, temp, get_object_long_name(usetrip, nullptr, 0));
             return (use_string);
         }
     } break;
     }
     // If we haven't set ref or ref is garbage, use the long name.
-    char *temp = static_cast<char *>((ref == -1) ? NULL : RefGet(ref));
-    if (temp == NULL) {
-        strcat(use_string, get_object_long_name(usetrip, NULL, 0));
+    char *temp = static_cast<char *>((ref == -1) ? nullptr : RefGet(ref));
+    if (temp == nullptr) {
+        strcat(use_string, get_object_long_name(usetrip, nullptr, 0));
     } else {
         strncpy(use_string, temp, sz);
-        use_string[sz-1] = '\0';
+        use_string[sz - 1] = '\0';
     }
     return (use_string);
 }
@@ -1183,7 +1085,6 @@ void look_at_object(ObjID id) {
 
 // ------------------------------------------------------------------------
 // view3d_dclick dispatches double clicks based on cursor mode
-
 // Not a directly-installed mouse handler, called from view3d_mouse_handler
 void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
     short obj_trans, obj;
@@ -1195,9 +1096,9 @@ void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
     case INPUT_NORMAL_CURSOR:
     case INPUT_OBJECT_CURSOR:
         use_frc = svga_render_context;
-        obj = fr_get_at_raw(use_frc, pos.x, pos.y, FALSE, FALSE);
+        obj = fr_get_at_raw(use_frc, pos.x, pos.y, false, false);
         if ((obj > 0) && (objs[obj].obclass == CLASS_DOOR)) {
-            obj_trans = fr_get_at_raw(use_frc, pos.x, pos.y, FALSE, TRUE);
+            obj_trans = fr_get_at_raw(use_frc, pos.x, pos.y, false, true);
             if (obj != obj_trans) {
                 if (DOOR_REALLY_CLOSED(obj)) {
                     string_message_info(REF_STR_PickupTooFar);
@@ -1206,7 +1107,7 @@ void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
                     obj = obj_trans;
             }
         } else if (obj > 0) {
-            obj = fr_get_at_raw(use_frc, pos.x, pos.y, FALSE, TRUE);
+            obj = fr_get_at_raw(use_frc, pos.x, pos.y, false, true);
         }
         if ((short)obj < 0) {
             // Don't display texture look strings in cspace....eventually we should do some cool hack
@@ -1214,7 +1115,7 @@ void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
             if (global_fullmap->cyber)
                 string_message_info(REF_STR_CybWallUse);
             else
-                message_info(get_texture_use_string(loved_textures[~obj], NULL, 0));
+                message_info(get_texture_use_string(loved_textures[~obj], nullptr, 0));
         } else if ((short)obj > 0) {
             use_cursor_pos = pos;
             use_object_in_3d(obj, shifted);
@@ -1230,67 +1131,67 @@ void view3d_dclick(LGPoint pos, frc *fr, bool shifted) {
 // -------------------------------------------------------------------------------
 // view3d_mouse_handler is the actual installed mouse handler, dispatching to the above functions
 uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
-    static uchar got_focus = FALSE;
+    static bool got_focus = false;
     uiMouseData *md = &ev->mouse_data;
-    view3d_data *view3d = (view3d_data*)data;
-    uchar retval = TRUE;
+    view3d_data *view3d = (view3d_data *)data;
+    bool retval = true;
     LGPoint pt;
     LGPoint evp = ev->pos;
 
     pt = evp;
 
-    if (ShockPlus::Options::halfResolution)                  // If double sizing, convert the y to 640x480, then
-        evp.y = SCONV_Y(evp.y) >> 1; // half it.  The x stays as is.
+    // If double sizing, convert the y to 640x480, then half it. The x stays as is.
+    if (ShockPlus::Options::halfResolution)
+        evp.y = SCONV_Y(evp.y) >> 1;
     else
-        ss_point_convert(&(evp.x), &(evp.y), FALSE);
+        ss_point_convert(&(evp.x), &(evp.y), false);
 
-    view3d_got_event = TRUE;
+    view3d_got_event = true;
     pt.x += r->r->ul.x - r->abs_x;
     pt.y += r->r->ul.y - r->abs_y;
 
     if (!RECT_TEST_PT(r->r, pt)) {
-        view3d->ldown = FALSE;
+        view3d->ldown = false;
         physics_set_player_controls(MOUSE_CONTROL_BANK, 0, 0, CONTROL_NO_CHANGE, 0, CONTROL_NO_CHANGE,
                                     CONTROL_NO_CHANGE);
-        return (FALSE);
+        return false;
     }
     if (md->action & MOUSE_LDOWN) {
-        view3d->ldown = TRUE;
+        view3d->ldown = true;
         view3d->lastleft = evp;
         if (full_game_3d && !got_focus) {
             if (uiGrabFocus(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE) == OK)
-                got_focus = TRUE;
+                got_focus = true;
         }
         chg_set_flg(_current_3d_flag);
-        //      view3d_constrain_mouse(r,LBUTTON_CONSTRAIN_BIT);
+        // view3d_constrain_mouse(r,LBUTTON_CONSTRAIN_BIT);
     }
     if (md->action & MOUSE_LUP || !(md->buttons & (1 << MOUSE_LBUTTON))) {
-        view3d->ldown = FALSE;
+        view3d->ldown = false;
         if (full_game_3d && got_focus) {
             if (uiReleaseFocus(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE) == OK)
-                got_focus = FALSE;
+                got_focus = false;
         }
-        //      view3d_unconstrain_mouse(LBUTTON_CONSTRAIN_BIT);
+        // view3d_unconstrain_mouse(LBUTTON_CONSTRAIN_BIT);
     }
     if (md->action & MOUSE_LUP && abs(evp.y - view3d->lastleft.y) < uiDoubleClickTolerance &&
         abs(evp.x - view3d->lastleft.x) < uiDoubleClickTolerance) {
-        //make shift+leftclick act as double-leftclick with alternate effects
-        if (md->modifiers & 1) { //shifted click; see sdl_events.c
-            view3d_dclick(evp, view3d->fr, TRUE); //TRUE indicates shifted
+        // make shift+leftclick act as double-leftclick with alternate effects shifted click; see sdl_events.c
+        if (md->modifiers & 1) {
+            view3d_dclick(evp, view3d->fr, true); // true indicates shifted
             view3d->lastleft = MakePoint(-100, -100);
-        }
-        else {
+        } else {
             ObjID id;
             frc *use_frc;
             short rabsx, rabsy;
-    
+
             use_frc = svga_render_context;
             rabsx = r->abs_x;
             rabsy = r->abs_y;
             if (!ShockPlus::Options::halfResolution)
-                ss_point_convert(&rabsx, &rabsy, FALSE);
-    
-            id = fr_get_at(use_frc, evp.x - rabsx, evp.y - rabsy, TRUE);
+                ss_point_convert(&rabsx, &rabsy, false);
+
+            id = fr_get_at(use_frc, evp.x - rabsx, evp.y - rabsy, true);
             if ((short)id > 0) {
                 look_at_object(id);
             } else if ((short)id < 0) {
@@ -1298,7 +1199,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
                 if (global_fullmap->cyber)
                     string_message_info(REF_STR_CybWall);
                 else
-                    message_info(get_texture_name(tnum, NULL, 0));
+                    message_info(get_texture_name(tnum, nullptr, 0));
             } else {
                 if (!global_fullmap->cyber) {
                     if (!(_fr_glob_flags & FR_SOLIDFR_STATIC))
@@ -1321,7 +1222,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
                             uiPopSlabCursor(&fullscreen_slab);
              else
                             uiPopSlabCursor(&main_slab);
-             fire_slam = FALSE;
+             fire_slam = false;
           }
        }
 
@@ -1332,7 +1233,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
 
     if (md->action & UI_MOUSE_LDOUBLE) {
         // Spew(DSRC_USER_I_Motion,("use this, bay-bee!\n"));
-        view3d_dclick(evp, view3d->fr, FALSE);
+        view3d_dclick(evp, view3d->fr, false);
         view3d->lastleft = MakePoint(-100, -100);
     }
 
@@ -1340,51 +1241,47 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
         cycle_weapons_func(0, 0, md->action & MOUSE_WHEELUP ? -1 : 1);
     }
 
-    // data->ldown = TRUE;
+    // data->ldown = true;
 
     // Do mouse motion.
     if (view3d_mouse_input(evp, r, view3d->ldown, &view3d->lastsect) != 0)
         view3d->lastleft = MakePoint(-1, -1); // if the player is moving, not a down
 
-    return (retval);
+    return retval;
 }
 
-typedef struct _view3d_kdata {
-    int maxctrl; // max control as affected by fatigue
-} view3d_kdata;
-
-uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data)
-{
+uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     uiCookedKeyData *kd = &ev->cooked_key_data;
-  int i, detect = 0, fire_pressed = 0;
+    int i = 0, detect = 0, fire_pressed = 0;
 
-  i = 0;
-  while (FireKeys[i] != 0)
-  {
-    if (kd->code == FireKeys[i]) detect = 1;
-    if (kd->code == (FireKeys[i] | KB_FLAG_DOWN)) {detect = 1; fire_pressed = 1; break;}
-    i++;
-  }
-  if (!detect) return FALSE;
-
-  if (fire_pressed)
-  {
-    if (weapon_button_up) // if we haven't fired already
-    {
-      LGPoint evp = ev->pos;
-      ss_point_convert(&(evp.x), &(evp.y), FALSE);
-      fire_player_weapon(&evp, r, !fire_slam);
-      fire_slam = TRUE;
-      weapon_button_up = FALSE;
+    while (FireKeys[i] != 0) {
+        if (kd->code == FireKeys[i])
+            detect = 1;
+        if (kd->code == (FireKeys[i] | KB_FLAG_DOWN)) {
+            detect = 1;
+            fire_pressed = 1;
+            break;
+        }
+        i++;
     }
-  }
-  else
-  {
-    weapon_button_up = TRUE;
-    fire_slam = FALSE;
-  }
+    if (!detect)
+        return false;
 
-  return FALSE;
+    if (fire_pressed) {
+        if (weapon_button_up) // if we haven't fired already
+        {
+            LGPoint evp = ev->pos;
+            ss_point_convert(&(evp.x), &(evp.y), false);
+            fire_player_weapon(&evp, r, !fire_slam);
+            fire_slam = true;
+            weapon_button_up = false;
+        }
+    } else {
+        weapon_button_up = true;
+        fire_slam = false;
+    }
+
+    return false;
 }
 
 // ---------
@@ -1394,20 +1291,20 @@ uchar view3d_key_handler(uiEvent *ev, LGRegion *r, intptr_t data)
 void install_motion_mouse_handler(LGRegion *r, frc *fr) {
     int cid;
     view3d_data *data = (view3d_data *)malloc(sizeof(view3d_data));
-    data->ldown = FALSE;
-    data->rdown = FALSE;
+    data->ldown = false;
+    data->rdown = false;
     data->lastsect = 0;
     data->lastleft.x = 0;
     data->lastleft.y = 0;
     data->lastright.x = 0;
     data->lastright.y = 0;
     data->fr = fr;
-    uiInstallRegionHandler(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE | UI_EVENT_USER_DEFINED,
-                           view3d_mouse_handler, (intptr_t)data, &cid);
+    uiInstallRegionHandler(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE | UI_EVENT_USER_DEFINED, view3d_mouse_handler,
+                           (intptr_t)data, &cid);
 
     // Yeah, yeah, I know, it's not a mouse handler...
     uiInstallRegionHandler(r, UI_EVENT_KBD_COOKED, view3d_key_handler, 0, &cid);
-    uiSetRegionDefaultCursor(r, NULL);
+    uiSetRegionDefaultCursor(r, nullptr);
 }
 
 void install_motion_keyboard_handler(LGRegion *r) {
@@ -1415,7 +1312,7 @@ void install_motion_keyboard_handler(LGRegion *r) {
     uiInstallRegionHandler(r, UI_EVENT_KBD_POLL, motion_keycheck_handler, 0, &cid);
 }
 
-void pop_cursor_object(void) {
+void pop_cursor_object() {
     if (input_cursor_mode != INPUT_OBJECT_CURSOR)
         return;
     object_on_cursor = OBJ_NULL;
@@ -1434,13 +1331,14 @@ void push_cursor_object(short obj) {
         push_live_grenade_cursor(obj);
         return;
     }
-    uiHideMouse(NULL);
+    uiHideMouse(nullptr);
     if ((ID2TRIP(obj) == HEAD_TRIPLE) || (ID2TRIP(obj) == HEAD2_TRIPLE))
         bmp = bitmaps_3d[BMAP_NUM_3D(ObjProps[OPNUM(obj)].bitmap_3d) + objs[obj].info.current_frame];
     else
         bmp = bitmaps_2d[OPNUM(obj)];
 
-    if (bmp == NULL) return;
+    if (bmp == nullptr)
+        return;
 
     object_on_cursor = obj;
     input_cursor_mode = INPUT_OBJECT_CURSOR;
@@ -1449,8 +1347,8 @@ void push_cursor_object(short obj) {
         grs_canvas temp_canv;
         // Get a new bigger bitmap
         gr_init_bitmap(&svga_cursor_bmp, svga_cursor_bits, BMT_FLAT8, BMF_TRANS,
-                   lg_min(MODE_SCONV_X(bmp->w, 2), SVGA_CURSOR_WIDTH),
-                   lg_min(MODE_SCONV_Y(bmp->h, 2), SVGA_CURSOR_HEIGHT));
+                       lg_min(MODE_SCONV_X(bmp->w, 2), SVGA_CURSOR_WIDTH),
+                       lg_min(MODE_SCONV_Y(bmp->h, 2), SVGA_CURSOR_HEIGHT));
         gr_make_canvas(&svga_cursor_bmp, &temp_canv);
 
         // Draw into it
@@ -1471,6 +1369,6 @@ void push_cursor_object(short obj) {
 #endif
     uiPushSlabCursor(&fullscreen_slab, &object_cursor);
     uiPushSlabCursor(&main_slab, &object_cursor);
-    uiShowMouse(NULL);
+    uiShowMouse(nullptr);
     look_at_object(obj);
 }
