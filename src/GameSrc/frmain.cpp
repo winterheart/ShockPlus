@@ -48,8 +48,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
+#include "Engine/Options.h"
 #include "frpipe.h"
-#include "frsetup.h"
 #include "frtypes.h"
 #include "frintern.h"
 #include "frparams.h"
@@ -75,7 +75,7 @@ int fr_rend(frc *view) {
     } else { /* actually do the 3d thang */
         uchar save_blend_flag;
 
-        if ((_fr_curflags & FR_PICKUPM_MASK) || DoubleSize) {
+        if ((_fr_curflags & FR_PICKUPM_MASK) || ShockPlus::Options::halfResolution) {
             save_blend_flag = _g3d_enable_blend;
             _g3d_enable_blend = FALSE;
         }
@@ -112,7 +112,7 @@ int fr_rend(frc *view) {
         audiolog_loop_callback();
 #endif
 
-        if ((_fr_curflags & FR_PICKUPM_MASK) || DoubleSize) {
+        if ((_fr_curflags & FR_PICKUPM_MASK) || ShockPlus::Options::halfResolution) {
             _g3d_enable_blend = save_blend_flag;
         }
     }

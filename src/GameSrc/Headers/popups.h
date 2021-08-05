@@ -55,6 +55,4 @@ void load_string_array(Ref first, char *arry[], char buf[], int sz, int n);
    Fills the array arry with pointers to each of the strings.
 */
 
-extern uchar popup_cursors;
-
 #endif // __POPUPS_H

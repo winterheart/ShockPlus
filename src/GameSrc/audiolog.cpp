@@ -24,13 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 //	Mac version by Ken Cobb,  2/9/95
 
-#include <stdio.h>
+#include <cstdio>
 #include <SDL.h>
 
 extern "C" {
 #include "afile.h"
 #include "movie.h"
 }
+
+#include "Engine/Options.h"
 
 #include "MacTune.h"
 #include "Shock.h"
@@ -55,7 +57,6 @@ static int audiolog_audiobuffer_size; // in blocks of MOVIE_DEFAULT_BLOCKLEN
 
 int curr_alog = -1;
 int alog_fn = -1;
-uchar audiolog_setting = 1;
 char secret_pending_hack;
 
 char *bark_files[] = {"res/data/citbark.res", "res/data/frnbark.res", "res/data/gerbark.res"};
@@ -67,7 +68,7 @@ errtype audiolog_play(int email_id) {
     int new_alog_fn;
     Afile *palog;
 
-    if (!sfx_on || !audiolog_setting)
+    if (!ShockPlus::Options::enableSFX || !ShockPlus::Options::alogPlayback)
         return ERR_NOEFFECT;
 
     // KLC - Big-time hack to prevent bark #389 from trying to play twice (and thus skipping).
@@ -86,9 +87,9 @@ errtype audiolog_play(int email_id) {
 
     // Open up the appropriate sound-only movie file.
     if (email_id > (AUDIOLOG_BARK_BASE_ID - AUDIOLOG_BASE_ID))
-        new_alog_fn = ResOpenFile(bark_files[which_lang]);
+        new_alog_fn = ResOpenFile(bark_files[ShockPlus::Options::language]);
     else
-        new_alog_fn = ResOpenFile(alog_files[which_lang]);
+        new_alog_fn = ResOpenFile(alog_files[ShockPlus::Options::language]);
 
     // Make sure this is a thing we have an audiolog for...
     if (!ResInUse(AUDIOLOG_BASE_ID + email_id)) {
@@ -126,8 +127,8 @@ errtype audiolog_play(int email_id) {
 
     // Duck the music
     if (music_on) {
-        curr_vol_lev = QVAR_TO_VOLUME(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
-        curr_vol_lev = curr_vol_lev * ALOG_MUSIC_DUCK;
+        ShockPlus::Options::musicVolume = QVAR_TO_VOLUME(QUESTVAR_GET(MUSIC_VOLUME_QVAR));  // TODO: unuse this
+        ShockPlus::Options::musicVolume = ShockPlus::Options::musicVolume * ALOG_MUSIC_DUCK;
         MacTuneUpdateVolume();
     }
 
@@ -143,7 +144,7 @@ void audiolog_stop(void) {
 
     // Restore music volume
     if (music_on) {
-        curr_vol_lev = QVAR_TO_VOLUME(QUESTVAR_GET(MUSIC_VOLUME_QVAR));
+        ShockPlus::Options::musicVolume = QVAR_TO_VOLUME(QUESTVAR_GET(MUSIC_VOLUME_QVAR));  // TODO: unuse this
         MacTuneUpdateVolume();
     }
 
@@ -178,7 +179,7 @@ errtype audiolog_loop_callback(void) {
         SDL_PauseAudioDevice(device, 0);
 
         if (audiolog_audiobuffer_size > 0) {
-            int i, vol = curr_alog_vol * 127 / 100; // convert from 0-100 to 0-127
+            int i, vol = ShockPlus::Options::voiceVolume * 127 / 100; // convert from 0-100 to 0-127
 
             for (i = 0; i < MOVIE_DEFAULT_BLOCKLEN; i++)
                 audiolog_audiobuffer_pos[i] = 128 + ((int)audiolog_audiobuffer_pos[i] - 128) * vol / 128;

@@ -108,7 +108,6 @@ ushort fr_get_again(frc *fr, int x, int y);
 
 //======== Externals to provide, initialized to dumb things
 extern int _fr_default_detail;
-extern int _fr_global_detail;
 extern void (*fr_mouse_hide)(void), (*fr_mouse_show)(void);
 extern int (*fr_get_idx)(void);
 extern uchar (*fr_obj_block)(void *mptr, uchar *_sclip, int *loc);

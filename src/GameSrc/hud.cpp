@@ -23,9 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/15 12:27:09 $
  */
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
+#include "Engine/Options.h"
 #include "cyber.h"
 #include "hud.h"
 #include "hudobj.h"
@@ -37,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objsim.h"
 #include "objgame.h"
 #include "gamestrn.h"
-#include "frsetup.h"
 #include "frtypes.h"
 #include "faketime.h"
 #include "fullscrn.h"
@@ -379,7 +379,7 @@ void hud_report_damage(ObjID target, byte dmglvl) {
 }
 
 void draw_target_box(short xl, short yl, short xh, short yh) {
-    if (DoubleSize) {
+    if (ShockPlus::Options::halfResolution) {
         xl *= 2;
         yl *= 2;
         xh *= 2;
@@ -440,7 +440,7 @@ void update_damage_report(struct _hudobj_data *dat, uchar reverse) {
                 uchar old_scale = shadow_scale;
                 shadow_scale = FALSE;
 #endif
-                if (DoubleSize) {
+                if (ShockPlus::Options::halfResolution) {
                     x *= 2;
                     y = 2 * y + 1; // Text needed to come down a bit.
                 }
@@ -567,7 +567,7 @@ errtype hud_update(uchar redraw_whole, frc *context) {
         hud_update_compass(&y, x, xwid);
     hud_update_lines(x, &y, xwid, fc->ywid);
 
-    if (olh_active)
+    if (ShockPlus::Options::showOnScreenHelp)
         olh_do_hudobjs(fc->xtop, fc->ytop);
     hud_do_objs(fc->xtop, fc->ytop, fc->xwid, fc->ywid, FALSE);
 

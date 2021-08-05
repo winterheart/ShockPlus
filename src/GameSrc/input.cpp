@@ -23,20 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/23 00:16:31 $
  */
 
-// lets get this somewhere else so we can get it in the manual or something, and not get warnings..
-#ifdef SPACEBALL_SUPPORT
-static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologies Inc.";
-#endif
+#include <cstdio>
+#include <cstring>
+#include <climits>
 
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
+#include "Engine/Options.h"
 
 #include "Prefs.h"
 #include "Shock.h"
 #include "ShockBitmap.h"
 #include "InitMac.h"
-#include "Prefs.h"
 #include "input.h"
 #include "ai.h"
 #include "aiflags.h"
@@ -50,7 +46,6 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "fatigue.h"
 #include "frflags.h" // until we do the right thing re: static
 #include "frintern.h"
-#include "frsetup.h"
 #include "frtypes.h"
 #include "frutils.h"
 #include "fullscrn.h"
@@ -60,11 +55,8 @@ static char sbcopy[] = "Spaceball Interface Copyright 1994 Spaceball Technologie
 #include "gr2ss.h"
 #include "grenades.h"
 #include "hotkey.h"
-#include "hud.h"
-#include "input.h"
 #include "invent.h"
 #include "leanmetr.h"
-#include "MacTune.h"
 #include "mainloop.h"
 #include "movekeys.h"
 #include "objbit.h"
@@ -392,31 +384,28 @@ uchar MacQuitFunc(ushort keycode, uint32_t context, intptr_t data) {
 }
 
 uchar MacResFunc(ushort keycode, uint32_t context, intptr_t data) {
-    DoubleSize = !DoubleSize;
+    ShockPlus::Options::halfResolution = !ShockPlus::Options::halfResolution;
     change_svga_screen_mode();
 
-    if (DoubleSize)
+    if (ShockPlus::Options::halfResolution)
         message_info("Low res.");
     else {
         message_info("High res.");
-        SkipLines = FALSE;
+        ShockPlus::Options::enableSkipLines = false;
     }
-    gShockPrefs.doResolution = (DoubleSize) ? 1 : 0; // KLC - Yeah, got to update this one too
-    gShockPrefs.doUseQD = SkipLines;                 // KLC - and this one
-    SavePrefs();                                     // KLC - and save the prefs out to disk.
+    ShockPlus::Options::save();
 
     return TRUE;
 }
 
 uchar MacSkiplinesFunc(ushort keycode, uint32_t context, intptr_t data) {
-    if (!DoubleSize) // Skip lines only applies in double-size mode.
+    if (!ShockPlus::Options::halfResolution) // Skip lines only applies in double-size mode.
     {
         message_info("Skip lines works only in low-res mode.");
         return FALSE;
     }
-    SkipLines = !SkipLines;
-    gShockPrefs.doUseQD = SkipLines;
-    SavePrefs();
+    ShockPlus::Options::enableSkipLines = !ShockPlus::Options::enableSkipLines;
+    ShockPlus::Options::save();
     return TRUE;
 }
 
@@ -426,28 +415,28 @@ uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data) {
     fauxrend_context *_frc = (fauxrend_context *)svga_render_context;
 
     if (_frc->detail == 4) // Adjust for that global detail nonsense.
-        _frc->detail = _fr_global_detail;
+        _frc->detail = ShockPlus::Options::videoDetail;
 
     _frc->detail++; // Cycle through the detail levels.
     if (_frc->detail >= 4)
         _frc->detail = 0;
-    _fr_global_detail = _frc->detail; // Update the global guy.
-
-    gShockPrefs.doDetail = _frc->detail; // Update and save our prefs.
-    SavePrefs();
+    // Update the global guy.
+    ShockPlus::Options::videoDetail = static_cast<ShockPlus::Options::VideoDetail>(_frc->detail);
+    // Update and save our prefs.
+    ShockPlus::Options::save();
 
     switch (_frc->detail) // Show a nice, informative message.
     {
-    case 0:
+    case ShockPlus::Options::VIDEO_DETAIL_MIN:
         strcpy(detailStr, "Min");
         break;
-    case 1:
+    case ShockPlus::Options::VIDEO_DETAIL_LOW:
         strcpy(detailStr, "Low");
         break;
-    case 2:
+    case ShockPlus::Options::VIDEO_DETAIL_HIGH:
         strcpy(detailStr, "High");
         break;
-    case 3:
+    case ShockPlus::Options::VIDEO_DETAIL_MAX:
         strcpy(detailStr, "Max");
     }
     sprintf(msg, "Detail level: %s", detailStr);
@@ -592,7 +581,7 @@ uchar weapon_button_up = TRUE;
 
 void CalcMotionCurOffset(uchar cyber, LGRegion *reg, short *cx, short *cy, short *cw, short *ch, short *x, short *y)
 {
-  if (DoubleSize)
+  if (ShockPlus::Options::halfResolution)
   {
     (*x) *= 2;
     (*y) *= 2;
@@ -809,7 +798,7 @@ int view3d_mouse_input(LGPoint pos, LGRegion *reg, uchar move,
 void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
     LGPoint aimpos = ev->pos;
 
-    if (DoubleSize)                        // If double sizing, convert the y to 640x480, then
+    if (ShockPlus::Options::halfResolution)                        // If double sizing, convert the y to 640x480, then
         aimpos.y = SCONV_Y(aimpos.y) >> 1; // half it.  The x stays as is.
     else
         ss_point_convert(&(aimpos.x), &(aimpos.y), FALSE);
@@ -877,7 +866,7 @@ void view3d_rightbutton_handler(uiEvent *ev, LGRegion *r, view3d_data *data) {
             short dropy = DROP_REGION_Y(r);
             short y = aimpos.y;
             //         if (convert_use_mode != 0)
-            if (DoubleSize)                  // If double sizing, convert the y to 640x480, then
+            if (ShockPlus::Options::halfResolution)                  // If double sizing, convert the y to 640x480, then
                 dropy = SCONV_Y(dropy) >> 1; // half it.  The x stays as is.
             else
                 dropy = SCONV_Y(dropy);
@@ -1250,7 +1239,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
 
     pt = evp;
 
-    if (DoubleSize)                  // If double sizing, convert the y to 640x480, then
+    if (ShockPlus::Options::halfResolution)                  // If double sizing, convert the y to 640x480, then
         evp.y = SCONV_Y(evp.y) >> 1; // half it.  The x stays as is.
     else
         ss_point_convert(&(evp.x), &(evp.y), FALSE);
@@ -1298,7 +1287,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
             use_frc = svga_render_context;
             rabsx = r->abs_x;
             rabsy = r->abs_y;
-            if (!DoubleSize)
+            if (!ShockPlus::Options::halfResolution)
                 ss_point_convert(&rabsx, &rabsy, FALSE);
     
             id = fr_get_at(use_frc, evp.x - rabsx, evp.y - rabsy, TRUE);

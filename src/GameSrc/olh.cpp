@@ -26,12 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
 
-#include "Prefs.h"
+#include "Engine/Options.h"
 #include "SDLFunctions.h"
 #include "Shock.h"
 
 #include "player.h"
-#include "audiolog.h"
 #include "gamestrn.h"
 #include "objapp.h"
 #include "objects.h"
@@ -43,7 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "hotkey.h"
 #include "olhint.h"
 #include "faketime.h"
-#include "frsetup.h"
 #include "objbit.h"
 #include "objuse.h"
 #include "olhscan.h"
@@ -75,7 +73,6 @@ extern "C" {
 //          ON-LINE HELP FOR SYSTEM SHOCK
 // -------------------------------------------------
 
-uchar olh_active = TRUE;
 uchar olh_overlay_on = FALSE;
 olh_data olh_object = {OBJ_NULL, {0, 0}};
 
@@ -268,7 +265,7 @@ LGPoint draw_olh_string(char *s, short xl, short yl) {
     gr_string_wrap(s, OLH_WRAP_WID);
     gr_string_size(s, &w, &h);
     ss_point_convert(&xl, &yl, TRUE);
-    if (DoubleSize) {
+    if (ShockPlus::Options::halfResolution) {
         xl *= 2;
         yl = yl * 2 + 1;
     }
@@ -346,7 +343,7 @@ void olh_do_callout(short xl, short yl) {
         LGPoint pos = olh_object.loc;
         pos.x = (int)(pos.x + 1) * SCAN_RATIO;
         pos.y = (int)(pos.y + 1) * SCAN_RATIO;
-        if (DoubleSize) {
+        if (ShockPlus::Options::halfResolution) {
             pos.x *= 2;
             pos.y *= 2;
         }
@@ -384,8 +381,7 @@ void olh_do_cursor(short xl, short yl) {
     // this should be a different string if the cursor is
     // a live grenade.
     char buf[80];
-    if ((objs[obj].obclass == CLASS_GRENADE &&
-         objGrenades[objs[obj].specID].flags & GREN_ACTIVE_FLAG) ||
+    if ((objs[obj].obclass == CLASS_GRENADE && objGrenades[objs[obj].specID].flags & GREN_ACTIVE_FLAG) ||
         ObjProps[OPNUM(obj)].flags & USELESS_FLAG)
         get_string(REF_STR_helpGrenade, buf, sizeof(buf));
     else {
@@ -430,9 +426,7 @@ void olh_init(void)
 
 void olh_closedown(void) { olh_object.obj = OBJ_NULL; }
 
-void olh_shutdown(void) {
-    olh_free_scan();
-}
+void olh_shutdown(void) { olh_free_scan(); }
 
 short _olh_overlay_keys[] = {
     ' ' | KB_FLAG_DOWN,
@@ -448,7 +442,7 @@ void olh_overlay(void) {
     uiPushGlobalCursor(&globcursor);
     gr_push_canvas(grd_screen_canvas);
     uiHideMouse(NULL);
-    draw_res_bm(REF_IMG_bmHelpOverlayEnglish + MKREF(which_lang, 0), 0, 0);
+    draw_res_bm(REF_IMG_bmHelpOverlayEnglish + MKREF(ShockPlus::Options::language, 0), 0, 0);
     uiShowMouse(NULL);
     gr_pop_canvas();
     uiFlush();
@@ -482,22 +476,21 @@ void olh_overlay(void) {
     uiPopGlobalCursor();
     uiFlush();
     olh_overlay_on = FALSE;
-	gr_clear(0); //makes red pixels go away, but real problem is probably in REF_IMG_bmBlankMFD
+    gr_clear(0); // makes red pixels go away, but real problem is probably in REF_IMG_bmBlankMFD
     screen_draw();
     status_bio_start();
 }
 
 uchar toggle_olh_func(ushort keycode, uint32_t context, intptr_t data) {
-    if (!olh_active) {
+    if (!ShockPlus::Options::showOnScreenHelp) {
         string_message_info(REF_STR_helpOn);
-        olh_active = TRUE;
+        ShockPlus::Options::showOnScreenHelp = true;
     } else {
         string_message_info(REF_STR_helpOff);
-        olh_active = FALSE;
+        ShockPlus::Options::showOnScreenHelp = false;
         ResUnlock(RES_olh_strings); // KLC - added to free strings.
     }
-    gShockPrefs.goOnScreenHelp = olh_active; // KLC - Yeah, got to update this one too and
-    SavePrefs();                             // KLC - save the prefs out to disk.
+    ShockPlus::Options::save();
     return TRUE;
 }
 

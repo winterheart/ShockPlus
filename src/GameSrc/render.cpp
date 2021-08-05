@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/10/27 04:55:24 $
  */
 
-#include <string.h>
+#include <cstring>
 
+#include "Engine/Options.h"
 #include "gamerend.h"
 #include "render.h"
 #include "frprotox.h"
-#include "frsetup.h"
 #include "faketime.h"
 #include "game_screen.h"
 #include "fullscrn.h"
@@ -220,7 +220,7 @@ errtype hack_camera_takeover(int hack_cam) {
 
     // do a wacky zoom thing
     ucp = use_cursor_pos;
-    if (!DoubleSize)
+    if (!ShockPlus::Options::halfResolution)
         ss_point_convert(&(ucp.x), &(ucp.y), TRUE);
     RECT_MOVE(&start, ucp);
     zoom_rect(&start, (full_game_3d) ? &fscrn_rect : &mainview_rect);

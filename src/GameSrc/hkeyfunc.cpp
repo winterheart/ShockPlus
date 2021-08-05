@@ -23,19 +23,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/18 00:24:50 $
  */
 
-#include <string.h>
-#include <hkeyfunc.h>
+#include <cstring>
 
+#include "Engine/Options.h"
 #include "Shock.h"
-#include "Prefs.h"
 
 #include "ai.h"
 #include "fullscrn.h"
 #include "game_screen.h"
 #include "grenades.h"
+#include "hkeyfunc.h"
 #include "invent.h"
 #include "loops.h"
-#include "mfdint.h"
 #include "mfdext.h"
 #include "MacTune.h"
 #include "musicai.h"
@@ -282,8 +281,8 @@ void start_music(void) {
         load_score_for_location(PLAYER_BIN_X, PLAYER_BIN_Y);
         MacTuneStartCurrentTheme();
     } else {
-        gShockPrefs.soBackMusic = FALSE;
-        SavePrefs();
+        ShockPlus::Options::enableSound = false;
+        ShockPlus::Options::save();
     }
     //   }
 }
@@ -306,8 +305,8 @@ uchar toggle_music_func(ushort keycode, uint32_t context, intptr_t data) {
         message_info("Music on.");
     }
 
-    gShockPrefs.soBackMusic = music_on;
-    SavePrefs();
+    ShockPlus::Options::enableSound = music_on;
+    ShockPlus::Options::save();
 
     return (FALSE);
 }

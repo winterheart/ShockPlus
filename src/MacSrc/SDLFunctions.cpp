@@ -20,9 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "Engine/Options.h"
+
 #include "InitMac.h"
 #include "OpenGL.h"
-#include "Prefs.h"
 #include "SDLFunctions.h"
 #include "ShockBitmap.h"
 #include "Shock.h"
@@ -59,7 +60,7 @@ void InitSDL() {
 
     gr_init();
 
-    gr_set_mode(svga_mode_data[gShockPrefs.doVideoMode], TRUE);
+    gr_set_mode(svga_mode_data[ShockPlus::Options::videoMode], TRUE);
 
     INFO("Setting up screen and render contexts");
 
@@ -146,7 +147,7 @@ void SetSDLPalette(int index, int count, uchar *pal) {
         INFO("Gamma LUT init\'ed");
     }
 
-    int gam = gShockPrefs.doGamma;
+    int gam = ShockPlus::Options::gammaCorrection;
     if (gam < 10)
         gam = 10;
     if (gam > 100)
@@ -179,7 +180,7 @@ void SetSDLPalette(int index, int count, uchar *pal) {
 bool MouseCaptured = FALSE;
 
 void CaptureMouse(bool capture) {
-    MouseCaptured = (capture && gShockPrefs.goCaptureMouse);
+    MouseCaptured = (capture && ShockPlus::Options::captureMouse);
 
     if (!MouseCaptured && mlook_enabled && SDL_GetRelativeMouseMode() == SDL_TRUE) {
         SDL_SetRelativeMouseMode(SDL_FALSE);

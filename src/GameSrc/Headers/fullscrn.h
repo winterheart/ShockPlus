@@ -88,7 +88,7 @@ extern uiSlab fullscreen_slab;
 extern grs_screen *svga_screen;
 extern frc *svga_render_context;
 extern short svga_mode_data[];
-extern short mode_id;
+//extern short mode_id;
 #endif
 
 #endif // __FULLSCRN_H

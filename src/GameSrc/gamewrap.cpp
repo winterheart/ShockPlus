@@ -23,8 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/26 03:36:36 $
  */
 
-#include <string.h>
+#include <cstring>
+#include <cstdio>
 
+#include "Engine/Options.h"
 #include "MacTune.h"
 #include "Shock.h"
 
@@ -66,8 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "wrapper.h"
 
 #include "otrip.h"
-
-#include <stdio.h>
 
 #define SCHEDULE_BASE_ID 590
 
@@ -289,7 +289,6 @@ errtype interpret_qvars(void) {
     recompute_digifx_level(QUESTVAR_GET(SFX_VOLUME_QVAR));
 #ifdef AUDIOLOGS
     recompute_audiolog_level(QUESTVAR_GET(ALOG_VOLUME_QVAR));
-    //audiolog_setting = QUESTVAR_GET(ALOG_OPT_QVAR); //moved to prefs file
 #endif
     fullscrn_vitals = QUESTVAR_GET(FULLSCRN_VITAL_QVAR);
     fullscrn_icons = QUESTVAR_GET(FULLSCRN_ICON_QVAR);
@@ -488,7 +487,7 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
     load_dynamic_memory(DYNMEM_ALL);
 
     // KLC - if not already on, turn on-line help on.
-    if (!olh_active)
+    if (!ShockPlus::Options::showOnScreenHelp)
         toggle_olh_func(0, 0, 0);
 
     // Do entry-level triggers for starting level
@@ -498,7 +497,7 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
     do_level_entry_triggers();
 
     // turn on help overlay.
-    olh_overlay_on = olh_active;
+    olh_overlay_on = ShockPlus::Options::showOnScreenHelp;
 
     // Plot timers
 

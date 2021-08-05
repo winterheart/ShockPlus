@@ -24,8 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string.h>
+#include <cstring>
 
+#include "Engine/Options.h"
 #include "Shock.h"
 #include "audiolog.h"
 #include "gamestrn.h"
@@ -66,9 +67,9 @@ char *lg_sprintf_string_get(uint32_t ref)
 
 void init_strings(void) {
     // Open the string resource file.
-    if (which_lang < 0 || which_lang >= sizeof(language_files) / sizeof(*language_files))
-        which_lang = 0;
-    const char *lang_file = language_files[which_lang];
+    if (ShockPlus::Options::language < 0 || ShockPlus::Options::language > 2)
+        ShockPlus::Options::language = ShockPlus::Options::LANGUAGE_ENGLISH;
+    const char *lang_file = language_files[ShockPlus::Options::language];
     string_res_file = ResOpenFile(lang_file);
 
     if (string_res_file < 0)

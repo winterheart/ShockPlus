@@ -34,6 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <cstring>
 
+#include "Engine/Options.h"
+
 #include "2dres.h"
 #include "game_screen.h" // for the root region
 #include "fullscrn.h"
@@ -897,14 +899,14 @@ uchar mfd_button_callback(uiEvent *e, LGRegion *r, intptr_t udata) {
 
         cnum = which_button;
 
-        if (player_struct.mfd_slot_status[which_button] == MFD_UNAVAIL || !popup_cursors) {
+        if (player_struct.mfd_slot_status[which_button] == MFD_UNAVAIL || !ShockPlus::Options::showTooltipMessages) {
             if ((cnum != last_mfd_cnum[which_panel])) {
                 last_mfd_cnum[which_panel] = cnum;
                 uiSetRegionDefaultCursor(r, &globcursor);
             }
         }
         if (player_struct.mfd_slot_status[which_button] != MFD_UNAVAIL) {
-            if ((cnum != last_mfd_cnum[which_panel]) && popup_cursors) {
+            if ((cnum != last_mfd_cnum[which_panel]) && ShockPlus::Options::showTooltipMessages) {
                 LGPoint offset = {0, 0};
                 last_mfd_cnum[which_panel] = cnum;
                 free(mfd_bttn_bitmaps[which_panel].bits);

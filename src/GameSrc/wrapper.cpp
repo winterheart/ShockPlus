@@ -25,6 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <climits>
 
+#include "Engine/Options.h"
+
 #include "newmfd.h"
 #include "wrapper.h"
 #include "tools.h"
@@ -36,8 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "mainloop.h"
 #include "event.h"
 #include "hkeyfunc.h"
-#include "hotkey.h"
-#include "keydefs.h"
 #include "gamewrap.h"
 #include "colors.h"
 #include "cybstrng.h"
@@ -58,14 +58,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "criterr.h"
 #include "gr2ss.h"
 #include "player.h"
-#include "popups.h"
 #include "str.h"
 #include "olhext.h"
 #include "Xmi.h"
-#include "Prefs.h"
 
 #include "OpenGL.h"
-
 
 #ifdef AUDIOLOGS
 #include "audiolog.h"
@@ -75,28 +72,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "MacTune.h"
 
-#define LOAD_BUTTON          0
-#define SAVE_BUTTON          1
-#define AUDIO_BUTTON         2
-#define INPUT_BUTTON         3
-#define OPTIONS_BUTTON       4
-#define VIDEO_BUTTON         5
-#define RETURN_BUTTON        6
-#define QUIT_BUTTON          7
-#define AUDIO_OPT_BUTTON     8
-#define SCREENMODE_BUTTON    9
+#define LOAD_BUTTON 0
+#define SAVE_BUTTON 1
+#define AUDIO_BUTTON 2
+#define INPUT_BUTTON 3
+#define OPTIONS_BUTTON 4
+#define VIDEO_BUTTON 5
+#define RETURN_BUTTON 6
+#define QUIT_BUTTON 7
+#define AUDIO_OPT_BUTTON 8
+#define SCREENMODE_BUTTON 9
 #define HEAD_RECENTER_BUTTON 10
-#define HEADSET_BUTTON       11
+#define HEADSET_BUTTON 11
 
 #define MOUSE_DOWN (MOUSE_LDOWN | MOUSE_RDOWN | UI_MOUSE_LDOUBLE)
-#define MOUSE_UP   (MOUSE_LUP | MOUSE_RUP)
+#define MOUSE_UP (MOUSE_LUP | MOUSE_RUP)
 #define MOUSE_LEFT (MOUSE_LDOWN | UI_MOUSE_LDOUBLE)
 #define MOUSE_WHEEL (MOUSE_WHEELUP | MOUSE_WHEELDN)
 
-#define STATUS_X      4
-#define STATUS_Y      1
+#define STATUS_X 4
+#define STATUS_Y 1
 #define STATUS_HEIGHT 20
-#define STATUS_WIDTH  312
+#define STATUS_WIDTH 312
 
 LGCursor option_cursor;
 grs_bitmap option_cursor_bmap;
@@ -283,12 +280,12 @@ typedef uchar (*slorker)(uchar butid);
 typedef struct {
     LGRect rect;
     union {
-        opt_slider_state     slider_st;
+        opt_slider_state slider_st;
         opt_pushbutton_state pushbutton_st;
-        opt_text_state       text_st;
-        opt_multi_state      multi_st;
-        opt_textlist_state   textlist_st;
-        slorker              sl;
+        opt_text_state text_st;
+        opt_multi_state multi_st;
+        opt_textlist_state textlist_st;
+        slorker sl;
     } user;
     ulong evmask;
     void (*drawfunc)(uchar butid);
@@ -319,11 +316,11 @@ uchar fv;
 
 #ifdef HALF_BUTTON_MARGINS
 #define widget_width(t, m) (2 * INVENTORY_PANEL_WIDTH / (3 * (t) + 1))
-#define widget_x(c, t, m)  ((3 * (t) + 1) * INVENTORY_PANEL_WIDTH / (3 * (t) + 1))
+#define widget_x(c, t, m) ((3 * (t) + 1) * INVENTORY_PANEL_WIDTH / (3 * (t) + 1))
 #endif
 #ifdef CONSTANT_MARGINS
 #define widget_width(t, m) ((INVENTORY_PANEL_WIDTH - ((m) * ((t) + 1))) / (t))
-#define widget_x(c, t, m)  ((m) * ((c) + 1) + widget_width(t, m) * (c))
+#define widget_x(c, t, m) ((m) * ((c) + 1) + widget_width(t, m) * (c))
 #endif
 
 // override get_temp_string() to support hard-coded custom strings without
@@ -334,30 +331,43 @@ static char MIDI_STR_BUFFER[MIDI_OUT_STR_SIZE];
 
 static char *_get_temp_string(int num) {
     switch (num) {
-        case REF_STR_Renderer: return "Renderer";
-        case REF_STR_Software: return "Software";
-        case REF_STR_OpenGL:   return "OpenGL";
+    case REF_STR_Renderer:
+        return "Renderer";
+    case REF_STR_Software:
+        return "Software";
+    case REF_STR_OpenGL:
+        return "OpenGL";
 
-        case REF_STR_TextFilt: return "Tex Filter";
-        case REF_STR_TFUnfil:  return "Unfiltered";
-        case REF_STR_TFBilin:  return "Bilinear";
+    case REF_STR_TextFilt:
+        return "Tex Filter";
+    case REF_STR_TFUnfil:
+        return "Unfiltered";
+    case REF_STR_TFBilin:
+        return "Bilinear";
 
-        case REF_STR_MousLook: return "Mouselook";
-        case REF_STR_MousNorm: return "Normal";
-        case REF_STR_MousInv:  return "Inverted";
+    case REF_STR_MousLook:
+        return "Mouselook";
+    case REF_STR_MousNorm:
+        return "Normal";
+    case REF_STR_MousInv:
+        return "Inverted";
 
-        case REF_STR_Seqer:    return "Midi Player";
-        case REF_STR_ADLMIDI:  return "ADLMIDI";
-        case REF_STR_NativeMI: return "Native MIDI";
+    case REF_STR_Seqer:
+        return "Midi Player";
+    case REF_STR_ADLMIDI:
+        return "ADLMIDI";
+    case REF_STR_NativeMI:
+        return "Native MIDI";
 #ifdef USE_FLUIDSYNTH
-        case REF_STR_FluidSyn: return "FluidSynth";
+    case REF_STR_FluidSyn:
+        return "FluidSynth";
 #endif
 
-        case REF_STR_MidiOut:  return "Midi Output";
+    case REF_STR_MidiOut:
+        return "Midi Output";
     }
 
-    if (num >= REF_STR_MidiOutX && num <= (REF_STR_MidiOutX | 0x0fffffff))
-    {
+    if (num >= REF_STR_MidiOutX && num <= (REF_STR_MidiOutX | 0x0fffffff)) {
         const unsigned int midiOutputIndex = (unsigned int)num - REF_STR_MidiOutX;
         MIDI_STR_BUFFER[0] = '\0';
         GetOutputNameXMI(midiOutputIndex, &MIDI_STR_BUFFER[0], MIDI_OUT_STR_SIZE);
@@ -500,12 +510,9 @@ void slider_init(uchar butid, Ref descrip, uchar type, uchar smooth, void *var, 
     opt_slider_state *st = &OButtons[butid].user.slider_st;
     uint val;
 
-    if (maxval)
-    {
+    if (maxval) {
         val = ((r->lr.x - r->ul.x - 3) * multi_get_curval(type, var)) / maxval;
-    }
-    else
-    {
+    } else {
         // just put it in the middle
         val = (r->lr.x - r->ul.x - 3) / 2;
     }
@@ -702,7 +709,7 @@ uchar multi_handler(uiEvent *ev, uchar butid) {
         else if (ev->subtype & MOUSE_RDOWN)
             delta = st->num_opts - 1;
     } else if (ev->type == UI_EVENT_KBD_COOKED) {
-	short code = ev->cooked_key_data.code;
+        short code = ev->cooked_key_data.code;
         if (tolower(code & 0xFF) == st->keyeq) {
             if (isupper(code & 0xFF))
                 delta = st->num_opts - 1;
@@ -904,8 +911,8 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
 
         // FIXME It's Unicode, we need to use wchar.h stuff here
         char k = ev->sdl_data.text.text[0];
-        //uint keycode = code & ~KB_FLAG_DOWN;
-        //uchar special = ((code & KB_FLAG_SPECIAL) != 0);
+        // uint keycode = code & ~KB_FLAG_DOWN;
+        // uchar special = ((code & KB_FLAG_SPECIAL) != 0);
         char *s;
         char upness = 0;
         char cur = st->currstring;
@@ -1147,7 +1154,7 @@ errtype wrapper_panel_close(uchar clear_message) {
     if (clear_message)
         message_info("");
     wrapper_panel_on = FALSE;
-    SavePrefs();
+    ShockPlus::Options::save();
     inventory_page = inv_last_page;
     if (inventory_page < 0 && inventory_page != INV_3DVIEW_PAGE)
         inventory_page = 0;
@@ -1272,9 +1279,9 @@ void wrapper_init(void) {
     opanel_redraw(TRUE);
 }
 
-    //
-    // THE VERIFY SCREEN: Initialization, handlers
-    //
+//
+// THE VERIFY SCREEN: Initialization, handlers
+//
 
 void quit_verify_pushbutton_handler(uchar butid) { really_quit_key_func(0, 0, 0); }
 
@@ -1297,10 +1304,12 @@ void verify_screen_init(void (*verify)(uchar butid), slorker slork) {
     clear_obuttons();
 
     standard_button_rect(&r, 1, 2, 2, 5);
-    pushbutton_init(0, static_cast<SDL_Scancode>(tolower(get_temp_string(REF_STR_VerifyText)[0])), REF_STR_VerifyText, verify, &r);
+    pushbutton_init(0, static_cast<SDL_Scancode>(tolower(get_temp_string(REF_STR_VerifyText)[0])), REF_STR_VerifyText,
+                    verify, &r);
 
     standard_button_rect(&r, 4, 2, 2, 5);
-    pushbutton_init(1, SDL_GetScancodeFromKey(tolower(get_temp_string(REF_STR_VerifyText + 1)[0])), (REF_STR_VerifyText + 1), (void (*)(uchar))slork, &r);
+    pushbutton_init(1, SDL_GetScancodeFromKey(tolower(get_temp_string(REF_STR_VerifyText + 1)[0])),
+                    (REF_STR_VerifyText + 1), (void (*)(uchar))slork, &r);
 
     slork_init(2, slork);
 
@@ -1312,13 +1321,9 @@ void quit_verify_init(void) { verify_screen_init(quit_verify_pushbutton_handler,
 //
 // THE SOUND OPTIONS SCREEN: Initialization, update funcs
 
-uchar curr_vol_lev = 100;
-uchar curr_sfx_vol = 100;
-uchar curr_alog_vol = 100;
-
 void recompute_music_level(ushort vol) {
     //   curr_vol_lev=long_sqrt(100*vol);
-    curr_vol_lev = QVAR_TO_VOLUME(vol);
+    ShockPlus::Options::musicVolume = QVAR_TO_VOLUME(vol);
     if (vol == 0) {
         music_on = FALSE;
         // stop_music_func(0,0,0);
@@ -1333,13 +1338,13 @@ void recompute_music_level(ushort vol) {
 }
 
 void recompute_digifx_level(ushort vol) {
-    sfx_on = (vol != 0);
-    curr_sfx_vol = QVAR_TO_VOLUME(vol);
-    if (sfx_on) {
+    ShockPlus::Options::enableSFX = (vol != 0);
+    ShockPlus::Options::sfxVolume = QVAR_TO_VOLUME(vol);
+    if (ShockPlus::Options::enableSFX) {
 #ifdef DEMO
         play_digi_fx(73, 1);
 #else
-        // play a sample (if not alreay playing)
+        // play a sample (if not already playing)
         if (!digi_fx_playing(SFX_NEAR_1, NULL))
             play_digi_fx(SFX_NEAR_1, 1);
         // update volume (main loop is not running at this point)
@@ -1355,14 +1360,14 @@ void recompute_digifx_level(ushort vol) {
 
 #ifdef AUDIOLOGS
 void recompute_audiolog_level(ushort vol) {
-    curr_alog_vol = QVAR_TO_VOLUME(vol);
+    ShockPlus::Options::voiceVolume = QVAR_TO_VOLUME(vol);
     sound_frame_update();
 }
 #endif
 
 void digi_toggle_deal(ushort offon) {
     int vol;
-    vol = (sfx_on) ? 100 : 0;
+    vol = (ShockPlus::Options::enableSFX) ? 100 : 0;
     recompute_digifx_level(vol);
     QUESTVAR_SET(SFX_VOLUME_QVAR, vol);
 }
@@ -1371,7 +1376,7 @@ void digi_toggle_deal(ushort offon) {
 void audiolog_dealfunc(ushort val) {
     if (!val)
         audiolog_stop();
-    QUESTVAR_SET(ALOG_OPT_QVAR, audiolog_setting);
+    QUESTVAR_SET(ALOG_OPT_QVAR, ShockPlus::Options::alogPlayback);  // TODO: unuse this
 }
 #endif
 
@@ -1395,15 +1400,15 @@ void digichan_dealfunc(ushort val) {
 }
 
 static void seqer_dealfunc(ushort val) {
-//    INFO("Selected MIDI device %d", val);
-    gShockPrefs.soMidiOutput = 0;
+    //    INFO("Selected MIDI device %d", val);
+    ShockPlus::Options::midiOutput = 0;
     ReloadDecXMI(); // Reload Midi decoder
     soundopt_screen_init();
     (void)val;
 }
 
 static void midi_output_dealfunc(ushort val) {
-//    INFO("Selected MIDI output %d", val);
+    //    INFO("Selected MIDI output %d", val);
     ReloadDecXMI(); // Reload Midi decoder
     soundopt_screen_init();
     (void)val;
@@ -1432,35 +1437,32 @@ void soundopt_screen_init() {
 #ifdef AUDIOLOGS
     standard_button_rect(&r, i, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_MusicText + 3)[0]);
-    multi_init(i, retkey, REF_STR_MusicText + 3, REF_STR_AudiologState, ID_NULL, sizeof(audiolog_setting),
-               &audiolog_setting, 3, audiolog_dealfunc, &r);
+    multi_init(i, retkey, REF_STR_MusicText + 3, REF_STR_AudiologState, ID_NULL, sizeof(ShockPlus::Options::alogPlayback),
+               &ShockPlus::Options::alogPlayback, 3, audiolog_dealfunc, &r);
     i++;
 #endif
 
     standard_button_rect(&r, i, 2, 2, 5);
-    multi_init(i, 'p', REF_STR_Seqer, REF_STR_ADLMIDI, ID_NULL,
-               sizeof(gShockPrefs.soMidiBackend), &gShockPrefs.soMidiBackend, OPT_SEQ_Max, seqer_dealfunc, &r);
+    multi_init(i, 'p', REF_STR_Seqer, REF_STR_ADLMIDI, ID_NULL, sizeof(ShockPlus::Options::midiBackend),
+               &ShockPlus::Options::midiBackend, 3, seqer_dealfunc, &r);
     i++;
-/* standard button is too narrow, so use a slider instead
-    const unsigned int numMidiOutputs = GetOutputCountXMI();
-    INFO("numMidiOutputs=%d", numMidiOutputs);
-    standard_button_rect(&r, i, 2, 2, 5);
-    multi_init(i, 'o', REF_STR_MidiOut, REF_STR_MidiOutX, ID_NULL,
-               sizeof(gShockPrefs.soMidiOutput), &gShockPrefs.soMidiOutput, numMidiOutputs, midi_output_dealfunc, &r);
-    i++;
-*/
+    /* standard button is too narrow, so use a slider instead
+        const unsigned int numMidiOutputs = GetOutputCountXMI();
+        INFO("numMidiOutputs=%d", numMidiOutputs);
+        standard_button_rect(&r, i, 2, 2, 5);
+        multi_init(i, 'o', REF_STR_MidiOut, REF_STR_MidiOutX, ID_NULL,
+                   sizeof(gShockPrefs.soMidiOutput), &gShockPrefs.soMidiOutput, numMidiOutputs, midi_output_dealfunc,
+       &r); i++;
+    */
     unsigned int midiOutputCount = GetOutputCountXMI();
-    if (midiOutputCount > 1)
-    {
+    if (midiOutputCount > 1) {
         standard_slider_rect(&r, i, 2, 5);
         // this makes it double-wide i guess?
         r.lr.x += (r.lr.x - r.ul.x);
-        slider_init(i, REF_STR_MidiOutX + gShockPrefs.soMidiOutput, sizeof(gShockPrefs.soMidiOutput), FALSE, &gShockPrefs.soMidiOutput, midiOutputCount - 1,
-                    0, midi_output_dealfunc, &r);
+        slider_init(i, REF_STR_MidiOutX + ShockPlus::Options::midiOutput, sizeof(ShockPlus::Options::midiOutput), FALSE,
+                    &ShockPlus::Options::midiOutput, midiOutputCount - 1, 0, midi_output_dealfunc, &r);
         i++;
-    }
-    else if (midiOutputCount == 1)
-    {
+    } else if (midiOutputCount == 1) {
         // just show a text label
         standard_button_rect(&r, i, 1, 2, 10);
         textwidget_init(i, BUTTON_COLOR, REF_STR_MidiOutX, &r);
@@ -1516,7 +1518,7 @@ void sound_screen_init(void) {
         r.ul.y -= slider_offset;
         r.lr.y -= slider_offset;
         multi_init(1, get_temp_string(REF_STR_MusicText + 1)[0], REF_STR_MusicText + 1, REF_STR_OffonText,
-                   REF_STR_MusicFeedbackText + 5, sizeof(sfx_on), &sfx_on, 2, digi_toggle_deal, &r);
+                   REF_STR_MusicFeedbackText + 5, sizeof(ShockPlus::Options::enableSFX), &ShockPlus::Options::enableSFX, 2, digi_toggle_deal, &r);
     }
 
 #ifdef AUDIOLOGS
@@ -1530,7 +1532,8 @@ void sound_screen_init(void) {
 
     standard_button_rect(&r, 2, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_AilThreeText + 2)[0]);
-    pushbutton_init(AUDIO_OPT_BUTTON, SDL_GetScancodeFromKey(retkey), REF_STR_AilThreeText + 2, wrapper_pushbutton_func, &r);
+    pushbutton_init(AUDIO_OPT_BUTTON, SDL_GetScancodeFromKey(retkey), REF_STR_AilThreeText + 2, wrapper_pushbutton_func,
+                    &r);
 
     standard_button_rect(&r, 5, 2, 2, 5);
     retkey = tolower(get_temp_string(REF_STR_MusicText + 2)[0]);
@@ -1542,29 +1545,29 @@ void sound_screen_init(void) {
     opanel_redraw(TRUE);
 }
 
-    //
-    // THE OPTIONS SCREEN: Initialization, update funcs
-    //
+//
+// THE OPTIONS SCREEN: Initialization, update funcs
+//
 
-    /*void gamma_dealfunc(ushort gamma_qvar)
-    {
-       fix gamma;
+/*void gamma_dealfunc(ushort gamma_qvar)
+{
+   fix gamma;
 
-    //   gamma=FIX_UNIT-fix_make(0,gamma_qvar);
-    //   gamma=fix_mul(gamma,gamma)+(FIX_UNIT/2);
-       gamma=QVAR_TO_GAMMA(gamma_qvar);
-       gr_set_gamma_pal(0,256,gamma);
-    }*/
+//   gamma=FIX_UNIT-fix_make(0,gamma_qvar);
+//   gamma=fix_mul(gamma,gamma)+(FIX_UNIT/2);
+   gamma=QVAR_TO_GAMMA(gamma_qvar);
+   gr_set_gamma_pal(0,256,gamma);
+}*/
 
 #ifdef SVGA_SUPPORT
 uchar wrapper_screenmode_hack = FALSE;
 void screenmode_change(uchar new_mode) {
-    mode_id = new_mode;
+    ShockPlus::Options::videoMode = new_mode;
     QUESTVAR_SET(SCREENMODE_QVAR, new_mode);
     change_mode_func(0, 0, _current_loop);
     wrapper_screenmode_hack = TRUE;
 
-    INFO("Changed screen mode to %i\n", mode_id);
+    INFO("Changed screen mode to %i", ShockPlus::Options::videoMode);
     wrapper_panel_close(TRUE);
 }
 #endif
@@ -1584,9 +1587,8 @@ void language_change(uchar lang) {
 
     QUESTVAR_SET(LANGUAGE_QVAR, lang);
 
-    // in case we got here from interpret_qvars, and thus
-    // haven't set this yet
-    which_lang = lang;
+    // in case we got here from interpret_qvars, and thus haven't set this yet
+    ShockPlus::Options::language = static_cast<ShockPlus::Options::GeneralLanguage>(lang);
 
     invent_language_change();
     mfd_language_change();
@@ -1607,13 +1609,9 @@ void dclick_dealfunc(ushort dclick_qvar) {
     uiDoubleClickTime = QVAR_TO_DCLICK(dclick_qvar, 1);
 }
 
-void joysens_dealfunc(ushort joysens_qvar) {
-    inpJoystickSens = QVAR_TO_JOYSENS(joysens_qvar);
-}
+void joysens_dealfunc(ushort joysens_qvar) { inpJoystickSens = QVAR_TO_JOYSENS(joysens_qvar); }
 
-void center_joy_go(uchar butid) {
-    joystick_screen_init();
-}
+void center_joy_go(uchar butid) { joystick_screen_init(); }
 
 void center_joy_pushbutton_func(uchar butid) {
     int i;
@@ -1659,9 +1657,7 @@ void mousehand_dealfunc(ushort lefty) {
     // mouse_set_lefty(lefty);
 }
 
-void olh_dealfunc(ushort olh) {
-    toggle_olh_func(0, 0, 0);
-}
+void olh_dealfunc(ushort olh) { toggle_olh_func(0, 0, 0); }
 
 ushort wrap_joy_type = 0;
 ushort high_joy_flags;
@@ -1681,8 +1677,8 @@ void joystick_screen_init(void) {
     clear_obuttons();
 
     standard_button_rect(&r, i, 2, 2, 1);
-    multi_init(i, keys[i], REF_STR_JoystickType, REF_STR_JoystickTypes, ID_NULL, sizeof(wrap_joy_type),
-               &wrap_joy_type, 4, joystick_type_func, &r);
+    multi_init(i, keys[i], REF_STR_JoystickType, REF_STR_JoystickTypes, ID_NULL, sizeof(wrap_joy_type), &wrap_joy_type,
+               4, joystick_type_func, &r);
     i++;
 
     standard_button_rect(&r, i, 2, 2, 1);
@@ -1701,7 +1697,8 @@ void joystick_screen_init(void) {
     i++;
 
     standard_button_rect(&r, 5, 2, 2, 1);
-    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func,
+                    &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
     keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
@@ -1722,8 +1719,8 @@ void input_screen_init(void) {
 
     standard_button_rect(&r, i, 2, 2, 1);
     r.ul.x -= 1;
-    multi_init(i, keys[0], REF_STR_OptionsText + 0, REF_STR_OffonText, REF_STR_PopupCursFeedback, sizeof(popup_cursors),
-               &popup_cursors, 2, NULL, &r);
+    multi_init(i, keys[0], REF_STR_OptionsText + 0, REF_STR_OffonText, REF_STR_PopupCursFeedback,
+               sizeof(ShockPlus::Options::showTooltipMessages), &ShockPlus::Options::showTooltipMessages, 2, NULL, &r);
     i++;
 
     standard_button_rect(&r, i, 2, 2, 1);
@@ -1746,12 +1743,13 @@ void input_screen_init(void) {
 
     standard_button_rect(&r, i, 2, 2, 1);
     r.ul.x -= 1;
-    multi_init(i, keys[3], REF_STR_MousLook, REF_STR_MousNorm, ID_NULL,
-               sizeof(gShockPrefs.goInvertMouseY), &gShockPrefs.goInvertMouseY, 2, NULL, &r);
+    multi_init(i, keys[3], REF_STR_MousLook, REF_STR_MousNorm, ID_NULL, sizeof(ShockPlus::Options::invertMouseY),
+               &ShockPlus::Options::invertMouseY, 2, NULL, &r);
     i++;
 
     standard_button_rect(&r, 5, 2, 2, 1);
-    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func,
+                    &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
     keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
@@ -1759,7 +1757,7 @@ void input_screen_init(void) {
     opanel_redraw(TRUE);
 }
 
-//gamma param not used here; see SetSDLPalette() in Shock.c
+// gamma param not used here; see SetSDLPalette() in Shock.c
 void gamma_slider_dealfunc(ushort gamma_qvar) {
     gr_set_gamma_pal(0, 256, 0);
 
@@ -1782,10 +1780,10 @@ void video_screen_init(void) {
 
 #ifdef USE_OPENGL
     // renderer
-    if(can_use_opengl()) {
+    if (can_use_opengl()) {
         standard_button_rect(&r, i, 2, 2, 2);
-        multi_init(i, 'g', REF_STR_Renderer, REF_STR_Software, ID_NULL,
-                   sizeof(gShockPrefs.doUseOpenGL), &gShockPrefs.doUseOpenGL, 2, renderer_dealfunc, &r);
+        multi_init(i, 'g', REF_STR_Renderer, REF_STR_Software, ID_NULL, sizeof(ShockPlus::Options::enableOpenGL),
+                   &ShockPlus::Options::enableOpenGL, 2, renderer_dealfunc, &r);
         i++;
     }
 #endif
@@ -1801,30 +1799,31 @@ void video_screen_init(void) {
     standard_button_rect(&r, i, 2, 2, 2);
     r.lr.x += 2;
     multi_init(i, keys[1], REF_STR_OptionsText + 4, REF_STR_DetailLvl, REF_STR_DetailLvlFeedback,
-               sizeof(_fr_global_detail), &_fr_global_detail, 4, detail_dealfunc, &r);
+               sizeof(ShockPlus::Options::videoDetail), &ShockPlus::Options::videoDetail, 4, detail_dealfunc, &r);
     i++;
 
     // gamma
     standard_slider_rect(&r, i, 2, 2);
     r.ul.x = r.ul.x + 1;
     sliderbase = ((r.lr.x - r.ul.x - 1) * 29 / 100);
-    slider_init(i, REF_STR_OptionsText + 3, sizeof(ushort), TRUE, &(gShockPrefs.doGamma), 100,
-                sliderbase, gamma_slider_dealfunc, &r);
+    slider_init(i, REF_STR_OptionsText + 3, sizeof(ShockPlus::Options::gammaCorrection), TRUE,
+                &(ShockPlus::Options::gammaCorrection), 100, sliderbase, gamma_slider_dealfunc, &r);
     i++;
 
 #ifdef USE_OPENGL
     // textre filter
-    if(can_use_opengl() && gShockPrefs.doUseOpenGL) {
+    if (can_use_opengl() && ShockPlus::Options::enableOpenGL) {
         standard_button_rect(&r, i, 2, 2, 2);
-        multi_init(i, 't', REF_STR_TextFilt, REF_STR_TFUnfil, ID_NULL,
-                   sizeof(gShockPrefs.doTextureFilter), &gShockPrefs.doTextureFilter, 2, renderer_dealfunc, &r);
+        multi_init(i, 't', REF_STR_TextFilt, REF_STR_TFUnfil, ID_NULL, sizeof(ShockPlus::Options::videoTextureFilter),
+                   &ShockPlus::Options::videoTextureFilter, 2, renderer_dealfunc, &r);
         i++;
     }
 #endif
 
     // return (fixed at position 5)
     standard_button_rect(&r, 5, 2, 2, 2);
-    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[3]), REF_STR_OptionsText + 5, wrapper_pushbutton_func,
+                    &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
     keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
@@ -1838,7 +1837,7 @@ void screenmode_screen_init(void) {
     int i;
     char *keys;
 
-    if (wrapper_screenmode_hack && !(can_use_opengl() && gShockPrefs.doUseOpenGL)) {
+    if (wrapper_screenmode_hack && !(can_use_opengl() && ShockPlus::Options::enableOpenGL)) {
         uiHideMouse(NULL);
         render_run();
         uiShowMouse(NULL);
@@ -1866,7 +1865,8 @@ void screenmode_screen_init(void) {
     }
 
     standard_button_rect(&r, 5, 2, 2, 2);
-    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[2]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[2]), REF_STR_OptionsText + 5, wrapper_pushbutton_func,
+                    &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
     keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
@@ -1885,34 +1885,34 @@ void options_screen_init(void) {
 
     // olh_temp=(QUESTBIT_GET(OLH_QBIT)==0);
 
-    olh_temp = olh_active;
+    olh_temp = ShockPlus::Options::showOnScreenHelp;
 
-    // okay, I admit it, we're going to tweak these "standard"
-    // button rects a little bit.
+    // okay, I admit it, we're going to tweak these "standard" button rects a little bit.
 
     standard_button_rect(&r, 0, 2, 2, 2);
     r.ul.x -= 2;
     multi_init(i, keys[i], REF_STR_OptionsText + 2, REF_STR_TerseText, REF_STR_TerseFeedback,
-               sizeof(gShockPrefs.goMsgLength), &(gShockPrefs.goMsgLength), 2, NULL, &r);
+               sizeof(ShockPlus::Options::messageFormat), &(ShockPlus::Options::messageFormat), 2, NULL, &r);
     i++;
 
     i++;
 
     standard_button_rect(&r, 1, 2, 2, 2);
-    multi_init(i, keys[i], REF_STR_OnlineHelp, REF_STR_OffonText, ID_NULL, sizeof(olh_temp), &olh_temp, 2,
-               olh_dealfunc, &r);
+    multi_init(i, keys[i], REF_STR_OnlineHelp, REF_STR_OffonText, ID_NULL, sizeof(olh_temp), &olh_temp, 2, olh_dealfunc,
+               &r);
     i++;
 
     i++;
 
     standard_button_rect(&r, 2, 2, 2, 2);
-    multi_init(i, keys[i], REF_STR_Language, REF_STR_Languages, ID_NULL, sizeof(which_lang), &which_lang, 3,
+    multi_init(i, keys[i], REF_STR_Language, REF_STR_Languages, ID_NULL, sizeof(ShockPlus::Options::language), &ShockPlus::Options::language, 3,
                language_dealfunc, &r);
     i++;
 
     standard_button_rect(&r, 5, 2, 2, 2);
     r.lr.x += 2;
-    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func, &r);
+    pushbutton_init(RETURN_BUTTON, SDL_GetScancodeFromKey(keys[i]), REF_STR_OptionsText + 5, wrapper_pushbutton_func,
+                    &r);
 
     // FIXME: Cannot pass a keycode with modifier flags as uchar
     keywidget_init(QUIT_BUTTON, /*KB_FLAG_ALT |*/ SDL_SCANCODE_X, wrapper_pushbutton_func);
@@ -2001,7 +2001,7 @@ void wrapper_start(void (*init)(void)) {
     fv = full_visible;
     full_visible = 0;
 #endif
-    render_run(); //move here to fix ghost mouse cursor
+    render_run(); // move here to fix ghost mouse cursor
     uiHideMouse(NULL);
     if (full_game_3d) {
 #ifdef SVGA_SUPPORT
@@ -2019,8 +2019,7 @@ void wrapper_start(void (*init)(void)) {
     } else
         inventory_clear();
     uiShowMouse(NULL);
-    uiInstallRegionHandler(inventory_region, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE, opanel_mouse_handler, 0,
-                           &wrap_id);
+    uiInstallRegionHandler(inventory_region, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE, opanel_mouse_handler, 0, &wrap_id);
     uiInstallRegionHandler(inventory_region, UI_EVENT_KBD_COOKED, opanel_kb_handler, 0, &wrap_key_id);
     uiGrabFocus(inventory_region, UI_EVENT_KBD_COOKED | UI_EVENT_MOUSE);
     region_set_invisible(inventory_region, FALSE);
@@ -2074,7 +2073,7 @@ errtype do_savegame_guts(uchar slot) {
     return (retval);
 }
 
-    //#endif // NOT_YET
+//#endif // NOT_YET
 
 uchar wrapper_region_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     /*if (global_fullmap->cyber)
@@ -2145,8 +2144,7 @@ errtype wrapper_create_mouse_region(LGRegion *root) {
     err = region_create(root, reg, &r, 2, 0, REG_USER_CONTROLLED | AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
     if (err != OK)
         return err;
-    err = uiInstallRegionHandler(reg, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE, wrapper_region_mouse_handler,
-                                 0, &id);
+    err = uiInstallRegionHandler(reg, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE, wrapper_region_mouse_handler, 0, &id);
     if (err != OK)
         return err;
     if (!cursor_loaded) {

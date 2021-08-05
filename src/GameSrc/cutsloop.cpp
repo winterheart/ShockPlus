@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "Engine/Options.h"
 #include "Shock.h"
 #include "audiolog.h"
 #include "cutsloop.h"
@@ -26,9 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #include "game_screen.h"
 #include "gamescr.h"
-#include "keydefs.h"
 #include "palfx.h"
-#include "tools.h"
 #include "str.h"
 
 #include "MacTune.h"
@@ -198,15 +197,15 @@ void cutscene_loop(void) {
         // draw subtitles
 
         char *buf = 0;
-        switch (which_lang) {
-        case 0:
+        switch (ShockPlus::Options::language) {
+        case ShockPlus::Options::LANGUAGE_ENGLISH:
         default:
             buf = EngSubtitle;
             break;
-        case 1:
+        case ShockPlus::Options::LANGUAGE_FRENCH:
             buf = FrnSubtitle;
             break;
-        case 2:
+        case ShockPlus::Options::LANGUAGE_GERMAN:
             buf = GerSubtitle;
             break;
         }
@@ -284,7 +283,7 @@ short play_cutscene(int id, bool show_credits) {
 
     AfileReadReset(amovie);
 
-    if (sfx_on) {
+    if (ShockPlus::Options::enableSFX) {
         SDL_PauseAudioDevice(device, 1);
         SDL_Delay(1);
 

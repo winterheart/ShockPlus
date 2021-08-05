@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // Miscellaneous code-references quest variables
 
-#define MUSIC_VOLUME_QVAR  0x29
+#define MUSIC_VOLUME_QVAR  0x29     // Music level
 #define GAMMACOR_QVAR      0x2a
 #define SFX_VOLUME_QVAR    0x2b
 #define MOUSEHAND_QVAR     0x2c
@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SCREENMODE_QVAR    0x32
 #define JOYSENS_QVAR       0x33
 #define FULLSCRN_ICON_QVAR 0x34
-#define ALOG_OPT_QVAR      0x35
+#define ALOG_OPT_QVAR      0x35     // Audiolog showing. 0 - only text, 1 - only speech, 2 - both
 #define FULLSCRN_VITAL_QVAR 0x36
 #define AMAP_NOTES_QVAR    0x37
 #define HUDCOLOR_QVAR      0x39

@@ -24,8 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+
+#include "Engine/Options.h"
 
 #include "event.h"
 #include "game_screen.h"
@@ -36,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tools.h"
 #include "fullscrn.h"
 #include "newmfd.h"
-#include "tools.h"
 #include "wares.h"
 #include "objsim.h"
 #include "objclass.h"
@@ -49,7 +50,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sfxlist.h"
 #include "gr2ss.h"
 #include "canvchek.h"
-#include "wares.h"
 
 // ---------
 // Constants
@@ -291,7 +291,7 @@ uchar side_icon_mouse_callback(uiEvent *e, LGRegion *r, intptr_t udata) {
             last_side_icon = -1;
             return FALSE;
         }
-        if (popup_cursors) {
+        if (ShockPlus::Options::showTooltipMessages) {
             if (last_side_icon != i) {
                 uchar side = i * 2 / NUM_SIDE_ICONS;
                 LGCursor *c = &icon_cursor[side];
@@ -323,7 +323,7 @@ uchar side_icon_mouse_callback(uiEvent *e, LGRegion *r, intptr_t udata) {
             use_ware(type, num);
         retval = TRUE;
     }
-    if (global_fullmap->cyber || (full_game_3d && !fullscrn_icons) || !popup_cursors) {
+    if (global_fullmap->cyber || (full_game_3d && !fullscrn_icons) || !ShockPlus::Options::showTooltipMessages) {
         last_side_icon = -1;
         uiSetRegionDefaultCursor(r, NULL);
     }

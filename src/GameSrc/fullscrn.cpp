@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/22 20:16:55 $
  */
 
+#include "Engine/Options.h"
 
 #include "ShockBitmap.h"
 #include "Prefs.h"
@@ -72,8 +73,8 @@ uchar fullscrn_icons = TRUE;
 grs_screen *svga_screen = NULL;
 frc *svga_render_context = NULL;
 short svga_mode_data[] = {GRM_320x200x8, GRM_320x400x8, GRM_640x400x8, GRM_640x480x8, GRM_1024x768x8, GRM_320x200x8};
-char mickey_stupid[][2] = {{16, 8}, {16, 4}, {3, 1}, {2, 1}, {3, 1}, {16, 8}};
-short mode_id = 3; // KLC - start off in 640x480 in Mac version      old -  short mode_id=0;
+//char mickey_stupid[][2] = {{16, 8}, {16, 4}, {3, 1}, {2, 1}, {3, 1}, {16, 8}};
+//short mode_id = 3; // KLC - start off in 640x480 in Mac version      old -  short mode_id=0;
 #endif
 
 #ifdef GADGET
@@ -187,7 +188,7 @@ void change_svga_screen_mode() {
     uchar mode_change = FALSE;
     short temp;
 
-    if (convert_use_mode != mode_id)
+    if (convert_use_mode != ShockPlus::Options::videoMode)
         mode_change = TRUE;
     if (mode_change) {
         int retval = -1;
@@ -204,13 +205,13 @@ void change_svga_screen_mode() {
                         cur_m = i6d_ss->scr_mode;
                      else
              */
-            cur_m = svga_mode_data[mode_id];
+            cur_m = svga_mode_data[ShockPlus::Options::videoMode];
             retval = gr_set_mode(cur_m, TRUE);
             if (retval == -1) {
-                mode_id = (mode_id + 1) % 5;
+                ShockPlus::Options::videoMode = (ShockPlus::Options::videoMode + 1) % 5;
             }
         }
-        convert_use_mode = mode_id;
+        convert_use_mode = ShockPlus::Options::videoMode;
         cur_w = grd_mode_cap.w;
         cur_h = grd_mode_cap.h;
 
@@ -232,7 +233,7 @@ void change_svga_screen_mode() {
     // KLC - we're never 320x200   amap_pixratio_set(svga_mode_data[mode_id]==GRM_320x200x8?FIX_UNIT:0);
     // amap_pixratio_set(0);
 
-    amap_pixratio_set(svga_mode_data[mode_id] == GRM_320x200x8 ? FIX_UNIT : 0);
+    amap_pixratio_set(svga_mode_data[ShockPlus::Options::videoMode] == GRM_320x200x8 ? FIX_UNIT : 0);
 
     if (svga_render_context != NULL) {
         fr_free_view(svga_render_context);
@@ -260,10 +261,10 @@ void change_svga_screen_mode() {
 
     chg_set_flg(DEMOVIEW_UPDATE);
     if (mode_change) {
-        if (mode_id == 0)
+        if (ShockPlus::Options::videoMode == 0)
             game_redrop_rad(0);
         else
-            game_redrop_rad(2 + mode_id);
+            game_redrop_rad(2 + ShockPlus::Options::videoMode);
 
         ss_mouse_convert(&mx, &my, FALSE);
         /*KLC  leave out until stereo view is needed
@@ -306,7 +307,7 @@ void change_svga_screen_mode() {
 
     change_svga_cursors();
     // KLC	gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
-    gamma_dealfunc(gShockPrefs.doGamma);
+    gamma_dealfunc(ShockPlus::Options::gammaCorrection);
     redraw_paused = TRUE;
 }
 

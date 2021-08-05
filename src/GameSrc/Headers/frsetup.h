@@ -22,10 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "3d.h"
 
-// Set by machine type
-extern bool DoubleSize;
-extern bool SkipLines;
-
 extern g3s_vector viewer_position;
 extern g3s_angvec viewer_orientation;
 

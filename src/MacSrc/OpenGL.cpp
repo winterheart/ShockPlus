@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL_opengl.h>
 #endif
 
+#include "Engine/Options.h"
 #include "clip.h"
 #include "mainloop.h"
 #include "map.h"
@@ -47,9 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frflags.h"
 #include "player.h"
 #include "textmaps.h"
-#include "star.h"
 #include "tools.h"
-#include "Prefs.h"
 #include "Shock.h"
 #include "faketime.h"
 #include "render.h"
@@ -131,7 +130,7 @@ static const float IdentityMatrix[] = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0
 
 static inline GLint get_texture_min_func() {
     // convert prefs texture filtering mode to GL min func value
-    switch (gShockPrefs.doTextureFilter) {
+    switch (ShockPlus::Options::videoTextureFilter) {
     case 0:
         return GL_NEAREST;
     case 1:
@@ -139,24 +138,24 @@ static inline GLint get_texture_min_func() {
         //        case 2: return GL_LINEAR_MIPMAP_LINEAR;
     }
 
-    WARN("gShockPrefs.doTextureFilter=%d is invalid; resetting to zero (unflitered)", gShockPrefs.doTextureFilter);
-    gShockPrefs.doTextureFilter = 0;
+    WARN("gShockPrefs.doTextureFilter=%d is invalid; resetting to zero (unflitered)",
+         ShockPlus::Options::videoTextureFilter);
+    ShockPlus::Options::videoTextureFilter = ShockPlus::Options::VIDEO_TEXTURE_NONE;
     return GL_NEAREST;
 }
 
 static inline GLint get_texture_mag_func() {
     // convert prefs texture filtering mode to GL mag func value
-    switch (gShockPrefs.doTextureFilter) {
+    switch (ShockPlus::Options::videoTextureFilter) {
     case 0:
         return GL_NEAREST;
     case 1:
         return GL_LINEAR;
-    case 2:
-        return GL_LINEAR;
     }
 
-    WARN("gShockPrefs.doTextureFilter=%d is invalid; resetting to zero (unflitered)", gShockPrefs.doTextureFilter);
-    gShockPrefs.doTextureFilter = 0;
+    WARN("gShockPrefs.doTextureFilter=%d is invalid; resetting to zero (unflitered)",
+         ShockPlus::Options::videoTextureFilter);
+    ShockPlus::Options::videoTextureFilter = static_cast<ShockPlus::Options::VideoTextureFilter>(0);
     return GL_NEAREST;
 }
 
@@ -393,13 +392,13 @@ void opengl_change_palette() { palette_dirty = true; }
 bool can_use_opengl() { return context != nullptr; }
 
 bool use_opengl() {
-    return can_use_opengl() && gShockPrefs.doUseOpenGL && opengl_enabled &&
+    return can_use_opengl() && ShockPlus::Options::enableOpenGL && opengl_enabled &&
            (_current_loop == GAME_LOOP || _current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber &&
            !(_fr_curflags & (FR_PICKUPM_MASK | FR_HACKCAM_MASK));
 }
 
 bool should_opengl_swap() {
-    return can_use_opengl() && gShockPrefs.doUseOpenGL && opengl_enabled &&
+    return can_use_opengl() && ShockPlus::Options::enableOpenGL && opengl_enabled &&
            (_current_loop == GAME_LOOP || _current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber;
 }
 
@@ -514,24 +513,24 @@ void opengl_swap_and_restore() {
 }
 
 void toggle_opengl() {
-    if (gShockPrefs.doUseOpenGL) {
-        switch (gShockPrefs.doTextureFilter) {
+    if (ShockPlus::Options::enableOpenGL) {
+        switch (ShockPlus::Options::videoTextureFilter) {
         case 0: {
             message_info("Switching to OpenGL bilinear rendering");
-            gShockPrefs.doTextureFilter = 1;
+            ShockPlus::Options::videoTextureFilter = ShockPlus::Options::VIDEO_TEXTURE_BILINEAR;
         } break;
         case 1: {
-            message_info("Switching to sofware rendering");
-            gShockPrefs.doUseOpenGL = false;
-            gShockPrefs.doTextureFilter = 0;
+            message_info("Switching to software rendering");
+            ShockPlus::Options::enableOpenGL = false;
+            ShockPlus::Options::videoTextureFilter = ShockPlus::Options::VIDEO_TEXTURE_NONE;
         } break;
         }
     } else {
         message_info("Switching to OpenGL unfiltered");
-        gShockPrefs.doUseOpenGL = true;
-        gShockPrefs.doTextureFilter = 0;
+        ShockPlus::Options::enableOpenGL = true;
+        ShockPlus::Options::videoTextureFilter = ShockPlus::Options::VIDEO_TEXTURE_NONE;
     }
-    SavePrefs();
+    ShockPlus::Options::save();
 }
 
 void opengl_set_viewport(int x, int y, int width, int height) {

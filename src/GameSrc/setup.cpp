@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <cstring>
-#include <string>
-#include <SDL.h>
 
 // TODO: extract this into a compatibility header
 #ifdef _MSC_VER
@@ -39,6 +37,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef SVGA_SUPPORT
 #include "fullscrn.h"
 #endif
+
+#include "Engine/Options.h"
 
 #include "SDLFunctions.h"
 
@@ -67,7 +67,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "game_screen.h"
 #include "hkeyfunc.h"
 #include "loops.h"
-#include "keydefs.h"
 #include "status.h"
 #include "cutsloop.h"
 #include "musicai.h"
@@ -79,7 +78,6 @@ extern "C" {
 #include "sdl_events.h"
 }
 
-#include "audiolog.h"
 #include "damage.h"
 #include "frintern.h"
 #include "invent.h"
@@ -934,14 +932,13 @@ void go_and_start_the_game_already(void) {
     QUESTVAR_SET(SCREENMODE_QVAR, convert_use_mode);
 #endif
 
-    QUESTVAR_SET(MUSIC_VOLUME_QVAR, (curr_vol_lev * curr_vol_lev) / 100);
-    QUESTVAR_SET(SFX_VOLUME_QVAR, (curr_sfx_vol * curr_sfx_vol) / 100);
+    QUESTVAR_SET(MUSIC_VOLUME_QVAR, (ShockPlus::Options::musicVolume * ShockPlus::Options::musicVolume) / 100); // TODO: unuse this
+    QUESTVAR_SET(SFX_VOLUME_QVAR, (ShockPlus::Options::sfxVolume * ShockPlus::Options::sfxVolume) / 100); // TODO: unuse this
 
 #ifdef AUDIOLOGS
-    QUESTVAR_SET(ALOG_VOLUME_QVAR, (curr_alog_vol * curr_alog_vol) / 100);
-    QUESTVAR_SET(ALOG_OPT_QVAR, audiolog_setting);
+    QUESTVAR_SET(ALOG_VOLUME_QVAR, (ShockPlus::Options::voiceVolume * ShockPlus::Options::voiceVolume) / 100); // TODO: unuse this
+    QUESTVAR_SET(ALOG_OPT_QVAR, ShockPlus::Options::alogPlayback);          // TODO: unuse this
 #endif
-
     QUESTVAR_SET(FULLSCRN_ICON_QVAR, fullscrn_icons);
     QUESTVAR_SET(FULLSCRN_VITAL_QVAR, fullscrn_vitals);
     QUESTVAR_SET(AMAP_NOTES_QVAR, map_notes_on);

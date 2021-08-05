@@ -23,7 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/19 20:35:51 $
  */
 
-#include <string.h>
+#include <cstring>
+
+#include "Engine/Options.h"
 
 #include "Prefs.h"
 #include "cyber.h"
@@ -38,7 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "status.h"
 #include "render.h"
 #include "musicai.h"
-#include "MacTune.h"
 #include "newmfd.h"
 #include "faketime.h"
 #include "invent.h"
@@ -168,13 +169,13 @@ void game_loop(void) {
         TRACE("%s: physics_run", __FUNCTION__);
         loopLine(GL | 0x15, physics_run());
         {
-            if (!olh_overlay_on && olh_active && !global_fullmap->cyber) {
+            if (!olh_overlay_on && ShockPlus::Options::showOnScreenHelp && !global_fullmap->cyber) {
                 TRACE("%s: olh_scan_objects", __FUNCTION__);
                 olh_scan_objects();
             }
         }
         // KLC - does nothing!         loopLine(GL|0x1D,synchronous_update());
-        if (sfx_on || music_on) {
+        if (ShockPlus::Options::enableSFX || music_on) {
             TRACE("%s: sound_frame_update", __FUNCTION__);
             loopLine(GL | 0x1C, mlimbs_do_ai());
             loopLine(GL | 0x1E, sound_frame_update());
@@ -183,7 +184,7 @@ void game_loop(void) {
         if (pal_fx_on) {
             loopLine(GL | 0x1F, palette_advance_all_fx(*tmd_ticks));
 
-			gamma_dealfunc(gShockPrefs.doGamma);
+			gamma_dealfunc(ShockPlus::Options::gammaCorrection);
         }
 
         TRACE("%s: destroy_destroyed_objects", __FUNCTION__);

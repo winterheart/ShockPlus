@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "2dres.h"
 #include "popups.h"
@@ -46,7 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EMAIL_CURS_MARG 5
 #define EMAIL_CURS_FONT RES_tinyTechFont
 
-uchar popup_cursors = TRUE;
 grs_bitmap popup_bitmaps[NUM_POPUPS];
 LGRect popup_rects[NUM_POPUPS];
 LGPoint popup_hotspots[NUM_POPUPS] = {

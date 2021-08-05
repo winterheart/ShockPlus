@@ -29,8 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // The main C file for drug effects, updates, (un)installs.
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+
+#include "Engine/Options.h"
 
 #include "Prefs.h"
 #include "cybstrng.h"
@@ -331,7 +333,7 @@ void drug_lsd_wearoff() {
     // Return from palette shift
     gr_set_pal(0, 256, ppall);
     // KLC   gamma_dealfunc(QUESTVAR_GET(GAMMACOR_QVAR));
-    gamma_dealfunc(gShockPrefs.doGamma);
+    gamma_dealfunc(ShockPlus::Options::gammaCorrection);
 }
 
 void drug_lsd_closedown(bool visible) {

@@ -24,12 +24,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string.h>
+#include <cstring>
 
 extern "C" {
 #include "sdl_events.h"
 }
 
+#include "Engine/Options.h"
 #include "weapons.h"
 #include "damage.h"
 #include "edms.h"
@@ -51,7 +52,6 @@ extern "C" {
 #include "combat.h"
 #include "sfxlist.h"
 #include "tools.h"
-#include "schedule.h"
 #include "status.h"
 #include "otrip.h"
 #include "mainloop.h"
@@ -64,7 +64,6 @@ extern "C" {
 #include "colors.h"
 #include "hud.h"
 #include "cybstrng.h"
-#include "frsetup.h"
 #include "frtypes.h"
 #include "doorparm.h"
 #include "gr2ss.h"
@@ -343,7 +342,7 @@ uchar player_fire_handtohand(LGPoint *p, ubyte slot, ObjID *what_hit, int gun_tr
             hand_pos.x = HAND2HANDX;
 
         hand_pos.y = (full_game_3d) ? FULLHAND2HANDY : HAND2HANDY;
-        if (DoubleSize)
+        if (ShockPlus::Options::halfResolution)
             hand_pos.y = SCONV_Y(hand_pos.y) >> 1;
         else
             ss_point_convert(&(hand_pos.x), &(hand_pos.y), FALSE);
@@ -883,10 +882,10 @@ uchar fire_player_weapon(LGPoint *pos, LGRegion *r, uchar pull) {
     if (player_struct.weapons[w].type == EMPTY_WEAPON_SLOT) return FALSE;
 
     region_abs_rect(r, r->r, &rc);
-    if (DoubleSize)
+    if (ShockPlus::Options::halfResolution)
         rc.lr.y = SCONV_Y(rc.lr.y) >> 1;
     cp = realpos;
-    if (!DoubleSize)
+    if (!ShockPlus::Options::halfResolution)
         ss_mouse_convert(&(cp.x), &(cp.y), TRUE);
     if (!RECT_TEST_PT(&rc, cp)) {
         //realpos.x = r->abs_x + RectWidth(r->r) / 2;
