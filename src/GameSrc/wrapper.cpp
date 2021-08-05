@@ -910,7 +910,7 @@ uchar textlist_handler(uiEvent *ev, uchar butid) {
         SDL_Keysym key = ev->sdl_data.key.keysym;
 
         // FIXME It's Unicode, we need to use wchar.h stuff here
-        char k = ev->sdl_data.text.text[0];
+        char k = ev->sdl_data.key.keysym.sym;
         // uint keycode = code & ~KB_FLAG_DOWN;
         // uchar special = ((code & KB_FLAG_SPECIAL) != 0);
         char *s;
