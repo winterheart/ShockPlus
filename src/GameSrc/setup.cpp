@@ -470,9 +470,9 @@ int CreditsTune;
 int WonGame_ShowStats = 0;
 
 // ticks: 0 wait forever
-int WaitForKey(ulong ticks) {
-    ulong end_ticks = TickCount();
-    ulong key_ticks = end_ticks + (!ticks ? 500 : (ticks * 1 / 8));
+int WaitForKey(uint32_t ticks) {
+    uint32_t end_ticks = TickCount();
+    uint32_t key_ticks = end_ticks + (!ticks ? 500 : (ticks * 1 / 8));
     end_ticks = ticks ? end_ticks + ticks : 0;
     SDL_Scancode ch;
 
@@ -490,7 +490,7 @@ int WaitForKey(ulong ticks) {
                 track = 1 + CreditsTune;
 
             if (track >= 0 && track < NumTracks) {
-                //        int volume = (int)curr_vol_lev * 127 / 100; //convert from 0-100 to 0-127
+                // int volume = (int)curr_vol_lev * 127 / 100; //convert from 0-100 to 0-127
                 StartTrack(i, track);
 
                 if (!WonGame_ShowStats)
@@ -501,9 +501,14 @@ int WaitForKey(ulong ticks) {
         pump_events();
         SDLDraw();
 
-        kbs_event ev = kb_next();
-        ch = ev.event.key.keysym.scancode;
-        ticks = TickCount();
+        SDL_Event ev;
+        while (SDL_PollEvent(&ev)) {
+            switch (ev.type) {
+            case SDL_KEYDOWN:
+                ch = ev.key.keysym.scancode;
+                ticks = TickCount();
+            }
+        }
 
         if ((ch == SDL_SCANCODE_ESCAPE || ch == SDL_SCANCODE_SPACE || ch == SDL_SCANCODE_RETURN) && ticks >= key_ticks)
             break;
