@@ -90,10 +90,10 @@ typedef struct _mouse_event {
 #define MOUSE_WHEELUP (1 << 10)
 #define MOUSE_WHEELDN (1 << 11)
 
-// Mask of events that are allowed into the queue.
-extern ubyte mouseMask;
-
 extern short mouseInstantButts;
+
+// latest mouse state as input for MousePollProc() in mouse.c
+extern ss_mouse_event latestMouseEvent;
 
 // type of mouse interrupt callback func
 typedef void (*mouse_callfunc)(ss_mouse_event *e, void *data);

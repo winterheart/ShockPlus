@@ -68,9 +68,6 @@ typedef struct {
 
 extern int kb_startup(void *init_buf);
 extern int kb_shutdown(void);
-
-extern kbs_event kb_next(void);
-extern kbs_event kb_look_next(void);
 extern void kb_flush(void);
 
 #define KBF_BLOCK (1)

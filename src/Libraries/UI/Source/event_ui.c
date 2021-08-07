@@ -35,18 +35,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------
 // INTERNAL PROTOTYPES
 // ---------------------
-void event_queue_add(uiEvent *e);
 uchar event_queue_next(uiEvent **e);
 uchar region_check_opacity(LGRegion *reg, ulong evmask);
 uchar event_dispatch_callback(LGRegion *reg, LGRect *r, void *v);
 void ui_set_last_mouse_region(LGRegion *reg, uiEvent *ev);
 uchar ui_try_region(LGRegion *reg, LGPoint pos, uiEvent *ev);
 uchar ui_traverse_point(LGRegion *reg, LGPoint pos, uiEvent *data);
-uchar send_event_to_region(LGRegion *r, uiEvent *ev);
-void ui_purge_mouse_events(void);
 void ui_flush_mouse_events(ulong timestamp, LGPoint pos);
 void ui_poll_keyboard(void);
-void ui_pop_up_keys(void);
 LGPoint ui_poll_mouse_position(void);
 
 
@@ -303,27 +299,6 @@ static struct _eventqueue {
     uiEvent *vec;
 } EventQueue;
 
-void event_queue_add(uiEvent *e) {
-    if ((EventQueue.in + 1) % EventQueue.size == EventQueue.out) {
-        // Queue is full, grow it.
-        int i;
-        int out = EventQueue.out;
-        int newsize = EventQueue.size * 2;
-        uiEvent *newvec = (uiEvent *)malloc(sizeof(uiEvent) * newsize);
-        for (i = 0; out != EventQueue.in; i++, out = (out + 1) % EventQueue.size)
-            newvec[i] = EventQueue.vec[out];
-        free(EventQueue.vec);
-        EventQueue.vec = newvec;
-        EventQueue.size = newsize;
-        EventQueue.in = i;
-        EventQueue.out = 0;
-    }
-    EventQueue.vec[EventQueue.in] = *e;
-    EventQueue.in++;
-    if (EventQueue.in >= EventQueue.size)
-        EventQueue.in = 0;
-}
-
 uchar event_queue_next(uiEvent **e) {
     if (EventQueue.in != EventQueue.out) {
         *e = &EventQueue.vec[EventQueue.out++];
@@ -440,11 +415,6 @@ uchar ui_traverse_point(LGRegion *reg, LGPoint pos, uiEvent *data) {
     return TRAVERSE_MISS;
 }
 
-uchar send_event_to_region(LGRegion *r, uiEvent *ev) {
-    // Spew(DSRC_UI_Dispatch,("send_event_to_region(%x,%x)\n",r,ev));
-    return ui_traverse_point(r, ev->pos, ev) == TRAVERSE_HIT;
-}
-
 uchar uiDispatchEventToRegion(uiEvent *ev, LGRegion *reg) {
     LGPoint pos;
     uiEvent nev = *ev;
@@ -479,16 +449,6 @@ uchar uiDispatchEvent(uiEvent *ev) {
 }
 
 #define MOUSE_EVENT_FLUSHED UI_EVENT_MOUSE_MOVE
-
-void ui_purge_mouse_events(void) {
-    int i;
-    for (i = 0; i < NUM_MOUSE_BTNS; i++) {
-        last_down_events[i].type = UI_EVENT_NULL;
-        last_down_events[i].mouse_data.tstamp = 0;
-        last_up_events[i].type = UI_EVENT_NULL;
-        last_up_events[i].mouse_data.tstamp = 0;
-    }
-}
 
 void ui_flush_mouse_events(ulong timestamp, LGPoint pos) {
     int i;
@@ -638,39 +598,6 @@ void ui_poll_keyboard(void) {
         }
         // *key is a System Shock/Mac keycode
     }
-
-#if 0
-	extern uchar	pKbdGetKeys[16];
-	long			*keys = (long *)pKbdGetKeys;
-	GetKeys((UInt32 *)keys);
-
-	uchar *key;
-	for (key = ui_poll_keys; *key != KBC_NONE; key++)
-		if((pKbdGetKeys[*key>>3] >> (*key & 7)) & 1)
-		{
-			uiPollKeyEvent ev;
-			ev.type = UI_EVENT_KBD_POLL;
-			ev.pos.x = 0;
-			ev.pos.y = 0;
-			ev.action = KBS_DOWN;
-			ev.scancode = *key;
-			ev.mods = 0;
-			if ((keys[1] & 0x00000001) != 0L)	// Shift key
-				ev.mods |= KB_FLAG_SHIFT;
-			if ((keys[1] & 0x00008000) != 0L)	// Cmd key
-				ev.mods |= KB_FLAG_CTRL;
-			if ((keys[1] & 0x00000004) != 0L)	// Option key
-				ev.mods |= KB_FLAG_ALT;
-
-			uiDispatchEvent((uiEvent*)&ev);
-		}
-#endif
-}
-
-/**
- * @deprecated Does nothing
- */
-void ui_pop_up_keys(void) {
 }
 
 errtype uiMakeMotionEvent(uiEvent *ev) {
@@ -746,31 +673,11 @@ errtype uiPoll(void) {
     return OK;
 }
 
-errtype uiSetMouseMotionPolling(uchar poll) {
-    if (poll)
-        mouseMask &= ~MOUSE_MOTION;
-    else
-        mouseMask |= MOUSE_MOTION;
-    poll_mouse_motion = poll;
-    return OK;
-}
-
 errtype uiFlush(void) {
-    uiEvent *e;
-    kbs_event kbe = kb_next();
-    mouse_flush();
-
-    // ((kbe.event.type == SDL_KEYDOWN || kbe.event.type == SDL_KEYUP) && kbe.event.key.keysym.scancode != SDL_SCANCODE_UNKNOWN)
-    while (kbe.event.type != SDL_FIRSTEVENT) {
-        ushort dummy;
-        uchar result;
-        kb_cook(kbe, &dummy, &result);
-        kbe = kb_next();
-    }
-    while (event_queue_next(&e))
-        ;
-    ui_pop_up_keys();
-    ui_purge_mouse_events();
+    // Flush keyboard and mouse events from queue
+    DEBUG("%s: FLUSH input events!", __FUNCTION__);
+    SDL_FlushEvents(SDL_KEYDOWN, SDL_KEYUP);
+    SDL_FlushEvents(SDL_MOUSEMOTION, SDL_MOUSEWHEEL);
     return OK;
 }
 

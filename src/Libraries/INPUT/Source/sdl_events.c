@@ -59,15 +59,6 @@ static void toggleFullScreen() {
 // key) set at the beginning of each frame in pump_events()
 uchar sshockKeyStates[256];
 
-enum { kNumKBevents = 128 };
-
-// queue keyboard events, created in pump_events(), consumed by kb_next()
-static kbs_event kbEvents[kNumKBevents];
-static int nextKBevent = 0; // where next to insert (also, if 0 there are no events)
-
-// latest mouse state as input for MousePollProc() in mouse.c
-ss_mouse_event latestMouseEvent;
-
 static uchar sdlKeyCodeToSSHOCKkeyCode(SDL_Keycode kc) {
     // apparently System Shock uses the same keycodes as Mac which are luckily documented, see
     // see http://snipplr.com/view/42797/ and https://stackoverflow.com/a/16125341
@@ -780,50 +771,16 @@ void pump_events(void) {
 //---------------------------------------------------------------
 int kb_startup(void *v) {
     memset(sshockKeyStates, 0, sizeof(sshockKeyStates));
-    nextKBevent = 0;
-
     return (0);
 }
 
 int kb_shutdown(void) { return (0); }
 
 //---------------------------------------------------------------
-//  Get the next available key from the event queue.
-//---------------------------------------------------------------
-kbs_event kb_next(void) {
-    kbs_event retEvent = kb_look_next();
-    // kb_look_next() doesn't remove events from the queue, this function does,
-    // right here (but only if there actually was an event in the queue, of course):
-    if (nextKBevent > 0) {
-        --nextKBevent;
-        memmove(&kbEvents[0], &kbEvents[1], sizeof(kbs_event) * (kNumKBevents - 1));
-    }
-    return retEvent;
-}
-
-//---------------------------------------------------------------
-//  See if there is a key waiting in the queue.
-//---------------------------------------------------------------
-kbs_event kb_look_next(void) {
-    kbs_event retEvent = {KBC_NONE, 0x00};
-
-    if (nextKBevent > 0) {
-        return kbEvents[0];
-    }
-    TRACE("%s: No KB events. Injecting own...", __FUNCTION__);
-    return retEvent;
-}
-
-//---------------------------------------------------------------
 //  Flush keyboard events from the event queue.
 //---------------------------------------------------------------
 void kb_flush(void) {
-    // http://mirror.informatimago.com/next/developer.apple.com/documentation/Carbon/Reference/Event_Manager/event_mgr_ref/function_group_5.html#//apple_ref/c/func/FlushEvents
-    // FlushEvents(keyDownMask | autoKeyMask, 0);
-
     SDL_FlushEvents(SDL_KEYDOWN, SDL_KEYUP); // Note: that's a range!
-
-    nextKBevent = 0; // this flushes the keyboard events already buffered - TODO is that desirable?
 }
 
 //---------------------------
