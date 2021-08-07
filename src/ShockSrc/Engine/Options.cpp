@@ -34,11 +34,10 @@ namespace ShockPlus::Options {
 #include "Options.inc.h"
 #undef OPT
 
-std::string dataFolder_;
-std::vector<std::string> dataList_;
-std::string userFolder_;
-std::string configFolder_;
-std::vector<std::string> userList_;
+std::filesystem::path dataFolder_;
+std::vector<std::filesystem::path> dataList_;
+std::filesystem::path userFolder_;
+std::filesystem::path configFolder_;
 std::map<std::string, std::string> commandLine_;
 std::vector<OptionInfo> info_;
 
@@ -91,19 +90,19 @@ void writeNode(const YAML::Node &node, YAML::Emitter &emitter) {
  * same as the User folder.
  * @return Full path to Config folder.
  */
-std::string getConfigFolder() { return configFolder_; }
+std::filesystem::path getConfigFolder() { return configFolder_; }
 
 /**
  * Returns the game's current Data folder where resources are loaded from.
  * @return Full path to Data folder.
  */
-std::string getDataFolder() { return dataFolder_; }
+std::filesystem::path getDataFolder() { return dataFolder_; }
 
 /**
  * Returns the game's User folder where saves are stored in.
  * @return Full path to User folder.
  */
-std::string getUserFolder() { return userFolder_; }
+std::filesystem::path getUserFolder() { return userFolder_; }
 
 /**
  * Returns the game's list of all available option information.
@@ -115,13 +114,13 @@ const std::vector<OptionInfo> &getOptionInfo() { return info_; }
  * Returns the game's list of possible Data folders.
  * @return List of Data paths.
  */
-const std::vector<std::string> &getDataList() { return dataList_; }
+const std::vector<std::filesystem::path> &getDataList() { return dataList_; }
 
 /**
  * Changes the game's current Data folder where resources are loaded from.
  * @param folder Full path to Data folder.
  */
-void setDataFolder(const std::string &folder) { dataFolder_ = folder; }
+void setDataFolder(const std::filesystem::path &folder) { dataFolder_ = folder; }
 
 /**
  * Sets up the options by creating their OptionInfo metadata.
@@ -175,7 +174,7 @@ void create() {
  * @return Was the loading successful?
  */
 bool load(const std::string &filename) {
-    std::string s = configFolder_ + filename;
+    std::string s = configFolder_ / filename;
     try {
         YAML::Node doc = YAML::LoadFile(s);
         for (auto &i : info_) {
@@ -194,7 +193,7 @@ bool load(const std::string &filename) {
  * @return Was the saving successful?
  */
 bool save(const std::string &filename) {
-    std::string s = configFolder_ + filename;
+    std::string s = configFolder_ / filename;
     std::ofstream sav(s.c_str());
     if (!sav) {
         WARN("Failed to save %s", filename.c_str());
@@ -279,7 +278,7 @@ void loadArgs(int argc, char *argv[]) {
 void setFolders() {
     // FIXME move it to specific CrossPlatform class methods
     //_dataList = CrossPlatform::findDataFolders();
-    dataList_.emplace_back(std::string(SDL_GetPrefPath("Interrupt", "SystemShock")));
+    dataList_.emplace_back(std::filesystem::path(SDL_GetPrefPath("Interrupt", "SystemShock")));
 
     if (!dataFolder_.empty()) {
         dataList_.insert(dataList_.begin(), dataFolder_);
@@ -300,7 +299,7 @@ void setFolders() {
         }
     }
     if (!userFolder_.empty()) {
-        std::filesystem::path modDir(userFolder_ + "/mods");
+        std::filesystem::path modDir(userFolder_ / "mods");
         // create mod folder if it doesn't already exist
         if (!std::filesystem::exists(modDir)) {
             std::filesystem::create_directory(modDir);
@@ -354,7 +353,7 @@ bool showHelp(int argc, char *argv[]) {
 void updateOptions() {
     // Load existing options
     if (std::filesystem::is_directory(configFolder_)) {
-        if (std::filesystem::is_regular_file(configFolder_ + "options.cfg")) {
+        if (std::filesystem::is_regular_file(configFolder_ / "options.cfg")) {
             load();
         } else {
             save();
@@ -389,9 +388,9 @@ bool init(int argc, char *argv[]) {
 
     log_set_level(Options::logLevel);
     // Save updated options
-    save("options.cfg");
+    save();
 
-    std::string logfile = getUserFolder() + "shockplus.log";
+    std::string logfile = getUserFolder() / "shockplus.log";
     FILE *file = fopen(logfile.c_str(), "w");
     if (file) {
         log_add_fp(file, Options::logLevel);
