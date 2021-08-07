@@ -237,6 +237,8 @@ errtype uiFlush(void);
 // is a key or mouse button up event, false otherwise.
 uchar uiCheckInput(void);
 
+void ui_dispatch_mouse_event(uiEvent *mout);
+
 // ---------------------------
 // INITIALIZATION AND SHUTDOWN
 // ---------------------------

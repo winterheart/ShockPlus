@@ -45,7 +45,6 @@ uchar ui_traverse_point(LGRegion *reg, LGPoint pos, uiEvent *data);
 uchar send_event_to_region(LGRegion *r, uiEvent *ev);
 void ui_purge_mouse_events(void);
 void ui_flush_mouse_events(ulong timestamp, LGPoint pos);
-void ui_dispatch_mouse_event(uiEvent *mout);
 void ui_poll_keyboard(void);
 void ui_pop_up_keys(void);
 LGPoint ui_poll_mouse_position(void);
@@ -705,14 +704,13 @@ errtype uiPoll(void) {
     static LGPoint last_mouse = {-1, -1};
     errtype err;
     uiEvent out, *ev;
-    uchar kbdone = FALSE;
-    uchar msdone = FALSE;
     LGPoint mousepos = last_mouse;
 
 #define BURN_QUEUE
 #ifdef BURN_QUEUE
     // burn through queue
     while (event_queue_next(&ev)) {
+        DEBUG("%s: Burning event queue...");
         uchar result = TRUE;
         //      ui_mouse_do_conversion(&(ev->pos.x),&(ev->pos.y),TRUE);
         if (ev->type == UI_EVENT_MOUSE)
@@ -737,68 +735,7 @@ errtype uiPoll(void) {
     }
 #endif // BURN_QUEUE
 
-    //   ui_mouse_get_xy(&mousepos.x,&mousepos.y);
-
     mouse_get_xy(&mousepos.x, &mousepos.y);
-
-    while (!kbdone || !msdone) {
-        if (!kbdone) {
-            kbs_event kbe = kb_next();
-            if (kbe.code != KBC_NONE) {
-                uchar eaten;
-                DEBUG("%s: got a keyboard event: %d, %d, %d", __FUNCTION__, kbe.event.key.type, kbe.event.key.state, kbe.event.key.keysym.scancode );
-                out.pos = mousepos;
-                out.type = UI_EVENT_KBD_RAW;
-                out.raw_key_data.scancode = kbe.code;
-                out.raw_key_data.action = kbe.state;
-                out.sdl_data = kbe.event;
-                eaten = uiDispatchEvent(&out);
-                if (!eaten) {
-                    ushort cooked;
-                    uchar result;
-                    // Spew(DSRC_UI_Polling,("uiPoll(): cooking keyboard event: <%d,%x>\n",kbe.state,kbe.code));
-                    err = kb_cook(kbe, &cooked, &result);
-                    if (err != OK)
-                        return err;
-                    if (result) {
-                        out.subtype = cooked;
-                        out.type = UI_EVENT_KBD_COOKED;
-                        eaten = uiDispatchEvent(&out);
-                    }
-                }
-                //            if (eaten)
-                //            {
-                //               kb_clear_state(kbe.code,KBA_STATE);
-                //            }
-            } else
-                kbdone = TRUE;
-        }
-        if (!msdone) {
-            ss_mouse_event mse;
-            err = mouse_next(&mse);
-            /*if (poll_mouse_motion)
-               while (mse.type == MOUSE_MOTION  && err == OK)
-               {
-                  err = mouse_next(&mse);
-               }*/
-
-            if (err == OK) {
-                out.pos.x = mse.x;
-                out.pos.y = mse.y;
-                // note that the equality operator here means that motion-only
-                // events are MOUSE_MOVE, and others are MOUSE events.
-                out.type = (mse.type == MOUSE_MOTION) ? UI_EVENT_MOUSE_MOVE : UI_EVENT_MOUSE;
-                out.sdl_data = mse.event;
-                out.subtype = mse.type;
-                out.mouse_data.tstamp = mse.timestamp;
-                out.mouse_data.buttons = mse.buttons;
-                out.mouse_data.modifiers = mse.modifiers;
-                ui_dispatch_mouse_event(&out);
-                //            uiDispatchEvent((uiEvent*)mout);
-            } else
-                msdone = TRUE;
-        }
-    }
 
     if (poll_mouse_motion) {
         mousepos = ui_poll_mouse_position();

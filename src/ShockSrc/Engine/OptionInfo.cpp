@@ -138,15 +138,15 @@ void OptionInfo::load(const std::map<std::string, std::string> &map) const {
     if (it != map.end()) {
         std::string value = it->second;
         std::stringstream ss;
-        bool b;
-        int i;
         switch (type_) {
         case OPTION_BOOL:
+            bool b;
             ss << std::boolalpha << value;
             ss >> std::boolalpha >> b;
             *(ref_.b) = b;
             break;
         case OPTION_INT:
+            int i;
             ss << std::dec << value;
             ss >> std::dec >> i;
             *(ref_.i) = i;
