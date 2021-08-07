@@ -22,9 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Author: xemu $
  * $Date: 1994/11/21 21:07:36 $
  */
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
+#include <filesystem>
 
+#include "Engine/Options.h"
 #include "MacTune.h"
 
 #include "saveload.h"
@@ -223,7 +225,8 @@ uchar go_to_different_level(int targlevel) {
         early_exit_cyberspace_stuff();
     }
 
-    rv = write_level_to_disk(CURRENT_GAME_FNAME, ResIdFromLevel(player_struct.level), TRUE);
+    std::filesystem::path current_game_filename = ShockPlus::Options::getSavesFolder() / CURRENT_GAME_FNAME;
+    rv = write_level_to_disk(current_game_filename.c_str(), ResIdFromLevel(player_struct.level), TRUE);
     if (rv)
         critical_error(CRITERR_FILE | 4);
 
@@ -752,7 +755,8 @@ errtype load_current_map(Id id_num) {
     }
 
     // Open the saved-game (or archive) file.
-    fd = ResOpenFile(CURRENT_GAME_FNAME);
+    std::filesystem::path current_game_filename = ShockPlus::Options::getSavesFolder() / CURRENT_GAME_FNAME;
+    fd = ResOpenFile(current_game_filename.c_str());
     if (fd < 0) {
         // Warning(("Could not load map file %s (%s) , rv = %d!\n",dpath_fn,fn,retval));
         ERROR("Could not load map file %d", retval);

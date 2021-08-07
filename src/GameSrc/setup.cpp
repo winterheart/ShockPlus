@@ -846,7 +846,8 @@ errtype load_that_thar_game(int which_slot) {
         player_create_initial();
         player_struct.level = 0xFF; // make sure we load textures
         change_mode_func(0, 0, GAME_LOOP);
-        retval = load_game(get_save_filename(which_slot).c_str());
+        std::filesystem::path filename = ShockPlus::Options::getSavesFolder() / get_save_filename(which_slot);
+        retval = load_game(filename.c_str());
         if (retval != OK) {
             strcpy(comments[which_slot], "<< INVALID GAME >>");
             uiHideMouse(NULL);
@@ -1217,8 +1218,9 @@ errtype load_savegame_names() {
     DEBUG("Grabbing save game names");
 
     for (i = 0; i < NUM_SAVE_SLOTS; i++) {
-        if (access(get_save_filename(i).c_str(), F_OK) != -1) {
-            file = ResOpenFile(get_save_filename(i).c_str());
+        std::filesystem::path filename = ShockPlus::Options::getSavesFolder() / get_save_filename(i);
+        if (access(filename.c_str(), F_OK) != -1) {
+            file = ResOpenFile(filename.c_str());
             if (ResInUse(OLD_SAVE_GAME_ID_BASE)) {
 #ifdef OLD_SG_FORMAT
                 ResExtract(OLD_SAVE_GAME_ID_BASE, FORMAT_RAW, comments[i]);

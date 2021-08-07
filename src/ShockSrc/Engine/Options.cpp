@@ -99,10 +99,16 @@ std::filesystem::path getConfigFolder() { return configFolder_; }
 std::filesystem::path getDataFolder() { return dataFolder_; }
 
 /**
- * Returns the game's User folder where saves are stored in.
+ * Returns the game's User folder where user's data are stored in.
  * @return Full path to User folder.
  */
 std::filesystem::path getUserFolder() { return userFolder_; }
+
+/**
+ * Returns the game's Saves folder where saves are stored in.
+ * @return
+ */
+std::filesystem::path getSavesFolder() { return (userFolder_ / "saves"); };
 
 /**
  * Returns the game's list of all available option information.
@@ -299,10 +305,10 @@ void setFolders() {
         }
     }
     if (!userFolder_.empty()) {
-        std::filesystem::path modDir(userFolder_ / "mods");
-        // create mod folder if it doesn't already exist
-        if (!std::filesystem::exists(modDir)) {
-            std::filesystem::create_directory(modDir);
+        std::vector<std::string> dirs = {"mods", "saves"};
+
+        for (const auto &i : dirs) {
+            std::filesystem::create_directories(userFolder_ / i);
         }
     }
 
