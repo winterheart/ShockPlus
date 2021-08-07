@@ -67,6 +67,8 @@ const std::vector<std::filesystem::path> &getDataList();
 std::filesystem::path getUserFolder();
 /// Gets the game's config folder.
 std::filesystem::path getConfigFolder();
+/// Gets the game's saves folder
+std::filesystem::path getSavesFolder();
 /// Gets the game's options.
 const std::vector<OptionInfo> &getOptionInfo();
 /// Sets the game's data, user and config folders.

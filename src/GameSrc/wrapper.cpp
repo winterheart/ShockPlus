@@ -1926,8 +1926,8 @@ uchar wrapper_options_func(ushort keycode, uint32_t context, intptr_t data) {
 
 void load_dealfunc(uchar butid, uchar index) {
     begin_wait();
-
-    if (load_game(get_save_filename(index).c_str()) != OK) {
+    std::filesystem::path filename = ShockPlus::Options::getSavesFolder() / get_save_filename(index);
+    if (load_game(filename.c_str()) != OK) {
         WARN("%s: Load game failed!", __FUNCTION__);
     } else {
         INFO("Game %d loaded!", index);
@@ -2047,7 +2047,8 @@ errtype do_savegame_guts(uchar slot) {
         }
     }
     if (retval == OK) {
-        if (save_game(get_save_filename(slot).c_str(), comments[slot]) != OK) {
+        std::filesystem::path filename = ShockPlus::Options::getSavesFolder() / get_save_filename(slot);
+        if (save_game(filename.c_str(), comments[slot]) != OK) {
             ERROR("Save game failed!");
             message_info("Game save failed!");
             //      strcpy(comments[comment_mode], original_comment);

@@ -162,8 +162,10 @@ errtype save_game(const char *fname, char *comment) {
 
     DEBUG("starting save_game");
 
+    std::filesystem::path current_game_filename = ShockPlus::Options::getSavesFolder() /CURRENT_GAME_FNAME;
+
     // Open the current game file to save some more resources into it.
-    filenum = ResEditFile(CURRENT_GAME_FNAME, FALSE);
+    filenum = ResEditFile(current_game_filename.c_str(), FALSE);
     if (filenum < 0) {
         ERROR("Couldn't open Current Game");
         return ERR_FOPEN;
@@ -211,7 +213,7 @@ errtype save_game(const char *fname, char *comment) {
     ResCloseFile(filenum);
 
     // Save current level
-    retval = write_level_to_disk(CURRENT_GAME_FNAME, ResIdFromLevel(player_struct.level), TRUE);
+    retval = write_level_to_disk(current_game_filename.c_str(), ResIdFromLevel(player_struct.level), TRUE);
     if (retval) {
         ERROR("Return value from write_level_to_disk is non-zero!"); //
         critical_error(CRITERR_FILE | 3);
@@ -219,7 +221,7 @@ errtype save_game(const char *fname, char *comment) {
 
     // Copy current game out to save game slot
     try {
-        std::filesystem::copy_file(CURRENT_GAME_FNAME, fname, std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy_file(current_game_filename.c_str(), fname, std::filesystem::copy_options::overwrite_existing);
     } catch (std::exception& e) {
         ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
     }
@@ -281,15 +283,16 @@ errtype load_game(const char *fname) {
     closedown_game(TRUE);
     // KLC - don't do this here   stop_music();
 
+    std::filesystem::path current_game_filename = ShockPlus::Options::getSavesFolder() / CURRENT_GAME_FNAME;
     // Copy the save file into the current game
     try {
-        std::filesystem::copy_file(fname, CURRENT_GAME_FNAME, std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy_file(fname, current_game_filename, std::filesystem::copy_options::overwrite_existing);
     } catch (std::exception& e) {
         ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
     }
 
     // Load in player and current level
-    filenum = ResOpenFile(CURRENT_GAME_FNAME);
+    filenum = ResOpenFile(current_game_filename.c_str());
     old_plr = player_struct.rep;
     orig_lvl = player_struct.level;
 
@@ -365,33 +368,6 @@ errtype load_level_from_file(int level_num) {
     return (retval);
 }
 
-#ifdef NOT_YET //
-
-void check_and_update_initial(void) {
-    extern Datapath savegame_dpath;
-    char archive_fname[128];
-    char dpath_fn[50];
-    char *tmp;
-    extern char real_archive_fn[20];
-    if (!DatapathFind(&savegame_dpath, CURRENT_GAME_FNAME, archive_fname)) {
-        tmp = getenv("CITHOME");
-        if (tmp) {
-            strcpy(dpath_fn, tmp);
-            strcat(dpath_fn, "\\");
-        } else
-            dpath_fn[0] = '\0';
-        strcat(dpath_fn, "data\\");
-        strcat(dpath_fn, CURRENT_GAME_FNAME);
-
-        if (!DatapathFind(&DataDirPath, real_archive_fn, archive_fname))
-            critical_error(CRITERR_RES | 0x10);
-        if (copy_file(archive_fname, dpath_fn) != OK)
-            critical_error(CRITERR_FILE | 0x7);
-    }
-}
-
-#endif // NOT_YET
-
 uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefined3) {
     int i;
     byte plrdiff[4];
@@ -403,8 +379,10 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
 
     // Copy archive into local current game file.
 
+    std::filesystem::path current_game_filename = ShockPlus::Options::getSavesFolder() / CURRENT_GAME_FNAME;
+
     try {
-        std::filesystem::copy_file(ARCHIVE_FNAME, CURRENT_GAME_FNAME, std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy_file(ARCHIVE_FNAME, current_game_filename, std::filesystem::copy_options::overwrite_existing);
     } catch (std::exception& e) {
         ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
         critical_error(CRITERR_FILE | 7);
@@ -476,9 +454,5 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
 errtype write_level_to_disk(const char *fname, int idnum, uchar flush_mem) {
     // Eventually, this ought to cleverly determine whether or not to pack
     // the save game resource, but for now we will always do so...
-
-    // FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
-
-    // char* currSpec = "saves/save.dat";
     return (save_current_map(fname, idnum, flush_mem, TRUE));
 }
