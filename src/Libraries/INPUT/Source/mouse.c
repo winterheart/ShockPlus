@@ -56,7 +56,6 @@ typedef struct _mouse_state {
 short mouseQueueSize = NUM_MOUSEEVENTS;
 volatile short mouseQueueIn;                // back of event queue
 volatile short mouseQueueOut;               // front of event queue
-ss_mouse_event mouseQueue[NUM_MOUSEEVENTS]; // array of events
 
 short mouseInstantX; // instantaneous mouse xpos (int-based)
 short mouseInstantY; // instantaneous mouse ypos (int-based)
@@ -106,7 +105,6 @@ void MousePollProc(void) {
         // Add a mouse-moved event to the internal queue.
         if (mouseMask & MOUSE_MOTION) {
             short newin = mouseQueueIn, newout = mouseQueueOut;
-            mouseQueue[newin] = e;
             newin = (newin + 1 < mouseQueueSize) ? newin + 1 : 0;
             if (newin == mouseQueueOut)
                 newout = (newout + 1 < mouseQueueSize) ? newout + 1 : 0;

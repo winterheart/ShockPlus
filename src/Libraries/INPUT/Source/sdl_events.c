@@ -59,15 +59,11 @@ static void toggleFullScreen() {
 // key) set at the beginning of each frame in pump_events()
 uchar sshockKeyStates[256];
 
-enum { kNumKBevents = 128, kNumMouseEvents = 128 };
+enum { kNumKBevents = 128 };
 
 // queue keyboard events, created in pump_events(), consumed by kb_next()
 static kbs_event kbEvents[kNumKBevents];
 static int nextKBevent = 0; // where next to insert (also, if 0 there are no events)
-
-// same for mouse events, also created in pump_events(), consumed by mouse_next()
-static ss_mouse_event mouseEvents[kNumMouseEvents];
-static int nextMouseEvent = 0;
 
 // latest mouse state as input for MousePollProc() in mouse.c
 ss_mouse_event latestMouseEvent;
@@ -779,17 +775,10 @@ void pump_events(void) {
 //
 //===============================================================
 
-//------------------
-//  Globals
-//------------------
-int pKbdStatusFlags;
-
 //---------------------------------------------------------------
 //  Startup and keyboard handlers and initialize globals.   Shutdown follows.
 //---------------------------------------------------------------
 int kb_startup(void *v) {
-    pKbdStatusFlags = 0;
-
     memset(sshockKeyStates, 0, sizeof(sshockKeyStates));
     nextKBevent = 0;
 
@@ -797,13 +786,6 @@ int kb_startup(void *v) {
 }
 
 int kb_shutdown(void) { return (0); }
-
-//---------------------------------------------------------------
-//  Get and set the global flags.
-//---------------------------------------------------------------
-int kb_get_flags() { return (pKbdStatusFlags); }
-
-void kb_set_flags(int flags) { pKbdStatusFlags = flags; }
 
 //---------------------------------------------------------------
 //  Get the next available key from the event queue.
@@ -850,31 +832,11 @@ void kb_flush(void) {
 //
 //---------------------------
 
-// ---------------------------------------------------------
-// mouse_next gets the event in the front event queue,
-// and removes the event from the queue.
-// res = ptr to event to be filled.
-//	---------------------------------------------------------
-//  For Mac version: Get event from the normal Mac event queue for mouse events.
-//  The events looked for depend on the 'mouseMask' setting.
-
-errtype mouse_next(ss_mouse_event *res) {
-    if (nextMouseEvent <= 0)
-        return ERR_DUNDERFLOW;
-
-    *res = mouseEvents[0];
-
-    --nextMouseEvent;
-    memmove(&mouseEvents[0], &mouseEvents[1], sizeof(ss_mouse_event) * (kNumMouseEvents - 1));
-
-    return OK;
-}
-
+/**
+ * @deprecated does nothing
+ * @return
+ */
 errtype mouse_flush(void) {
-    // FlushEvents(mouseDown | mouseUp, 0);
-    //   Spew(DSRC_MOUSE_Flush,("Entering mouse_flush()\n"));
-    // mouseQueueIn = mouseQueueOut = 0;
-    nextMouseEvent = 0;
     // TODO: anything else?
     return OK;
 }
@@ -919,4 +881,7 @@ void set_mouse_chaos(short dx, short dy) {
     MouseChaosY = dy;
 }
 
-void sdl_mouse_init(void) { nextMouseEvent = 0; }
+/**
+ * @deprecated does nothing
+ */
+void sdl_mouse_init(void) {}

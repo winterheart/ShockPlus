@@ -72,9 +72,6 @@ extern int kb_shutdown(void);
 extern kbs_event kb_next(void);
 extern kbs_event kb_look_next(void);
 extern void kb_flush(void);
-extern int kb_get_flags();
-extern void kb_set_flags(int flags);
-extern uchar kb_get_cooked(ushort *key);
 
 #define KBF_BLOCK (1)
 #define KBF_CHAIN (2)

@@ -233,9 +233,6 @@ errtype uiSetKeyboardPolling(uchar *codes);
 // Flushes all ui system input events.
 errtype uiFlush(void);
 
-// reads through the input queue, returning true if there
-// is a key or mouse button up event, false otherwise.
-uchar uiCheckInput(void);
 
 void ui_dispatch_mouse_event(uiEvent *mout);
 

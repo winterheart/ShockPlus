@@ -674,9 +674,6 @@ void ui_pop_up_keys(void) {
 }
 
 errtype uiMakeMotionEvent(uiEvent *ev) {
-    // haha, this is the super secret mouse library variable of the
-    // current button state.
-    extern short mouseInstantButts;
     mouse_get_xy(&ev->pos.x, &ev->pos.y);
     ev->type = UI_EVENT_MOUSE_MOVE; // must get past event mask
     ev->mouse_data.action = MOUSE_MOTION;
@@ -777,34 +774,9 @@ errtype uiFlush(void) {
     return OK;
 }
 
-uchar uiCheckInput(void) {
-    kbs_event kbe;
-    ss_mouse_event mse;
-    kbe = kb_next();
-    if (kbe.event.type != SDL_FIRSTEVENT) {
-        ushort cooked;
-        uchar res;
-        kb_cook(kbe, &cooked, &res);
-        if (kbe.state == KBS_DOWN) {
-            ui_pop_up_keys();
-            return TRUE;
-        }
-    }
-    if (mouse_next(&mse) == OK) {
-        int i;
-        for (i = 0; i < NUM_MOUSE_BTNS; i++) {
-            if ((mse.type & MOUSE_BTN2DOWN(i)) != 0)
-                return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 // ---------------------------
 // INITIALIZATION AND SHUTDOWN
 // ---------------------------
-
-// char keybuf[512];
 
 errtype uiInit(uiSlab *slab) {
     int i;

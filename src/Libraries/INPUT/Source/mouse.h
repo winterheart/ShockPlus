@@ -93,6 +93,8 @@ typedef struct _mouse_event {
 // Mask of events that are allowed into the queue.
 extern ubyte mouseMask;
 
+extern short mouseInstantButts;
+
 // type of mouse interrupt callback func
 typedef void (*mouse_callfunc)(ss_mouse_event *e, void *data);
 
@@ -118,12 +120,6 @@ errtype mouse_get_xy(short *x, short *y);
 
 // Set the mouse position
 errtype mouse_put_xy(short x, short y);
-
-// look at the next mouse event.
-// errtype mouse_look_next(ss_mouse_event *result);
-
-// get & pop the next mouse event
-errtype mouse_next(ss_mouse_event *result);
 
 // Flush the mouse queue
 errtype mouse_flush(void);

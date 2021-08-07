@@ -79,12 +79,3 @@ errtype kb_cook(kbs_event ev, ushort *cooked, uchar *results) {
 
     return OK;
 }
-
-uchar kb_get_cooked(ushort *key) {
-    uchar res = FALSE;
-    kbs_event ev = kb_next();
-    if (ev.code == KBC_NONE)
-        return res;
-    kb_cook(ev, key, &res);
-    return res;
-}
