@@ -223,7 +223,7 @@ uchar go_to_different_level(int targlevel) {
         early_exit_cyberspace_stuff();
     }
 
-    rv = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
+    rv = write_level_to_disk(CURRENT_GAME_FNAME, ResIdFromLevel(player_struct.level), TRUE);
     if (rv)
         critical_error(CRITERR_FILE | 4);
 
@@ -292,7 +292,11 @@ errtype write_id(Id id_num, short index, uint32_t version, void *ptr, long sz, i
     return (OK);
 }
 
-errtype save_current_map(char *fname, Id id_num, uchar flush_mem, uchar pack) {
+#define REF_WRITE(id_num, index, x) write_id(id_num, index, map_version, &(x), sizeof(x), fd, 0)
+#define REF_WRITE_LZW(id_num, index, x)	write_id(id_num, index, map_version, &(x), sizeof(x), fd, RDF_LZW)
+#define REF_WRITE_RAW(id_num, index, ptr, sz) write_id(id_num, index, map_version, ptr, sz, fd, RDF_LZW)
+
+errtype save_current_map(const char *fname, Id id_num, uchar flush_mem, uchar pack) {
     int i, goof;
     int idx = 0;
     int fd;
@@ -334,19 +338,12 @@ errtype save_current_map(char *fname, Id id_num, uchar flush_mem, uchar pack) {
     //      free_dynamic_memory(DYNMEM_PARTIAL);
 
     // Open the file we're going to save into.
-    fd = ResEditFile(CURRENT_GAME_FNAME, TRUE);
+    fd = ResEditFile(fname, TRUE);
     if (fd < 0) {
         ERROR("No file!");
         end_wait();
         return ERR_FOPEN;
     }
-
-#define REF_WRITE(id_num, index, x)			\
-    write_id(id_num, index, map_version, &(x), sizeof(x), fd, 0)
-#define REF_WRITE_LZW(id_num, index, x)			\
-    write_id(id_num, index, map_version, &(x), sizeof(x), fd, RDF_LZW)
-#define REF_WRITE_RAW(id_num, index, ptr, sz)      \
-    write_id(id_num, index, map_version, ptr, sz, fd, RDF_LZW)
 
     REF_WRITE(SAVELOAD_VERIFICATION_ID, 0, verify_cookie);
 

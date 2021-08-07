@@ -141,15 +141,11 @@ void draw_button(uchar butid);
 errtype (*verify_callback)(int num_clicked) = NULL;
 char savegame_verify;
 char comments[NUM_SAVE_SLOTS + 1][SAVE_COMMENT_LEN];
-uchar pause_game_func(ushort keycode, uint32_t context, intptr_t data);
-uchar really_quit_key_func(ushort keycode, uint32_t context, intptr_t data);
 
 // separate mouse region for regular-screen and fullscreen.
 #define NUM_MOUSEREGION_SCREENS 2
 LGRegion options_mouseregion[NUM_MOUSEREGION_SCREENS];
 uchar free_mouseregion = 0;
-
-char save_game_name[] = "savgam00.dat";
 
 #define FULL_BACK_X (GAME_MESSAGE_X - INVENTORY_PANEL_X)
 #define FULL_BACK_Y (GAME_MESSAGE_Y - INVENTORY_PANEL_Y)
@@ -1930,10 +1926,8 @@ uchar wrapper_options_func(ushort keycode, uint32_t context, intptr_t data) {
 
 void load_dealfunc(uchar butid, uchar index) {
     begin_wait();
-    Poke_SaveName(index);
-    // Spew(DSRC_EDITOR_Save,("attempting to load from %s\n",save_game_name));
 
-    if (load_game(save_game_name) != OK) {
+    if (load_game(get_save_filename(index).c_str()) != OK) {
         WARN("%s: Load game failed!", __FUNCTION__);
     } else {
         INFO("Game %d loaded!", index);
@@ -2053,8 +2047,7 @@ errtype do_savegame_guts(uchar slot) {
         }
     }
     if (retval == OK) {
-        Poke_SaveName(slot);
-        if (save_game(save_game_name, comments[slot]) != OK) {
+        if (save_game(get_save_filename(slot).c_str(), comments[slot]) != OK) {
             ERROR("Save game failed!");
             message_info("Game save failed!");
             //      strcpy(comments[comment_mode], original_comment);
@@ -2155,7 +2148,12 @@ errtype wrapper_create_mouse_region(LGRegion *root) {
     return OK;
 }
 
-//#ifdef NOT_YET //
+std::string get_save_filename(int slot) {
+    char buf[13] = {};
+    sprintf(buf, "savgam%02d.dat", slot);
+    return std::string(buf);
+}
+
 uchar saveload_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
 #ifdef DEMO
     return (TRUE);
@@ -2173,5 +2171,3 @@ uchar demo_quit_func(ushort keycode, uint32_t context, intptr_t data) {
     string_message_info(REF_STR_QuitConfirm);
     return (TRUE);
 }
-
-//#endif // NOT_YET

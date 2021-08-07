@@ -154,7 +154,7 @@ void check_save_game_wackiness(void) {
 
 #endif // NOT_YET
 
-errtype save_game(char *fname, char *comment) {
+errtype save_game(const char *fname, char *comment) {
     int filenum;
     State player_state;
     errtype retval;
@@ -211,7 +211,7 @@ errtype save_game(char *fname, char *comment) {
     ResCloseFile(filenum);
 
     // Save current level
-    retval = write_level_to_disk(ResIdFromLevel(player_struct.level), TRUE);
+    retval = write_level_to_disk(CURRENT_GAME_FNAME, ResIdFromLevel(player_struct.level), TRUE);
     if (retval) {
         ERROR("Return value from write_level_to_disk is non-zero!"); //
         critical_error(CRITERR_FILE | 3);
@@ -268,7 +268,7 @@ errtype interpret_qvars(void) {
     return (OK);
 }
 
-errtype load_game(char *fname) {
+errtype load_game(const char *fname) {
     int filenum;
     ObjID old_plr;
     uchar bad_save = FALSE;
@@ -473,12 +473,12 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
     return (FALSE);
 }
 
-errtype write_level_to_disk(int idnum, uchar flush_mem) {
+errtype write_level_to_disk(const char *fname, int idnum, uchar flush_mem) {
     // Eventually, this ought to cleverly determine whether or not to pack
     // the save game resource, but for now we will always do so...
 
     // FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
 
     // char* currSpec = "saves/save.dat";
-    return (save_current_map(CURRENT_GAME_FNAME, idnum, flush_mem, TRUE));
+    return (save_current_map(fname, idnum, flush_mem, TRUE));
 }

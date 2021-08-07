@@ -51,6 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Includes
+#include <string>
+
 #include "region.h"
 
 
@@ -90,22 +92,22 @@ uchar saveload_hotkey_func(ushort keycode, uint32_t context, intptr_t data);
 
 errtype wrapper_create_mouse_region(LGRegion *root);
 
+/**
+ * Gets filename for save/load functions
+ * @param slot number of save/load slot
+ * @return name of file
+ */
+std::string get_save_filename(int slot);
+
 #define NUM_SAVE_SLOTS 8
 #define SAVE_COMMENT_LEN 32
 
 // Globals
-extern char save_game_name[];
 extern char comments[NUM_SAVE_SLOTS + 1][SAVE_COMMENT_LEN];
 
 #ifdef SVGA_SUPPORT
 extern uchar wrapper_screenmode_hack;
 #endif
-
-#define Poke_SaveName(game_num)                    \
-    {                                              \
-        save_game_name[6] = '0' + (game_num >> 3); \
-        save_game_name[7] = '0' + (game_num & 7);  \
-    }
 
 enum TEMP_STR_ {
     REF_STR_Renderer = 0x10000000,
