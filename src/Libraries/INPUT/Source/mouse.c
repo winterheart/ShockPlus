@@ -52,13 +52,6 @@ typedef struct _mouse_state {
     short butts;
 } mouse_state;
 
-#define NUM_MOUSEEVENTS 32
-short mouseQueueSize = NUM_MOUSEEVENTS;
-volatile short mouseQueueIn;                // back of event queue
-volatile short mouseQueueOut;               // front of event queue
-
-short mouseInstantX; // instantaneous mouse xpos (int-based)
-short mouseInstantY; // instantaneous mouse ypos (int-based)
 short mouseInstantButts;
 
 #define NUM_MOUSE_CALLBACKS 16
@@ -73,37 +66,6 @@ ss_mouse_event latestMouseEvent;
 // Internal Prototypes
 //----------------
 static void ReadMouseState(mouse_state *pMouseState);
-
-// KLC - try calling this from the main timer task.
-//---------------------------------------------------------------
-void MousePollProc(void) {
-    // TODO: is this even still needed? if so, can it be replaced by setting mouseInstant* in pump_events() ?
-    //       if the callbacks from mouseCall[] are still needed, could they also be called in pump_events() ?
-    //       if not, could they be the only thing called here, while mouseInstant* is still set in pump_events() ?
-
-    mouseInstantButts = latestMouseEvent.buttons;
-
-    // If different
-    if (mouseInstantX != latestMouseEvent.x || mouseInstantY != latestMouseEvent.y) {
-        mouseInstantX = latestMouseEvent.x; // save the position
-        mouseInstantY = latestMouseEvent.y;
-
-        ss_mouse_event e = latestMouseEvent;
-        e.type = MOUSE_MOTION;
-
-        for (uint16_t i = 0; i < mouseCalls; i++)
-            if (mouseCall[i] != NULL)
-                mouseCall[i](&e, mouseCallData[i]);
-
-        // Add a mouse-moved event to the internal queue.
-        short newin = mouseQueueIn, newout = mouseQueueOut;
-        newin = (newin + 1 < mouseQueueSize) ? newin + 1 : 0;
-        if (newin == mouseQueueOut)
-            newout = (newout + 1 < mouseQueueSize) ? newout + 1 : 0;
-        mouseQueueOut = newout;
-        mouseQueueIn = newin;
-    }
-}
 
 /**
  * terminates mouse handler.
@@ -125,14 +87,9 @@ errtype mouse_init(short mone, short mtwo) {
     // Initialize mouse state variables
     sdl_mouse_init();
 
-    mouseQueueIn = 0;
-    mouseQueueOut = 0;
-
     mouseCalls = 0;
 
     ReadMouseState(&mstate);
-    mouseInstantX = mstate.x;
-    mouseInstantY = mstate.y;
     mouseInstantButts = mstate.butts;
     return OK;
 }

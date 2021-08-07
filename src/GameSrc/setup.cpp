@@ -751,8 +751,7 @@ errtype journey_credits_func(uchar draw_stuff) {
 }
 
 void journey_credits_done(void) {
-    kb_flush();
-    mouse_flush();
+    uiFlush();
 
     credits_inp = 0;
 
@@ -1464,8 +1463,7 @@ void setup_start(void) {
     uiSetCurrentSlab(&setup_slab);
 
     // flush the keyboard and mouse - so we don't read old events
-    kb_flush();
-    mouse_flush();
+    uiFlush();
 
     intro_num = ResOpenFile("res/data/intro.res");
 

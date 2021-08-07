@@ -39,8 +39,6 @@ float mlook_vsens = 50;
 
 int mlook_vel_x, mlook_vel_y;
 
-extern short mouseInstantX, mouseInstantY;
-
 int mlook_enabled = FALSE;
 
 void mouse_look_physics() {

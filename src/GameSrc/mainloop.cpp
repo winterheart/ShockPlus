@@ -146,8 +146,6 @@ void mainloop(int argc, char *argv[]) {
         // OR in the static change flags...
         chg_set_flg(_static_change);
 
-        MousePollProc(); // update the cursor, was 35 times/sec originally
-
         status_bio_update();
         ZoomDrawProc(FALSE); //draw zoom rectangle if enabled; if not, returns immediately
 

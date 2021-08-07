@@ -133,8 +133,6 @@ errtype mouse_unset_callback(int id);
 // Constrain the mouse coordinates
 errtype mouse_constrain_xy(short xl, short yl, short xh, short yh);
 
-void MousePollProc(void);
-
 #ifdef __cplusplus
 }
 #endif
