@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -57,15 +58,15 @@ bool load(const std::string &filename = "options.cfg");
 /// Saves options to YAML.
 bool save(const std::string &filename = "options.cfg");
 /// Gets the game's data folder.
-std::string getDataFolder();
+std::filesystem::path getDataFolder();
 /// Sets the game's data folder.
-void setDataFolder(const std::string &folder);
+void setDataFolder(const std::filesystem::path &folder);
 /// Gets the game's data list.
-const std::vector<std::string> &getDataList();
+const std::vector<std::filesystem::path> &getDataList();
 /// Gets the game's user folder.
-std::string getUserFolder();
+std::filesystem::path getUserFolder();
 /// Gets the game's config folder.
-std::string getConfigFolder();
+std::filesystem::path getConfigFolder();
 /// Gets the game's options.
 const std::vector<OptionInfo> &getOptionInfo();
 /// Sets the game's data, user and config folders.
