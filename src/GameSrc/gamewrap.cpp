@@ -106,31 +106,6 @@ errtype interpret_qvars(void);
 
 #define OldResIdFromLevel(level) (OLD_SAVE_GAME_ID_BASE + (level * 2) + 2)
 
-errtype copy_file(char *src_fname, char *dest_fname) {
-    FILE *fsrc, *fdst;
-    DEBUG("copy_file: %s to %s", src_fname, dest_fname);
-
-    fsrc = fopen_caseless(src_fname, "rb");
-    if (fsrc == nullptr) {
-        return ERR_FOPEN;
-    }
-
-    fdst = fopen_caseless(dest_fname, "wb");
-    if (fdst == nullptr) {
-        return ERR_FOPEN;
-    }
-
-    int b;
-    while ((b = fgetc(fsrc)) != EOF) {
-        fputc(b, fdst);
-    }
-
-    fclose(fsrc);
-    fclose(fdst);
-
-    return OK;
-}
-
 void closedown_game(uchar visible) {
     // clear any transient hud settings
     hud_shutdown_lines();
@@ -243,15 +218,13 @@ errtype save_game(char *fname, char *comment) {
     }
 
     // Copy current game out to save game slot
-    if (copy_file(CURRENT_GAME_FNAME, fname) != OK) {
-        // Put up some alert here.
-        ERROR("No good copy, dude!");
-        // string_message_info(REF_STR_SaveGameFail);
+    try {
+        std::filesystem::copy_file(CURRENT_GAME_FNAME, fname, std::filesystem::copy_options::overwrite_existing);
+    } catch (std::exception& e) {
+        ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
     }
-    // KLC	else
-    // KLC		string_message_info(REF_STR_SaveGameSaved);
     old_ticks = *tmd_ticks;
-    // do we have to do this?		startup_game(FALSE);
+
     return (OK);
 }
 
@@ -309,7 +282,11 @@ errtype load_game(char *fname) {
     // KLC - don't do this here   stop_music();
 
     // Copy the save file into the current game
-    copy_file(fname, CURRENT_GAME_FNAME);
+    try {
+        std::filesystem::copy_file(fname, CURRENT_GAME_FNAME, std::filesystem::copy_options::overwrite_existing);
+    } catch (std::exception& e) {
+        ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
+    }
 
     // Load in player and current level
     filenum = ResOpenFile(CURRENT_GAME_FNAME);
@@ -426,8 +403,12 @@ uchar create_initial_game_func(short undefined1, ulong undefined2, void *undefin
 
     // Copy archive into local current game file.
 
-    if (copy_file(ARCHIVE_FNAME, CURRENT_GAME_FNAME) != OK)
+    try {
+        std::filesystem::copy_file(ARCHIVE_FNAME, CURRENT_GAME_FNAME, std::filesystem::copy_options::overwrite_existing);
+    } catch (std::exception& e) {
+        ERROR("%s: No good copy, dude! %s", __FUNCTION__, e.what());
         critical_error(CRITERR_FILE | 7);
+    }
 
     plr_obj = PLAYER_OBJ;
     for (i = 0; i < 4; i++)
