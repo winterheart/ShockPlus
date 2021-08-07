@@ -43,26 +43,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // THE GLOBAL ERROR STRING ARRAYS
 // ------------------------------
 
-static char *criterr_type_messages[CRITERR_CLASSES] = {"Test",
+static const char *criterr_type_messages[CRITERR_CLASSES] = {"Test",
                                                        "Configuration error",
                                                        "Resource error",
                                                        "Memory error",
                                                        "File error",
                                                        "Execution error",
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
+                                                       nullptr,
                                                        "General failure"};
 
 typedef struct _code_string {
     unsigned short code;
-    char *message;
+    const char *message;
 } _code_string;
 
 static _code_string code_messages[] = {
@@ -166,7 +166,7 @@ void criterr_init(void)
 void critical_error(unsigned short code) {
     char buf[256];
     char explain[256];
-    char *s;
+    const char *s;
     int i, len;
 
     if (code == NO_CRITICAL_ERROR)
@@ -175,10 +175,10 @@ void critical_error(unsigned short code) {
 #if 1
     STUB_ONCE("Maybe use SDL_ShowSimpleMessageBox() ?");
 
-    printf("A fatal error has occured in System Shock. Error code %d.\n", code);
+    printf("A fatal error has occurred in System Shock. Error code %d.\n", code);
 
     s = criterr_type_messages[CLASS(code)]; // Specific error message.
-    if (s != NULL)
+    if (s != nullptr)
         strcpy(explain, s);
     for (i = 0; i < NUM_CODE_MESSAGES; i++)
         if (code_messages[i].code == code)

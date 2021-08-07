@@ -206,6 +206,7 @@ bool citadel_check_input() {
             return false;
         }
     }
+    return false;
 }
 
 void input_chk() {

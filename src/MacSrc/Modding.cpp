@@ -29,8 +29,8 @@ char *modding_archive_override;
 char *modding_additional_files[MAX_MOD_FILES];
 int num_mod_files;
 
-int StringEndsWith(char *src, char *dst) {
-    char *s = strrchr(src, '.');
+int StringEndsWith(const char *src, const char *dst) {
+    char *s = const_cast<char *>(strrchr(src, '.'));
 
     if (s != NULL)
         return (strcmp(s, dst)) == 0;

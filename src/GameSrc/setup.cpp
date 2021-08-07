@@ -203,7 +203,7 @@ uchar start_selected = FALSE;
 
 short diff_titles_x[] = {DIFF_TITLE1_X1, DIFF_TITLE2_X1, DIFF_TITLE3_X1, DIFF_TITLE4_X1};
 short diff_titles_y[] = {DIFF_TITLE1_Y1, DIFF_TITLE2_Y1, DIFF_TITLE3_Y1, DIFF_TITLE4_Y1};
-char *valid_char_string = "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+const char *valid_char_string = "0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
 
 LGRect name_rect = {{DIFF_NAME_TEXT_X, DIFF_NAME_Y}, {DIFF_NAME_X2, DIFF_NAME_Y2}};
 

@@ -34,7 +34,7 @@ errtype load_da_palette(void);
 void object_data_flush(void);
 errtype object_data_load(void);
 
-extern char *mfdart_files[];
+extern const char *mfdart_files[];
 extern int mfdart_res_file;
 extern uchar clear_player_data;
 extern uchar objdata_loaded;

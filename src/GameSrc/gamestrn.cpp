@@ -54,7 +54,7 @@ int string_res_file; // string res filenum
 // EXTERNALS
 // ---------
 
-char *language_files[] = {"res/data/cybstrng.res", "res/data/frnstrng.res", "res/data/gerstrng.res"};
+const char *language_files[] = {"res/data/cybstrng.res", "res/data/frnstrng.res", "res/data/gerstrng.res"};
 
 // Wrapper around RefGet suitable for use by lg_sprintf to get string resources
 // for the custom '%S' format specifier.

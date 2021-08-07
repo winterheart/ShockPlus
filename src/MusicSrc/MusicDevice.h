@@ -57,7 +57,7 @@ struct MusicDevice {
     unsigned short isOpen;    // 1 if device open, 0 if closed
     unsigned int outputIndex; // index of currently opened output
     MusicType deviceType;     // type of device
-    char *musicType;          // "sblaster" or "genmidi"
+    const char *musicType;          // "sblaster" or "genmidi"
 };
 
 #define MUSICTYPE_SBLASTER "sblaster"

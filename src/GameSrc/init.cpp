@@ -173,11 +173,7 @@ uchar pause_for_input(ulong wait_time) {
 }
 
 int mfdart_res_file;
-//#ifdef DEMO
-// uchar *mfdart_files[] = { "mfdart.rsrc", "mfdart.rsrc", "mfdart.rsrc" };
-//#else
-char *mfdart_files[] = {"res/data/mfdart.res", "res/data/mfdfrn.res", "res/data/mfdger.res"};
-//#endif
+const char *mfdart_files[] = {"res/data/mfdart.res", "res/data/mfdfrn.res", "res/data/mfdger.res"};
 
 /* MLA - don't need these
 extern void *CitMalloc(int n);

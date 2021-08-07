@@ -59,8 +59,8 @@ int curr_alog = -1;
 int alog_fn = -1;
 char secret_pending_hack;
 
-char *bark_files[] = {"res/data/citbark.res", "res/data/frnbark.res", "res/data/gerbark.res"};
-char *alog_files[] = {"res/data/citalog.res", "res/data/frnalog.res", "res/data/geralog.res"};
+const char *bark_files[] = {"res/data/citbark.res", "res/data/frnbark.res", "res/data/gerbark.res"};
+const char *alog_files[] = {"res/data/citalog.res", "res/data/frnalog.res", "res/data/geralog.res"};
 
 errtype audiolog_init(void) { return OK; }
 

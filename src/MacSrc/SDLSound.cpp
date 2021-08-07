@@ -155,7 +155,7 @@ extern uchar transition_table[NUM_TRANSITIONS];
 extern uchar layering_table[NUM_LAYERS][MAX_KEYS];
 extern uchar key_table[NUM_LAYERABLE_SUPERCHUNKS][KEY_BAR_RESOLUTION];
 
-int MacTuneLoadTheme(char *theme_base, int themeID) {
+int MacTuneLoadTheme(const char *theme_base, int themeID) {
     char filename[40];
     FILE *f;
     int i;

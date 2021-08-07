@@ -51,7 +51,7 @@ extern bool gReadyToQueue; // True when it's time to queue up a new sequence.
 //-----------------
 int MacTuneInit(void);
 void MacTuneShutdown(void);
-int MacTuneLoadTheme(char *theme, int themeID);
+int MacTuneLoadTheme(const char *theme_base, int themeID);
 void MacTuneStartCurrentTheme(void);
 void MacTuneKillCurrentTheme(void);
 void MacTunePurgeCurrentTheme(void);
