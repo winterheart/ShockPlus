@@ -51,14 +51,24 @@ extern char *modding_archive_override;
 
 // Loads or saves a game named by fname.
 errtype copy_file(char *src_fname, char *dest_fname);
-// errtype copy_file(FSSpec *srcFile, FSSpec *destFile, Boolean saveGameFile);
+
+/**
+ * Save game state to file
+ * @param fname path to file
+ * @param comment comment
+ * @return OK on success, ERR_FOPEN on problems
+ */
 errtype save_game(char *fname, char *comment);
-// errtype save_game(FSSpec *fSpec);
+
+/**
+ * Load game state from file
+ * @param fname path to file
+ * @return OK on success
+ */
 errtype load_game(char *fname);
-// errtype load_game(FSSpec *loadSpec);
+
 errtype write_level_to_disk(int idnum, uchar flush_mem);
 uchar create_initial_game_func(short keycode, ulong context, void *data);
-uchar create_level_archive_func(short keycode, ulong context, void *data);
 errtype load_level_from_file(int level_num);
 void startup_game(uchar visible);
 void closedown_game(uchar visible);

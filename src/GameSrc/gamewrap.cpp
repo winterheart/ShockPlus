@@ -81,22 +81,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "playerlayout.h"
 #undef PL_MFD_PUZZLE_SIZE
 
-const ResLayout *PlayerLayouts[] = { &PlayerLayout_M32, &PlayerLayout_M64 };
+const ResLayout *PlayerLayouts[] = {&PlayerLayout_M32, &PlayerLayout_M64};
 // Decode wrapper for a player layout. Tries to figure out which version saved
 // the game from the resource size.
 void *decode_player(void *raw, size_t *size, UserDecodeData layout) {
     int i;
     for (i = 0; i < sizeof PlayerLayouts / sizeof *PlayerLayouts; ++i) {
-	if (*size == PlayerLayouts[i]->dsize) {
-	    return ResDecode(raw, size, (UserDecodeData)PlayerLayouts[i]);
-	}
+        if (*size == PlayerLayouts[i]->dsize) {
+            return ResDecode(raw, size, (UserDecodeData)PlayerLayouts[i]);
+        }
     }
     ERROR("Could not determine format of saved player!");
-    return NULL;
+    return nullptr;
 }
 // Player format. We always save as enhanced format (64-byte MFD array).
-const ResourceFormat PlayerFormat = {
-    decode_player, ResEncode, (UserDecodeData)&PlayerLayout_M64, NULL };
+const ResourceFormat PlayerFormat = {decode_player, ResEncode, (UserDecodeData)&PlayerLayout_M64, nullptr};
 #define FORMAT_PLAYER (&PlayerFormat)
 
 //-------------------
@@ -112,12 +111,12 @@ errtype copy_file(char *src_fname, char *dest_fname) {
     DEBUG("copy_file: %s to %s", src_fname, dest_fname);
 
     fsrc = fopen_caseless(src_fname, "rb");
-    if (fsrc == NULL) {
+    if (fsrc == nullptr) {
         return ERR_FOPEN;
     }
 
     fdst = fopen_caseless(dest_fname, "wb");
-    if (fdst == NULL) {
+    if (fdst == nullptr) {
         return ERR_FOPEN;
     }
 
@@ -186,17 +185,9 @@ errtype save_game(char *fname, char *comment) {
     errtype retval;
     int idx = SAVE_GAME_ID_BASE;
 
-    // KLC - this does nothing now.		check_save_game_wackiness();
-    // Why is this done???			closedown_game(FALSE);
-
     DEBUG("starting save_game");
 
-    // KLC  do it the Mac way						i = flush_resource_cache();
-    // Size	dummy;
-    // MaxMem(&dummy); DG: I don't think this is needed anymore
-
     // Open the current game file to save some more resources into it.
-    // FSMakeFSSpec(gDataVref, gDataDirID, CURRENT_GAME_FNAME, &currSpec);
     filenum = ResEditFile(CURRENT_GAME_FNAME, FALSE);
     if (filenum < 0) {
         ERROR("Couldn't open Current Game");
@@ -214,8 +205,8 @@ errtype save_game(char *fname, char *comment) {
     player_struct.realspace_loc = objs[player_struct.rep].loc;
     EDMS_get_state(objs[PLAYER_OBJ].info.ph, &player_state);
     memcpy(player_struct.edms_state, &player_state, sizeof(fix) * 12);
-    // LZW later		ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum,
-    // RDF_LZW);
+    // LZW later
+    // ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, RDF_LZW);
 
     ResMake(idx, (void *)&player_struct, sizeof(player_struct), RTYPE_APP, filenum, 0, FORMAT_PLAYER);
     ResWrite(idx);
@@ -225,8 +216,8 @@ errtype save_game(char *fname, char *comment) {
     // HAX HAX HAX Skip the schedule for now!
     // Save game schedule (resource #590)
     idx = SCHEDULE_BASE_ID;
-    // LZW later		ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum,
-    // RDF_LZW);
+    // LZW later
+    // ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, RDF_LZW);
 
     ResMake(idx, (void *)&game_seconds_schedule, sizeof(Schedule), RTYPE_APP, filenum, 0, FORMAT_SCHEDULE);
     ResWrite(idx);
@@ -234,8 +225,8 @@ errtype save_game(char *fname, char *comment) {
     idx++;
 
     // Save game schedule vec info (resource #591)
-    // LZW later		ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE,
-    // RTYPE_APP, filenum, RDF_LZW);
+    // LZW later
+    // ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent)*GAME_SCHEDULE_SIZE, RTYPE_APP, filenum, RDF_LZW);
     ResMake(idx, (void *)game_seconds_schedule.queue.vec, sizeof(SchedEvent) * GAME_SCHEDULE_SIZE, RTYPE_APP, filenum,
             0, FORMAT_SCHEDULE_QUEUE);
     ResWrite(idx);
@@ -255,7 +246,7 @@ errtype save_game(char *fname, char *comment) {
     if (copy_file(CURRENT_GAME_FNAME, fname) != OK) {
         // Put up some alert here.
         ERROR("No good copy, dude!");
-        //		string_message_info(REF_STR_SaveGameFail);
+        // string_message_info(REF_STR_SaveGameFail);
     }
     // KLC	else
     // KLC		string_message_info(REF_STR_SaveGameSaved);
@@ -341,7 +332,7 @@ errtype load_game(char *fname) {
     ResCloseFile(filenum);
 
     if (orig_lvl == player_struct.level) {
-        //      Warning(("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level));
+        // Warning(("HEY, trying to be clever about loading the game! %d vs %d\n",orig_lvl,player_struct.level));
         dynmem_mask = DYNMEM_PARTIAL;
     }
 
@@ -373,9 +364,6 @@ errtype load_game(char *fname) {
         lamp_turnoff(TRUE, FALSE);
     else
         lamp_turnon(TRUE, FALSE);
-
-    //Â¥Â¥ temp
-    // BlockMove(0, saveArray, 16);
 
     return (OK);
 }
