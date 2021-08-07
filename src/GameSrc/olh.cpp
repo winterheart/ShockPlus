@@ -428,48 +428,35 @@ void olh_closedown(void) { olh_object.obj = OBJ_NULL; }
 
 void olh_shutdown(void) { olh_free_scan(); }
 
-short _olh_overlay_keys[] = {
-    ' ' | KB_FLAG_DOWN,
-    '?' | KB_FLAG_DOWN,
-};
-
-#define NUM_OVERLAY_KEYS (sizeof(_olh_overlay_keys) / sizeof(_olh_overlay_keys[0]))
-
-void olh_overlay(void) {
+void olh_overlay() {
     uchar done = FALSE;
 
     status_bio_end();
     uiPushGlobalCursor(&globcursor);
     gr_push_canvas(grd_screen_canvas);
-    uiHideMouse(NULL);
+    uiHideMouse(nullptr);
     draw_res_bm(REF_IMG_bmHelpOverlayEnglish + MKREF(ShockPlus::Options::language, 0), 0, 0);
-    uiShowMouse(NULL);
+    uiShowMouse(nullptr);
     gr_pop_canvas();
     uiFlush();
 
+    // WH: Little hackish, but it's works, and without custom kbe/mse queue!
     while (!done) {
-        ushort key;
-        ss_mouse_event me;
-        pump_events(); // DG: apparently this can loop for a long time waiting for input w/o game_loop() being able to
-                       // update events
-
-        tight_loop(FALSE);
-        // FIXME It crash on Linux
-        /*if (mouse_next(&me) == OK)
-        {
-          if (me.type == MOUSE_LDOWN)
-                  done = TRUE;
-        }*/
-        if (kb_get_cooked(&key)) {
-            int i;
-            for (i = 0; i < NUM_OVERLAY_KEYS; i++)
-                if (_olh_overlay_keys[i] == key) {
-                    done = TRUE;
-                    if (i != 0)
-                        hotkey_dispatch(key);
-                }
+        SDL_Event ev;
+        while (SDL_PollEvent(&ev)) {
+            switch (ev.type) {
+            case SDL_KEYDOWN: {
+                if (ev.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                    done = true;
+                // TODO: Show on-line keybinding screen here, when it will be done (SDL_SCANCODE_SLASH)
+                break;
+            }
+            case SDL_MOUSEBUTTONDOWN: {
+                done = true;
+                break;
+            }
+            }
         }
-
         SDLDraw();
     }
 
