@@ -64,7 +64,6 @@ void alloc_cursor_bitmaps(void);
 void free_cursor_bitmaps();
 
 void input_chk();
-// uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata);
 void shutdown_input();
 void init_input();
 void install_motion_mouse_handler(LGRegion *r, frc *fr);
@@ -86,7 +85,7 @@ uchar MacDetailFunc(ushort keycode, uint32_t context, intptr_t data);
 
 void SetMotionCursorForMouseXY();
 
-uchar citadel_check_input();
+bool citadel_check_input();
 
 // -------
 // GLOBALS
@@ -102,7 +101,6 @@ extern uchar fire_slam;
 extern uchar left_down_jump;
 extern uchar weapon_button_up;
 extern LGCursor object_cursor;
-extern bool checking_mouse_button_emulation;
 extern LGPoint use_cursor_pos;
 extern grs_bitmap motion_cursor_bitmaps[NUM_MOTION_CURSORS];
 

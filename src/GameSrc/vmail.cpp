@@ -210,7 +210,7 @@ errtype play_vmail(byte vmail_no) {
     // spew the appropriate text for vmail - full screen needs a draw!
     suspend_game_time();
     time_passes = false;
-    checking_mouse_button_emulation = game_paused = true;
+    game_paused = true;
 
     // open the res file
     vmail_animfile_num = ResOpenFile("res/data/vidmail.res");
@@ -319,8 +319,9 @@ errtype play_vmail(byte vmail_no) {
 #ifndef CONTINUOUS_VMAIL_TEST
     if (!early_exit && vmail_wait_for_input)
         while (!citadel_check_input()) {
-            uiHideMouse(nullptr); // trick to prevent
-            uiShowMouse(nullptr); //  mouse pointer freeze
+            // trick to prevent mouse pointer freeze
+            uiHideMouse(nullptr);
+            uiShowMouse(nullptr);
             pump_events();
             SDLDraw();
             tight_loop(false); // keep the music playing
@@ -334,7 +335,7 @@ errtype play_vmail(byte vmail_no) {
 
     DEBUG("Resuming game time");
     resume_game_time();
-    checking_mouse_button_emulation = game_paused = false;
+    game_paused = false;
 
     // let the player wait before firing auto fire weapon
     player_struct.auto_fire_click = player_struct.game_time + 60;

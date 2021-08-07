@@ -825,13 +825,6 @@ kbs_event kb_next(void) {
 kbs_event kb_look_next(void) {
     kbs_event retEvent = {KBC_NONE, 0x00};
 
-    int flags = kb_get_flags();
-    if (flags & KBF_BLOCK) {
-        while (nextKBevent == 0) {
-            pump_events();
-        }
-    }
-
     if (nextKBevent > 0) {
         return kbEvents[0];
     }

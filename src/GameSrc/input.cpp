@@ -191,20 +191,21 @@ void poll_mouse() {
     }
 }
 
-bool checking_mouse_button_emulation = false;
-bool mouse_button_emulated = false;
-
-uchar citadel_check_input() {
-    if (uiCheckInput())
-        return true;
-
-    if (checking_mouse_button_emulation)
-        mouse_button_emulated = false;
-
-    // if we're suppose to emulate a mouse button - let's do it!
-    if (mouse_button_emulated)
-        return true;
-    return false;
+/**
+ * Check event system for input (mouse and keyboard button pressing)
+ * @return true if mouse or keyboard pressed down
+ */
+bool citadel_check_input() {
+    SDL_Event ev;
+    while (SDL_PollEvent(&ev)) {
+        switch (ev.type) {
+        case SDL_KEYDOWN:
+        case SDL_MOUSEBUTTONDOWN:
+            return true;
+        default:
+            return false;
+        }
+    }
 }
 
 void input_chk() {
