@@ -49,9 +49,6 @@ extern char *modding_archive_override;
 
 // Prototypes
 
-// Loads or saves a game named by fname.
-errtype copy_file(char *src_fname, char *dest_fname);
-
 /**
  * Save game state to file
  * @param fname path to file
