@@ -374,11 +374,6 @@ errtype _screen_init_mouse(LGRegion *r, uiSlab *slab, uchar do_init) {
     uiMakeSlab(slab, r, &globcursor);
     if (do_init)
         uiInit(slab);
-#ifdef INPUT_CHAINING
-/* Ãdo we ever need this?
-   if (config_get_raw(CHAINING_VAR,NULL,0))
-      kb_set_flags(kb_get_flags()|KBF_CHAIN);*/
-#endif // INPUT_CHAINING
 
     uiHideMouse(NULL);
     // KLC - no longer needed   if (mouse_put_xy(100,100) == ERR_NODEV)

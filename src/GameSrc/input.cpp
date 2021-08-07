@@ -219,10 +219,6 @@ void input_chk() {
 }
 
 uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
-#ifdef INPUT_CHAINING
-    kb_flush_bios();
-#endif // INPUT_CHAINING
-
     // Broad event types related to KB
     if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP) {
         int result = hotkey_dispatch(h->subtype);
@@ -422,7 +418,7 @@ void init_input() {
 
 void shutdown_input() {
     hotkey_shutdown();
-    kb_flush_bios();
+    kb_flush();
 
     // kb_clear_state(0x1d, 3);
     // kb_clear_state(0x9d, 3);

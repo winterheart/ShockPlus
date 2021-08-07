@@ -554,7 +554,7 @@ errtype tight_loop(uchar check_input) {
 
     if (check_input) {
         uiPoll();
-        kb_flush_bios();
+        kb_flush();
     }
     return (OK);
 }

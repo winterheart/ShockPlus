@@ -521,29 +521,6 @@ errtype object_data_load(void) {
     return (OK);
 }
 
-#ifdef DUMMY ///Â¥
-
-errtype init_kb() {
-    // Keyboard frobbing
-    if (config_get_raw(CHAINING_VAR, NULL, 0))
-        kb_set_flags(kb_get_flags() | KBF_CHAIN);
-    kb_set_state(0x16, KBA_REPEAT);
-    kb_set_state(0x17, KBA_REPEAT);
-    kb_set_state(0x18, KBA_REPEAT);
-    kb_set_state(0x1A, KBA_REPEAT);
-    kb_set_state(0x1B, KBA_REPEAT);
-    kb_set_state(0x24, KBA_REPEAT);
-    kb_set_state(0x25, KBA_REPEAT);
-    kb_set_state(0x26, KBA_REPEAT);
-    kb_set_state(0x09, KBA_REPEAT);
-    kb_set_state(0x33, KBA_REPEAT);
-    kb_set_state(0x32, KBA_REPEAT);
-    kb_set_state(0x34, KBA_REPEAT);
-    return (OK);
-}
-
-#endif // Â¥ DUMMY
-
 errtype load_da_palette(void) {
     int pal_file;
 

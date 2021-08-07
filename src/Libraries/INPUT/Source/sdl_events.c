@@ -64,38 +64,12 @@ enum { kNumKBevents = 128, kNumMouseEvents = 128 };
 static kbs_event kbEvents[kNumKBevents];
 static int nextKBevent = 0; // where next to insert (also, if 0 there are no events)
 
-static void addKBevent(const kbs_event *ev) {
-    if (nextKBevent < kNumKBevents) {
-        kbEvents[nextKBevent] = *ev;
-        ++nextKBevent;
-    } else {
-        // printf("WTF, the kbEvents queue is full?!");
-        // drop the oldest event
-        memmove(&kbEvents[0], &kbEvents[1], sizeof(kbs_event) * (kNumKBevents - 1));
-        kbEvents[kNumKBevents - 1] = *ev;
-    }
-}
-
 // same for mouse events, also created in pump_events(), consumed by mouse_next()
 static ss_mouse_event mouseEvents[kNumMouseEvents];
 static int nextMouseEvent = 0;
 
 // latest mouse state as input for MousePollProc() in mouse.c
 ss_mouse_event latestMouseEvent;
-
-static void addMouseEvent(const ss_mouse_event *ev) {
-    latestMouseEvent = *ev;
-
-    if (nextMouseEvent < kNumMouseEvents) {
-        mouseEvents[nextMouseEvent] = latestMouseEvent;
-        ++nextMouseEvent;
-    } else {
-        // printf("WTF, the mouseEvents queue is full?!");
-        // drop the oldest event
-        memmove(&mouseEvents[0], &mouseEvents[1], sizeof(ss_mouse_event) * (kNumMouseEvents - 1));
-        mouseEvents[kNumMouseEvents - 1] = latestMouseEvent;
-    }
-}
 
 static uchar sdlKeyCodeToSSHOCKkeyCode(SDL_Keycode kc) {
     // apparently System Shock uses the same keycodes as Mac
@@ -553,8 +527,7 @@ void dispatch_kb_event(kbs_event *kbe) {
 
     if (kbe->code != KBC_NONE) {
         uchar eaten;
-        DEBUG("%s: got a keyboard event: %d, %d, %d", __FUNCTION__, kbe->event.key.type, kbe->event.key.state,
-              kbe->event.key.keysym.scancode);
+        DEBUG("%s: got a keyboard event: %d, %d", __FUNCTION__, kbe->event.key.type, kbe->event.key.keysym.scancode);
         out.pos = mousepos;
         out.type = UI_EVENT_KBD_RAW;
         out.raw_key_data.scancode = kbe->code;
@@ -564,7 +537,7 @@ void dispatch_kb_event(kbs_event *kbe) {
         if (!eaten) {
             ushort cooked;
             uchar result;
-            DEBUG("%s: cooking keyboard event: %d, %d, %d", __FUNCTION__, kbe->event.key.type, kbe->event.key.state,
+            DEBUG("%s: cooking keyboard event: %d, %d", __FUNCTION__, kbe->event.key.type,
                   kbe->event.key.keysym.scancode);
             // Spew(DSRC_UI_Polling,("uiPoll(): cooking keyboard event: <%d,%x>\n",kbe.state,kbe.code));
             errtype err = kb_cook(*kbe, &cooked, &result);
@@ -639,13 +612,10 @@ void pump_kb_event(SDL_Event *ev) {
             dispatch_kb_event(&keyEvent);
         } else {
             // key up following text input event case below is handled here
-
-            // keyEvent.state = KBS_UP;
-            // addKBevent(&keyEvent);
-
+            DEBUG("%s: got a keyboard event: %d, %d, ignoring (KEYUP)", __FUNCTION__, keyEvent.event.key.type,
+                  keyEvent.event.key.keysym.scancode);
             sshockKeyStates[c] = 0;
         }
-
     }
 
     // hack to allow pressing shift after move key
