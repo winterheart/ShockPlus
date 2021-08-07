@@ -39,7 +39,6 @@ extern char *modding_archive_override;
 #define NUM_RESIDS_PER_LEVEL 100
 #define CURRENT_GAME_FNAME "CurrentGame.dat"
 #define ARCHIVE_FNAME "res/data/archive.dat"
-// #define ARCHIVE_FNAME (modding_archive_override != NULL ? modding_archive_override : "res/data/archive.dat")
 
 #define ResIdFromLevel(level) (SAVE_GAME_ID_BASE + (level * NUM_RESIDS_PER_LEVEL) + 2)
 
@@ -55,16 +54,16 @@ extern char *modding_archive_override;
  * @param comment comment
  * @return OK on success, ERR_FOPEN on problems
  */
-errtype save_game(char *fname, char *comment);
+errtype save_game(const char *fname, char *comment);
 
 /**
  * Load game state from file
  * @param fname path to file
  * @return OK on success
  */
-errtype load_game(char *fname);
+errtype load_game(const char *fname);
 
-errtype write_level_to_disk(int idnum, uchar flush_mem);
+errtype write_level_to_disk(const char *fname, int idnum, uchar flush_mem);
 uchar create_initial_game_func(short keycode, ulong context, void *data);
 errtype load_level_from_file(int level_num);
 void startup_game(uchar visible);

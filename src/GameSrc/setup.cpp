@@ -845,9 +845,8 @@ errtype load_that_thar_game(int which_slot) {
         object_data_load();
         player_create_initial();
         player_struct.level = 0xFF; // make sure we load textures
-        Poke_SaveName(which_slot);
         change_mode_func(0, 0, GAME_LOOP);
-        retval = load_game(save_game_name);
+        retval = load_game(get_save_filename(which_slot).c_str());
         if (retval != OK) {
             strcpy(comments[which_slot], "<< INVALID GAME >>");
             uiHideMouse(NULL);
@@ -1209,7 +1208,7 @@ uchar intro_key_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     return (main_kb_callback(ev, r, user_data));
 }
 
-errtype load_savegame_names(void) {
+errtype load_savegame_names() {
     int i;
     int file;
 
@@ -1218,10 +1217,8 @@ errtype load_savegame_names(void) {
     DEBUG("Grabbing save game names");
 
     for (i = 0; i < NUM_SAVE_SLOTS; i++) {
-        Poke_SaveName(i);
-
-        if (access(save_game_name, F_OK) != -1) {
-            file = ResOpenFile(save_game_name);
+        if (access(get_save_filename(i).c_str(), F_OK) != -1) {
+            file = ResOpenFile(get_save_filename(i).c_str());
             if (ResInUse(OLD_SAVE_GAME_ID_BASE)) {
 #ifdef OLD_SG_FORMAT
                 ResExtract(OLD_SAVE_GAME_ID_BASE, FORMAT_RAW, comments[i]);
