@@ -2,6 +2,7 @@
 
 Copyright (C) 2015-2018 Night Dive Studios, LLC.
 Copyright (C) 2019 Shockolate Project
+Copyright (C) 2021 ShockPlus Project
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -72,13 +73,9 @@ static int nextMouseEvent = 0;
 ss_mouse_event latestMouseEvent;
 
 static uchar sdlKeyCodeToSSHOCKkeyCode(SDL_Keycode kc) {
-    // apparently System Shock uses the same keycodes as Mac
-    // which are luckily documented, see
-    // see http://snipplr.com/view/42797/
-    // and https://stackoverflow.com/a/16125341
+    // apparently System Shock uses the same keycodes as Mac which are luckily documented, see
+    // see http://snipplr.com/view/42797/ and https://stackoverflow.com/a/16125341
     // see also GameSrc/movekeys.c for a very short list
-
-    // printf("sdlKeyCodeToSSHOCKkeyCode: %x\n", kc);
 
     switch (kc) {
     case SDLK_a:
@@ -668,7 +665,6 @@ void pump_ms_button_event(SDL_Event *ev) {
         mouseEvent.modifiers = (shifted ? 1 : 0);
 
         dispatch_ms_event(&mouseEvent);
-        // addMouseEvent(&mouseEvent);
     }
 }
 
@@ -683,7 +679,6 @@ void pump_ms_wheel_event(SDL_Event *ev) {
         mouseEvent.timestamp = mouse_get_time();
 
         dispatch_ms_event(&mouseEvent);
-        // addMouseEvent(&mouseEvent);
     }
 }
 
@@ -707,12 +702,11 @@ void pump_ms_motion_event(SDL_Event *ev) {
     mouseEvent.timestamp = mouse_get_time();
 
     dispatch_ms_event(&mouseEvent);
-    // addMouseEvent(&mouseEvent);
 
     if (TriggerRelMouseMode) {
         TriggerRelMouseMode = FALSE;
 
-        SDL_SetRelativeMouseMode(SDL_TRUE);
+        SDL_SetRelativeMouseMode(true);
         // throw away this first relative mouse reading
         int mvelx, mvely;
         get_mouselook_vel(&mvelx, &mvely);
@@ -759,7 +753,7 @@ void pump_events(void) {
 
             case SDL_WINDOWEVENT_FOCUS_GAINED:
                 SDL_SetRelativeMouseMode(saved_rel_mouse);
-                if (saved_rel_mouse == SDL_TRUE) {
+                if (saved_rel_mouse == true) {
                     // throw away this first relative mouse reading
                     int mvelx, mvely;
                     get_mouselook_vel(&mvelx, &mvely);
@@ -823,25 +817,6 @@ kbs_event kb_next(void) {
         memmove(&kbEvents[0], &kbEvents[1], sizeof(kbs_event) * (kNumKBevents - 1));
     }
     return retEvent;
-
-#if 0
-	bool gotKey = FALSE;
-	EventRecord	theEvent;
-	while(!gotKey)
-	{
-		gotKey = GetOSEvent(keyDownMask | autoKeyMask, &theEvent);		// Get a key
-		if (gotKey)
-		{
-			retEvent.code = (uchar)(theEvent.message >> 8); // keyCodeMask == 0x0000FF00
-			retEvent.state = KBS_DOWN;
-			retEvent.ascii = (uchar)(theEvent.message & charCodeMask);
-			retEvent.modifiers = (uchar)(theEvent.modifiers >> 8);
-		}
-		else if ((flags & KBF_BLOCK) == 0)					// If there was no key and we're
-			return (retEvent);										// not blocking, then return.
-	}
-	return (retEvent);
-#endif
 }
 
 //---------------------------------------------------------------
@@ -862,25 +837,6 @@ kbs_event kb_look_next(void) {
     }
     TRACE("%s: No KB events. Injecting own...", __FUNCTION__);
     return retEvent;
-
-#if 0
-	bool				gotKey = FALSE;
-	EventRecord	theEvent;
-	while(!gotKey)
-	{
-		gotKey = OSEventAvail(keyDownMask | autoKeyMask, &theEvent);		// Get a key
-		if (gotKey)
-		{
-			retEvent.code = (uchar)(theEvent.message >> 8);
-			retEvent.state = KBS_DOWN;
-			retEvent.ascii = (uchar)(theEvent.message & charCodeMask);
-			retEvent.modifiers = (uchar)(theEvent.modifiers >> 8);
-		}
-		else if (flags & KBF_BLOCK == 0)					// If there was no key and we're
-			return (retEvent);										// not blocking, then return.
-	}
-	return (retEvent);
-#endif
 }
 
 //---------------------------------------------------------------
@@ -893,19 +849,6 @@ void kb_flush(void) {
     SDL_FlushEvents(SDL_KEYDOWN, SDL_KEYUP); // Note: that's a range!
 
     nextKBevent = 0; // this flushes the keyboard events already buffered - TODO is that desirable?
-}
-
-//---------------------------------------------------------------
-//  Return the state of the indicated key (scan code).
-//---------------------------------------------------------------
-
-uchar kb_state(uchar code) {
-    // see
-    // http://mirror.informatimago.com/next/developer.apple.com/documentation/Carbon/Reference/Event_Manager/event_mgr_ref/function_group_4.html#//apple_ref/c/func/GetKeys
-    // GetKeys((UInt32 *) pKbdGetKeys);
-    // return ((pKbdGetKeys[code>>3] >> (code & 7)) & 1);
-
-    return sshockKeyStates[code] != 0;
 }
 
 //---------------------------
@@ -922,8 +865,6 @@ uchar kb_state(uchar code) {
 //  For Mac version: Get event from the normal Mac event queue for mouse events.
 //  The events looked for depend on the 'mouseMask' setting.
 
-uchar btn_left = FALSE;
-uchar btn_right = FALSE;
 errtype mouse_next(ss_mouse_event *res) {
     if (nextMouseEvent <= 0)
         return ERR_DUNDERFLOW;

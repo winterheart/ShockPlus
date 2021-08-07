@@ -35,22 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lg_error.h"
 #include "kb.h"
 
-//#include <Carbon/Carbon.h>
-
-/*
-#define KB_CNV_SHIFT   1
-#define KB_CNV_NOSHIFT 0
-#define KB_CNV_TBLSIZE 0xE0
-
-extern ushort kb_cnv_table[KB_CNV_TBLSIZE][2];
-
-#ifdef DEBUG_ON
-#define KB_CNV(scan,shift) (((scan) >= KB_CNV_TBLSIZE) ? 0 : kb_cnv_table[scan][shift])
-#else
-#define KB_CNV(scan,shift) (kb_cnv_table[scan][shift])
-#endif
-*/
-
 #define CNV_CTRL (1 << (1 + 8))    // KB_FLAG_CTRL can be set
 #define CNV_ALT (1 << (2 + 8))     // KB_FLAG_SHIFT can be set
 #define CNV_SPECIAL (1 << (3 + 8)) // KB_FLAG_SPECIAL is set
@@ -75,26 +59,10 @@ extern ushort kb_cnv_table[KB_CNV_TBLSIZE][2];
 #define KB_SHIFT_SHF 12
 #define KB_2ND_SHF 13
 
-#define KBC_EXTENDED 0x80
-
-errtype kb_cook(kbs_event code, ushort *cooked, uchar *results);
 // "cooks" kb event "code."  If cooking generates a cooked code, sets
 // *results to true and puts the result in *cooked.  Otherwise, *results = false.
+errtype kb_cook(kbs_event code, ushort *cooked, uchar *results);
 
 #define kb2ascii(x) (((x)&KB_FLAG_SPECIAL) ? 0 : (x)&0xFF)
-
-#define kb_isalnum(i) isalnum(kb2ascii(i))
-#define kb_isalpha(i) isalpha(kb2ascii(i))
-#define kb_iscntrl(i) ((i)&KB_FLAG_CTRL)
-#define kb_isdigit(i) isdigit(kb2ascii(i))
-#define kb_isgraph(i) isgraph(kb2ascii(i))
-#define kb_islower(i) islower(kb2ascii(i))
-#define kb_isprint(i) isprint(kb2ascii(i))
-#define kb_ispunct(i) ispunct(kb2ascii(i))
-#define kb_isspace(i) isspace(kb2ascii(i))
-#define kb_isupper(i) isupper(kb2ascii(i))
-#define kb_isxdigit(i) isxdigit(kb2ascii(i))
-#define kb_tolower(i) (((i)&KB_FLAG_SPECIAL) ? (i) : ((i)&0xFF00) | tolower((i)&0xFF))
-#define kb_toupper(i) (((i)&KB_FLAG_SPECIAL) ? (i) : ((i)&0xFF00) | toupper((i)&0xFF))
 
 #endif /* __KBCOOK_H */

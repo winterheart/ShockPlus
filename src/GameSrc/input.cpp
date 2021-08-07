@@ -419,11 +419,6 @@ void init_input() {
 void shutdown_input() {
     hotkey_shutdown();
     kb_flush();
-
-    // kb_clear_state(0x1d, 3);
-    // kb_clear_state(0x9d, 3);
-    // kb_clear_state(0x38, 3);
-    // kb_clear_state(0xb8, 3);
 }
 
 // ------------------------

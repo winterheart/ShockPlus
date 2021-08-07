@@ -27,11 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * This file is part of the input library.
  */
+
 #include "lg.h"
 #include "kbcook.h"
 #include "keydefs.h"
-//#include <kbmod.h>
-//#include <kbscan.h>
 
 //----------------------------------------------------------------------------
 // This cooks kbc codes into ui codes which include ascii stuff.
@@ -66,90 +65,19 @@ errtype kb_cook(kbs_event ev, ushort *cooked, uchar *results) {
     // text input events are used to get printable characters (see sdl_events.c)
     // note that text input events don't work for ctrl'd or alt'd keys
 
-    if (ev.modifiers & KB_MOD_CTRL) // If command-key was down,
-        *cooked |= KB_FLAG_CTRL;    // simulate a control key
+    // If command-key was down, simulate a control key
+    if (ev.modifiers & KB_MOD_CTRL)
+        *cooked |= KB_FLAG_CTRL;
 
-    if (ev.modifiers & KB_MOD_SHIFT) // If shift-key was down
+    // If shift-key was down
+    if (ev.modifiers & KB_MOD_SHIFT)
         *cooked |= KB_FLAG_SHIFT;
 
-    if (ev.modifiers & KB_MOD_ALT) // If option-key was down,
-        *cooked |= KB_FLAG_ALT;    // simulate an alt key.
+    // If option-key was down, simulate an alt key.
+    if (ev.modifiers & KB_MOD_ALT)
+        *cooked |= KB_FLAG_ALT;
 
     return OK;
-    /*
-       ushort flags = KB_CNV(ev.code,0);
-       uchar shifted = 1 & ((kbd_modifier_state >> KBM_SHIFT_SHF)
-          | (kbd_modifier_state >> (KBM_SHIFT_SHF+1)));
-       uchar capslock = 1 & (flags >> CNV_CAPS_SHF)
-                         & (kbd_modifier_state >> KBM_CAPS_SHF);
-       ushort cnv = KB_CNV(ev.code,shifted ^ capslock);
-       int old_mods = kbd_modifier_state;
-
-       *cooked = cnv & (CNV_SPECIAL|CNV_2ND|0xFF)  ;
-       *results = FALSE;
-
-       // if an up event, use negative logic.  Wacky
-       if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
-       switch(ev.code)  // check for modifiers
-       {
-       case 0x7a: return 0; break;
-       case KBC_LSHIFT:
-          kbd_modifier_state |= KBM_LSHIFT;
-          break;
-       case KBC_RSHIFT:
-          kbd_modifier_state |= KBM_RSHIFT;
-          break;
-       case KBC_LCTRL:
-          kbd_modifier_state |= KBM_LCTRL;
-          break;
-       case KBC_RCTRL:
-          kbd_modifier_state |= KBM_RCTRL;
-          break;
-       case KBC_CAPS:
-          if (ev.state == KBS_DOWN)
-             kbd_modifier_state ^= KBM_CAPS;
-          break;
-       case KBC_NUM:
-          if (ev.state == KBS_DOWN)
-            kbd_modifier_state ^= KBM_NUM;
-          break;
-       case KBC_SCROLL:
-          if (ev.state == KBS_DOWN)
-             kbd_modifier_state ^= KBM_SCROLL;
-          break;
-       case KBC_LALT:
-          kbd_modifier_state |= KBM_LALT;
-          break;
-       case KBC_RALT:
-          kbd_modifier_state |= KBM_RALT;
-          break;
-       default:
-          *results = TRUE;  // Not a modifier key, we must translate.
-          break;
-       }
-       if (ev.state == KBS_UP) kbd_modifier_state = ~kbd_modifier_state;
-       if ((kbd_modifier_state&KBM_LED_MASK) != (old_mods&KBM_LED_MASK))
-          kb_set_leds(kbd_modifier_state&KBM_LED_MASK);
-       if (!*results) return OK;
-
-       if ((cnv & CNV_NUM) && !(kbd_modifier_state & KBM_NUM))
-          *cooked = ev.code|KB_FLAG_SPECIAL;
-
-       *cooked |= (short)ev.state << KB_DOWN_SHF;
-
-       *cooked |= (((kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF))
-          | (kbd_modifier_state << (KB_CTRL_SHF - KBM_CTRL_SHF-1)))
-             & KB_FLAG_CTRL) & cnv;
-
-       *cooked |= (((kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF))
-          | (kbd_modifier_state << (KB_ALT_SHF - KBM_ALT_SHF-1)))
-             & KB_FLAG_ALT) & cnv;
-
-       // if KB_FLAG_SPECIAL is set, then let set the shifted
-       // flag according to shifted
-       *cooked |= (shifted << KB_SHIFT_SHF) & cnv;
-       return OK;
-    */
 }
 
 uchar kb_get_cooked(ushort *key) {

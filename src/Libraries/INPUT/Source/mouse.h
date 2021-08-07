@@ -110,9 +110,6 @@ errtype mouse_init(short xsize, short ysize);
 // shutdown mouse system
 errtype mouse_shutdown(void);
 
-// Tell the mouse library where to get timestamps from.
-// errtype mouse_set_timestamp_register(ulong *tstamp);
-
 // Get the current mouse timestamp
 uint32_t mouse_get_time(void);
 
@@ -121,9 +118,6 @@ errtype mouse_get_xy(short *x, short *y);
 
 // Set the mouse position
 errtype mouse_put_xy(short x, short y);
-
-// Check the state of a mouse button
-// errtype mouse_check_btn(short button, bool *result);
 
 // look at the next mouse event.
 // errtype mouse_look_next(ss_mouse_event *result);
@@ -134,9 +128,6 @@ errtype mouse_next(ss_mouse_event *result);
 // Flush the mouse queue
 errtype mouse_flush(void);
 
-// Add an event to the back of the mouse queue
-errtype mouse_generate(ss_mouse_event e);
-
 // Set up an interrupt callback
 errtype mouse_set_callback(mouse_callfunc f, void *data, int *id);
 
@@ -145,22 +136,6 @@ errtype mouse_unset_callback(int id);
 
 // Constrain the mouse coordinates
 errtype mouse_constrain_xy(short xl, short yl, short xh, short yh);
-
-// Set the mouse rate and accelleration threshhold
-// errtype mouse_set_rate(short xr, short yr, short thold);
-
-// Get the mouse rate and accelleration threshhold
-// errtype mouse_get_rate(short *xr, short *yr, short *thold);
-
-// Sets the mouse coordinate bounds to (0,0) - (x-1,y-1),
-// and scales the current values of the mouse sensitivity accordingly.
-// errtype mouse_set_screensize(short x, short y);
-
-// Find the min and max "virtual" coordinates of the mouse position
-// errtype mouse_extremes(short *xmin, short *ymin, short *xmax, short *ymax);
-
-// Sets mouse handedness (true for left-handed)
-// errtype mouse_set_lefty(uchar lefty);
 
 void MousePollProc(void);
 

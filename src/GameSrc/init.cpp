@@ -213,28 +213,6 @@ void init_all(void) {
     atexit(byebyemessage);
 
     ResInit();
-    // Where are these defined?
-    //   restemp_buffer = ALTERNATE_BUFFER;
-    //   restemp_buffer_size = ALTERNATE_BUFFER_SIZE;
-
-    /*
-       init_early_dpaths();
-       init_config(argc,argv);
-       if (config_get_raw(CFG_NORUN_VAR,norun,1))
-       {
-          if (norun[0]=='1')
-             critical_error(CRITERR_EXEC|1);
-       }
-    */
-    //   Spew(DSRC_SYSTEM_Memory, ("initial memory: %d\n",start_mem));
-    /*
-       dofault = !config_get_raw(CFG_NOFAULT_VAR,NULL,0);
-       DBG(DSRC_SYSTEM_FaultDisable,{ dofault = FALSE;});
-       if (dofault)
-          ex_startup(EXM_ALL);
-    */
-    //   KLC - this is done in uiInit() [in UI:EVENT.C]   kb_startup(NULL);
-    //   kb_set_state(0x54,KBA_SIGNAL);
 
     // Use our own buffer for LZW
     LzwSetBuffer((void *)big_buffer, BIG_BUFFER_SIZE);
@@ -259,7 +237,7 @@ void init_all(void) {
 
     // Initialize low-level keyboard and mouse input.  KLC - taken out of uiInit.
     mouse_init(grd_cap->w, grd_cap->h);
-    kb_init(NULL);
+    kb_startup(nullptr);
 
     // Initialize map
     DEBUG("- Map Startup");

@@ -66,61 +66,19 @@ typedef struct {
  *
  */
 
-#ifdef __INLINE_FUNCTIONS__
-#define kb_state(code) (kbd_lowmem_start[KBD_ARRAY_START + code] & KBA_STATE)
-#else
-extern uchar kb_state(uchar code);
-#endif
-
-#define kb_init kb_startup
-#define kb_close kb_shutdown
 extern int kb_startup(void *init_buf);
 extern int kb_shutdown(void);
 
 extern kbs_event kb_next(void);
 extern kbs_event kb_look_next(void);
 extern void kb_flush(void);
-extern uchar kb_get_state(uchar kb_code);
-extern void kb_clear_state(uchar kb_code, uchar bits);
-extern void kb_set_state(uchar kb_code, uchar bits);
-extern void kb_set_signal(uchar code, uchar int_no);
 extern int kb_get_flags();
 extern void kb_set_flags(int flags);
-extern void kb_generate(kbs_event e);
 extern uchar kb_get_cooked(ushort *key);
-#define KBA_STATE (1)
-#define KBA_REPEAT (2)
-#define KBA_SIGNAL (4)
-#define __KBD_INC (1)
-extern char *kbd_lowmem_start;
-#define __KBERR_INC (1)
-#define KBE_ALLOC_LOWMEM (0)
-#define KBE_FREE_LOWMEM (1)
-#define KBE_MEM_THRASHED (2)
-#define KBE_REAL_HANDLER (3)
-#define KBE_PROT_HANDLER (4)
-#define KBE_MEM_LOCK (5)
-#define KBE_MEM_UNLOCK (6)
+
 #define KBF_BLOCK (1)
 #define KBF_CHAIN (2)
 #define KBF_SIGNAL (4)
-#define KBD_GLOBAL_START (0)
-#define KBD_QUEUE_HEAD (KBD_GLOBAL_START)
-#define KBD_LAST_CODES (KBD_QUEUE_HEAD + 4)
-#define KBD_OLD_REAL_HANDLER (KBD_LAST_CODES + 4)
-#define KBD_STATUS_FLAGS (KBD_OLD_REAL_HANDLER + 4)
-#define KBD_GLOBAL_SIZE (KBD_STATUS_FLAGS + 4)
-#define KBD_QUEUE_START (KBD_GLOBAL_SIZE)
-#define KBD_QUEUE_SIZE (1024)
-#define KBD_QUEUE_END (KBD_QUEUE_START + KBD_QUEUE_SIZE)
-#define KBD_ARRAY_START (KBD_QUEUE_END)
-#define KBD_ARRAY_SIZE (256)
-#define KBD_ARRAY_END (KBD_ARRAY_START + KBD_ARRAY_SIZE)
-#define KBD_SIGLIST_START (KBD_ARRAY_END)
-#define KBD_SIGLIST_SIZE (256)
-#define KBD_SIGLIST_END (KBD_SIGLIST_START + KBD_SIGLIST_SIZE)
-#define KBD_LOWBUF_SIZE (KBD_SIGLIST_END)
-#define KBD_HANDLER_START (KBD_LOWBUF_SIZE)
 
 // FIXME Remove this after migration to SDL_Keycode
 #define KBC_SHIFT_PREFIX (0x0e0)
@@ -131,6 +89,7 @@ extern char *kbd_lowmem_start;
 #define KBC_PRSCR_UP (0x0aa)
 #define KBC_PAUSE (0x07f)
 #define KBC_NONE (0x0ff)
+
 #define KBS_UP (0)
 #define KBS_DOWN (1)
 

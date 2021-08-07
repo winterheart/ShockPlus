@@ -667,17 +667,10 @@ void ui_poll_keyboard(void) {
 #endif
 }
 
+/**
+ * @deprecated Does nothing
+ */
 void ui_pop_up_keys(void) {
-    /*¥¥¥ serve any purpose now?
-       if (ui_poll_keys != NULL)
-       {
-          uchar* key;
-          for (key = ui_poll_keys; *key != KBC_NONE; key++)
-          {
-             kb_clear_state(*key,KBA_STATE);
-          }
-       }
-    */
 }
 
 errtype uiMakeMotionEvent(uiEvent *ev) {
@@ -836,7 +829,7 @@ errtype uiInit(uiSlab *slab) {
 void uiShutdown(void) {
     ui_shutdown_cursors();
     mouse_shutdown();
-    kb_close();
+    kb_shutdown();
 }
 
 errtype uiShutdownRegionHandlers(LGRegion *r) {
