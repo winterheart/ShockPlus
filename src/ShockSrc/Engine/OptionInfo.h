@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <string>
+#include <variant>
 #include <yaml-cpp/yaml.h>
 
 namespace ShockPlus {
@@ -31,18 +32,8 @@ class OptionInfo {
     std::string id_, desc_, cat_;
     OptionType type_;
 
-    union {
-        bool *b;
-        int *i;
-        std::string *s;
-        /* SDLKey *k; */
-    } ref_{};
-    union {
-        bool b;
-        int i;
-        const char *s;
-        /* SDLKey k; */
-    } def_{};
+    std::variant<bool *, int *, std::string *> ref_;
+    std::variant<bool, int, std::string> def_;
 
   public:
     /// Creates a bool option
@@ -50,7 +41,7 @@ class OptionInfo {
     /// Creates a int option.
     OptionInfo(std::string id, int *option, int def, std::string desc = "", std::string cat = "");
     /// Creates a string option.
-    OptionInfo(std::string id, std::string *option, const char *def, std::string desc = "", std::string cat = "");
+    OptionInfo(std::string id, std::string *option, std::string def, std::string desc = "", std::string cat = "");
 
     /// Gets a bool option pointer.
     bool *asBool() const;
