@@ -2575,7 +2575,7 @@ void install_keypad_hotkeys(void) {
     int i;
     for (i = 0; i < 10; i++)
         // KLC      hotkey_add(('0'+i)|KB_FLAG_DOWN|KB_FLAG_2ND, DEMO_CONTEXT, keypad_hotkey_func, 0);
-        hotKeyDispatcher.add(('0' + i) | KB_FLAG_DOWN, {.contexts = DEMO_CONTEXT,
+        hotKeyDispatcher.add(('0' + i) | KB_FLAG_DOWN, {.contexts = ShockPlus::Contexts::DEMO_CONTEXT,
                                                         .func = keypad_hotkey_func, .state = 0});
 }
 

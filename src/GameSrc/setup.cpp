@@ -1332,7 +1332,7 @@ void splash_draw(bool show_splash) {
     // clear the screen
     gr_clear(0);
 
-    hotKeyDispatcher.setContext(SETUP_CONTEXT);
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::SETUP_CONTEXT);
     uiSetCurrentSlab(&setup_slab);
 
 #ifdef DO_FADES
@@ -1457,7 +1457,7 @@ void setup_start(void) {
     // clear the screen
     gr_clear(0);
 
-    hotKeyDispatcher.setContext(SETUP_CONTEXT);
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::SETUP_CONTEXT);
     uiSetCurrentSlab(&setup_slab);
 
     // flush the keyboard and mouse - so we don't read old events

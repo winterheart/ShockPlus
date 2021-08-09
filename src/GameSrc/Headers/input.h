@@ -33,16 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define NUM_HOTKEYS 50 // an arbitrary constant
 
-// Hotkey contexts
-#define DEMO_CONTEXT 0x01
-#define EDIT_CONTEXT 0x02
-#define CYBER_CONTEXT 0x04
-#define SETUP_CONTEXT 0x08
-#define MWORK_CONTEXT 0x10
-#define SVGA_CONTEXT 0x20
-#define AMAP_CONTEXT 0x40
-#define EVERY_CONTEXT 0xFFFFFFFF
-
 // input modes
 #define INPUT_NORMAL_CURSOR 0
 #define INPUT_OBJECT_CURSOR 1

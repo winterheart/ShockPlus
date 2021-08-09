@@ -24,7 +24,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace ShockPlus {
 
-// typedef uchar (*hotkey_callback)(ushort keycode, uint32_t context, intptr_t state);
+enum Contexts : uint32_t {
+    DEMO_CONTEXT = 0x01,       // main context
+    EDIT_CONTEXT = 0x02,       // unused
+    CYBER_CONTEXT = 0x04,      // cyber context
+    SETUP_CONTEXT = 0x08,      // setup context
+    MWORK_CONTEXT = 0x10,      // unused
+    SVGA_CONTEXT = 0x20,       // unused
+    AMAP_CONTEXT = 0x40,       // automap context
+    EVERY_CONTEXT = 0xFFFFFFFF // all context
+};
 
 typedef struct hotkeylookup_struct {
     intptr_t contexts;                                                               // contexts that applies hotkey
@@ -37,7 +46,7 @@ class HotKeyDispatcher {
     /// All hotkeys map
     std::multimap<uint16_t, HotkeyLookup> hotkeys_;
     /// Hotkey context that applies all matched hotkeys
-    uint32_t hotkey_context_ = 0xFFFFFFFF;
+    uint32_t hotkey_context_ = Contexts::EVERY_CONTEXT;
 
   public:
     /**

@@ -314,7 +314,7 @@ void fullscreen_start() {
 
     // Hey, we don't need to hide here because the mouse already gets hidden by fooscreen_exit
     //   uiHideMouse(NULL);
-    hotKeyDispatcher.setContext(DEMO_CONTEXT);
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::DEMO_CONTEXT);
     full_game_3d = TRUE;
     uiSetCurrentSlab(&fullscreen_slab);
 

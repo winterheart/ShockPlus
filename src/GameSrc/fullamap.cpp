@@ -87,7 +87,7 @@ void amap_start() {
     static_change_copy();
     message_info("");
 
-    hotKeyDispatcher.setContext(AMAP_CONTEXT);
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::AMAP_CONTEXT);
     uiSetCurrentSlab(&amap_slab);
 
     gr_set_screen(svga_screen);

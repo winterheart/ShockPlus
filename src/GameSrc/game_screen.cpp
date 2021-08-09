@@ -206,7 +206,7 @@ void screen_start() {
        if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = TRUE;
     */
 
-    hotKeyDispatcher.setContext(DEMO_CONTEXT);
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::DEMO_CONTEXT);
     uiSetCurrentSlab(&main_slab);
     inventory_region = inventory_region_game;
     pagebutton_region = pagebutton_region_game;

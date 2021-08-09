@@ -2353,9 +2353,9 @@ void init_invent_hotkeys(void) {
        hotkey_add(PAGEDN_KEY|KB_FLAG_2ND,DEMO_CONTEXT,invent_hotkey_func,1);
        hotkey_add(KB_FLAG_DOWN|KB_FLAG_ALT|']',DEMO_CONTEXT,invent_hotkey_func,1);
     */
-    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN, {.contexts = DEMO_CONTEXT, .func = cycle_weapons_func, .state = 1});
+    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN, {.contexts = ShockPlus::Contexts::DEMO_CONTEXT, .func = cycle_weapons_func, .state = 1});
     hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT,
-                         {.contexts = DEMO_CONTEXT, .func = cycle_weapons_func, .state = -1});
+                         {.contexts = ShockPlus::Contexts::DEMO_CONTEXT, .func = cycle_weapons_func, .state = -1});
 }
 
 void invent_language_change(void) {
