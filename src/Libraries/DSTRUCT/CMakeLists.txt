@@ -1,6 +1,5 @@
 set(DSTRUCT_SRC
 	Source/array.c
-	Source/hash.c
 	Source/pqueue.c
 	Source/rect.c
 	)
