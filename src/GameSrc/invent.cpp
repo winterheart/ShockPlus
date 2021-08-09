@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
 
+#include "Shock.h"
 #include "Engine/Options.h"
 
 #include "2dres.h"
@@ -53,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fullscrn.h"
 #include "gameloop.h"
 #include "game_screen.h"
+#include "kbcook.h"
 #include "loops.h"
-#include "hotkey.h"
 #include "input.h"
 #include "keydefs.h"
 #include "mfdext.h"
@@ -76,7 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "amap.h"
 
 #include "game_screen.h" // was screen.h?
-
 
 /***************************************/
 /* INVENTORY DISPLAY MODULE            */
@@ -134,49 +134,49 @@ And now, the code...
         chg_set_flg(INVENTORY_UPDATE);
 
 // colors & fonts
-#define TITLE_COLOR         (RED_BASE + 5)
-#define ITEM_COLOR          (0x5A)
+#define TITLE_COLOR (RED_BASE + 5)
+#define ITEM_COLOR (0x5A)
 #define SELECTED_ITEM_COLOR (0x4C)
-#define BRIGHT_ITEM_COLOR   (0xE7)
-#define DULL_ITEM_COLOR     (0x5F)
+#define BRIGHT_ITEM_COLOR (0xE7)
+#define DULL_ITEM_COLOR (0x5F)
 // let us no longer pretend we have differenet fonts for everything
-#define ITEM_FONT    RES_tinyTechFont
+#define ITEM_FONT RES_tinyTechFont
 #define WEAPONS_FONT ITEM_FONT
 
 // Screen margins/locations/proportions
-#define TOP_MARGIN      2 // was 15
-#define LEFT_MARGIN     4
-#define RIGHT_MARGIN    3
-#define Y_STEP          6
-#define WEAPON_X        LEFT_MARGIN
-#define AMMO_X          70
-#define GRENADE_LEFT_X  (AMMO_X + 4)
+#define TOP_MARGIN 2 // was 15
+#define LEFT_MARGIN 4
+#define RIGHT_MARGIN 3
+#define Y_STEP 6
+#define WEAPON_X LEFT_MARGIN
+#define AMMO_X 70
+#define GRENADE_LEFT_X (AMMO_X + 4)
 #define GRENADE_RIGHT_X (GRENADE_LEFT_X + 30)
-#define DRUG_RIGHT_X    (INVENTORY_PANEL_WIDTH - RIGHT_MARGIN)
-#define DRUG_LEFT_X     (DRUG_RIGHT_X - 35)
-#define AMMO_LEFT_1     WEAPON_X
-#define AMMO_RIGHT_1    (AMMO_LEFT_1 + 40)
-#define AMMO_LEFT_2     (AMMO_RIGHT_1 + 4)
-#define AMMO_RIGHT_2    (AMMO_LEFT_2 + 40)
-#define AMMO_LEFT_3     (AMMO_RIGHT_2 + 4)
-#define AMMO_RIGHT_3    (AMMO_LEFT_3 + 40)
-#define CENTER_X        (INVENTORY_PANEL_WIDTH / 2)
-#define RIGHT_X         INVENTORY_PANEL_WIDTH
-#define ONETHIRD_X      (INVENTORY_PANEL_WIDTH / 3)
-#define TWOTHIRDS_X     (2 * INVENTORY_PANEL_WIDTH / 3)
+#define DRUG_RIGHT_X (INVENTORY_PANEL_WIDTH - RIGHT_MARGIN)
+#define DRUG_LEFT_X (DRUG_RIGHT_X - 35)
+#define AMMO_LEFT_1 WEAPON_X
+#define AMMO_RIGHT_1 (AMMO_LEFT_1 + 40)
+#define AMMO_LEFT_2 (AMMO_RIGHT_1 + 4)
+#define AMMO_RIGHT_2 (AMMO_LEFT_2 + 40)
+#define AMMO_LEFT_3 (AMMO_RIGHT_2 + 4)
+#define AMMO_RIGHT_3 (AMMO_LEFT_3 + 40)
+#define CENTER_X (INVENTORY_PANEL_WIDTH / 2)
+#define RIGHT_X INVENTORY_PANEL_WIDTH
+#define ONETHIRD_X (INVENTORY_PANEL_WIDTH / 3)
+#define TWOTHIRDS_X (2 * INVENTORY_PANEL_WIDTH / 3)
 
 // Page button defines
-#define FIRST_BTTN_X   (3)
-#define INVENT_BTTN_Y  (2)
+#define FIRST_BTTN_X (3)
+#define INVENT_BTTN_Y (2)
 #define INVENT_BTTN_HT 3
 #define INVENT_BTTN_WD 18
-#define BUTTON_X_STEP  24
+#define BUTTON_X_STEP 24
 
 // Hey, these colors are stolen from mfd
-#define INVENT_BTTN_EMPTY     0xcb
-#define INVENT_BTTN_FLASH_ON  0x35
+#define INVENT_BTTN_EMPTY 0xcb
+#define INVENT_BTTN_FLASH_ON 0x35
 #define INVENT_BTTN_FLASH_OFF 0xcb
-#define INVENT_BTTN_SELECT    0x77
+#define INVENT_BTTN_SELECT 0x77
 
 typedef enum {
     BttnOff = 0,
@@ -202,15 +202,15 @@ ubyte _bttn_state2color[] = {
 #define NUM_PAGE_BUTTONS 6
 
 // Page stuff
-#define WEAPON_PAGES      1
-#define WEAPONS_PER_PAGE  7
-#define DRUG_PAGES        1
-#define DRUGS_PER_PAGE    7
-#define GRENADE_PAGES     1
+#define WEAPON_PAGES 1
+#define WEAPONS_PER_PAGE 7
+#define DRUG_PAGES 1
+#define DRUGS_PER_PAGE 7
+#define GRENADE_PAGES 1
 #define GRENADES_PER_PAGE 7
-#define AMMO_PAGES        3
-#define AMMO_PER_PAGE     3
-#define ITEMS_PER_PAGE    7
+#define AMMO_PAGES 3
+#define AMMO_PER_PAGE 3
+#define ITEMS_PER_PAGE 7
 
 // Misc
 #define BUFSZ 50
@@ -624,9 +624,9 @@ int get_item_at_pixrow(inv_display *dp, int row) {
     return linenum + row;
 }
 
-    // --------------------
-    // WEAPON DISPLAY FUNCS
-    // --------------------
+// --------------------
+// WEAPON DISPLAY FUNCS
+// --------------------
 
 #define WEAP_CLASSES (1 << CLASS_GUN)
 #define WEAP_TRIP MAKETRIP(CLASS_GUN, 0, 0)
@@ -935,7 +935,7 @@ void generic_drop_func(inv_display *dp, int row) {
 static char *generic_quant_func(inv_display *dp, int n, int q, char *buf) {
 #ifndef NO_DUMMIES
     char *dummy;
-    dummy = n + (char*)dp;
+    dummy = n + (char *)dp;
 #endif // NO_DUMMIES
     //  itoa(q,buf,10);
     sprintf(buf, "%d", q);
@@ -945,15 +945,15 @@ static char *generic_quant_func(inv_display *dp, int n, int q, char *buf) {
 char *null_name_func(inv_display *dp, int n, char *buf) {
 #ifndef NO_DUMMIES
     char *goof;
-    goof = (char*)dp + n;
+    goof = (char *)dp + n;
 #endif // NO_DUMMIES
     *buf = '\0';
     return buf;
 }
 
-    // -------------
-    // GRENADE FUNCS
-    // -------------
+// -------------
+// GRENADE FUNCS
+// -------------
 
 #define GREN_CLASSES (1 << CLASS_GRENADE)
 #define GREN_TRIP MAKETRIP(CLASS_GRENADE, 0, 0)
@@ -1333,9 +1333,9 @@ char *null_quant_func(inv_display *dp, int n, int q, char *buf) {
     return buf;
 }
 
-    // -----
-    // SOFTS
-    // -----
+// -----
+// SOFTS
+// -----
 
 #define SOFT_PAGES 2
 #define SOFT_CLASSES (1 << CLASS_SOFTWARE)
@@ -1355,7 +1355,7 @@ static char *soft_quant_func(inv_display *dp, int n, int q, char *buf) {
     return buf;
 }
 
-    // COMPUTRON SUPPORT
+// COMPUTRON SUPPORT
 
 #define CTRON_WD 10
 
@@ -1388,9 +1388,9 @@ char *computron_quant_func(inv_display *dp, int n, int q, char *buf) {
 }
 #endif // COMPUTRONS
 
-    // ------------------------------
-    // GENERAL INVENTORY -- FUN! FUN!
-    // ------------------------------
+// ------------------------------
+// GENERAL INVENTORY -- FUN! FUN!
+// ------------------------------
 
 #define GENERAL_CLASSES 0xFFFFFF80
 static ObjID general_lines[NUM_GENERAL_SLOTS];
@@ -1764,11 +1764,11 @@ void email_drop_func(inv_display *dp, int n) {
     // For now, do nothing.
 }
 
-    // ----
-    // LOGS
-    // ----
+// ----
+// LOGS
+// ----
 
-    // I'm on your side; we are on the both side.
+// I'm on your side; we are on the both side.
 
 #define FIRST_LOG_PAGE 20
 
@@ -2179,7 +2179,8 @@ uchar inventory_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
             break;
         }
     }
-    if (input_cursor_mode == INPUT_OBJECT_CURSOR && (ev->mouse_data.action & (MOUSE_LDOWN | MOUSE_RUP | UI_MOUSE_LDOUBLE))) {
+    if (input_cursor_mode == INPUT_OBJECT_CURSOR &&
+        (ev->mouse_data.action & (MOUSE_LDOWN | MOUSE_RUP | UI_MOUSE_LDOUBLE))) {
         add_object_on_cursor(dp, row);
         return TRUE;
     }
@@ -2205,8 +2206,8 @@ uchar pagebutton_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
     int cnum;
 
     if (full_game_3d && (ev->mouse_data.buttons & (1 << MOUSE_LBUTTON)) != 0 &&
-	(ev->mouse_data.action & MOUSE_LDOWN) == 0 &&
-        uiLastMouseRegion[MOUSE_LBUTTON] != NULL && uiLastMouseRegion[MOUSE_LBUTTON] != r) {
+        (ev->mouse_data.action & MOUSE_LDOWN) == 0 && uiLastMouseRegion[MOUSE_LBUTTON] != NULL &&
+        uiLastMouseRegion[MOUSE_LBUTTON] != r) {
         uiSetRegionDefaultCursor(r, NULL);
         return FALSE;
     }
@@ -2237,7 +2238,8 @@ uchar pagebutton_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
         uiSetRegionDefaultCursor(r, c);
     }
 
-    if (input_cursor_mode == INPUT_OBJECT_CURSOR && (ev->mouse_data.action & (MOUSE_LDOWN | MOUSE_RDOWN | UI_MOUSE_LDOUBLE))) {
+    if (input_cursor_mode == INPUT_OBJECT_CURSOR &&
+        (ev->mouse_data.action & (MOUSE_LDOWN | MOUSE_RDOWN | UI_MOUSE_LDOUBLE))) {
         AddResult pop = (AddResult)add_to_some_page(object_on_cursor, FALSE);
         if (IS_POP_RESULT(pop))
             pop_cursor_object();
@@ -2351,8 +2353,9 @@ void init_invent_hotkeys(void) {
        hotkey_add(PAGEDN_KEY|KB_FLAG_2ND,DEMO_CONTEXT,invent_hotkey_func,1);
        hotkey_add(KB_FLAG_DOWN|KB_FLAG_ALT|']',DEMO_CONTEXT,invent_hotkey_func,1);
     */
-    hotkey_add(KEY_TAB | KB_FLAG_DOWN, DEMO_CONTEXT, cycle_weapons_func, 1);
-    hotkey_add(KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT, DEMO_CONTEXT, cycle_weapons_func, -1);
+    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN, {.contexts = DEMO_CONTEXT, .func = cycle_weapons_func, .state = 1});
+    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT,
+                         {.contexts = DEMO_CONTEXT, .func = cycle_weapons_func, .state = -1});
 }
 
 void invent_language_change(void) {
@@ -2395,8 +2398,7 @@ LGRegion *create_invent_region(LGRegion *root, LGRegion **pbuttons, LGRegion **p
     invrect.ul.y = invrect.lr.y;
     invrect.lr.y = RectHeight(root->r);
     region_create(root, pagereg, &invrect, 0, 0, REG_USER_CONTROLLED | AUTODESTROY_FLAG, NULL, NULL, NULL, NULL);
-    uiInstallRegionHandler(pagereg, (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE), pagebutton_mouse_handler,
-                           0, &id);
+    uiInstallRegionHandler(pagereg, (UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE), pagebutton_mouse_handler, 0, &id);
     uiSetRegionDefaultCursor(pagereg, &globcursor);
 
     if (pbuttons != NULL)
@@ -2422,16 +2424,16 @@ LGRegion *create_invent_region(LGRegion *root, LGRegion **pbuttons, LGRegion **p
         // in fullscreen mode, so we need extra bits
         inv_backgnd.bits = (uchar *)malloc(MAX_INV_FULL_WD(INV_FULL_WD) * MAX_INV_FULL_HT(grd_cap->h - GAME_MESSAGE_Y));
         memcpy(inv_backgnd.bits, (f + 1), f->bm.w * f->bm.h);
-	RefUnlock(REF_IMG_bmBlankInventoryPanel);
+        RefUnlock(REF_IMG_bmBlankInventoryPanel);
 
         // init the canvas
-        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
-                           INVENTORY_PANEL_HEIGHT);
+        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y,
+                           INVENTORY_PANEL_WIDTH, INVENTORY_PANEL_HEIGHT);
         gr_init_canvas(&inv_fullscrn_canvas, inv_backgnd.bits, BMT_FLAT8, INVENTORY_PANEL_WIDTH,
                        INVENTORY_PANEL_HEIGHT);
         gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, INV_FULL_WD, INV_FULL_HT);
-        gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y, INVENTORY_PANEL_WIDTH,
-                           grd_cap->h - BUTTON_PANEL_Y);
+        gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, INVENTORY_PANEL_X, BUTTON_PANEL_Y,
+                           INVENTORY_PANEL_WIDTH, grd_cap->h - BUTTON_PANEL_Y);
 
         uchar *p = (uchar *)malloc(292 * 10);                        // This canvas holds an off-screen image of the
         gr_init_canvas(&inv_fullpage_canvas, p, BMT_FLAT8, 292, 10); // inventory buttons.
@@ -2457,14 +2459,14 @@ errtype inventory_update_screen_mode() {
                            SCONV_Y(INV_FULL_HT));
             // gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, 290, SCONV_Y(INV_FULL_HT));
         } else {
-            gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, SCONV_X(INVENTORY_PANEL_X), SCONV_Y(BUTTON_PANEL_Y),
-                               SCONV_X(INVENTORY_PANEL_WIDTH), SCONV_Y(10));
+            gr_init_sub_canvas(grd_screen_canvas, &inv_gamepage_canvas, SCONV_X(INVENTORY_PANEL_X),
+                               SCONV_Y(BUTTON_PANEL_Y), SCONV_X(INVENTORY_PANEL_WIDTH), SCONV_Y(10));
             gr_init_canvas(&inv_view360_canvas, inv_backgnd.bits, BMT_FLAT8, SCONV_X(INV_FULL_WD),
                            SCONV_Y(INV_FULL_HT));
         }
     } else {
-        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y, INVENTORY_PANEL_WIDTH,
-                           INVENTORY_PANEL_HEIGHT);
+        gr_init_sub_canvas(grd_screen_canvas, &inv_norm_canvas, INVENTORY_PANEL_X, INVENTORY_PANEL_Y,
+                           INVENTORY_PANEL_WIDTH, INVENTORY_PANEL_HEIGHT);
         if (full_game_3d) {
             gr_init_canvas(&inv_fullscrn_canvas, inv_backgnd.bits, BMT_FLAT8, INVENTORY_PANEL_WIDTH,
                            INVENTORY_PANEL_HEIGHT);
@@ -2585,19 +2587,25 @@ void inv_update_fullscreen(uchar full) {
     RESTORE_CLIP(a, b, c, d);
 }
 
-    // ----------------------
-    // THE DISPLAY LIST ARRAY
-    // ----------------------
+// ----------------------
+// THE DISPLAY LIST ARRAY
+// ----------------------
 
 #define FIELD_OFFSET(fld) (offsetof(Player, fld))
 
 inv_display inv_display_list[] = {
     // Page 0, weapons, grenades, drugs
     // weapons are there own thang, they have slots and stuff...
-    {0, 0,
-     WEAPON_X, AMMO_X, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, WEAPONS_PER_PAGE, NUM_WEAPON_SLOTS,
+    {0,
+     0,
+     WEAPON_X,
+     AMMO_X,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     WEAPONS_PER_PAGE,
+     NUM_WEAPON_SLOTS,
      REF_STR_WeaponTitle,
      ACTIVE_WEAPON,
      0,
@@ -2615,10 +2623,16 @@ inv_display inv_display_list[] = {
      0,
      NULL},
     // grenades
-    {0, 0,
-     GRENADE_LEFT_X, GRENADE_RIGHT_X, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, GRENADES_PER_PAGE, NUM_GRENADES,
+    {0,
+     0,
+     GRENADE_LEFT_X,
+     GRENADE_RIGHT_X,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     GRENADES_PER_PAGE,
+     NUM_GRENADES,
      REF_STR_GrenadeTitle,
      ACTIVE_GRENADE,
      FIELD_OFFSET(grenades),
@@ -2636,10 +2650,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
     // drug
-    {0, 0,
-     DRUG_LEFT_X, DRUG_RIGHT_X, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, DRUGS_PER_PAGE, NUM_DRUGS,
+    {0,
+     0,
+     DRUG_LEFT_X,
+     DRUG_RIGHT_X,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     DRUGS_PER_PAGE,
+     NUM_DRUGS,
      REF_STR_DrugTitle,
      ACTIVE_DRUG,
      FIELD_OFFSET(drugs),
@@ -2657,10 +2677,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines + NUM_GRENADES},
     // Page 1, Hardwares.
-    {1, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_HARDWAREZ,
+    {1,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_HARDWAREZ,
      REF_STR_HardwareTitle,
      ACTIVE_HARDWARE,
      FIELD_OFFSET(hardwarez),
@@ -2677,10 +2703,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {1, 1,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_HARDWAREZ,
+    {1,
+     1,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_HARDWAREZ,
      REF_STR_Null,
      ACTIVE_HARDWARE,
      FIELD_OFFSET(hardwarez),
@@ -2698,10 +2730,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
     // Page 2. General
-    {2, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_GENERAL_SLOTS,
+    {2,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_GENERAL_SLOTS,
      REF_STR_GeneralTitle,
      ACTIVE_GENERAL,
      0,
@@ -2718,10 +2756,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      (quantity_state *)general_lines},
-    {2, 1,
-     CENTER_X - RIGHT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_GENERAL_SLOTS,
+    {2,
+     1,
+     CENTER_X - RIGHT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_GENERAL_SLOTS,
      REF_STR_Null,
      ACTIVE_GENERAL,
      0,
@@ -2739,10 +2783,16 @@ inv_display inv_display_list[] = {
      0,
      (quantity_state *)general_lines},
     // Page 2, Softwares.
-    {5, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, NUM_COMBAT_SOFTS - 1, NUM_COMBAT_SOFTS - 1,
+    {5,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     NUM_COMBAT_SOFTS - 1,
+     NUM_COMBAT_SOFTS - 1,
      REF_STR_SoftTitle,
      ACTIVE_COMBAT_SOFT,
      FIELD_OFFSET(softs.combat),
@@ -2759,10 +2809,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {5, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN + 6 * Y_STEP,
-     TITLE_COLOR, ITEM_COLOR,
-     0, 1, 1,
+    {5,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN + 6 * Y_STEP,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     1,
+     1,
      REF_STR_Null,
      ACTIVE_DEFENSE_SOFT,
      FIELD_OFFSET(softs.defense),
@@ -2779,10 +2835,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines + NUM_COMBAT_SOFTS},
-    {5, 0,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, NUM_ONESHOT_SOFTWARE, NUM_ONESHOT_SOFTWARE,
+    {5,
+     0,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     NUM_ONESHOT_SOFTWARE,
+     NUM_ONESHOT_SOFTWARE,
      REF_STR_Null,
      ACTIVE_MISC_SOFT,
      FIELD_OFFSET(softs.misc),
@@ -2799,10 +2861,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines + NUM_COMBAT_SOFTS + NUM_DEFENSE_SOFTS},
-    {5, 0,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN + 6 * Y_STEP,
-     TITLE_COLOR, ITEM_COLOR,
-     NUM_ONESHOT_SOFTWARE, 1, NUM_MISC_SOFTWARE,
+    {5,
+     0,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN + 6 * Y_STEP,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     NUM_ONESHOT_SOFTWARE,
+     1,
+     NUM_MISC_SOFTWARE,
      REF_STR_Null,
      ACTIVE_MISC_SOFT,
      FIELD_OFFSET(softs.misc),
@@ -2820,10 +2888,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines + NUM_COMBAT_SOFTS + NUM_DEFENSE_SOFTS + NUM_ONESHOT_SOFTWARE},
     // Page 7 main log page
-    {7, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_LOG_LEVELS,
+    {7,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_LOG_LEVELS,
      REF_STR_LogTitle,
      NULL_ACTIVE,
      FIELD_OFFSET(logs),
@@ -2840,10 +2914,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {7, 1,
-     CENTER_X + LEFT_MARGIN, RIGHT_X, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_LOG_LEVELS,
+    {7,
+     1,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_LOG_LEVELS,
      REF_STR_Null,
      NULL_ACTIVE,
      FIELD_OFFSET(logs),
@@ -2861,10 +2941,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
 #ifdef NEED_THIRD_LOGLVL_PAGE
-    {7, 2,
-     CENTER_X + LEFT_MARGIN, RIGHT_X, TOP_MARGIN - Y_STEP,
-     TITLE_COLOR, ITEM_COLOR,
-     0, ITEMS_PER_PAGE, NUM_LOG_LEVELS - 1,
+    {7,
+     2,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X,
+     TOP_MARGIN - Y_STEP,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     ITEMS_PER_PAGE,
+     NUM_LOG_LEVELS - 1,
      REF_STR_Null,
      NULL_ACTIVE,
      FIELD_OFFSET(logs),
@@ -2883,10 +2969,16 @@ inv_display inv_display_list[] = {
      generic_lines},
 #endif
     // Page 8, Data
-    {8, 0,
-     LEFT_MARGIN, ONETHIRD_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     FIRST_DATA, ITEMS_PER_PAGE, FIRST_DATA + ITEMS_PER_PAGE,
+    {8,
+     0,
+     LEFT_MARGIN,
+     ONETHIRD_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     FIRST_DATA,
+     ITEMS_PER_PAGE,
+     FIRST_DATA + ITEMS_PER_PAGE,
      REF_STR_DataTitle,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -2903,10 +2995,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {8, 1,
-     ONETHIRD_X + LEFT_MARGIN, TWOTHIRDS_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     FIRST_DATA + ITEMS_PER_PAGE, ITEMS_PER_PAGE + 1, FIRST_DATA + 2 * ITEMS_PER_PAGE + 1,
+    {8,
+     1,
+     ONETHIRD_X + LEFT_MARGIN,
+     TWOTHIRDS_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     FIRST_DATA + ITEMS_PER_PAGE,
+     ITEMS_PER_PAGE + 1,
+     FIRST_DATA + 2 * ITEMS_PER_PAGE + 1,
      REF_STR_Null,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -2923,10 +3021,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {8, 2,
-     TWOTHIRDS_X + LEFT_MARGIN, RIGHT_X, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     FIRST_DATA + 2 * ITEMS_PER_PAGE + 1, ITEMS_PER_PAGE + 1, NUM_EMAIL,
+    {8,
+     2,
+     TWOTHIRDS_X + LEFT_MARGIN,
+     RIGHT_X,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     FIRST_DATA + 2 * ITEMS_PER_PAGE + 1,
+     ITEMS_PER_PAGE + 1,
+     NUM_EMAIL,
      REF_STR_Null,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -2944,10 +3048,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
     // Ammo page, off screen.
-    {9, 0,
-     AMMO_LEFT_1, AMMO_RIGHT_1, TOP_MARGIN,
-     TITLE_COLOR, ITEM_COLOR,
-     0, NUM_AMMO_TYPES, NUM_AMMO_TYPES,
+    {9,
+     0,
+     AMMO_LEFT_1,
+     AMMO_RIGHT_1,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     ITEM_COLOR,
+     0,
+     NUM_AMMO_TYPES,
+     NUM_AMMO_TYPES,
      REF_STR_PistolCartTitle,
      ACTIVE_CART,
      FIELD_OFFSET(cartridges),
@@ -2965,10 +3075,16 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
     // Pages 50-52 Email
-    {50, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
+    {50,
+     0,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
      REF_STR_EmailTitle,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -2985,170 +3101,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {50, 0,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_EmailTitle,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     NULL,
-     NULL,
-     email_more_draw,
-     email_more_use,
-     email_more_use,
+    {50,
      0,
-     NULL,
-     NULL,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
      0,
-     NULL,
-     0,
-     generic_lines},
-    {50, 1,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_Null,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     email_name_func,
-     null_quant_func,
-     generic_draw_list,
-     email_use_func,
-     email_use_func,
-     SOFT_CLASSES,
-     email_add_func,
-     email_drop_func,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {50, 1,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_Null,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     NULL,
-     NULL,
-     email_more_draw,
-     email_more_use,
-     email_more_use,
-     0,
-     NULL,
-     NULL,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {51, 2,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_EmailTitle,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     email_name_func,
-     null_quant_func,
-     generic_draw_list,
-     email_use_func,
-     email_use_func,
-     SOFT_CLASSES,
-     email_add_func,
-     email_drop_func,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {51, 2,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_Null,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     NULL,
-     NULL,
-     email_more_draw,
-     email_more_use,
-     email_more_use,
-     0,
-     NULL,
-     NULL,
-     0,
-     NULL,
-     0,
-     generic_lines},
-    {51, 3,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_Null,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     email_name_func,
-     null_quant_func,
-     generic_draw_list,
-     email_use_func,
-     email_use_func,
-     SOFT_CLASSES,
-     email_add_func,
-     email_drop_func,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {51, 3,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_EmailTitle,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     NULL,
-     NULL,
-     email_more_draw,
-     email_more_use,
-     email_more_use,
-     0,
-     NULL,
-     NULL,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {52, 4,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
-     REF_STR_EmailTitle,
-     NULL_ACTIVE,
-     FIELD_OFFSET(email),
-     MFD_INV_NULL,
-     email_name_func,
-     null_quant_func,
-     generic_draw_list,
-     email_use_func,
-     email_use_func,
-     SOFT_CLASSES,
-     email_add_func,
-     email_drop_func,
-     EMAIL_TRIP,
-     NULL,
-     0,
-     generic_lines},
-    {52, 4,
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
      REF_STR_EmailTitle,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -3165,10 +3127,16 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {52, 5,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
+    {50,
+     1,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
      REF_STR_Null,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -3185,10 +3153,224 @@ inv_display inv_display_list[] = {
      NULL,
      0,
      generic_lines},
-    {52, 5,
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
-     TITLE_COLOR, EMAIL_COLOR_FUNC,
-     0, ITEMS_PER_PAGE - 1, NUM_EMAIL_PROPER,
+    {50,
+     1,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_Null,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     NULL,
+     NULL,
+     email_more_draw,
+     email_more_use,
+     email_more_use,
+     0,
+     NULL,
+     NULL,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {51,
+     2,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_EmailTitle,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     email_name_func,
+     null_quant_func,
+     generic_draw_list,
+     email_use_func,
+     email_use_func,
+     SOFT_CLASSES,
+     email_add_func,
+     email_drop_func,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {51,
+     2,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_Null,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     NULL,
+     NULL,
+     email_more_draw,
+     email_more_use,
+     email_more_use,
+     0,
+     NULL,
+     NULL,
+     0,
+     NULL,
+     0,
+     generic_lines},
+    {51,
+     3,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_Null,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     email_name_func,
+     null_quant_func,
+     generic_draw_list,
+     email_use_func,
+     email_use_func,
+     SOFT_CLASSES,
+     email_add_func,
+     email_drop_func,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {51,
+     3,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_EmailTitle,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     NULL,
+     NULL,
+     email_more_draw,
+     email_more_use,
+     email_more_use,
+     0,
+     NULL,
+     NULL,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {52,
+     4,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_EmailTitle,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     email_name_func,
+     null_quant_func,
+     generic_draw_list,
+     email_use_func,
+     email_use_func,
+     SOFT_CLASSES,
+     email_add_func,
+     email_drop_func,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {52,
+     4,
+     LEFT_MARGIN,
+     CENTER_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_EmailTitle,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     NULL,
+     NULL,
+     email_more_draw,
+     email_more_use,
+     email_more_use,
+     0,
+     NULL,
+     NULL,
+     0,
+     NULL,
+     0,
+     generic_lines},
+    {52,
+     5,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
+     REF_STR_Null,
+     NULL_ACTIVE,
+     FIELD_OFFSET(email),
+     MFD_INV_NULL,
+     email_name_func,
+     null_quant_func,
+     generic_draw_list,
+     email_use_func,
+     email_use_func,
+     SOFT_CLASSES,
+     email_add_func,
+     email_drop_func,
+     EMAIL_TRIP,
+     NULL,
+     0,
+     generic_lines},
+    {52,
+     5,
+     CENTER_X + LEFT_MARGIN,
+     RIGHT_X - RIGHT_MARGIN,
+     TOP_MARGIN + (ITEMS_PER_PAGE - 1) * Y_STEP,
+     TITLE_COLOR,
+     EMAIL_COLOR_FUNC,
+     0,
+     ITEMS_PER_PAGE - 1,
+     NUM_EMAIL_PROPER,
      REF_STR_EmailTitle,
      NULL_ACTIVE,
      FIELD_OFFSET(email),
@@ -3206,70 +3388,66 @@ inv_display inv_display_list[] = {
      0,
      generic_lines},
 // Page 20 logs
-#define LOG_PAGE(i)                                                          \
-    {FIRST_LOG_PAGE + i, 0,                                                  \
-     LEFT_MARGIN, CENTER_X - RIGHT_MARGIN, TOP_MARGIN,                       \
-     TITLE_COLOR, EMAIL_COLOR_FUNC,                                          \
-     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL,                                  \
-     ITEMS_PER_PAGE, NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + ITEMS_PER_PAGE, \
-     REF_STR_LogName0 + i,                                                   \
-     NULL_ACTIVE,                                                            \
-     FIELD_OFFSET(email),                                                    \
-     MFD_INV_NULL,                                                           \
-     email_name_func,                                                        \
-     null_quant_func,                                                        \
-     generic_draw_list,                                                      \
-     email_use_func,                                                         \
-     email_use_func,                                                         \
-     SOFT_CLASSES,                                                           \
-     email_add_func,                                                         \
-     email_drop_func,                                                        \
-     EMAIL_TRIP,                                                             \
-     NULL,                                                                   \
-     0,                                                                      \
-     generic_lines},                                                         \
-    {FIRST_LOG_PAGE + i, 2,                                                  \
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN - Y_STEP,    \
-     TITLE_COLOR, EMAIL_COLOR_FUNC,                                          \
-     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + 2 * ITEMS_PER_PAGE + 1,         \
-     1, NUM_EMAIL_PROPER + ((i) + 1) * LOGS_PER_LEVEL ,                      \
-     REF_STR_Null,                                                           \
-     NULL_ACTIVE,                                                            \
-     FIELD_OFFSET(email),                                                    \
-     MFD_INV_NULL,                                                           \
-     email_name_func,                                                        \
-     null_quant_func,                                                        \
-     generic_draw_list,                                                      \
-     email_use_func,                                                         \
-     email_use_func,                                                         \
-     SOFT_CLASSES,                                                           \
-     email_add_func,                                                         \
-     email_drop_func,                                                        \
-     EMAIL_TRIP,                                                             \
-     NULL,                                                                   \
-     0,                                                                      \
-     generic_lines + 2 * ITEMS_PER_PAGE},                                    \
-    {FIRST_LOG_PAGE + i, 1,                                                  \
-     CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN,             \
-     TITLE_COLOR, EMAIL_COLOR_FUNC,                                          \
-     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + ITEMS_PER_PAGE, ITEMS_PER_PAGE, \
-     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + 2 * ITEMS_PER_PAGE + 1,         \
-     REF_STR_Null,                                                           \
-     NULL_ACTIVE,                                                            \
-     FIELD_OFFSET(email),                                                    \
-     MFD_INV_NULL,                                                           \
-     email_name_func,                                                        \
-     null_quant_func,                                                        \
-     generic_draw_list,                                                      \
-     email_use_func,                                                         \
-     email_use_func,                                                         \
-     SOFT_CLASSES,                                                           \
-     email_add_func,                                                         \
-     email_drop_func,                                                        \
-     EMAIL_TRIP,                                                             \
-     NULL,                                                                   \
-     0,                                                                      \
-     generic_lines}
+#define LOG_PAGE(i)                                                                                                 \
+    {FIRST_LOG_PAGE + i,                                                                                            \
+     0,                                                                                                             \
+     LEFT_MARGIN,                                                                                                   \
+     CENTER_X - RIGHT_MARGIN,                                                                                       \
+     TOP_MARGIN,                                                                                                    \
+     TITLE_COLOR,                                                                                                   \
+     EMAIL_COLOR_FUNC,                                                                                              \
+     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL,                                                                         \
+     ITEMS_PER_PAGE,                                                                                                \
+     NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + ITEMS_PER_PAGE,                                                        \
+     REF_STR_LogName0 + i,                                                                                          \
+     NULL_ACTIVE,                                                                                                   \
+     FIELD_OFFSET(email),                                                                                           \
+     MFD_INV_NULL,                                                                                                  \
+     email_name_func,                                                                                               \
+     null_quant_func,                                                                                               \
+     generic_draw_list,                                                                                             \
+     email_use_func,                                                                                                \
+     email_use_func,                                                                                                \
+     SOFT_CLASSES,                                                                                                  \
+     email_add_func,                                                                                                \
+     email_drop_func,                                                                                               \
+     EMAIL_TRIP,                                                                                                    \
+     NULL,                                                                                                          \
+     0,                                                                                                             \
+     generic_lines},                                                                                                \
+        {FIRST_LOG_PAGE + i,                                                                                        \
+         2,                                                                                                         \
+         CENTER_X + LEFT_MARGIN,                                                                                    \
+         RIGHT_X - RIGHT_MARGIN,                                                                                    \
+         TOP_MARGIN - Y_STEP,                                                                                       \
+         TITLE_COLOR,                                                                                               \
+         EMAIL_COLOR_FUNC,                                                                                          \
+         NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + 2 * ITEMS_PER_PAGE + 1,                                            \
+         1,                                                                                                         \
+         NUM_EMAIL_PROPER + ((i) + 1) * LOGS_PER_LEVEL,                                                             \
+         REF_STR_Null,                                                                                              \
+         NULL_ACTIVE,                                                                                               \
+         FIELD_OFFSET(email),                                                                                       \
+         MFD_INV_NULL,                                                                                              \
+         email_name_func,                                                                                           \
+         null_quant_func,                                                                                           \
+         generic_draw_list,                                                                                         \
+         email_use_func,                                                                                            \
+         email_use_func,                                                                                            \
+         SOFT_CLASSES,                                                                                              \
+         email_add_func,                                                                                            \
+         email_drop_func,                                                                                           \
+         EMAIL_TRIP,                                                                                                \
+         NULL,                                                                                                      \
+         0,                                                                                                         \
+         generic_lines + 2 * ITEMS_PER_PAGE},                                                                       \
+    {                                                                                                               \
+        FIRST_LOG_PAGE + i, 1, CENTER_X + LEFT_MARGIN, RIGHT_X - RIGHT_MARGIN, TOP_MARGIN, TITLE_COLOR,             \
+            EMAIL_COLOR_FUNC, NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + ITEMS_PER_PAGE, ITEMS_PER_PAGE,               \
+            NUM_EMAIL_PROPER + (i)*LOGS_PER_LEVEL + 2 * ITEMS_PER_PAGE + 1, REF_STR_Null, NULL_ACTIVE,              \
+            FIELD_OFFSET(email), MFD_INV_NULL, email_name_func, null_quant_func, generic_draw_list, email_use_func, \
+            email_use_func, SOFT_CLASSES, email_add_func, email_drop_func, EMAIL_TRIP, NULL, 0, generic_lines       \
+    }
 
     // Hey these pages MUST BE LAST.
     LOG_PAGE(0),

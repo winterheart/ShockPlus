@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "olhext.h"
 #include "fullscrn.h"
 #include "hkeyfunc.h"
-#include "hotkey.h"
 #include "hud.h"
 #include "input.h"
 #include "invent.h"
+#include "kbcook.h"
 #include "keydefs.h"
 #include "mainloop.h"
 #include "mfdfunc.h"
@@ -229,6 +229,8 @@ static void LowerCaseInPlace(char *p) {
 #define CTRL(x) (DOWN(x) | KB_FLAG_CTRL)
 #define ALT(x) (DOWN(x) | KB_FLAG_ALT)
 
+typedef uchar (*hotkey_callback)(ushort keycode, uint32_t context, intptr_t state);
+
 typedef struct HOTKEYLOOKUP_STRUCT {
     const char *s;
     intptr_t contexts;
@@ -335,8 +337,6 @@ void LoadHotkeyKeybinds() {
     const char *string;
     int len, i, flags, ch, fire_key_index = 0;
 
-    hotkey_init(NUM_HOTKEYS);
-
     // clear hotkey used flags so we can tell which weren't specified in file
     // later we can add default key chars for them
     i = 0;
@@ -412,7 +412,9 @@ void LoadHotkeyKeybinds() {
                 string = HotKeyLookup[i].s;
                 len = strlen(string);
                 if (!strncmp(p, string, len)) {
-                    hotkey_add(ch, HotKeyLookup[i].contexts, HotKeyLookup[i].func, HotKeyLookup[i].state);
+                    hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
+                                              .func = HotKeyLookup[i].func,
+                                              .state = HotKeyLookup[i].state});
                     HotKeyLookup[i].used = TRUE;
                     break;
                 }
@@ -437,13 +439,19 @@ void LoadHotkeyKeybinds() {
         if (!HotKeyLookup[i].used) {
             // add default 1
             ch = HotKeyLookup[i].def1;
-            if (ch)
-                hotkey_add(ch, HotKeyLookup[i].contexts, HotKeyLookup[i].func, HotKeyLookup[i].state);
+            if (ch) {
+                hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
+                                          .func = HotKeyLookup[i].func,
+                                          .state = HotKeyLookup[i].state});
+            }
 
             // add default 2
             ch = HotKeyLookup[i].def2;
-            if (ch)
-                hotkey_add(ch, HotKeyLookup[i].contexts, HotKeyLookup[i].func, HotKeyLookup[i].state);
+            if (ch) {
+                hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
+                                          .func = HotKeyLookup[i].func,
+                                          .state = HotKeyLookup[i].state});
+            }
         }
         i++;
     }

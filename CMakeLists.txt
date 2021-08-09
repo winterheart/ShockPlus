@@ -311,6 +311,7 @@ include_directories(
 )
 
 set(ShockSrc
+	src/ShockSrc/Engine/HotKeyDispatcher.cpp
 	src/ShockSrc/Engine/OptionInfo.cpp
 	src/ShockSrc/Engine/Options.cpp
 	src/ShockSrc/Shock.cpp

@@ -39,7 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamescr.h"
 #include "gamestrn.h"
 #include "gr2ss.h"
-#include "hotkey.h"
 #include "keydefs.h"
 #include "lvldata.h"
 #include "mainloop.h"

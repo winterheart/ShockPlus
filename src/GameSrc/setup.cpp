@@ -50,7 +50,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffq.h"
 #include "gamewrap.h"
 #include "gr2ss.h"
-#include "hotkey.h"
 #include "hud.h"
 #include "init.h"
 #include "miscqvar.h"
@@ -1333,7 +1332,7 @@ void splash_draw(bool show_splash) {
     // clear the screen
     gr_clear(0);
 
-    HotkeyContext = SETUP_CONTEXT;
+    hotKeyDispatcher.setContext(SETUP_CONTEXT);
     uiSetCurrentSlab(&setup_slab);
 
 #ifdef DO_FADES
@@ -1458,7 +1457,7 @@ void setup_start(void) {
     // clear the screen
     gr_clear(0);
 
-    HotkeyContext = SETUP_CONTEXT;
+    hotKeyDispatcher.setContext(SETUP_CONTEXT);
     uiSetCurrentSlab(&setup_slab);
 
     // flush the keyboard and mouse - so we don't read old events

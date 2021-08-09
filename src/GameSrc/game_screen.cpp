@@ -43,7 +43,6 @@ extern "C" {
 #include "frflags.h"
 #include "citres.h"
 #include "gr2ss.h"
-#include "hotkey.h"
 #include "invent.h"
 #include "invdims.h"
 #include "leanmetr.h"
@@ -207,7 +206,7 @@ void screen_start() {
        if (config_get_raw(CFG_TIME_VAR, NULL, 0)) time_passes = TRUE;
     */
 
-    HotkeyContext = DEMO_CONTEXT;
+    hotKeyDispatcher.setContext(DEMO_CONTEXT);
     uiSetCurrentSlab(&main_slab);
     inventory_region = inventory_region_game;
     pagebutton_region = pagebutton_region_game;

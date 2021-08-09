@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL.h>
 
+#include "Engine/HotKeyDispatcher.h"
+
 #include "2d.h"
 
 //--------------------
@@ -36,7 +38,6 @@ int main(int argc, char **argv);
 
 
 void CaptureMouse(bool capture);
-bool CheckArgument(char *name);
 
 //--------------------
 // Public Globals
@@ -54,3 +55,5 @@ extern SDL_AudioDeviceID device;
 extern SDL_Palette *sdlPalette;
 extern SDL_Renderer *renderer;
 extern SDL_Window *window;
+
+extern ShockPlus::HotKeyDispatcher hotKeyDispatcher;

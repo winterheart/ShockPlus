@@ -60,6 +60,9 @@ SDL_Renderer *renderer;
 
 SDL_AudioDeviceID device;
 
+// Our famous hotkey dispatcher
+ShockPlus::HotKeyDispatcher hotKeyDispatcher;
+
 //--------------------
 //  Prototypes
 //--------------------

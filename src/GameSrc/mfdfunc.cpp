@@ -30,6 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+#include "Shock.h"
+#include "Engine/HotKeyDispatcher.h"
+
 #include "2dres.h"
 #include "ammomfd.h"
 #include "bark.h"
@@ -40,8 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fatigue.h"
 #include "fixtrmfd.h"
 #include "gearmfd.h"
-#include "hotkey.h"
 #include "invent.h"
+#include "kbcook.h"
 #include "mfdgump.h"
 #include "mfdpanel.h"
 #include "newmfd.h"
@@ -2572,7 +2575,8 @@ void install_keypad_hotkeys(void) {
     int i;
     for (i = 0; i < 10; i++)
         // KLC      hotkey_add(('0'+i)|KB_FLAG_DOWN|KB_FLAG_2ND, DEMO_CONTEXT, keypad_hotkey_func, 0);
-        hotkey_add(('0' + i) | KB_FLAG_DOWN, DEMO_CONTEXT, keypad_hotkey_func, 0);
+        hotKeyDispatcher.add(('0' + i) | KB_FLAG_DOWN, {.contexts = DEMO_CONTEXT,
+                                                        .func = keypad_hotkey_func, .state = 0});
 }
 
 uchar mfd_keypad_handler(MFD *m, uiEvent *ev) {

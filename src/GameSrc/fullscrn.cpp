@@ -40,7 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "frutils.h"
 #include "gameloop.h"
 #include "gr2ss.h"
-#include "hotkey.h"
 #include "hud.h"
 #include "input.h"
 #include "invent.h"
@@ -315,7 +314,7 @@ void fullscreen_start() {
 
     // Hey, we don't need to hide here because the mouse already gets hidden by fooscreen_exit
     //   uiHideMouse(NULL);
-    HotkeyContext = DEMO_CONTEXT;
+    hotKeyDispatcher.setContext(DEMO_CONTEXT);
     full_game_3d = TRUE;
     uiSetCurrentSlab(&fullscreen_slab);
 
