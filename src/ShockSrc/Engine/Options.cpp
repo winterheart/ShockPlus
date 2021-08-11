@@ -40,6 +40,7 @@ std::filesystem::path userFolder_;
 std::filesystem::path configFolder_;
 std::map<std::string, std::string> commandLine_;
 std::vector<OptionInfo> info_;
+std::vector<OptionInfo> keys_;
 
 /**
  * Write node from emitter
@@ -132,6 +133,11 @@ void setDataFolder(const std::filesystem::path &folder) { dataFolder_ = folder; 
  * Sets up the options by creating their OptionInfo metadata.
  */
 void create() {
+    // Initialize
+    for (uint32_t i = 0; i < ShockPlus::Options::KeyCodes::KEY_COUNT; i++) {
+        keyMap.insert_or_assign(i, KeyDef{{.scancode = SDL_SCANCODE_UNKNOWN, .mod = KMOD_NONE}});
+    }
+
     // First goes non-UI options
     info_.emplace_back("logLevel", (int *)&logLevel, LOG_INFO);
 
@@ -172,6 +178,193 @@ void create() {
                        "STR_OPTIONS_VIDEO");
     info_.emplace_back("videoTextureFilter", (int *)&videoTextureFilter, VIDEO_TEXTURE_NONE,
                        "STR_OPTION_TEXTURE_FILTER", "STR_OPTIONS_VIDEO");
+
+    // keybindings
+    keys_.emplace_back("KEY_CANCEL_AUDIOLOG", &keyMap[KeyCodes::KEY_CANCEL_AUDIOLOG],
+                       KeyDef{{.scancode = SDL_SCANCODE_PERIOD, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_AUDIOLOG_CANCEL",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_STAND", &keyMap[KeyCodes::KEY_STAND],
+                       KeyDef{{.scancode = SDL_SCANCODE_T, .mod = KMOD_NONE}}, "STR_OPTION_KEY_STAND",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CROUCH", &keyMap[KeyCodes::KEY_CROUCH],
+                       KeyDef{{.scancode = SDL_SCANCODE_G, .mod = KMOD_NONE}}, "STR_OPTION_KEY_CROUCH",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_PRONE", &keyMap[KeyCodes::KEY_PRONE],
+                       KeyDef{{.scancode = SDL_SCANCODE_B, .mod = KMOD_NONE}}, "STR_OPTION_KEY_PRONE",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_TOGGLE_FREELOOK", &keyMap[KeyCodes::KEY_TOGGLE_FREELOOK],
+                       KeyDef{{.scancode = SDL_SCANCODE_F, .mod = KMOD_NONE}}, "STR_OPTION_KEY_TOGGLE_FREELOOK",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_FULL_VIEW", &keyMap[KeyCodes::KEY_FULL_VIEW],
+                       KeyDef{{.scancode = SDL_SCANCODE_F, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_FULL_VIEW",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NORMAL_VIEW", &keyMap[KeyCodes::KEY_NORMAL_VIEW],
+                       KeyDef{{.scancode = SDL_SCANCODE_D, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_NORMAL_VIEW",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MAP_VIEW", &keyMap[KeyCodes::KEY_MAP_VIEW],
+                       KeyDef{{.scancode = SDL_SCANCODE_A, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_MAP_VIEW",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CLEAR_FULLSCREEN", &keyMap[KeyCodes::KEY_CLEAR_FULLSCREEN],
+                       KeyDef{{.scancode = SDL_SCANCODE_BACKSPACE, .mod = KMOD_NONE}},
+                       "STR_OPTION_KEY_CLEAR_FULLSCREEN", "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_SAVE_GAME", &keyMap[KeyCodes::KEY_SAVE_GAME],
+                       KeyDef{{.scancode = SDL_SCANCODE_S, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_SAVE_GAME",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_LOAD_GAME", &keyMap[KeyCodes::KEY_LOAD_GAME],
+                       KeyDef{{.scancode = SDL_SCANCODE_L, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_LOAD_GAME",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_PAUSE", &keyMap[KeyCodes::KEY_PAUSE],
+                       KeyDef{{.scancode = SDL_SCANCODE_P, .mod = KMOD_NONE}}, "STR_OPTION_KEY_PAUSE",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_RELOAD_WEAPON_1", &keyMap[KeyCodes::KEY_RELOAD_WEAPON_1],
+                       KeyDef{{.scancode = SDL_SCANCODE_BACKSPACE, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_RELOAD_WEAPON_1",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_RELOAD_WEAPON_0", &keyMap[KeyCodes::KEY_RELOAD_WEAPON_0],
+                       KeyDef{{.scancode = SDL_SCANCODE_BACKSPACE, .mod = KMOD_ALT}}, "STR_OPTION_KEY_RELOAD_WEAPON_0",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_SELECT_GRENADE", &keyMap[KeyCodes::KEY_SELECT_GRENADE],
+                       KeyDef{{.scancode = SDL_SCANCODE_APOSTROPHE, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_SELECT_GRENADE",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_SELECT_DRUG", &keyMap[KeyCodes::KEY_SELECT_DRUG],
+                       KeyDef{{.scancode = SDL_SCANCODE_SEMICOLON, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_SELECT_DRUG",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_TOGGLE_OLH", &keyMap[KeyCodes::KEY_TOGGLE_OLH],
+                       KeyDef{{.scancode = SDL_SCANCODE_H, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_TOGGLE_OLH",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_TOGGLE_MUSIC", &keyMap[KeyCodes::KEY_TOGGLE_MUSIC],
+                       KeyDef{{.scancode = SDL_SCANCODE_M, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_TOGGLE_MUSIC",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_QUIT", &keyMap[KeyCodes::KEY_QUIT], KeyDef{{.scancode = SDL_SCANCODE_Q, .mod = KMOD_CTRL}},
+                       "STR_OPTION_KEY_QUIT", "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NEXT_WEAPON", &keyMap[KeyCodes::KEY_NEXT_WEAPON],
+                       KeyDef{{.scancode = SDL_SCANCODE_TAB, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NEXT_WEAPON",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_PREV_WEAPON", &keyMap[KeyCodes::KEY_PREV_WEAPON],
+                       KeyDef{{.scancode = SDL_SCANCODE_TAB, .mod = KMOD_SHIFT}}, "STR_OPTION_KEY_PREV_WEAPON",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CYCLE_DETAIL", &keyMap[KeyCodes::KEY_CYCLE_DETAIL],
+                       KeyDef{{.scancode = SDL_SCANCODE_1, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_CYCLE_DETAIL",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_TOGGLE_OPENGL", &keyMap[KeyCodes::KEY_TOGGLE_OPENGL],
+                       KeyDef{{.scancode = SDL_SCANCODE_G, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_TOGGLE_OPENGL",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_ARM_GRENADE", &keyMap[KeyCodes::KEY_ARM_GRENADE],
+                       KeyDef{{.scancode = SDL_SCANCODE_APOSTROPHE, .mod = KMOD_ALT}}, "STR_OPTION_KEY_ARM_GRENADE",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_USE_DRUG", &keyMap[KeyCodes::KEY_USE_DRUG],
+                       KeyDef{{.scancode = SDL_SCANCODE_SEMICOLON, .mod = KMOD_ALT}}, "STR_OPTION_KEY_USE_DRUG",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_HUD_COLOR", &keyMap[KeyCodes::KEY_HUD_COLOR],
+                       KeyDef{{.scancode = SDL_SCANCODE_H, .mod = KMOD_ALT}}, "STR_OPTION_KEY_HUD_COLOR",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_SHOW_HELP", &keyMap[KeyCodes::KEY_SHOW_HELP],
+                       KeyDef{{.scancode = SDL_SCANCODE_O, .mod = KMOD_ALT}}, "STR_OPTION_KEY_SHOW_HELP",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_BIOSCAN", &keyMap[KeyCodes::KEY_BIOSCAN],
+                       KeyDef{{.scancode = SDL_SCANCODE_1, .mod = KMOD_NONE}}, "STR_OPTION_KEY_BIOSCAN",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_FULLSCREEN", &keyMap[KeyCodes::KEY_FULLSCREEN],
+                       KeyDef{{.scancode = SDL_SCANCODE_2, .mod = KMOD_NONE}}, "STR_OPTION_KEY_FULLSCREEN",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_360_VIEW", &keyMap[KeyCodes::KEY_360_VIEW],
+                       KeyDef{{.scancode = SDL_SCANCODE_3, .mod = KMOD_NONE}}, "STR_OPTION_KEY_360_VIEW",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_LATERN", &keyMap[KeyCodes::KEY_LATERN],
+                       KeyDef{{.scancode = SDL_SCANCODE_4, .mod = KMOD_NONE}}, "STR_OPTION_KEY_LATERN",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_SHIELD", &keyMap[KeyCodes::KEY_SHIELD],
+                       KeyDef{{.scancode = SDL_SCANCODE_5, .mod = KMOD_NONE}}, "STR_OPTION_KEY_SHIELD",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_INFRARED", &keyMap[KeyCodes::KEY_INFRARED],
+                       KeyDef{{.scancode = SDL_SCANCODE_6, .mod = KMOD_NONE}}, "STR_OPTION_KEY_INFRARED",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NAV_UNIT", &keyMap[KeyCodes::KEY_NAV_UNIT],
+                       KeyDef{{.scancode = SDL_SCANCODE_7, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NAV_UNIT",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_DATA_READER", &keyMap[KeyCodes::KEY_DATA_READER],
+                       KeyDef{{.scancode = SDL_SCANCODE_8, .mod = KMOD_NONE}}, "STR_OPTION_KEY_DATA_READER",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_BOOSTER", &keyMap[KeyCodes::KEY_BOOSTER],
+                       KeyDef{{.scancode = SDL_SCANCODE_9, .mod = KMOD_NONE}}, "STR_OPTION_KEY_BOOSTER",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_JUMPJETS", &keyMap[KeyCodes::KEY_JUMPJETS],
+                       KeyDef{{.scancode = SDL_SCANCODE_0, .mod = KMOD_NONE}}, "STR_OPTION_KEY_JUMPJETS",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_L1", &keyMap[KeyCodes::KEY_MFD_L1],
+                       KeyDef{{.scancode = SDL_SCANCODE_F1, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_L1",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_L2", &keyMap[KeyCodes::KEY_MFD_L2],
+                       KeyDef{{.scancode = SDL_SCANCODE_F2, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_L2",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_L3", &keyMap[KeyCodes::KEY_MFD_L3],
+                       KeyDef{{.scancode = SDL_SCANCODE_F3, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_L3",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_L4", &keyMap[KeyCodes::KEY_MFD_L4],
+                       KeyDef{{.scancode = SDL_SCANCODE_F4, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_L4",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_L5", &keyMap[KeyCodes::KEY_MFD_L5],
+                       KeyDef{{.scancode = SDL_SCANCODE_F5, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_L5",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_R1", &keyMap[KeyCodes::KEY_MFD_R1],
+                       KeyDef{{.scancode = SDL_SCANCODE_F6, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R1",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_R2", &keyMap[KeyCodes::KEY_MFD_R2],
+                       KeyDef{{.scancode = SDL_SCANCODE_F7, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R2",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_R3", &keyMap[KeyCodes::KEY_MFD_R3],
+                       KeyDef{{.scancode = SDL_SCANCODE_F8, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R3",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_R4", &keyMap[KeyCodes::KEY_MFD_R4],
+                       KeyDef{{.scancode = SDL_SCANCODE_F9, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R4",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_MFD_R5", &keyMap[KeyCodes::KEY_MFD_R5],
+                       KeyDef{{.scancode = SDL_SCANCODE_F10, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R5",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_0", &keyMap[KeyCodes::KEY_NUMPAD_0],
+                       KeyDef{{.scancode = SDL_SCANCODE_O, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_0",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_1", &keyMap[KeyCodes::KEY_NUMPAD_1],
+                       KeyDef{{.scancode = SDL_SCANCODE_1, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_1",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_2", &keyMap[KeyCodes::KEY_NUMPAD_2],
+                       KeyDef{{.scancode = SDL_SCANCODE_2, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_2",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_3", &keyMap[KeyCodes::KEY_NUMPAD_3],
+                       KeyDef{{.scancode = SDL_SCANCODE_3, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_3",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_4", &keyMap[KeyCodes::KEY_NUMPAD_4],
+                       KeyDef{{.scancode = SDL_SCANCODE_4, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_4",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_5", &keyMap[KeyCodes::KEY_NUMPAD_5],
+                       KeyDef{{.scancode = SDL_SCANCODE_5, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_5",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_6", &keyMap[KeyCodes::KEY_NUMPAD_6],
+                       KeyDef{{.scancode = SDL_SCANCODE_6, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_6",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_7", &keyMap[KeyCodes::KEY_NUMPAD_7],
+                       KeyDef{{.scancode = SDL_SCANCODE_7, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_7",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_8", &keyMap[KeyCodes::KEY_NUMPAD_8],
+                       KeyDef{{.scancode = SDL_SCANCODE_8, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_8",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_NUMPAD_9", &keyMap[KeyCodes::KEY_NUMPAD_9],
+                       KeyDef{{.scancode = SDL_SCANCODE_9, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_9",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_TOGGLE_OPTIONS", &keyMap[KeyCodes::KEY_TOGGLE_OPTIONS],
+                       KeyDef{{.scancode = SDL_SCANCODE_ESCAPE, .mod = KMOD_NONE}}, "STR_OPTION_KEY_TOGGLE_OPTIONS",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CHEAT_GIVEALL", &keyMap[KeyCodes::KEY_CHEAT_GIVEALL],
+                       KeyDef{{.scancode = SDL_SCANCODE_2, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_CHEAT_GIVEALL",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CHEAT_PHYSICS", &keyMap[KeyCodes::KEY_CHEAT_PHYSICS],
+                       KeyDef{{.scancode = SDL_SCANCODE_3, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_CHEAT_PHYSICS",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CHEAT_LEVEL_UP", &keyMap[KeyCodes::KEY_CHEAT_LEVEL_UP],
+                       KeyDef{{.scancode = SDL_SCANCODE_4, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_CHEAT_LEVEL_UP",
+                       "STR_OPTIONS_KEYBINDING");
+    keys_.emplace_back("KEY_CHEAT_LEVEL_DOWN", &keyMap[KeyCodes::KEY_CHEAT_LEVEL_DOWN],
+                       KeyDef{{.scancode = SDL_SCANCODE_5, .mod = KMOD_CTRL}}, "STR_OPTION_KEY_CHEAT_LEVEL_DOWN",
+                       "STR_OPTIONS_KEYBINDING");
 }
 
 /**
@@ -185,6 +378,9 @@ bool load(const std::string &filename) {
         YAML::Node doc = YAML::LoadFile(s);
         for (auto &i : info_) {
             i.load(doc["options"]);
+        }
+        for (auto &i : keys_) {
+            i.load(doc["keys"]);
         }
     } catch (YAML::Exception &e) {
         WARN(e.what());
@@ -208,11 +404,15 @@ bool save(const std::string &filename) {
     try {
         YAML::Emitter out;
 
-        YAML::Node doc, node;
+        YAML::Node doc, node_options, node_keys;
         for (auto &i : info_) {
-            i.save(node);
+            i.save(node_options);
         }
-        doc["options"] = node;
+        for (auto &i : keys_) {
+            i.save(node_keys);
+        }
+        doc["options"] = node_options;
+        doc["keys"] = node_keys;
 
         writeNode(doc, out);
 
@@ -237,7 +437,9 @@ void resetDefault() {
     for (auto &i : info_) {
         i.reset();
     }
-    // backupDisplay();
+    for (auto &i : keys_) {
+        i.reset();
+    }
 }
 
 /**
@@ -405,16 +607,6 @@ bool init(int argc, char *argv[]) {
     }
 
     INFO(SHOCK_VERSION);
-#ifdef _WIN32
-    INFO("Platform: Windows");
-#elif __APPLE__
-    INFO("Platform: OSX");
-#elif __ANDROID_API__
-    INFO("Platform: Android");
-#else
-    INFO("Platform: Unix-like");
-#endif
-
     INFO("Data folder is: %s", dataFolder_.c_str());
     INFO("Data search is:");
     for (auto &i : dataList_) {

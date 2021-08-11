@@ -23,6 +23,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Exception/Exception.h"
 #include "OptionInfo.h"
 
+namespace YAML {
+template <> struct convert<SDL_Keysym> {
+    static Node encode(const SDL_Keysym &rhs) {
+        Node node;
+        node["scancode"] = static_cast<uint32_t>(rhs.scancode);
+        node["mod"] = static_cast<uint16_t>(rhs.mod);
+        return node;
+    }
+
+    static bool decode(const Node &node, SDL_Keysym &rhs) {
+        if (!node.IsMap() && node.size() != 2) {
+            return false;
+        }
+        rhs.scancode = static_cast<SDL_Scancode>(node["scancode"].as<uint32_t>());
+        rhs.mod = node["mod"].as<uint16_t>();
+        return true;
+    }
+};
+
+} // namespace YAML
+
 namespace ShockPlus {
 
 /**
@@ -57,6 +78,17 @@ OptionInfo::OptionInfo(std::string id, int *option, int def, std::string desc, s
  */
 OptionInfo::OptionInfo(std::string id, std::string *option, std::string def, std::string desc, std::string cat)
     : id_(std::move(id)), desc_(std::move(desc)), cat_(std::move(cat)), type_(OPTION_STRING), def_(def), ref_(option) {}
+
+/**
+ * Creates info for keybinding option.
+ * @param id String ID used in serializing.
+ * @param option Pointer to the option.
+ * @param def Default option value.
+ * @param desc Language ID for the option description (if any).
+ * @param cat Language ID for the option category (if any).
+ */
+OptionInfo::OptionInfo(std::string id, KeyDef *option, KeyDef def, std::string desc, std::string cat)
+    : id_(std::move(id)), desc_(std::move(desc)), cat_(std::move(cat)), type_(OPTION_KEY), def_(def), ref_(option) {}
 
 /**
  * Returns the pointer to the boolean option.
@@ -94,6 +126,13 @@ std::string *OptionInfo::asString() const {
     return std::get<std::string *>(ref_);
 }
 
+KeyDef *OptionInfo::asKey() const {
+    if (type_ != OPTION_KEY) {
+        throw Exception(id_ + " is not a key definition!");
+    }
+    return std::get<KeyDef *>(ref_);
+}
+
 /**
  * Loads an option value from the corresponding YAML.
  * @param node Options YAML node.
@@ -106,13 +145,11 @@ void OptionInfo::load(const YAML::Node &node) const {
     case OPTION_INT:
         *std::get<int *>(ref_) = node[id_].as<int>(std::get<int>(def_));
         break;
-        /*
-        case OPTION_KEY:
-            *(_ref.k) = (SDLKey)node[_id].as<int>(_def.k);
-            break;
-        */
     case OPTION_STRING:
         *std::get<std::string *>(ref_) = node[id_].as<std::string>(std::get<std::string>(def_));
+        break;
+    case OPTION_KEY:
+        *std::get<KeyDef *>(ref_) = node[id_].as<KeyDef>(std::get<KeyDef>(def_));
         break;
     }
 }
@@ -142,15 +179,11 @@ void OptionInfo::load(const std::map<std::string, std::string> &map) const {
             ss >> std::dec >> i;
             *std::get<int *>(ref_) = i;
             break;
-            /*
-            case OPTION_KEY:
-                ss << std::dec << value;
-                ss >> std::dec >> i;
-                *(_ref.k) = (SDLKey)i;
-                break;
-            */
         case OPTION_STRING:
             *std::get<std::string *>(ref_) = value;
+            break;
+        default:
+            // don't load keys from cli
             break;
         }
     }
@@ -168,13 +201,11 @@ void OptionInfo::save(YAML::Node &node) const {
     case OPTION_INT:
         node[id_] = *std::get<int *>(ref_);
         break;
-    /*
-    case OPTION_KEY:
-        node[_id] = (int)*(_ref.k);
-        break;
-    */
     case OPTION_STRING:
         node[id_] = *std::get<std::string *>(ref_);
+        break;
+    case OPTION_KEY:
+        node[id_] = *std::get<KeyDef *>(ref_);
         break;
     }
 }
@@ -190,13 +221,11 @@ void OptionInfo::reset() const {
     case OPTION_INT:
         *std::get<int *>(ref_) = std::get<int>(def_);
         break;
-    /*
-    case OPTION_KEY:
-        *(_ref.k) = _def.k;
-        break;
-    */
     case OPTION_STRING:
         *std::get<std::string *>(ref_) = std::get<std::string>(def_);
+        break;
+    case OPTION_KEY:
+        *std::get<KeyDef *>(ref_) = std::get<KeyDef>(def_);
         break;
     }
 }

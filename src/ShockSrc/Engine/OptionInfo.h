@@ -22,18 +22,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <variant>
 #include <yaml-cpp/yaml.h>
+#include <SDL.h>
 
 namespace ShockPlus {
 
-enum OptionType { OPTION_BOOL, OPTION_INT, OPTION_STRING };
+enum OptionType { OPTION_BOOL, OPTION_INT, OPTION_STRING, OPTION_KEY };
+
+typedef std::vector<SDL_Keysym> KeyDef;
 
 class OptionInfo {
   private:
     std::string id_, desc_, cat_;
     OptionType type_;
 
-    std::variant<bool *, int *, std::string *> ref_;
-    std::variant<bool, int, std::string> def_;
+    std::variant<bool *, int *, std::string *, std::vector<SDL_Keysym> *> ref_;
+    std::variant<bool, int, std::string, std::vector<SDL_Keysym>> def_;
 
   public:
     /// Creates a bool option
@@ -42,6 +45,8 @@ class OptionInfo {
     OptionInfo(std::string id, int *option, int def, std::string desc = "", std::string cat = "");
     /// Creates a string option.
     OptionInfo(std::string id, std::string *option, std::string def, std::string desc = "", std::string cat = "");
+    /// Creates a keybinding option.
+    OptionInfo(std::string id, KeyDef *option, KeyDef def, std::string desc = "", std::string cat = "");
 
     /// Gets a bool option pointer.
     bool *asBool() const;
@@ -49,6 +54,8 @@ class OptionInfo {
     int *asInt() const;
     /// Gets a string option pointer.
     std::string *asString() const;
+    /// Gets a key definition pointer.
+    KeyDef *asKey() const;
 
     void load(const YAML::Node &node) const;
     /// Loads the option from a map.

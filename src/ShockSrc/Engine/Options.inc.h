@@ -42,3 +42,6 @@ OPT bool enableOpenGL, halfResolution, enableSkipLines;
 OPT int videoMode, gammaCorrection;
 OPT VideoDetail videoDetail;
 OPT VideoTextureFilter videoTextureFilter;
+
+// Keybindings
+OPT std::map<uint16_t, KeyDef> keyMap;

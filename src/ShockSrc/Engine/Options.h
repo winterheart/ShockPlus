@@ -43,6 +43,73 @@ enum VideoTextureFilter { VIDEO_TEXTURE_NONE, VIDEO_TEXTURE_BILINEAR };
 /// Supported languages // FIXME: externalize
 enum GeneralLanguage { LANGUAGE_ENGLISH, LANGUAGE_FRENCH, LANGUAGE_GERMAN };
 
+/// Keycode Aliases
+enum KeyCodes {
+    KEY_CANCEL_AUDIOLOG,
+    KEY_STAND,
+    KEY_CROUCH,
+    KEY_PRONE,
+    KEY_TOGGLE_FREELOOK,
+    KEY_FULL_VIEW,
+    KEY_NORMAL_VIEW,
+    KEY_MAP_VIEW,
+    KEY_CLEAR_FULLSCREEN,
+    KEY_SAVE_GAME,
+    KEY_LOAD_GAME,
+    KEY_PAUSE,
+    KEY_RELOAD_WEAPON_1,
+    KEY_RELOAD_WEAPON_0,
+    KEY_SELECT_GRENADE,
+    KEY_SELECT_DRUG,
+    KEY_TOGGLE_OLH,
+    KEY_TOGGLE_MUSIC,
+    KEY_QUIT,
+    KEY_NEXT_WEAPON,
+    KEY_PREV_WEAPON,
+    KEY_CYCLE_DETAIL,
+    KEY_TOGGLE_OPENGL,
+    KEY_ARM_GRENADE,
+    KEY_USE_DRUG,
+    KEY_HUD_COLOR,
+    KEY_SHOW_HELP,
+    KEY_BIOSCAN,
+    KEY_FULLSCREEN,
+    KEY_360_VIEW,
+    KEY_LATERN,
+    KEY_SHIELD,
+    KEY_INFRARED,
+    KEY_NAV_UNIT,
+    KEY_DATA_READER,
+    KEY_BOOSTER,
+    KEY_JUMPJETS,
+    KEY_MFD_L1,
+    KEY_MFD_L2,
+    KEY_MFD_L3,
+    KEY_MFD_L4,
+    KEY_MFD_L5,
+    KEY_MFD_R1,
+    KEY_MFD_R2,
+    KEY_MFD_R3,
+    KEY_MFD_R4,
+    KEY_MFD_R5,
+    KEY_NUMPAD_0,
+    KEY_NUMPAD_1,
+    KEY_NUMPAD_2,
+    KEY_NUMPAD_3,
+    KEY_NUMPAD_4,
+    KEY_NUMPAD_5,
+    KEY_NUMPAD_6,
+    KEY_NUMPAD_7,
+    KEY_NUMPAD_8,
+    KEY_NUMPAD_9,
+    KEY_TOGGLE_OPTIONS,
+    KEY_CHEAT_GIVEALL,
+    KEY_CHEAT_PHYSICS,
+    KEY_CHEAT_LEVEL_UP,
+    KEY_CHEAT_LEVEL_DOWN,
+    KEY_COUNT
+};
+
 #define OPT extern
 #include "Options.inc.h"
 #undef OPT
@@ -76,4 +143,4 @@ void setFolders();
 /// Update game options from config file and command line.
 void updateOptions();
 
-}
+} // namespace ShockPlus::Options
