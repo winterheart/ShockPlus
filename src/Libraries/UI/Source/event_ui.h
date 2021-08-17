@@ -60,13 +60,6 @@ typedef struct {
     uchar modifiers;
 } uiMouseData;
 
-// joystick events
-typedef struct {
-    short action;   /* joystick event subtype, as defined below */
-    uchar joynum;   /* joystick number */
-    LGPoint joypos; /* joystick position */
-} uiJoyData;
-
 // User-defined event can hold a pointer or integer.
 typedef struct {
     short subtype;
@@ -84,7 +77,6 @@ typedef struct _ui_event {
         uiPollKeyData poll_key_data;
         uiCookedKeyData cooked_key_data;
         uiMouseData mouse_data;
-        uiJoyData joystick_data;
         uiUserData user_data;
     };
 } uiEvent;
@@ -265,7 +257,7 @@ extern uchar uiAltDoubleClick;
 extern LGRegion *uiLastMouseRegion[NUM_MOUSE_BTNS];
 
 // How much mouse motion will we tolerate before discarding
-// a potiential double click.  Defaults to 5.
+// a potential double click.  Defaults to 5.
 extern ushort uiDoubleClickTolerance;
 
 // Global mask of what events are to be dispatched.
