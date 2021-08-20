@@ -24,9 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 
 #include "2dres.h"
 #include "faketime.h"
@@ -59,7 +59,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gr2ss.h"
 
 #ifdef LOST_TREASURES_OF_MFD_GAMES
-#include "limits.h"
+#include <limits.h>
 #endif
 
 // -------

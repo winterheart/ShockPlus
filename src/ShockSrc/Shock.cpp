@@ -73,6 +73,8 @@ ShockPlus::HotKeyDispatcher hotKeyDispatcher;
 int main(int argc, char **argv) {
     if (!ShockPlus::Options::init(argc, argv))
         return EXIT_FAILURE;
+    hotKeyDispatcher.init();
+
 
     // init mac managers
 

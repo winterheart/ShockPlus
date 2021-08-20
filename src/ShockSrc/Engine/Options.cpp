@@ -321,34 +321,34 @@ void create() {
                        KeyDef{{.scancode = SDL_SCANCODE_F10, .mod = KMOD_NONE}}, "STR_OPTION_KEY_MFD_R5",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_0", &keyMap[KeyCodes::KEY_NUMPAD_0],
-                       KeyDef{{.scancode = SDL_SCANCODE_O, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_0",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_0, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_0",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_1", &keyMap[KeyCodes::KEY_NUMPAD_1],
-                       KeyDef{{.scancode = SDL_SCANCODE_1, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_1",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_1, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_1",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_2", &keyMap[KeyCodes::KEY_NUMPAD_2],
-                       KeyDef{{.scancode = SDL_SCANCODE_2, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_2",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_2, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_2",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_3", &keyMap[KeyCodes::KEY_NUMPAD_3],
-                       KeyDef{{.scancode = SDL_SCANCODE_3, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_3",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_3, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_3",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_4", &keyMap[KeyCodes::KEY_NUMPAD_4],
-                       KeyDef{{.scancode = SDL_SCANCODE_4, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_4",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_4, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_4",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_5", &keyMap[KeyCodes::KEY_NUMPAD_5],
-                       KeyDef{{.scancode = SDL_SCANCODE_5, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_5",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_5, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_5",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_6", &keyMap[KeyCodes::KEY_NUMPAD_6],
-                       KeyDef{{.scancode = SDL_SCANCODE_6, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_6",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_6, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_6",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_7", &keyMap[KeyCodes::KEY_NUMPAD_7],
-                       KeyDef{{.scancode = SDL_SCANCODE_7, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_7",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_7, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_7",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_8", &keyMap[KeyCodes::KEY_NUMPAD_8],
-                       KeyDef{{.scancode = SDL_SCANCODE_8, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_8",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_8, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_8",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_NUMPAD_9", &keyMap[KeyCodes::KEY_NUMPAD_9],
-                       KeyDef{{.scancode = SDL_SCANCODE_9, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_9",
+                       KeyDef{{.scancode = SDL_SCANCODE_KP_9, .mod = KMOD_NONE}}, "STR_OPTION_KEY_NUMPAD_9",
                        "STR_OPTIONS_KEYBINDING");
     keys_.emplace_back("KEY_TOGGLE_OPTIONS", &keyMap[KeyCodes::KEY_TOGGLE_OPTIONS],
                        KeyDef{{.scancode = SDL_SCANCODE_ESCAPE, .mod = KMOD_NONE}}, "STR_OPTION_KEY_TOGGLE_OPTIONS",

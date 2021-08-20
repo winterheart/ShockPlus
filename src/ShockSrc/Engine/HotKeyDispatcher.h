@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <functional>
 #include <map>
 #include <string>
+#include <SDL.h>
 
 namespace ShockPlus {
 
@@ -44,11 +45,16 @@ typedef struct hotkeylookup_struct {
 class HotKeyDispatcher {
   private:
     /// All hotkeys map
-    std::multimap<uint16_t, HotkeyLookup> hotkeys_;
+    std::map<uint16_t, HotkeyLookup> hotkeys_;
+    /// Map to SDL_Keysym -> keycode
+    std::multimap<SDL_Keysym, uint16_t> key_actions_;
     /// Hotkey context that applies all matched hotkeys
     uint32_t hotkey_context_ = Contexts::EVERY_CONTEXT;
 
+    uint16_t mod_filter_ = 0x3ff;   // capture only SHIFT, ALT, CTRL mods
+
   public:
+    void init();
     /**
      * Add hotkey to map of dispatcher
      * @param keycode key
@@ -63,10 +69,10 @@ class HotKeyDispatcher {
 
     /**
      * Emit hotkey event to function callback that assigned to keycode
-     * @param keycode key
+     * @param keysym key
      * @return true on success, false if there no such keycode
      */
-    bool hotkey_dispatch(uint16_t keycode);
+    bool hotkey_dispatch(SDL_Keysym keysym);
 
     /**
      * Get current hotkey context

@@ -406,21 +406,6 @@ void LoadHotkeyKeybinds() {
             while (*p && isspace(*p))
                 p++; // skip leading spaces
 
-            // lookup and add specified hotkey info
-            i = 0;
-            while (HotKeyLookup[i].s != NULL) {
-                string = HotKeyLookup[i].s;
-                len = strlen(string);
-                if (!strncmp(p, string, len)) {
-                    hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
-                                              .func = HotKeyLookup[i].func,
-                                              .state = HotKeyLookup[i].state});
-                    HotKeyLookup[i].used = TRUE;
-                    break;
-                }
-                i++;
-            }
-
             // special case for fire keys
             string = "\"fire\"";
             len = strlen(string);
@@ -431,29 +416,6 @@ void LoadHotkeyKeybinds() {
         }
 
         fclose(f);
-    }
-
-    // add defaults for unused hotkeys
-    i = 0;
-    while (HotKeyLookup[i].s != NULL) {
-        if (!HotKeyLookup[i].used) {
-            // add default 1
-            ch = HotKeyLookup[i].def1;
-            if (ch) {
-                hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
-                                          .func = HotKeyLookup[i].func,
-                                          .state = HotKeyLookup[i].state});
-            }
-
-            // add default 2
-            ch = HotKeyLookup[i].def2;
-            if (ch) {
-                hotKeyDispatcher.add(ch, {.contexts = HotKeyLookup[i].contexts,
-                                          .func = HotKeyLookup[i].func,
-                                          .state = HotKeyLookup[i].state});
-            }
-        }
-        i++;
     }
 
     // add default fire key if none were specified

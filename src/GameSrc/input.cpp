@@ -224,7 +224,7 @@ void input_chk() {
 uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
     // Broad event types related to KB
     if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP) {
-        bool result = hotKeyDispatcher.hotkey_dispatch(h->subtype);
+        bool result = hotKeyDispatcher.hotkey_dispatch(h->sdl_data.key.keysym);
         if (result) {
             DEBUG("%s: dispatched hotkey %d (SDL: %d, %d, %d)", __FUNCTION__, h->subtype, h->sdl_data.key.type,
                   h->sdl_data.key.state, h->sdl_data.key.keysym.scancode);
