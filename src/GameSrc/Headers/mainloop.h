@@ -35,14 +35,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SVGA_LOOP        7
 #define AUTOMAP_LOOP     8
 
-#define ML 0x1000
-#define GL 0x1100
-#define EL 0x1200
-#define CL 0x1400
-#define SL 0x1800
-#define WL 0x2000
-#define FL 0x2100
-#define AL 0x2200
+#define ML 0x1000   // main loop?
+#define GL 0x1100   // game loop?
+#define EL 0x1200   // edit loop?
+#define CL 0x1400   // cyber loop?
+#define SL 0x1800   // setup loop?
+#define WL 0x2000   // what a hell is going up loop?
+#define FL 0x2100   // for sake god loop?
+#define AL 0x2200   // automap loop
 
 #define ML_CHG_MASK 0xF000u /* mask for main loop bits in change_flag */
 #define ML_CHG_BASE 0x1000u /* mask for single main loop bit of change_flag */

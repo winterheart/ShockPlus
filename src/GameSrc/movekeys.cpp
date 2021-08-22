@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 
 #include "gamesys.h"
-#include "hotkey.h"
 #include "input.h"
+#include "kbcook.h"
 #include "mfdfunc.h"
 #include "movekeys.h"
 #include "physics.h"

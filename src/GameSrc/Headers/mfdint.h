@@ -80,10 +80,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ---------
 
 // Button colors
-#define MFD_BTTN_EMPTY   0xcb
-#define MFD_BTTN_ACTIVE  0xa2
-#define MFD_BTTN_FLASH   0x35
-#define MFD_BTTN_SELECT  0x77
+#define MFD_BTTN_EMPTY 0xcb
+#define MFD_BTTN_ACTIVE 0xa2
+#define MFD_BTTN_FLASH 0x35
+#define MFD_BTTN_SELECT 0x77
 #define MFD_BTTN_UNAVAIL 0xdd
 
 // Duration of a button flash
@@ -189,8 +189,8 @@ extern MFD_Func mfd_funcs[MFD_NUM_FUNCS];
 extern uchar mfd_string_wrap;
 extern ubyte mfd_string_shadow;
 
-#define MFD_SHADOW_NEVER      0
-#define MFD_SHADOW_ALWAYS     1
+#define MFD_SHADOW_NEVER 0
+#define MFD_SHADOW_ALWAYS 1
 #define MFD_SHADOW_FULLSCREEN 2
 
 extern grs_bitmap mfd_background;

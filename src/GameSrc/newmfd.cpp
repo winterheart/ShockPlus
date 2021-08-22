@@ -143,8 +143,6 @@ void init_newmfd() {
             player_struct.mfd_func_status[i] |= 1 << 4;
 
     chg_set_flg(MFD_UPDATE);
-
-    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -161,9 +159,8 @@ void mfd_language_change(void) {
 }
 
 void init_newmfd_button_cursors() {
-    int i;
     mfd_language_change();
-    for (i = 0; i < NUM_MFDS; i++) {
+    for (int i = 0; i < NUM_MFDS; i++) {
         LGCursor *c = &mfd_bttn_cursors[i];
         grs_bitmap *bm = &mfd_bttn_bitmaps[i];
         LGPoint offset = {0, 0};
@@ -183,8 +180,6 @@ void screen_init_mfd_draw() {
 
     mfd_draw_all_buttons(MFD_LEFT);
     mfd_draw_all_buttons(MFD_RIGHT);
-
-    return;
 }
 
 #ifdef SVGA_SUPPORT
@@ -297,7 +292,6 @@ void screen_init_mfd(uchar fullscrn) {
         init_newmfd_button_cursors();
         mfd_init_funcs();
     }
-    return;
 }
 
 #ifdef SVGA_SUPPORT
@@ -403,8 +397,6 @@ void set_slot_to_func(ubyte snum, ubyte fnum, MFD_Status stat) {
         ;
     else
         player_struct.mfd_slot_status[snum] = stat;
-
-    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -418,7 +410,6 @@ void mfd_clear_func(ubyte func_id) {
 
     player_struct.mfd_func_status[func_id] &= ~MFD_CHANGEBIT;
     player_struct.mfd_func_status[func_id] &= ~MFD_CHANGEBIT_FULL;
-    return;
 }
 
 #define MFD_STEREO_HACK_MODE 6
@@ -574,8 +565,6 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, uchar OnOff) {
             chg_set_sta(FULLSCREEN_UPDATE);
         }
     }
-
-    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -584,11 +573,9 @@ void mfd_set_slot(ubyte mfd_id, ubyte newSlot, uchar OnOff) {
 // Shifts an mfd over to a new slot.
 
 void mfd_change_slot(ubyte mfd_id, ubyte new_slot) {
-    ubyte old;
-
     if (global_fullmap->cyber && (new_slot != MFD_INFO_SLOT || mfd_id != MFD_RIGHT))
         return; // no slots in c-space
-    old = player_struct.mfd_current_slots[mfd_id];
+    uint8_t old = player_struct.mfd_current_slots[mfd_id];
 
     if (new_slot == old && !full_game_3d)
         return;
@@ -605,8 +592,6 @@ void mfd_change_slot(ubyte mfd_id, ubyte new_slot) {
         mfd_draw_button(mfd_id, old);
         mfd_draw_button(mfd_id, new_slot);
     }
-
-    return;
 }
 
 // ---------------------------------------------------------------------------
@@ -616,10 +601,9 @@ void mfd_change_slot(ubyte mfd_id, ubyte new_slot) {
 // lowest priority.  Returns the mfd id.
 
 int mfd_grab(void) {
-    int i;
     ubyte min = 0;
     int id;
-    for (i = 0; i < NUM_MFDS; i++) {
+    for (int i = 0; i < NUM_MFDS; i++) {
         ubyte slot = player_struct.mfd_current_slots[i];
         ubyte func = mfd_get_func(i, slot);
         ubyte p = mfd_funcs[func].priority;
@@ -635,8 +619,8 @@ int mfd_grab(void) {
 // mfd_grab_func()
 //
 // Like mfd_grab(), except specifies a func number.  If any mfd is already
-// set to that func, returns that mfd id instead of the lowest prority.
-// Otherwise, if there is already an mfd on the given slot, returns that
+// set to that func, returns that mfd id instead of the lowest priority.
+// Otherwise, if there is already a mfd on the given slot, returns that
 // mfd.  If neither of these conditions holds, returns the mfd with the
 // lowest priority.  If other mfds are on the same slot as the one we
 // are grabbing for a new func, try to restore to them.
@@ -646,12 +630,11 @@ int mfd_grab(void) {
 // therefore does not restore to other mfds on the same slot.
 //
 int mfd_choose_func(int my_func, int my_slot) {
-    int i;
     ubyte min = 0;
     ubyte slot, func, p;
     int lowid, retval, sameslotid = -1;
 
-    for (i = 0; i < NUM_MFDS; i++) {
+    for (int i = 0; i < NUM_MFDS; i++) {
         slot = player_struct.mfd_current_slots[i];
         func = mfd_get_func(i, slot);
         p = mfd_funcs[func].priority;
@@ -674,21 +657,18 @@ int mfd_choose_func(int my_func, int my_slot) {
 }
 
 int mfd_grab_func(int my_func, int my_slot) {
-    ubyte mfd, slot;
-    int i;
-
-    mfd = mfd_choose_func(my_func, my_slot);
-    slot = player_struct.mfd_current_slots[mfd];
+    uint8_t my_mfd = mfd_choose_func(my_func, my_slot);
+    uint8_t slot = player_struct.mfd_current_slots[my_mfd];
 
     // if more than one mfd is on the slot we're grabbing, try
     // restoring to the other slots.
-    for (i = 0; i < NUM_MFDS; i++) {
-        if (i != mfd && player_struct.mfd_current_slots[i] == slot) {
+    for (int i = 0; i < NUM_MFDS; i++) {
+        if (i != my_mfd && player_struct.mfd_current_slots[i] == slot) {
             restore_mfd_slot(i);
             break;
         }
     }
-    return mfd;
+    return my_mfd;
 }
 
 // -----------------------------------------------------------------------
@@ -705,9 +685,7 @@ int mfd_grab_func(int my_func, int my_slot) {
 // which is what I need, and it's loads more generally useful.  Har har.
 
 uchar mfd_yield_func(int func, int *mfd_id) {
-    int id;
-
-    for (id = (*mfd_id != NUM_MFDS) ? (*mfd_id) + 1 : 0; id < NUM_MFDS; id++) {
+    for (int id = (*mfd_id != NUM_MFDS) ? (*mfd_id) + 1 : 0; id < NUM_MFDS; id++) {
         if (mfd_get_active_func(id) == func) {
             *mfd_id = id;
             return TRUE;
@@ -938,7 +916,7 @@ uchar mfd_button_callback_kb(ushort keycode, uint32_t context, intptr_t data) {
 
     if (!global_fullmap->cyber) {
 
-        fkeynum = (int)keycode - 128;
+        fkeynum = keycode - ShockPlus::Options::KEY_MFD_L1;
 
         if (fkeynum >= MFD_NUM_VIRTUAL_SLOTS) {
             which_panel = MFD_RIGHT;

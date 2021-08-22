@@ -577,12 +577,21 @@ void pump_kb_event(SDL_Event *ev) {
 
         Uint16 mod = ev->key.keysym.mod;
 
-        if (mod & KMOD_SHIFT)
+        if (mod & KMOD_SHIFT) {
+            keyEvent.event.key.keysym.mod = mod | KMOD_SHIFT;
             keyEvent.modifiers |= KB_MOD_SHIFT;
-        if (mod & KMOD_CTRL)
+        }
+        if (mod & KMOD_CTRL) {
+            keyEvent.event.key.keysym.mod = mod | KMOD_CTRL;
             keyEvent.modifiers |= KB_MOD_CTRL;
-        if (mod & KMOD_ALT)
+        }
+        if (mod & KMOD_ALT) {
+            keyEvent.event.key.keysym.mod = mod | KMOD_ALT;
             keyEvent.modifiers |= KB_MOD_ALT;
+        }
+        if (mod & KMOD_GUI) {
+            keyEvent.event.key.keysym.mod = mod | KMOD_GUI;
+        }
 
         if (ev->key.state == SDL_PRESSED) {
             keyEvent.state = KBS_DOWN;

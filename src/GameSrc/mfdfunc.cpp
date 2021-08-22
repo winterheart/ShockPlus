@@ -28,7 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // This file is for callbacks only, actual infrastructure belongs
 // in newmfd.c
 
-#include <string.h>
+#include <climits>
+#include <cstring>
+
+#include "Shock.h"
 
 #include "2dres.h"
 #include "ammomfd.h"
@@ -40,8 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fatigue.h"
 #include "fixtrmfd.h"
 #include "gearmfd.h"
-#include "hotkey.h"
 #include "invent.h"
+#include "kbcook.h"
 #include "mfdgump.h"
 #include "mfdpanel.h"
 #include "newmfd.h"
@@ -78,16 +81,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "musicai.h"
 #include "fullscrn.h"
 #include "objbit.h"
-#include "limits.h"
 #include "mapflags.h"
-#include "input.h"
 #include "gr2ss.h"
 #include "mfdfunc.h"
 #include "mfdgames.h"
 #include "shodan.h"
 #include "str.h"
 #include "vmouse.h"
-#include "weapons.h"
 
 #define MFD_SHIELD_FUNC 19
 
@@ -165,7 +165,6 @@ void mfd_weapon_draw_temp(ubyte temp);
 void mfd_weapon_draw_ammo_buttons(int num_ammo_buttons, int ammo_subclass, ubyte *ammo_types, ubyte curr_ammo_type,
                                   int ammo_count);
 void mfd_weapon_draw_beam_status_bar(int charge, int setting, uchar does_overload);
-
 
 uchar weapon_mfd_temp;
 
@@ -427,7 +426,6 @@ void mfd_weapon_expose(MFD *m, ubyte control) {
         POP_CANVAS();
         mfd_update_rects(m);
     }
-
 }
 
 // --------------------------------------------------------------------------
@@ -1392,7 +1390,6 @@ uchar mfd_item_handler(MFD *m, uiEvent *e) {
 #define LANTERN_LAST_STATE(mfd) (player_struct.mfd_func_data[MFD_LANTERN_FUNC][2 * NUM_MFDS + mfd])
 #define LANTERN_BARRAY_IDX 0
 
-
 uchar mfd_lantern_button_handler(MFD *mfd, LGPoint bttn, uiEvent *ev, void *data) {
     int n = CPTRIP(LANTERN_HARD_TRIPLE);
     int s = player_struct.hardwarez_status[n];
@@ -1887,11 +1884,10 @@ void mfd_grenade_expose(MFD *mfd, ubyte control) {
         if (!GRENADE_MOUSE_CONSTRAINED)
             draw_raw_resource_bm(REF_IMG_BeamSetting, r->ul.x + x - 3, r->ul.y - 1);
 
-
         sprintf(buf, "%s %d.%d", get_string(REF_STR_TimeSetting, NULL, TIME_TEXT_LEN), setting / 10, setting % 10);
-        //numtostring(setting / 10, buf + strlen(buf)); // itoa(setting/10,buf+strlen(buf),10);
-        //strcat(buf, ".");
-        //numtostring(setting % 10, buf + strlen(buf)); // itoa(setting%10,buf+strlen(buf),10);
+        // numtostring(setting / 10, buf + strlen(buf)); // itoa(setting/10,buf+strlen(buf),10);
+        // strcat(buf, ".");
+        // numtostring(setting % 10, buf + strlen(buf)); // itoa(setting%10,buf+strlen(buf),10);
         {
             LGRect r = {{GRENADE_SLIDER_X, TIME_TEXT_Y}, {MFD_VIEW_WID, GRENADE_SLIDER_Y - 1}};
             mfd_partial_clear(&r);
@@ -2559,35 +2555,32 @@ errtype mfd_keypad_input(MFD *mfd, char b_num) {
 }
 
 uchar keypad_hotkey_func(ushort keycode, uint32_t context, intptr_t data) {
-    uchar digit = kb2ascii(keycode) - '0';
     int m = NUM_MFDS;
     while (mfd_yield_func(MFD_KEYPAD_FUNC, &m)) {
-        mfd_keypad_input(&mfd[m], digit);
+        mfd_keypad_input(&mfd[m], (char)data);
         return TRUE;
     }
     return FALSE;
 }
 
 void install_keypad_hotkeys(void) {
-    int i;
-    for (i = 0; i < 10; i++)
-        // KLC      hotkey_add(('0'+i)|KB_FLAG_DOWN|KB_FLAG_2ND, DEMO_CONTEXT, keypad_hotkey_func, 0);
-        hotkey_add(('0' + i) | KB_FLAG_DOWN, DEMO_CONTEXT, keypad_hotkey_func, 0);
+    // int i;
+    // for (i = 0; i < 10; i++)
+    //  KLC      hotkey_add(('0'+i)|KB_FLAG_DOWN|KB_FLAG_2ND, DEMO_CONTEXT, keypad_hotkey_func, 0);
+    // hotKeyDispatcher.add(('0' + i) | KB_FLAG_DOWN, {.contexts = ShockPlus::Contexts::DEMO_CONTEXT,
+    //                                                 .func = keypad_hotkey_func, .state = 0});
 }
 
 uchar mfd_keypad_handler(MFD *m, uiEvent *ev) {
-    uchar retval = FALSE;
-    char n;
-
     if (ev->type != UI_EVENT_KBD_COOKED)
-        return (FALSE);
+        return FALSE;
     if (!(ev->cooked_key_data.code & KB_FLAG_DOWN))
-        return (FALSE);
-    n = (ev->cooked_key_data.code & 0xFF) - '0';
+        return FALSE;
+    char n = (ev->cooked_key_data.code & 0xFF) - '0';
     if ((n < 0) || (n > 9))
-        return (FALSE);
+        return FALSE;
     mfd_keypad_input(m, n);
-    return (FALSE);
+    return FALSE;
 }
 
 uchar mfd_keypad_button_handler(MFD *mfd, LGPoint bttn, uiEvent *ev, void *data) {
@@ -2615,10 +2608,9 @@ errtype mfd_keypad_init(MFD_Func *f) {
 
 // Does every thing but set the slot..
 void mfd_setup_keypad(char special) {
-    int i;
     keypad_data_type *keypad_data = (keypad_data_type *)&player_struct.mfd_func_data[MFD_KEYPAD_FUNC][0];
     keypad_data->curr_digit = 0;
-    for (i = 0; i < MAX_KEYPAD_DIGITS; i++)
+    for (int i = 0; i < MAX_KEYPAD_DIGITS; i++)
         keypad_data->digits[i] = 0;
     keypad_data->special = special;
     mfd_notify_func(MFD_KEYPAD_FUNC, MFD_INFO_SLOT, TRUE, MFD_ACTIVE, TRUE);
@@ -2847,13 +2839,13 @@ void severed_head_expose(MFD *mfd, ubyte control) {
         // gr_bitmap(&mfd_background, 0, 0);
 
         mug = REF_IMG_EmailMugShotBase + objSmallstuffs[objs[head].specID].data1;
-	FrameDesc *f = static_cast<FrameDesc *>(RefLock(mug));
-	if (f != NULL) {
-	    ss_bitmap(&f->bm, (MFD_VIEW_WID - f->bm.w) / 2, (MFD_VIEW_HGT - f->bm.h) / 2);
-	    RefUnlock(mug);
-	} else {
-	    WARN("severed_head_expose(): could not load head art ", mug);
-	}
+        FrameDesc *f = static_cast<FrameDesc *>(RefLock(mug));
+        if (f != NULL) {
+            ss_bitmap(&f->bm, (MFD_VIEW_WID - f->bm.w) / 2, (MFD_VIEW_HGT - f->bm.h) / 2);
+            RefUnlock(mug);
+        } else {
+            WARN("severed_head_expose(): could not load head art ", mug);
+        }
 
         // draw the name
         mfd_draw_string(get_object_long_name(ID2TRIP(head), NULL, 0), X_MARGIN, 2, GREEN_YELLOW_BASE, TRUE);
@@ -2937,7 +2929,6 @@ ubyte activecats[] = {
     MFD_INV_WEAPON,      MFD_INV_GRENADE,      MFD_INV_DRUG,      MFD_INV_AMMO,   MFD_INV_HARDWARE,
     MFD_INV_SOFT_COMBAT, MFD_INV_SOFT_DEFENSE, MFD_INV_SOFT_MISC, MFD_INV_GENINV, 0,
 };
-
 
 void set_inventory_mfd(ubyte obclass, ubyte type, uchar grab) {
     int i;

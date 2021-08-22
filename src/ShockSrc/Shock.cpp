@@ -60,6 +60,9 @@ SDL_Renderer *renderer;
 
 SDL_AudioDeviceID device;
 
+// Our famous hotkey dispatcher
+ShockPlus::HotKeyDispatcher hotKeyDispatcher;
+
 //--------------------
 //  Prototypes
 //--------------------
@@ -70,6 +73,8 @@ SDL_AudioDeviceID device;
 int main(int argc, char **argv) {
     if (!ShockPlus::Options::init(argc, argv))
         return EXIT_FAILURE;
+    hotKeyDispatcher.init();
+
 
     // init mac managers
 

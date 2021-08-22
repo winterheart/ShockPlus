@@ -6,15 +6,15 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 */
 //		Rect.C		Rectangle-handling routines.
 //		Rex E. Bradford (REX)
@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //		Also, a rect's width = rect.lr.x - rect.ul.x,
 //		and its height = rect.lr.y - rect.ul.y.
 /*
-* $Header: n:/project/lib/src/dstruct/RCS/rect.c 1.3 1994/04/05 04:04:13 dc Exp $
-* $log$
-*/
+ * $Header: n:/project/lib/src/dstruct/RCS/rect.c 1.3 1994/04/05 04:04:13 dc Exp $
+ * $log$
+ */
 #include <stdbool.h>
 #include "rect.h"
 
@@ -45,10 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 //	returns: TRUE if rectangles intersect, FALSE if disjoint.
 
-int RectTestSect(LGRect *pr1, LGRect *pr2)
-{
-	return(RECT_TEST_SECT(pr1,pr2));
-}
+int RectTestSect(LGRect *pr1, LGRect *pr2) { return (RECT_TEST_SECT(pr1, pr2)); }
 
 //	--------------------------------------------------------
 //
@@ -62,17 +59,16 @@ int RectTestSect(LGRect *pr1, LGRect *pr2)
 //	returns: TRUE IF rectangles intersect, FALSE if disjoint (in this
 //		case, *prsect is undefined)
 
-int RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
-{
-	if (!RECT_TEST_SECT(pr1, pr2))
-		return(false);
+int RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect) {
+    if (!RECT_TEST_SECT(pr1, pr2))
+        return (false);
 
-	prsect->ul.x = pr1->ul.x > pr2->ul.x ? pr1->ul.x : pr2->ul.x;
-	prsect->lr.x = pr1->lr.x < pr2->lr.x ? pr1->lr.x : pr2->lr.x;
-	prsect->ul.y = pr1->ul.y > pr2->ul.y ? pr1->ul.y : pr2->ul.y;
-	prsect->lr.y = pr1->lr.y < pr2->lr.y ? pr1->lr.y : pr2->lr.y;
+    prsect->ul.x = pr1->ul.x > pr2->ul.x ? pr1->ul.x : pr2->ul.x;
+    prsect->lr.x = pr1->lr.x < pr2->lr.x ? pr1->lr.x : pr2->lr.x;
+    prsect->ul.y = pr1->ul.y > pr2->ul.y ? pr1->ul.y : pr2->ul.y;
+    prsect->lr.y = pr1->lr.y < pr2->lr.y ? pr1->lr.y : pr2->lr.y;
 
-	return(true);
+    return (true);
 }
 
 //	---------------------------------------------------------
@@ -83,10 +79,7 @@ int RectSect(LGRect *pr1, LGRect *pr2, LGRect *prsect)
 //		pr2     = ptr to 2nd rectangle
 //		prunion = ptr to rectangle, filled with union of the two rects
 
-void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion)
-{
-	RECT_UNION(pr1, pr2, prunion);
-}
+void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion) { RECT_UNION(pr1, pr2, prunion); }
 
 //	---------------------------------------------------------
 //
@@ -97,10 +90,7 @@ void RectUnion(LGRect *pr1, LGRect *pr2, LGRect *prunion)
 //
 //	returns: TRUE if *pr1 encloses *pr2, FALSE otherwise
 
-int RectEncloses(LGRect *pr1, LGRect *pr2)
-{
-	return(RECT_ENCLOSES(pr1, pr2));
-}
+int RectEncloses(LGRect *pr1, LGRect *pr2) { return (RECT_ENCLOSES(pr1, pr2)); }
 
 //	---------------------------------------------------------
 //
@@ -111,10 +101,7 @@ int RectEncloses(LGRect *pr1, LGRect *pr2)
 //
 //	returns: TRUE if point is within rectangle, FALSE if outside
 
-int RectTestPt(LGRect *prect, LGPoint pt)
-{
-	return(RECT_TEST_PT(prect, pt));
-}
+int RectTestPt(LGRect *prect, LGPoint pt) { return (RECT_TEST_PT(prect, pt)); }
 
 //	---------------------------------------------------------
 //
@@ -123,10 +110,7 @@ int RectTestPt(LGRect *prect, LGPoint pt)
 //		pr    = ptr to rectangle
 //		delta = point to move rectangle by
 
-void RectMove(LGRect *pr, LGPoint delta)
-{
-	RECT_MOVE(pr, delta);
-}
+void RectMove(LGRect *pr, LGPoint delta) { RECT_MOVE(pr, delta); }
 
 //	---------------------------------------------------------
 //
@@ -136,10 +120,7 @@ void RectMove(LGRect *pr, LGPoint delta)
 //		delta = pt to offset by
 //		proff = rectangle to fill in with offsetted rect
 
-void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff)
-{
-	RECT_OFFSETTED_RECT(pr, delta, proff);
-}
+void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff) { RECT_OFFSETTED_RECT(pr, delta, proff); }
 
 //	---------------------------------------------------------
 //
@@ -158,29 +139,27 @@ void RectOffsettedRect(LGRect *pr, LGPoint delta, LGRect *proff)
 //	thus set to 0 if point is inside rect, although a cheaper test can be
 //	done (via RectTestPt()).
 
-int RectClipCode(LGRect *prect, LGPoint pt)
-{
-	short flag;
+int RectClipCode(LGRect *prect, LGPoint pt) {
+    short flag;
 
-	flag = 0;
-	if (pt.x < prect->ul.x)
-		flag = 1;
-	if (pt.x >= prect->lr.x)
-		flag |= 2;
-	if (pt.y < prect->ul.y)
-		flag |= 4;
-	if (pt.y >= prect->lr.y)
-		flag |= 8;
+    flag = 0;
+    if (pt.x < prect->ul.x)
+        flag = 1;
+    if (pt.x >= prect->lr.x)
+        flag |= 2;
+    if (pt.y < prect->ul.y)
+        flag |= 4;
+    if (pt.y >= prect->lr.y)
+        flag |= 8;
 
-	return(flag);
+    return (flag);
 }
 
 //	---------------------------------------------------------
-LGPoint MakePoint(short x, short y)
-{
-	LGPoint	pt;
-	
-	pt.x = x;
-	pt.y = y;
-	return (pt);
+LGPoint MakePoint(short x, short y) {
+    LGPoint pt;
+
+    pt.x = x;
+    pt.y = y;
+    return (pt);
 }

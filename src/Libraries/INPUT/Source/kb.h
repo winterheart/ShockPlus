@@ -66,6 +66,10 @@ typedef struct {
  *
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int kb_startup(void *init_buf);
 extern int kb_shutdown(void);
 extern void kb_flush(void);
@@ -99,5 +103,9 @@ extern uchar sshockKeyStates[256];
 // this one is only used in sshockKeyStates[], it's set if a button is pressed
 // (together with the CTRL/SHIFT/ALT modifiers, if they were pressed as while the key was pressed)
 #define KB_MOD_PRESSED (0x10)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !__KB_H */

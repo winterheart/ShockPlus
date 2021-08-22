@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Shock.h"
 #include "tools.h"
 #include "game_screen.h"
-#include "hotkey.h"
 #include "input.h"
 
 #include "mainloop.h"
@@ -88,7 +87,7 @@ void amap_start() {
     static_change_copy();
     message_info("");
 
-    HotkeyContext = AMAP_CONTEXT;
+    hotKeyDispatcher.setContext(ShockPlus::Contexts::AMAP_CONTEXT);
     uiSetCurrentSlab(&amap_slab);
 
     gr_set_screen(svga_screen);

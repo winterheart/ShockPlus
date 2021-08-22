@@ -53,7 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gamestrn.h"
 #include "gr2ss.h"
 #include "grenades.h"
-#include "hotkey.h"
+#include "kb.h"
+#include "kbcook.h"
 #include "invent.h"
 #include "mainloop.h"
 #include "movekeys.h"
@@ -223,12 +224,12 @@ void input_chk() {
 uchar main_kb_callback(uiEvent *h, LGRegion *r, intptr_t udata) {
     // Broad event types related to KB
     if (h->sdl_data.type == SDL_KEYDOWN || h->sdl_data.type == SDL_KEYUP) {
-        int result = hotkey_dispatch(h->subtype);
-        if (result == OK) {
+        bool result = hotKeyDispatcher.hotkey_dispatch(h->sdl_data.key.keysym);
+        if (result) {
             DEBUG("%s: dispatched hotkey %d (SDL: %d, %d, %d)", __FUNCTION__, h->subtype, h->sdl_data.key.type,
                   h->sdl_data.key.state, h->sdl_data.key.keysym.scancode);
         }
-        return (result == OK);
+        return result;
     }
     return false;
 }
@@ -419,7 +420,7 @@ void init_input() {
 }
 
 void shutdown_input() {
-    hotkey_shutdown();
+    // hotkey_shutdown();
     kb_flush();
 }
 
