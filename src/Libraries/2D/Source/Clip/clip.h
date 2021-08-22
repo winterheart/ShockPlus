@@ -76,7 +76,7 @@ extern "C" {
 
 /* prototypes for analytic clippers. */
 extern int gr_clip_int_line(short *x0, short *y0, short *x1, short *y1);
-extern int gr_clip_fix_line(long *x0, long *y0, long *x1, long *y1);
+extern int gr_clip_fix_line(fix *x0, fix *y0, fix *x1, fix *y1);
 extern int gr_clip_fix_poly(int n, fix *vlist, fix *clist);
 extern int gr_clip_spoly(int n, fix *vlist, fix *clist, fix *ilist, fix *cilist);
 extern int gr_clip_fix_cpoly(int n, fix *vlist, grs_rgb *blist, fix *clist, grs_rgb *cblist);

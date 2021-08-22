@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #include "bitmap.h"
-#include "cnvdat.h"
 #include "tabdat.h"
 #include "ifcn.h"
 #include "grs.h"

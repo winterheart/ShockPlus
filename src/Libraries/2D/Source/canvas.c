@@ -36,9 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fcntab.h"
 #include "lintab.h"
 #include "tabdat.h"
-#include "valloc.h"
-
-#include <stdio.h> // printf()
 
 #define CANVAS_STACKSIZE 16
 grs_canvas *grd_canvas_stack[CANVAS_STACKSIZE];
@@ -59,7 +56,6 @@ void gr_set_canvas(grs_canvas *c) {
         i = c->bm.type;
 
     grd_pixel_index = c->bm.type;
-    grd_canvas_index = i;
     grd_pixel_table = grd_canvas_table_list[grd_pixel_index];
     grd_canvas_table = grd_canvas_table_list[i];
 

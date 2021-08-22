@@ -61,7 +61,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "fix.h"
-#include "grs.h"
 #include "pertol.h"
 
 ubyte flat8_per_ltol = 5;  /* Linear tolerance     */

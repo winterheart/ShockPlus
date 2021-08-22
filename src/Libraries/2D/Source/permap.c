@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bitmap.h"
 #include "buffer.h"
-#include "clpcon.h"
 #include "clpfcn.h"
 #include "cnvdat.h"
 #include "fill.h"
@@ -42,21 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tmaptab.h"
 
 extern int gri_per_umap_setup(int n, grs_vertex **vpl, grs_per_setup *ps);
-
-uchar grd_enable_quad_blend = FALSE;
-
-int per_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti) {
-    grs_vertex **cpl; /* clipped vertices */
-    int m;            /* number of clipped vertices */
-
-    cpl = NULL;
-    m = gr_clip_poly(n, 5, vpl, &cpl);
-    if (m > 2)
-        per_umap(bm, m, cpl, ti);
-    gr_free_temp(cpl);
-
-    return ((m > 2) ? CLIP_NONE : CLIP_ALL);
-}
 
 void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti) {
     short percode;

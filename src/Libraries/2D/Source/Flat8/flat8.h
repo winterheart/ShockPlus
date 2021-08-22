@@ -224,14 +224,7 @@ extern void flat8_tluc8_ubitmap(grs_bitmap *bm, short x, short y);
 /* bitmap get routines. */
 extern void flat8_get_flat8_ubitmap(grs_bitmap *bm, short x, short y);
 
-/* bitmap horizontal flip routines. */
-extern void flat8_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y);
-
-/* bitmap color lookup table horizontal flip routines. */
-extern void flat8_clut_hflip_flat8_ubitmap(grs_bitmap *bm, short x, short y, uchar *cl);
-
 /* device-specific routines. */
-extern short flat8_calc_row(short w);
 extern grs_bitmap *flat8_sub_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
 
 /* bitmap doubling routines. */

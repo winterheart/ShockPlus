@@ -67,7 +67,6 @@ int gr_set_mode(int mode, int clear) {
     // gr_init_device(&grd_info);       // try to initialize device if pointer isn't NULL
 
     // copy width & height values from info table to capability list
-    grd_mode = mode;
     grd_mode_cap.w = grd_mode_info[mode].w;
     grd_mode_cap.h = grd_mode_info[mode].h;
 

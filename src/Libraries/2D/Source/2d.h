@@ -35,12 +35,10 @@ extern "C" {
 #include "fill.h"
 #include "fix.h"
 #include "grcbm.h"
-#include "grclhbm.h"
 #include "grcply.h"
 #include "grd.h"
 #include "grdbm.h"
 #include "grgbm.h"
-#include "grhbm.h"
 #include "grlin.h"
 #include "grp24.h"
 #include "grpix.h"
@@ -78,10 +76,6 @@ extern "C" {
 #define gr_int_disk ((int (*)(short x, short y, short r))grd_canvas_table[INT_DISK])
 
 extern int gr_int_line(short x0, short y0, short x1, short y1);
-
-#define gr_per_map(bm, n, vpl)                              \
-    ((int (*)(grs_bitmap * _bm, int _n, grs_vertex **_vpl)) \
-         grd_canvas_table[DEVICE_PER_MAP + 2 * ((bm)->type)])(bm, n, vpl)
 
 #pragma pack(pop)
 

@@ -48,12 +48,10 @@ set(2D_SRC
 	Source/Gen/genwlin.c
 	Source/Gen/genpix.c
 	Source/Gen/genuhlin.c
-	Source/Gen/genhfl8.c
 	Source/Gen/genov.c
 	Source/Gen/gente.c
 	Source/Gen/genlin.c
 	Source/Gen/gencwlin.c
-	Source/Gen/genchfl8.c
 	Source/Gen/gengfl8.c
 	Source/Gen/genbox.c
 	Source/Gen/genmono.c
@@ -75,7 +73,6 @@ set(2D_SRC
 	Source/Flat8/fl8lf.c
 	Source/Flat8/fl8ll.c
 	Source/Flat8/fl8s.c
-	Source/Flat8/fl8hfl8.c
 	Source/Flat8/fl8fl8m.c
 	Source/Flat8/fl8ltp.c
 	Source/Flat8/fl8fl8c.c
@@ -84,7 +81,6 @@ set(2D_SRC
 	Source/Flat8/fl8wlin.c
 	Source/Flat8/fl8lw.c
 	Source/Flat8/fl8pix.c
-	Source/Flat8/fl8row.c
 	Source/Flat8/fl8ft.c
 	Source/Flat8/fl8rsd8.c
 	Source/Flat8/fl8f.c
@@ -118,7 +114,6 @@ set(2D_SRC
 	Source/Flat8/fl8fltr2.c
 	Source/Flat8/fl8mono.c
 	Source/Flat8/fl8fl8.c
-	Source/Flat8/fl8chfl8.c
 	Source/Clip/clpply.c
 	Source/Clip/clplin.c
 	Source/Clip/clpclin.c
@@ -130,15 +125,12 @@ set(2D_SRC
 	Source/Clip/clprect.c
 	Source/Clip/clpmono.c
 	Source/RSD/rsdcvt.c
-		Source/RSD/rsdunpck.c
+	Source/RSD/rsdunpck.c
 	Source/string/chrsiz.c
 	Source/string/genchr.c
 	Source/string/genstr.c
-	Source/string/genuchr.c
-	Source/string/genustr.c
 	Source/string/strscl.c
 	Source/string/strsiz.c
-	Source/string/struscl.c
 	Source/string/strwrap.c
 	Source/GR/grd.c
 	Source/GR/grilin.c

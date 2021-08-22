@@ -109,14 +109,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_fix_line gen_fix_line
 extern int gen_fix_line(fix x0, fix y0, fix x1, fix y1);
 
-/* rgb shaded lines */
-
-extern int gen_fix_cline(fix x0, fix y0, grs_rgb c0, fix x1, fix y1, grs_rgb c1);
-
-/* i shaded lines */
-
-extern int gen_fix_sline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1);
-
 /* These are horrific: something should be done. */
 #define gr_scale_ubitmap(bm, x, y, w, h)                                  \
     ((void (*)(grs_bitmap * _bm, short _x, short _y, short _w, short _h)) \

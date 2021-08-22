@@ -56,6 +56,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern grs_sys_info grd_info;
 extern grs_drvcap *grd_cap;
 extern grs_drvcap grd_mode_cap;
-extern int grd_mode;
 
 #endif /* !__GRD_H */

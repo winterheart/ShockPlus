@@ -27,13 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the 2d library.
  */
 
-#define GR_TEMP_USE_MEMSTACK
-#ifdef GR_TEMP_USE_MEMSTACK
 #include "memall.h"
 #include "tmpalloc.h"
+
 #define gr_alloc_temp temp_malloc
 #define gr_free_temp temp_free
-#else /* GR_TEMP_USE_MEMSTACK */
-extern void *gr_alloc_temp (int n);
-extern void gr_free_temp (void *p);
-#endif /* GR_TEMP_USE_MEMSTACK */

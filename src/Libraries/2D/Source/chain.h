@@ -65,7 +65,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "icanvas.h"
 
 extern short grd_pixel_index;
-extern short grd_canvas_index;
 
 extern uchar chn_flags;
 #define CHN_ON 1

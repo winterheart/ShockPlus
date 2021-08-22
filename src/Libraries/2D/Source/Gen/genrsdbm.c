@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "grs.h"
-#include "grrend.h"
 #include "clpcon.h"
 #include "grdbm.h"
 #include "grcbm.h"

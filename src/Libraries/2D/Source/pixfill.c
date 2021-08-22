@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "grrend.h"
-#include "grpix.h"
-#include "pixtab.h"
 
 /* not all pixel fill routines use all parameters */
 // MLA #pragma off (unreferenced)

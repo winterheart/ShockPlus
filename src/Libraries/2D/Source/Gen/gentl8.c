@@ -37,8 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "clpcon.h"
 #include "cnvdat.h"
 #include "grdbm.h"
-#include "grpix.h"
-#include "tlucdat.h"
 
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
 int gen_tluc8_bitmap(grs_bitmap *bm, short x, short y) {

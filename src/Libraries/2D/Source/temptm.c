@@ -31,7 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "bitmap.h"
 #include "clpcon.h"
 #include "cnvdat.h"
-#include "fill.h"
 #include "grpix.h"
 #include "grs.h"
 #include "plytyp.h"
@@ -57,11 +56,6 @@ void temp_rsd8_ubitmap(grs_bitmap *bm, int x, int y) {
 void temp_rsd8_bitmap(grs_bitmap *bm, int x, int y) {
     ((void (*)(grs_bitmap * _bm, int _x, int _y, grs_stencil *_sten))
          grd_function_table[GRC_STENCIL_BITMAP + BMT_RSD8 * GRD_FUNCS])(bm, x, y, grd_clip.sten);
-}
-
-void temp_flat8_mask_bitmap(grs_bitmap *bm, int x, int y, grs_stencil *sten) {
-    ((void (*)(grs_bitmap * _bm, int _x, int _y, grs_stencil *_sten))
-         grd_function_table[GRC_STENCIL_BITMAP + BMT_FLAT8 * GRD_FUNCS])(bm, x, y, sten);
 }
 
 void temp_flat8_clut_ubitmap(grs_bitmap *bm, int x, int y, uchar *cl) {
@@ -192,119 +186,6 @@ void temp_ustpoly(long c, int n, grs_vertex **vpl) {
     bm.type = STPOLY;
     bm.flags = 0;
     h_umap(&bm, n, vpl, &ti);
-}
-
-void temp_per_map(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_PER;
-        ti.flags = 0;
-        per_map(bm, n, vpl, &ti);
-    }
-}
-
-void temp_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_PER;
-        ti.flags = 0;
-        per_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_clut_per_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_CLUT_PER;
-        ti.flags = TMF_CLUT;
-        ti.clut = clut;
-        per_map(bm, n, vpl, &ti);
-    }
-}
-
-void temp_clut_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *clut) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_CLUT_PER;
-        ti.flags = TMF_CLUT;
-        ti.clut = clut;
-        per_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lit_per_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_LIT_PER;
-        ti.flags = 0;
-        per_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if ((bm->row == 1 << (bm->wlog)) || (grd_gc.fill_type == FILL_CLUT)) {
-        grs_tmap_info ti;
-        if ((n == 3) && ((bm->flags & BMF_TRANS) == 0))
-            ti.tmap_type = GRC_LIN;
-        else
-            ti.tmap_type = GRC_BILIN;
-        ti.flags = 0;
-        h_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if ((bm->row == 1 << (bm->wlog)) || (grd_gc.fill_type == FILL_CLUT)) {
-        grs_tmap_info ti;
-        if ((n == 3) && ((bm->flags & BMF_TRANS) == 0))
-            ti.tmap_type = GRC_LIN;
-        else
-            ti.tmap_type = GRC_BILIN;
-        ti.flags = 0;
-        h_map(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lit_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if ((bm->row == 1 << (bm->wlog)) || (grd_gc.fill_type == FILL_CLUT)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_LIT_BILIN;
-        ti.flags = 0;
-        h_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lit_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if ((bm->row == 1 << (bm->wlog)) || (grd_gc.fill_type == FILL_CLUT)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_LIT_BILIN;
-        ti.flags = 0;
-        h_map(bm, n, vpl, &ti);
-    }
-}
-
-void temp_clut_lin_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl) {
-    grs_tmap_info ti;
-
-    if ((n == 3) && ((bm->flags & BMF_TRANS) == 0))
-        ti.tmap_type = GRC_CLUT_LIN;
-    else
-        ti.tmap_type = GRC_CLUT_BILIN;
-    ti.flags = TMF_CLUT;
-    ti.clut = cl;
-    h_umap(bm, n, vpl, &ti);
-}
-
-void temp_clut_lin_map(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl) {
-    grs_tmap_info ti;
-
-    if ((n == 3) && ((bm->flags & BMF_TRANS) == 0))
-        ti.tmap_type = GRC_CLUT_LIN;
-    else
-        ti.tmap_type = GRC_CLUT_BILIN;
-    ti.flags = TMF_CLUT;
-    ti.clut = cl;
-    h_map(bm, n, vpl, &ti);
 }
 
 void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {

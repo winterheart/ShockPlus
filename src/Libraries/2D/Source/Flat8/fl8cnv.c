@@ -95,102 +95,102 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)temp_clut_floor_umap,  // FLAT8_CLUT_FLOOR_UMAP
     gr_null,                         // FLAT8_CLUT_FLOOR_MAP
     /* linear texture mappers */
-    gr_null,                 // DEVICE_ULMAP
-    gr_null,                 // DEVICE_LMAP
-    gr_null,                 // MONO_ULMAP
-    gr_null,                 // MONO_LMAP
-    (ptr_type)temp_lin_umap, // FLAT8_ULMAP
-    (ptr_type)temp_lin_map,  // FLAT8_LMAP
-    (ptr_type)temp_lin_umap, // FLAT24_ULMAP
-    (ptr_type)temp_lin_map,  // FLAT24_LMAP
-    (ptr_type)temp_lin_umap, // RSD_ULMAP
-    (ptr_type)temp_lin_map,  // RSD_LMAP
-    (ptr_type)temp_lin_umap, // TLUC8_ULMAP
-    (ptr_type)temp_lin_map,  // TLUC8_LMAP
+    gr_null,    // DEVICE_ULMAP
+    gr_null,    // DEVICE_LMAP
+    gr_null,    // MONO_ULMAP
+    gr_null,    // MONO_LMAP
+    gr_not_imp, // FLAT8_ULMAP // WH: was temp_lin_umap
+    gr_not_imp, // FLAT8_LMAP // WH: was temp_lin_map
+    gr_not_imp, // FLAT24_ULMAP // WH: was temp_lin_umap
+    gr_not_imp, // FLAT24_LMAP // WH: was temp_lin_map
+    gr_not_imp, // RSD_ULMAP // WH: was temp_lin_umap
+    gr_not_imp, // RSD_LMAP // WH: was temp_lin_map
+    gr_not_imp, // TLUC8_ULMAP // WH: was temp_lin_umap
+    gr_not_imp, // TLUC8_LMAP // WH: was temp_lin_map
     /* lit linear texture mappers */
-    gr_null,                     // DEVICE_LIT_LIN_UMAP
-    gr_null,                     // DEVICE_LIT_LIN_MAP
-    gr_null,                     // MONO_LIT_LIN_UMAP
-    gr_null,                     // MONO_LIT_LIN_MAP
-    (ptr_type)temp_lit_lin_umap, // FLAT8_LIT_LIN_UMAP
-    (ptr_type)temp_lit_lin_map,  // FLAT8_LIT_LIN_MAP
-    gr_null,                     // FLAT24_LIT_LIN_UMAP
-    gr_null,                     // FLAT24_LIT_LIN_MAP
-    (ptr_type)temp_lit_lin_umap, // RSD_LIT_LIN_UMAP
-    (ptr_type)temp_lit_lin_map,  // RSD_LIT_LIN_MAP
-    gr_null,                     // TLUC8_LIT_LIN_UMAP
-    gr_null,                     // TLUC8_LIT_LIN_MAP
+    gr_null,    // DEVICE_LIT_LIN_UMAP
+    gr_null,    // DEVICE_LIT_LIN_MAP
+    gr_null,    // MONO_LIT_LIN_UMAP
+    gr_null,    // MONO_LIT_LIN_MAP
+    gr_not_imp, // FLAT8_LIT_LIN_UMAP // WH: was temp_lit_lin_umap
+    gr_not_imp, // FLAT8_LIT_LIN_MAP // WH: was temp_lit_lin_map
+    gr_null,    // FLAT24_LIT_LIN_UMAP
+    gr_null,    // FLAT24_LIT_LIN_MAP
+    gr_not_imp, // RSD_LIT_LIN_UMAP // WH: was temp_lit_lin_umap
+    gr_not_imp, // RSD_LIT_LIN_MAP // WH: was temp_lit_lin_map
+    gr_null,    // TLUC8_LIT_LIN_UMAP
+    gr_null,    // TLUC8_LIT_LIN_MAP
     /* clut linear texture mappers */
-    gr_null,                      // DEVICE_CLUT_LIN_UMAP
-    gr_null,                      // DEVICE_CLUT_LIN_MAP
-    gr_null,                      // MONO_CLUT_LIN_UMAP
-    gr_null,                      // MONO_CLUT_LIN_MAP
-    (ptr_type)temp_clut_lin_umap, // FLAT8_CLUT_LIN_UMAP
-    (ptr_type)temp_clut_lin_map,  // FLAT8_CLUT_LIN_MAP
-    gr_null,                      // FLAT24_CLUT_LIN_UMAP
-    gr_null,                      // FLAT24_CLUT_LIN_MAP
-    (ptr_type)temp_clut_lin_umap, // RSD_CLUT_LIN_UMAP
-    (ptr_type)temp_clut_lin_map,  // RSD_CLUT_LIN_MAP
-    (ptr_type)temp_clut_lin_umap, // TLUC8_CLUT_LIN_UMAP
-    (ptr_type)temp_clut_lin_map,  // TLUC8_CLUT_LIN_MAP
+    gr_null,    // DEVICE_CLUT_LIN_UMAP
+    gr_null,    // DEVICE_CLUT_LIN_MAP
+    gr_null,    // MONO_CLUT_LIN_UMAP
+    gr_null,    // MONO_CLUT_LIN_MAP
+    gr_not_imp, // FLAT8_CLUT_LIN_UMAP // WH: was temp_clut_lin_umap
+    gr_not_imp, // FLAT8_CLUT_LIN_MAP // WH: was temp_clut_lin_map
+    gr_null,    // FLAT24_CLUT_LIN_UMAP
+    gr_null,    // FLAT24_CLUT_LIN_MAP
+    gr_not_imp, // RSD_CLUT_LIN_UMAP // WH: was temp_clut_lin_umap
+    gr_not_imp, // RSD_CLUT_LIN_MAP // WH: was temp_clut_lin_map
+    gr_not_imp, // TLUC8_CLUT_LIN_UMAP // WH: was temp_clut_lin_umap
+    gr_not_imp, // TLUC8_CLUT_LIN_MAP // WH: was temp_clut_lin_map
     /* solid linear mapper */
     gr_null, // FLAT8_SOLID_LIN_UMAP
     gr_null, // FLAT8_SOLID_LIN_MAP
     /* perspective texture mappers */
-    gr_null,                 // DEVICE_PER_UMAP
-    gr_null,                 // DEVICE_PER_MAP
-    gr_null,                 // MONO_PER_UMAP
-    gr_null,                 // MONO_PER_MAP
-    (ptr_type)temp_per_umap, // FLAT8_PER_UMAP
-    (ptr_type)temp_per_map,  // FLAT8_PER_MAP
-    gr_null,                 // FLAT24_PER_UMAP
-    gr_null,                 // FLAT24_PER_MAP
-    (ptr_type)temp_per_umap, // RSD_PER_UMAP
-    (ptr_type)temp_per_map,  // RSD_PER_MAP
-    gr_null,                 // TLUC8_PER_UMAP
-    gr_null,                 // TLUC8_PER_MAP
+    gr_null,    // DEVICE_PER_UMAP
+    gr_null,    // DEVICE_PER_MAP
+    gr_null,    // MONO_PER_UMAP
+    gr_null,    // MONO_PER_MAP
+    gr_not_imp, // FLAT8_PER_UMAP // WH: was temp_per_umap
+    gr_not_imp, // FLAT8_PER_MAP // WH: was temp_per_map
+    gr_null,    // FLAT24_PER_UMAP
+    gr_null,    // FLAT24_PER_MAP
+    gr_not_imp, // RSD_PER_UMAP // WH: was temp_per_umap
+    gr_not_imp, // RSD_PER_MAP // WH: was temp_per_map
+    gr_null,    // TLUC8_PER_UMAP
+    gr_null,    // TLUC8_PER_MAP
     /* lit perspective texture mappers */
-    gr_null,                     // DEVICE_LIT_PER_UMAP
-    gr_null,                     // DEVICE_LIT_PER_MAP
-    gr_null,                     // MONO_LIT_PER_UMAP
-    gr_null,                     // MONO_LIT_PER_MAP
-    (ptr_type)temp_lit_per_umap, // FLAT8_LIT_PER_UMAP
-    gr_null,                     // FLAT8_LIT_PER_MAP
-    gr_null,                     // FLAT24_LIT_PER_UMAP
-    gr_null,                     // FLAT24_LIT_PER_MAP
-    (ptr_type)temp_lit_per_umap, // RSD_LIT_PER_UMAP
-    gr_null,                     // RSD_LIT_PER_MAP
-    gr_null,                     // TLUC8_LIT_PER_UMAP
-    gr_null,                     // TLUC8_LIT_PER_MAP
+    gr_null,    // DEVICE_LIT_PER_UMAP
+    gr_null,    // DEVICE_LIT_PER_MAP
+    gr_null,    // MONO_LIT_PER_UMAP
+    gr_null,    // MONO_LIT_PER_MAP
+    gr_not_imp, // FLAT8_LIT_PER_UMAP // WH: was temp_lit_per_umap
+    gr_null,    // FLAT8_LIT_PER_MAP
+    gr_null,    // FLAT24_LIT_PER_UMAP
+    gr_null,    // FLAT24_LIT_PER_MAP
+    gr_not_imp, // RSD_LIT_PER_UMAP // WH: was temp_lit_per_umap
+    gr_null,    // RSD_LIT_PER_MAP
+    gr_null,    // TLUC8_LIT_PER_UMAP
+    gr_null,    // TLUC8_LIT_PER_MAP
     /* clut perspective texture mappers */
-    gr_null,                      // DEVICE_CLUT_PER_UMAP
-    gr_null,                      // DEVICE_CLUT_PER_MAP
-    gr_null,                      // MONO_CLUT_PER_UMAP
-    gr_null,                      // MONO_CLUT_PER_MAP
-    (ptr_type)temp_clut_per_umap, // FLAT8_CLUT_PER_UMAP
-    (ptr_type)temp_clut_per_map,  // FLAT8_CLUT_PER_MAP
-    gr_null,                      // FLAT24_CLUT_PER_UMAP
-    gr_null,                      // FLAT24_CLUT_PER_MAP
-    (ptr_type)temp_clut_per_umap, // RSD_CLUT_PER_UMAP
-    (ptr_type)temp_clut_per_map,  // RSD_CLUT_PER_MAP
-    gr_null,                      // TLUC8_CLUT_PER_UMAP
-    gr_null,                      // TLUC8_CLUT_PER_MAP
+    gr_null,    // DEVICE_CLUT_PER_UMAP
+    gr_null,    // DEVICE_CLUT_PER_MAP
+    gr_null,    // MONO_CLUT_PER_UMAP
+    gr_null,    // MONO_CLUT_PER_MAP
+    gr_not_imp, // FLAT8_CLUT_PER_UMAP // WH: was temp_clut_per_umap
+    gr_not_imp, // FLAT8_CLUT_PER_MAP // WH: was temp_clut_per_map
+    gr_null,    // FLAT24_CLUT_PER_UMAP
+    gr_null,    // FLAT24_CLUT_PER_MAP
+    gr_not_imp, // RSD_CLUT_PER_UMAP // WH: was temp_clut_per_umap
+    gr_not_imp, // RSD_CLUT_PER_MAP // WH: was temp_clut_per_map
+    gr_null,    // TLUC8_CLUT_PER_UMAP
+    gr_null,    // TLUC8_CLUT_PER_MAP
     /* solid perspective mapper */
     gr_null, // FLAT8_SOLID_PER_UMAP
     gr_null, // FLAT8_SOLID_PER_MAP
     /* curves, should change to fixed-point */
-    (ptr_type)gen_int_ucircle, // INT_UCIRCLE
-    (ptr_type)gen_int_circle,  // INT_CIRCLE
-    gr_null,                   // FIX_UCIRCLE
-    gr_null,                   // FIX_CIRCLE
-    (ptr_type)gen_int_udisk,   // INT_UDISK
-    (ptr_type)gen_int_disk,    // INT_DISK
-    gr_null,                   // FIX_UDISK
-    gr_null,                   // FIX_DISK
-    gr_null,                   // INT_UROD
-    gr_null,                   // INT_ROD
-    gr_null,                   // FIX_UROD
-    gr_null,                   // FIX_ROD
+    gr_not_imp,               // INT_UCIRCLE // WH: was gen_int_ucircle
+    (ptr_type)gen_int_circle, // INT_CIRCLE
+    gr_null,                  // FIX_UCIRCLE
+    gr_null,                  // FIX_CIRCLE
+    gr_not_imp,               // INT_UDISK // WH: was gen_int_udisk
+    (ptr_type)gen_int_disk,   // INT_DISK
+    gr_null,                  // FIX_UDISK
+    gr_null,                  // FIX_DISK
+    gr_null,                  // INT_UROD
+    gr_null,                  // INT_ROD
+    gr_null,                  // FIX_UROD
+    gr_null,                  // FIX_ROD
     /* bitmap drawing functions. */
     // MLA - added these two for the device functions
     (ptr_type)flat8_flat8_ubitmap, // DRAW_DEVICE_UBITMAP
@@ -251,18 +251,18 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_TLUC8_UBITMAP
     (ptr_type)temp_clut_scale_map,  // CLUT_SCALE_TLUC8_BITMAP
     /* bitmap mask draw functions. */
-    gr_null,                          // MASK_DEVICE_UBITMAP
-    gr_null,                          // MASK_DEVICE_BITMAP
-    gr_null,                          // MASK_MONO_UBITMAP
-    gr_null,                          // MASK_MONO_BITMAP
-    (ptr_type)flat8_flat8_ubitmap,    // MASK_FLAT8_UBITMAP
-    (ptr_type)temp_flat8_mask_bitmap, // MASK_FLAT8_BITMAP
-    gr_null,                          // MASK_FLAT24_UBITMAP
-    gr_null,                          // MASK_FLAT24_BITMAP
-    gr_null,                          // MASK_RSD8_UBITMAP
-    gr_null,                          // MASK_RSD8_BITMAP
-    gr_null,                          // MASK_TLUC8_UBITMAP
-    gr_null,                          // MASK_TLUC8_BITMAP
+    gr_null,    // MASK_DEVICE_UBITMAP
+    gr_null,    // MASK_DEVICE_BITMAP
+    gr_null,    // MASK_MONO_UBITMAP
+    gr_null,    // MASK_MONO_BITMAP
+    gr_not_imp, // MASK_FLAT8_UBITMAP // WH: was flat8_flat8_ubitmap
+    gr_not_imp, // MASK_FLAT8_BITMAP // WH: was temp_flat8_mask_bitmap
+    gr_null,    // MASK_FLAT24_UBITMAP
+    gr_null,    // MASK_FLAT24_BITMAP
+    gr_null,    // MASK_RSD8_UBITMAP
+    gr_null,    // MASK_RSD8_BITMAP
+    gr_null,    // MASK_TLUC8_UBITMAP
+    gr_null,    // MASK_TLUC8_BITMAP
     /* bitmap get functions. */
     gr_null,                           // GET_DEVICE_UBITMAP
     gr_null,                           // GET_DEVICE_BITMAP
@@ -277,31 +277,31 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                           // GET_TLUC8_UBITMAP
     gr_null,                           // GET_TLUC8_BITMAP
     /* bitmap horizontal flip functions */
-    gr_null,                             // HFLIP_DEVICE_UBITMAP
-    gr_null,                             // HFLIP_DEVICE_BITMAP
-    gr_null,                             // HFLIP_MONO_UBITMAP
-    gr_null,                             // HFLIP_MONO_BITMAP
-    (ptr_type)flat8_hflip_flat8_ubitmap, // HFLIP_FLAT8_UBITMAP
-    (ptr_type)gen_hflip_flat8_bitmap,    // HFLIP_FLAT8_BITMAP
-    gr_null,                             // HFLIP_FLAT24_UBITMAP
-    gr_null,                             // HFLIP_FLAT24_BITMAP
-    gr_null,                             // HFLIP_RSD8_UBITMAP
-    gr_null,                             // HFLIP_RSD8_BITMAP
-    gr_null,                             // HFLIP_TLUC8_UBITMAP
-    gr_null,                             // HFLIP_TLUC8_BITMAP
+    gr_null,    // HFLIP_DEVICE_UBITMAP
+    gr_null,    // HFLIP_DEVICE_BITMAP
+    gr_null,    // HFLIP_MONO_UBITMAP
+    gr_null,    // HFLIP_MONO_BITMAP
+    gr_not_imp, // HFLIP_FLAT8_UBITMAP // WH: was flat8_hflip_flat8_ubitmap
+    gr_not_imp, // HFLIP_FLAT8_BITMAP // WH: was gen_hflip_flat8_bitmap
+    gr_null,    // HFLIP_FLAT24_UBITMAP
+    gr_null,    // HFLIP_FLAT24_BITMAP
+    gr_null,    // HFLIP_RSD8_UBITMAP
+    gr_null,    // HFLIP_RSD8_BITMAP
+    gr_null,    // HFLIP_TLUC8_UBITMAP
+    gr_null,    // HFLIP_TLUC8_BITMAP
     /* bitmap color lookup table horizontal flip functions */
-    gr_null,                                  // CLUT_HFLIP_DEVICE_UBITMAP
-    gr_null,                                  // CLUT_HFLIP_DEVICE_BITMAP
-    gr_null,                                  // CLUT_HFLIP_MONO_UBITMAP
-    gr_null,                                  // CLUT_HFLIP_MONO_BITMAP
-    (ptr_type)flat8_clut_hflip_flat8_ubitmap, // CLUT_HFLIP_FLAT8_UBITMAP
-    (ptr_type)gen_clut_hflip_flat8_bitmap,    // CLUT_HFLIP_FLAT8_BITMAP
-    gr_null,                                  // CLUT_HFLIP_FLAT24_UBITMAP
-    gr_null,                                  // CLUT_HFLIP_FLAT24_BITMAP
-    gr_null,                                  // CLUT_HFLIP_RSD8_UBITMAP
-    gr_null,                                  // CLUT_HFLIP_RSD8_BITMAP
-    gr_null,                                  // CLUT_HFLIP_TLUC8_UBITMAP
-    gr_null,                                  // CLUT_HFLIP_TLUC8_BITMAP
+    gr_null,    // CLUT_HFLIP_DEVICE_UBITMAP
+    gr_null,    // CLUT_HFLIP_DEVICE_BITMAP
+    gr_null,    // CLUT_HFLIP_MONO_UBITMAP
+    gr_null,    // CLUT_HFLIP_MONO_BITMAP
+    gr_not_imp, // CLUT_HFLIP_FLAT8_UBITMAP // WH: was flat8_clut_hflip_flat8_ubitmap
+    gr_not_imp, // CLUT_HFLIP_FLAT8_BITMAP // WH: was gen_clut_hflip_flat8_bitmap
+    gr_null,    // CLUT_HFLIP_FLAT24_UBITMAP
+    gr_null,    // CLUT_HFLIP_FLAT24_BITMAP
+    gr_null,    // CLUT_HFLIP_RSD8_UBITMAP
+    gr_null,    // CLUT_HFLIP_RSD8_BITMAP
+    gr_null,    // CLUT_HFLIP_TLUC8_UBITMAP
+    gr_null,    // CLUT_HFLIP_TLUC8_BITMAP
     /* bitmap horizontal doubling. */
     gr_null,    // DOUBLE_H_DEVICE_UBITMAP
     gr_null,    // DOUBLE_H_DEVICE_BITMAP
@@ -368,27 +368,27 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null, // SMOOTH_DOUBLE_V_TLUC8_UBITMAP
     gr_null, // SMOOTH_DOUBLE_V_TLUC8_BITMAP
     /* bitmap smooth horizontal and vertical doubling. */
-    gr_null,                                        // SMOOTH_DOUBLE_HV_DEVICE_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_DEVICE_BITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_MONO_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_MONO_BITMAP
-    (ptr_type)flat8_flat8_smooth_hv_double_ubitmap, // SMOOTH_DOUBLE_HV_FLAT8_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_FLAT8_BITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_FLAT24_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_FLAT24_BITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_RSD8_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_RSD8_BITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_TLUC8_UBITMAP
-    gr_null,                                        // SMOOTH_DOUBLE_HV_TLUC8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_DEVICE_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_DEVICE_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_MONO_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_MONO_BITMAP
+    gr_not_imp, // SMOOTH_DOUBLE_HV_FLAT8_UBITMAP // WH: was flat8_flat8_smooth_hv_double_ubitmap
+    gr_null,    // SMOOTH_DOUBLE_HV_FLAT8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_FLAT24_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_FLAT24_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_RSD8_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_RSD8_BITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_TLUC8_UBITMAP
+    gr_null,    // SMOOTH_DOUBLE_HV_TLUC8_BITMAP
     /* text/font functions. */
-    (ptr_type)gen_font_ustring,       // DRAW_USTRING
-    (ptr_type)gen_font_string,        // DRAW_STRING
-    (ptr_type)gen_font_scale_ustring, // DRAW_SCALE_USTRING
-    (ptr_type)gen_font_scale_string,  // DRAW_SCALE_STRING
-    (ptr_type)gen_font_uchar,         // DRAW_UCHAR
-    (ptr_type)gen_font_char,          // DRAW_CHAR
+    gr_not_imp,                      // DRAW_USTRING // WH: was gen_font_ustring
+    (ptr_type)gen_font_string,       // DRAW_STRING
+    gr_not_imp,                      // DRAW_SCALE_USTRING // WH: was gen_font_scale_ustring
+    (ptr_type)gen_font_scale_string, // DRAW_SCALE_STRING
+    gr_not_imp,                      // DRAW_UCHAR // WH: was gen_font_uchar
+    (ptr_type)gen_font_char,         // DRAW_CHAR
     /* utility functions; bitmap type specific functions */
-    (ptr_type)flat8_calc_row,   // CALC_ROW
+    gr_not_imp,                 // CALC_ROW // WH: was flat8_calc_row
     (ptr_type)flat8_sub_bitmap, // SUB_BITMAP
     /* placeholders for primitiveless chains */
     gr_null, // START_FRAME,

@@ -54,16 +54,11 @@ extern int gri_hline_clip_fill(short, short, short, long, long);
 extern int gri_vline_clip_fill(short, short, short, long, long);
 
 extern int gri_wire_poly_line_clip_fill(long c, long parm, grs_vertex *v0, grs_vertex *v1);
-extern int gri_wire_poly_sline_clip_fill(long c, long parm, grs_vertex *v0, grs_vertex *v1);
 extern int gri_wire_poly_cline_clip_fill(long c, long parm, grs_vertex *v0, grs_vertex *v1);
 
 /* actual clippers */
 extern int gri_line_clip(grs_vertex *, grs_vertex *);
 extern int gri_cline_clip(grs_vertex *, grs_vertex *);
 extern int gri_sline_clip(grs_vertex *, grs_vertex *);
-
-/* these are implemented, but are not used */
-extern int gri_hline_clip(short *, short *, short *);
-extern int gri_vline_clip(short *, short *, short *);
 
 #endif

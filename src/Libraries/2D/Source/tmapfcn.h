@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern void per_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 extern void h_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 extern void v_umap(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
-extern int per_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 extern int h_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 extern int v_map(grs_bitmap *bm, int n, grs_vertex **vpl, grs_tmap_info *ti);
 

@@ -284,94 +284,9 @@ int draw_line_common(g3s_phandle p0, g3s_phandle p1) {
             gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
 
         result = CLIP_NONE;
-        //	  	DebugString("implement me?");
-        /*
-        //        mov     edx,ebx                 // dl=clip codes
-
-        // set up args -- vertex contents on stack, pass sp
-        // for cline only need 1st 5 elements of grs_vertex, only push them
-                gr_splitrgb [esi].rgb,eax	// eax scratch
-                pushm	[esi].sy,[esi].sx
-                mov 	ebx,esp			// v0 on stack, addr is arg
-                gr_splitrgb [edi].rgb,eax	// eax scratch
-                pushm	[edi].sy,[edi].sx
-                mov 	ecx,esp			// v1 on stack, addr is arg
-
-                gr_getcol	eax
-                gr_getfp	edx
-                mov     edi,grd_line_clip_fill_vector
-                call 	d [edi + 4*GR_WIRE_POLY_CLINE]
-                add esp,40			// 2 vertex's each 5 fix's
-
-                mov     eax,CLIP_NONE
-                jmp     leave_draw_line*/
     } else {
         // sline
-
         DEBUG("%s: implement me?", __FUNCTION__);
-        // we have to do this annoyingly because i is an sfix,
-        // and 2d takes a fix, so we dump things in eax and munge
-        /*
-        // new smaller converter
-                xor     eax,eax
-                mov     ax,[edi].i
-                shl     eax,8
-                push    eax
-                push    [edi].sy
-                xor     eax,eax
-                mov     ax,[esi].i
-                shl     eax,8
-
-                or      bl,bl   // check triv acc
-
-                mov     ebx,eax         // we had to do all the ugliness in eax b/c
-        needed
-                                        // the codes in bl to check for triv acc,
-        and we
-                                        // couldnt do the check earlier because all
-        our
-                                        // and's reset the zero flag needed for the
-        jz below mov     eax,[esi].sx mov     edx,[esi].sy mov     ecx,[edi].sx
-
-                jz      unclipped_sline
-                                        call gen_fix_sline_
-                jmp     leave_draw_line
-
-                ret
-
-        unclipped_sline:
-        //        gr_call FIX_USLINE
-        // set up args -- vertex contents on stack, pass sp
-        // pushd contents of vertex -- don't care about u,v,w
-        // i needs to have sfix to fix
-                xor     eax,eax			// eax scratch
-                mov     ax,[esi].i
-                shl     eax,8
-                push    eax
-                pushm	0,0,0			// uvw are don't cares
-                pushm	[esi].sy,[esi].sx
-                mov 	ebx,esp			// v0 on stack, addr is arg
-                xor     eax,eax			// eax scratch
-                mov     ax,[edi].i
-                shl     eax,8
-                push    eax
-                pushm	0,0,0			// uvw are don't cares
-                pushm	[edi].sy,[edi].sx
-                mov 	ecx,esp			// v1 on stack, addr is arg
-        // 	now its OK to trash esi
-                gr_getcol	eax
-                gr_getfp	edx
-                mov	esi,grd_uline_fill_vector
-                call 	d [esi + 4*SLINE]
-                add esp,48			// 2 vertex's each 6 fix's
-
-        //	junk from old stuff -- kill these
-                pop esi
-                pop esi
-
-                mov     eax,CLIP_NONE
-                jmp     leave_draw_line
-        */
     }
 
     return result;
