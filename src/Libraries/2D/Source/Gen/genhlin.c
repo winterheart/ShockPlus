@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ctxmac.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "grlin.h"
 
 /* draw a clipped horizontal line with integral coordinates.  returns a clip

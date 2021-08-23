@@ -30,8 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bitmap.h"
 #include "buffer.h"
-#include "clpcon.h"
-#include "clpfcn.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "fill.h"
 #include "grnull.h"

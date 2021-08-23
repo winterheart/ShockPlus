@@ -24,11 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
-#include "grs.h"
-#include "clpcon.h"
-#include "clpfcn.h"
+#include "clip.h"
 #include "grrect.h"
-#include "clpltab.h"
 
 /* The amount of copying into and out of vertex's is quite
    disgusting.

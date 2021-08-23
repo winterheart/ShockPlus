@@ -47,8 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * completely clipped.
  */
 
-#include "clpcon.h"
-#include "clpfcn.h"
+#include "clip.h"
 #include "grrect.h"
 
 /* draw an unclipped, filled rectangle with edges as given.  do this

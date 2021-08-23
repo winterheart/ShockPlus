@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * $Date: 1994/11/07 15:26:38 $
  */
 
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "grpix.h"
 #include "fix.h"

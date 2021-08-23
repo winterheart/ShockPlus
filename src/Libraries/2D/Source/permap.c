@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bitmap.h"
 #include "buffer.h"
-#include "clpfcn.h"
 #include "cnvdat.h"
 #include "fill.h"
 #include "fl8p.h"

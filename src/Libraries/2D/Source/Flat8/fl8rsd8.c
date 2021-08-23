@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Fixed bug in flat8_rsd8_[u]bitmap() -- were omitting bottom lines.
  */
 
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "fl8tf.h"
 #include "general.h"

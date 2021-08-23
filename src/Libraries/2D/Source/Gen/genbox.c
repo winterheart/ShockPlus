@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Generic box (unfilled rectangle) routines.
  */
 
-#include "clpcon.h"
+#include "clip.h"
 #include "grrect.h"
 #include "general.h"
 

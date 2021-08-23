@@ -57,7 +57,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "plytyp.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "clpltab.h"
 #include "grlin.h"
 

@@ -28,10 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     gr_xxx canvas table x,y routines.
  */
 
-#include "clpcon.h"
-#include "clpfcn.h"
-#include "clpltab.h"
+
+#include "clip.h"
 #include "lg.h"
+#include "plytyp.h"
 
 /* The amount of copying into and out of vertex's is quite
    disgusting.
