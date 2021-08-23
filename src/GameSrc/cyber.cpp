@@ -107,7 +107,7 @@ int old_loop;
 errtype enter_cyberspace_stuff(char dest_lev) {
     int i;
     cyber_nodie = FALSE;
-    old_loop = _current_loop;
+    old_loop = current_loop;
 
     // Store away our realspace info
     player_struct.realspace_loc = objs[PLAYER_OBJ].loc;

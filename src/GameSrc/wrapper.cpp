@@ -1558,7 +1558,7 @@ uchar wrapper_screenmode_hack = FALSE;
 void screenmode_change(uchar new_mode) {
     ShockPlus::Options::videoMode = new_mode;
     QUESTVAR_SET(SCREENMODE_QVAR, new_mode);
-    change_mode_func(0, 0, _current_loop);
+    change_mode_func(0, 0, current_loop);
     wrapper_screenmode_hack = TRUE;
 
     INFO("Changed screen mode to %i", ShockPlus::Options::videoMode);

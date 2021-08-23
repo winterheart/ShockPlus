@@ -307,7 +307,7 @@ errtype increment_anim(ulong num_units) {
         handart_show += (new_units / hand_speed);
         handart_remainder = new_units % hand_speed;
         if (old_handart != handart_show)
-            chg_set_flg(_current_3d_flag);
+            chg_set_flg(current_3d_flag);
 
         // check to see if we're going to skip the fire frame, if so, don't skip it!
         // - this is so we definitely show the fire frame, otherwise it would look very goooooofy - minman

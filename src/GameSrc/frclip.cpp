@@ -83,7 +83,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // pre prototyping
 static void _fr_rebuild_nVecWork(void);
 static void _fr_init_vecwork(void);
+#ifndef CLEAR_AS_WE_GO
 static void clear_clip_bits(void);
+#endif
 
 // for the subtile clipper
 ushort sc_reg[NUM_SUBCLIP][SC_VEC_COUNT];

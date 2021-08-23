@@ -393,13 +393,13 @@ bool can_use_opengl() { return context != nullptr; }
 
 bool use_opengl() {
     return can_use_opengl() && ShockPlus::Options::enableOpenGL && opengl_enabled &&
-           (_current_loop == GAME_LOOP || _current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber &&
+           (current_loop == GAME_LOOP || current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber &&
            !(_fr_curflags & (FR_PICKUPM_MASK | FR_HACKCAM_MASK));
 }
 
 bool should_opengl_swap() {
     return can_use_opengl() && ShockPlus::Options::enableOpenGL && opengl_enabled &&
-           (_current_loop == GAME_LOOP || _current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber;
+           (current_loop == GAME_LOOP || current_loop == FULLSCREEN_LOOP) && !global_fullmap->cyber;
 }
 
 void opengl_end_frame() {

@@ -108,7 +108,7 @@ void view360_setup_mode(uchar mode) {
 }
 
 void view360_restore_inventory() {
-    if (_current_loop == GAME_LOOP) {
+    if (current_loop == GAME_LOOP) {
         chg_set_flg(INVENTORY_UPDATE);
         inv_change_fullscreen(full_game_3d);
         view360_message_obscured = FALSE;
@@ -298,7 +298,7 @@ void view360_turnon(uchar visible, uchar real_start) {
 
     if (visible) {
         view360_setup_mode(VIEW_MODE(s));
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
     }
     view360_render_on = TRUE;
 }

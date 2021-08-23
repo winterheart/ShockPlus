@@ -1161,7 +1161,7 @@ errtype obj_move_to_vel(ObjID id, ObjLoc *newloc, uchar phys_tel, fix x_dot, fix
 
     // If the camera is on the object we are moving, then hey
     if ((_def_cam != NULL) && (_def_cam->obj_id == id))
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
 
     return (OK);
 }

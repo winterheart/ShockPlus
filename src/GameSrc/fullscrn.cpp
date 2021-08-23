@@ -252,7 +252,7 @@ void change_svga_screen_mode() {
         _current_view = fullview_region;
     else
         _current_view = mainview_region;
-    _current_3d_flag = DEMOVIEW_UPDATE;
+    current_3d_flag = DEMOVIEW_UPDATE;
     fr_set_view(_current_fr_context);
 
     // Recompute zoom!

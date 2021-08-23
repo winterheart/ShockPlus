@@ -386,7 +386,7 @@ errtype message_info(const char *info_text) {
         strip_newlines(buf);
     } else
         buf[0] = '\0';
-    if (_current_loop <= FULLSCREEN_LOOP) {
+    if (current_loop <= FULLSCREEN_LOOP) {
         short a, b, c, d;
         LGRect *r = &msg_rect[(full_game_3d && !game_paused) ? 1 : 0];
 

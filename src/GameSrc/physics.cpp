@@ -679,7 +679,7 @@ errtype physics_run(void) {
     }
     old_ticks = *tmd_ticks;
     if (update || hack_takeover)
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
     if (physics_running && global_fullmap->cyber) {
         ObjSpecID specid;
         // check for the player

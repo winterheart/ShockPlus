@@ -28,17 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grnull.h"
 #include "line.h"
 
-grt_line_clip_fill grd_line_clip_fill_table [GRD_LINE_TYPES] = 
-{
-   gri_line_clip_fill,
-   gri_iline_clip_fill,
-   gri_hline_clip_fill,
-   gri_vline_clip_fill,
-   gri_sline_clip_fill,
-   gri_cline_clip_fill,
-   gri_wire_poly_line_clip_fill,
-   gr_null,
-   gri_wire_poly_cline_clip_fill
+grt_line_clip_fill grd_line_clip_fill_table[GRD_LINE_TYPES] = {
+    gri_line_clip_fill,           // GR_LINE
+    gri_iline_clip_fill,          // GR_ILINE
+    gri_hline_clip_fill,          // GR_HLINE
+    gri_vline_clip_fill,          // GR_VLINE
+    gri_sline_clip_fill,          // GR_SLINE
+    gri_cline_clip_fill,          // GR_CLINE
+    gri_wire_poly_line_clip_fill, // GR_WIRE_POLY_LINE
+    gr_null,                      // GR_WIRE_POLY_SLINE
+    gri_wire_poly_cline_clip_fill // GR_WIRE_POLY_CLINE
 };
 
 grt_line_clip_fill *grd_line_clip_fill_vector = grd_line_clip_fill_table;

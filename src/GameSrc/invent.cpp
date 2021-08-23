@@ -129,8 +129,8 @@ And now, the code...
 // -------
 // DEFINES
 // -------
-#define INVENT_CHANGED                    \
-    if (_current_loop <= FULLSCREEN_LOOP) \
+#define INVENT_CHANGED                   \
+    if (current_loop <= FULLSCREEN_LOOP) \
         chg_set_flg(INVENTORY_UPDATE);
 
 // colors & fonts
@@ -1206,7 +1206,7 @@ void hardware_add_specials(int n, int ver) {
         mfd_notify_func(MFD_SHIELD_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
     } break;
     case HARDWARE_ENVIROSUIT: {
-        if (_current_loop == GAME_LOOP)
+        if (current_loop == GAME_LOOP)
             gamescr_bio_func();
         zoom_to_lean_meter();
     } break;
@@ -2353,8 +2353,8 @@ void init_invent_hotkeys(void) {
        hotkey_add(PAGEDN_KEY|KB_FLAG_2ND,DEMO_CONTEXT,invent_hotkey_func,1);
        hotkey_add(KB_FLAG_DOWN|KB_FLAG_ALT|']',DEMO_CONTEXT,invent_hotkey_func,1);
 
-    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN, {.contexts = ShockPlus::Contexts::DEMO_CONTEXT, .func = cycle_weapons_func, .state = 1});
-    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT,
+    hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN, {.contexts = ShockPlus::Contexts::DEMO_CONTEXT, .func =
+    cycle_weapons_func, .state = 1}); hotKeyDispatcher.add(KEY_TAB | KB_FLAG_DOWN | KB_FLAG_SHIFT,
                          {.contexts = ShockPlus::Contexts::DEMO_CONTEXT, .func = cycle_weapons_func, .state = -1});
     */
 }

@@ -479,7 +479,7 @@ void mfd_notify_func(ubyte fnum, ubyte snum, uchar Grab, MFD_Status stat, uchar 
         }
 
         // Now redraw them
-        if (_current_loop <= FULLSCREEN_LOOP && !global_fullmap->cyber)
+        if (current_loop <= FULLSCREEN_LOOP && !global_fullmap->cyber)
             for (i = 0; i < NUM_MFDS; i++)
                 if (mfd_but[i] != -1)
                     mfd_draw_button(i, mfd_but[i]);
@@ -1107,7 +1107,7 @@ void mfd_force_update_single(int which_mfd) {
     ubyte f_id, s_id;
     MFD_Status stat;
 
-    if (_current_loop <= FULLSCREEN_LOOP)
+    if (current_loop <= FULLSCREEN_LOOP)
         mfd_draw_all_buttons(which_mfd);
 
     f_id = mfd_get_active_func(which_mfd);

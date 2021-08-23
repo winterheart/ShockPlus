@@ -1001,7 +1001,7 @@ uchar fire_player_weapon(LGPoint *pos, LGRegion *r, uchar pull) {
         handart_fire = FALSE;
         handart_flash = TRUE;
 
-        if (_current_loop <= FULLSCREEN_LOOP) {
+        if (current_loop <= FULLSCREEN_LOOP) {
             chg_set_flg(INVENTORY_UPDATE);
             mfd_notify_func(MFD_WEAPON_FUNC, MFD_WEAPON_SLOT, FALSE, MFD_ACTIVE, FALSE);
         }
