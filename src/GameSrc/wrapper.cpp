@@ -1067,7 +1067,6 @@ uchar opanel_kb_handler(uiEvent *ev, LGRegion *r, intptr_t user_data) {
     return TRUE;
 }
 
-extern uiSlab *uiCurrentSlab;
 void clear_obuttons() {
     uiCursorStack *cs;
 

@@ -86,5 +86,6 @@ errtype uiGetCurrentSlab(uiSlab **slab);
 errtype uiDestroySlab(uiSlab *slab);
 
 // Globals
+extern uiSlab *uiCurrentSlab;
 
 #endif // __SLAB_H

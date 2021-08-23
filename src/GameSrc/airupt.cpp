@@ -82,7 +82,6 @@ extern char curr_crossfade;
 
 // extern int digifx_volume_shift(short x, short y, short z, short phi, short theta, short basevol);
 // extern int digifx_pan_shift(short x, short y, short z, short phi, short theta);
-extern uchar mai_semaphor;
 
 extern uchar park_random;
 extern uchar park_playing;
@@ -94,7 +93,6 @@ extern int danger_hp_level;
 extern int danger_damage_level;
 extern int damage_decay_time;
 extern int damage_decay_amount;
-extern int mai_damage_sum;
 
 extern uchar mlimbs_semaphore;
 

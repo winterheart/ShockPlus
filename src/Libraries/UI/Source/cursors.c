@@ -109,6 +109,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "curdrw.h"
 #include "cursors.h"
 #include "curtyp.h"
+#include "slab.h"
 #include "vmouse.h"
 
 #define CURSOR_STACKSIZE 5
@@ -122,7 +123,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Global: the saveunder for bitmap cursors
 struct cursor_saveunder SaveUnder;
 
-extern uiSlab *uiCurrentSlab;
 #define RootCursorRegion (uiCurrentSlab->creg)
 
 // The region currently occupied by the cursor, and the current cursor to be drawn

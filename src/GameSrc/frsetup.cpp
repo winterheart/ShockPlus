@@ -143,8 +143,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Internal Prototypes
 void fr_tfunc_grab_start(void);
 void fr_set_default_ptrs(void);
-void _fr_update_context(int det);
-void _fr_change_detail(int det);
+void fr_update_context(int det);
+void fr_change_detail(int det);
 
 // Globals
 void (*fr_mouse_hide)(void), (*fr_mouse_show)(void);
@@ -185,50 +185,10 @@ int _fr_default_detail = 0;
 //======== global initialization
 // startup and closedown functions, misc initialization and setup
 
-// first, for now, we make sure we have full texture context, and eat 8K to boot
-#define NO_FAKE_TMAPS
-
 void fr_closedown(void) {
     fr_global_mod_flag(0, 0xFFFFFFFF); // not totally sure this is right.
     _frp.lighting.global_mod = 0;
 }
-
-#ifndef NO_FAKE_TMAPS
-#include "3dinterp.h"
-
-grs_bitmap tmap_bm[FAKE_TMAPS]; // this is dumb, yea yea
-
-void _fr_init_all_tmaps(void) {
-    uchar *dummy_tm;
-    int i, x, y;
-
-    for (i = 0; i < FAKE_TMAPS; i++) {
-        int v1 = (rand() & 0xff), v2 = (rand() & 0xff), v3 = (rand() & 0xff), v4 = (rand() & 0xff);
-        dummy_tm = (uchar *)malloc(16 * 16);
-        for (x = 0; x < 16; x++)
-            for (y = 0; y < 16; y++)
-                dummy_tm[(x * 16) + y] =
-                    (((x >> 1) + (y >> 1)) & 1) ? ((2 * abs(8 - x)) > y) ? v1 : v2 : ((2 * abs(8 - x)) > y) ? v3 : v4;
-        gr_init_bitmap(tmap_bm + i, dummy_tm, BMT_FLAT8, 0, 16, 16);
-        g3_set_vtext(i, tmap_bm + i);
-    }
-#ifdef RANDOMLY_SET_VCOLORS
-    for (i = 0; i < 16; i++) // hack hack hack
-    {
-        g3_set_vcolor(i, 0x33 + (i << 2));
-    }
-#endif
-}
-
-void _fr_free_all_tmaps(void) {
-    int i;
-    for (i = 0; i < FAKE_TMAPS; i++)
-        free(tmap_bm[i].bits);
-}
-#else
-#define _fr_init_all_tmaps()
-#define _fr_free_all_tmaps()
-#endif
 
 extern int _game_fr_tmap;
 void fr_default_mouse(void) {}
@@ -237,11 +197,8 @@ int fr_pickup_idx(void) {
     gr_set_fill_parm(_game_fr_tmap + 1);
     return _game_fr_tmap + 1;
 }
-#ifndef NO_FAKE_TMAPS
-grs_bitmap *fr_default_tmap(void) { return &tmap_bm[fr_default_idx() % FAKE_TMAPS]; }
-#else
+
 grs_bitmap *fr_default_tmap(void) { return NULL; }
-#endif
 uchar fr_default_block(void *v, uchar *u, int *i) { return FALSE; }
 void fr_default_clip_start(uchar u) {}
 void fr_default_rend_start(void) {}
@@ -258,7 +215,6 @@ void fr_set_default_ptrs(void) {
 // actually init the 3d, as one might expect, also set up global statics for the renderer
 void fr_startup(void) {
     g3_init(FR_PT_CNT, AXIS_ORDER);
-    _fr_init_all_tmaps();
     fr_tables_build();
     _fr_glob_flags = 0;
     _fr = _sr = NULL;
@@ -271,7 +227,6 @@ void fr_startup(void) {
 
 // lets hit the fucking road
 void fr_shutdown(void) {
-    _fr_free_all_tmaps();
     g3_shutdown();
 }
 
@@ -557,7 +512,7 @@ void *fr_get_canvas(frc *view) {
 // but whose got the real, anti-parent culture sound
 
 // run when context detail has changed.
-void _fr_update_context(int det) {
+void fr_update_context(int det) {
     if (_fr->flags & FR_DOUBLEB_MASK)
         gr_init_canvas(&_fr->draw_canvas, _fr->main_canvas.bm.bits, BMT_FLAT8, _fr->xwid >> det_sizing[det][0],
                        _fr->ywid >> det_sizing[det][1]);
@@ -568,7 +523,7 @@ void _fr_update_context(int det) {
 }
 
 
-void _fr_change_detail(int det) {
+void fr_change_detail(int det) {
     // note: pixel_ratio 5 data types before scrw, if order is preserved
     int tmpz, fov;
 #ifdef DOUBLE_DEF_STUPID_BLEND
@@ -627,9 +582,9 @@ int fr_prepare_view(frc *view) {
     else
         det = _fr->detail;
     if (_fr_last_detail != det)
-        _fr_change_detail(det);
+        fr_change_detail(det);
     if (_fr->last_detail != det)
-        _fr_update_context(det);
+        fr_update_context(det);
     return FR_OK;
 }
 
