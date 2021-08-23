@@ -132,6 +132,7 @@ void interpreter_loop(uchar *object);
 #define OP_JNORM 1
 
 #define n_ops 40
+// clang-format off
 void *opcode_table[n_ops] = {
     do_eof,
     do_jnorm,
@@ -174,6 +175,7 @@ void *opcode_table[n_ops] = {
     do_tmap_op,
     do_dbg
 };
+// clang-format on
 
 #define N_RES_POINTS 1000
 #define PARM_DATA_SIZE (4 * 100)
@@ -226,8 +228,6 @@ char _itrp_check_flg = 0;
 // takes ptr to object
 // this is bullshit, man, takes ptr to object on the freakin' stack!
 void g3_interpret_object(ubyte *object_ptr, ...) {
-    int i, scale;
-
     // lighting stuff, params are on the stack
     // so don't sweat it
     // set fill type so 2d can light the thang
@@ -246,24 +246,24 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     memset(resbuf, 0, N_RES_POINTS * 4);
 
     // scale view vector for scale
-    scale = *(short *)(object_ptr - 2);
+    int scale = *(short *)(object_ptr - 2);
     if (scale) {
         if (scale > 0) {
             view_position.gX >>= scale;
             view_position.gY >>= scale;
             view_position.gZ >>= scale;
         } else {
-            int temp;
+            uint32_t temp;
 
             scale = -scale;
 
-            temp = (((ulong)view_position.gX) >> 16); // get high 16 bits
+            temp = (((uint32_t)view_position.gX) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
-                return;                                // overflow
-            temp = (((ulong)view_position.gY) >> 16); // get high 16 bits
+                return;                                  // overflow
+            temp = (((uint32_t)view_position.gY) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
-                return;                                // overflow
-            temp = (((ulong)view_position.gZ) >> 16); // get high 16 bits
+                return;                                  // overflow
+            temp = (((uint32_t)view_position.gZ) >> 16); // get high 16 bits
             if (((temp << scale) & 0xffff0000) != 0)
                 return; // overflow
 
@@ -276,7 +276,7 @@ void g3_interpret_object(ubyte *object_ptr, ...) {
     interpreter_loop(object_ptr);
 
     // free res points
-    for (i = N_RES_POINTS - 1; i >= 0; i--)
+    for (int i = N_RES_POINTS - 1; i >= 0; i--)
         if (resbuf[i])
             freepnt(resbuf[i]);
 
@@ -297,10 +297,8 @@ void interpreter_loop(uchar *object) {
 // opcodes.  [ebp] points at op on entry
 uchar *do_debug(uchar *opcode) { return 0; }
 
-uchar *do_eof(uchar *opcode) // and return extra level
-{
-    return 0;
-}
+// and return extra level
+uchar *do_eof(uchar *opcode) { return 0; }
 
 // jnorm lbl,px,py,pz,nx,ny,nz
 // v=viewer coords-p
@@ -330,31 +328,27 @@ uchar *do_multires(uchar *opcode) {
 // this should do some cute matrix transform trick, not this ugly hack
 
 // that kid from the wrong side came over my house again, decapitated all my
-// dolls
-//  and if you bore me, you lose your soul to me       - "Gepetto", Belly,
-//  _Star_
+// dolls and if you bore me, you lose your soul to me - "Gepetto", Belly, _Star_
 uchar *do_scaleres(uchar *opcode) {
     // MLA - this routine appears to be buggy and can't possibly work, so I'm not
     // doing it yet.
     DEBUG("%s Call Mark!", __FUNCTION__);
+    /*
+    int count, scale;
+    long temp_pnt[3];
+    g3s_phandle temp_hand;
 
-    /* 	int					count,scale;
-            long				temp_pnt[3];
-            g3s_phandle	temp_hand;
+    count = *(unsigned short *)(opcode + 2);
+    scale = *(unsigned short *)(opcode + 4);
+    temp_hand = (g3s_phandle)(parm_data + (*(unsigned short *)(opcode + 6)));
 
-            count = * (unsigned short *) (opcode+2);
-            scale = * (unsigned short *) (opcode+4);
-            temp_hand = (g3s_phandle) (parm_data+(* (unsigned short *)
-       (opcode+6)));
+    opcode += 8;
+    do {
+    } while (--count > 0);
 
-            opcode += 8;
-            do
-             {
-             }
-            while (--count>0);
+    return opcode;
+    */
 
-            return opcode;
-             */
     return 0;
 }
 
@@ -376,9 +370,7 @@ uchar *do_defres(uchar *opcode) {
 }
 
 uchar *do_defres_i(uchar *opcode) {
-    g3s_phandle temphand;
-
-    temphand = g3_transform_point((g3s_vector *)(opcode + 4));
+    g3s_phandle temphand = g3_transform_point((g3s_vector *)(opcode + 4));
     resbuf[*(unsigned short *)(opcode + 2)] = temphand;
 
     temphand->i = *(short *)(opcode + 16);
@@ -439,9 +431,7 @@ uchar *do_gour_vc(uchar *opcode) {
 }
 
 uchar *do_draw_mode(uchar *opcode) {
-    short flags;
-
-    flags = *(short *)(opcode + 2);
+    short flags = *(short *)(opcode + 2);
     _itrp_wire_flg = flags >> 8;
     flags &= 0x00ff;
     flags <<= 1;
@@ -453,12 +443,10 @@ uchar *do_draw_mode(uchar *opcode) {
 }
 
 uchar *do_setshade(uchar *opcode) {
-    int i;
-    uchar *new_opcode;
     g3s_phandle temphand;
 
-    i = *(unsigned short *)(opcode + 2); // get number of shades
-    new_opcode = opcode + 4 + (i << 2);
+    int i = *(unsigned short *)(opcode + 2); // get number of shades
+    uchar *new_opcode = opcode + 4 + (i << 2);
 
     while (--i >= 0) {
         temphand = resbuf[*(unsigned short *)(opcode + 4 + (i << 2))]; // get point handle
@@ -470,12 +458,10 @@ uchar *do_setshade(uchar *opcode) {
 }
 
 uchar *do_rgbshades(uchar *opcode) {
-    uchar *new_opcode;
-    int i;
     g3s_phandle temphand;
 
-    i = *(unsigned short *)(opcode + 2); // get number of shades
-    new_opcode = opcode + 4;
+    int i = *(unsigned short *)(opcode + 2); // get number of shades
+    uchar *new_opcode = opcode + 4;
     while (--i >= 0) {
         temphand = resbuf[*(unsigned short *)new_opcode]; // get point handle
         temphand->rgb = *(long *)(new_opcode + 2);
@@ -486,9 +472,7 @@ uchar *do_rgbshades(uchar *opcode) {
 }
 
 uchar *do_setuv(uchar *opcode) {
-    g3s_phandle temphand;
-
-    temphand = resbuf[*(unsigned short *)(opcode + 2)]; // get point handle
+    g3s_phandle temphand = resbuf[*(unsigned short *)(opcode + 2)]; // get point handle
     temphand->uv.u = (*(unsigned long *)(opcode + 4)) >> 8;
     temphand->uv.v = (*(unsigned long *)(opcode + 8)) >> 8;
     temphand->p3_flags |= PF_U | PF_V;
@@ -497,10 +481,9 @@ uchar *do_setuv(uchar *opcode) {
 }
 
 uchar *do_uvlist(uchar *opcode) {
-    int i;
     g3s_phandle temphand;
 
-    i = *(unsigned short *)(opcode + 2); // get number of shades
+    int i = *(unsigned short *)(opcode + 2); // get number of shades
     opcode += 4;
     while (--i >= 0) {
         temphand = resbuf[*(unsigned short *)opcode]; // get point handle
@@ -533,18 +516,14 @@ uchar *do_getpcolor(uchar *opcode) {
 }
 
 uchar *do_getvscolor(uchar *opcode) {
-    short temp;
-
-    temp = (byte)_vcolor_tab[*(unsigned short *)(opcode + 2)];
+    short temp = (byte)_vcolor_tab[*(unsigned short *)(opcode + 2)];
     temp |= (*(short *)(opcode + 4)) << 8;
     gr_set_fcolor(gr_get_light_tab()[temp]);
     return opcode + 6;
 }
 
 uchar *do_getpscolor(uchar *opcode) {
-    short temp;
-
-    temp = (unsigned short)parm_data[*(unsigned short *)(opcode + 2)];
+    short temp = (unsigned short)parm_data[*(unsigned short *)(opcode + 2)];
     temp &= 0x00ff;
     temp |= (*(short *)(opcode + 4)) << 8;
     gr_set_fcolor(gr_get_light_tab()[temp]);
@@ -615,12 +594,9 @@ uchar *do_sfcal(uchar *opcode) {
 
 // copy parms of stack. takes offset,count
 uchar *do_getparms(uchar *opcode) {
-    long *src, *dest;
-    int count;
-
-    dest = (long *)(parm_data + (*(unsigned short *)(opcode + 2)));
-    src = (long *)(parm_ptr + (*(unsigned short *)(opcode + 4)));
-    count = *(unsigned short *)(opcode + 6);
+    long *dest = (long *)(parm_data + (*(unsigned short *)(opcode + 2)));
+    long *src = (long *)(parm_ptr + (*(unsigned short *)(opcode + 4)));
+    int count = *(unsigned short *)(opcode + 6);
     while (count-- > 0)
         *(dest++) = *(src)++;
 
@@ -629,12 +605,9 @@ uchar *do_getparms(uchar *opcode) {
 
 // copy parm block. ptr is on stack. takes dest_ofs,src_ptr_ofs,size
 uchar *do_getparms_i(uchar *opcode) {
-    long *src, *dest;
-    int count;
-
-    dest = *(long **)(parm_data + (*(unsigned short *)(opcode + 2)));
-    src = (long *)(parm_ptr + (*(unsigned short *)(opcode + 4)));
-    count = *(unsigned short *)(opcode + 6);
+    long *dest = *(long **)(parm_data + (*(unsigned short *)(opcode + 2)));
+    long *src = (long *)(parm_ptr + (*(unsigned short *)(opcode + 4)));
+    int count = *(unsigned short *)(opcode + 6);
     while (count-- > 0)
         *(dest++) = *(src)++;
 
@@ -657,8 +630,8 @@ uchar *do_tmap_op(uchar *opcode) {
         poly_buf[count] = resbuf[temp];
     } while (--count >= 0);
 
-    ((int (*)(int, g3s_phandle *, grs_bitmap *)) * g3_tmap_func)(count2, poly_buf,
-                                                                 _vtext_tab[*(unsigned short *)(opcode + 2)]);
+    ((int(*)(int, g3s_phandle *, grs_bitmap *)) * g3_tmap_func)(count2, poly_buf,
+                                                                _vtext_tab[*(unsigned short *)(opcode + 2)]);
 
     return opcode + 6 + (count2 * 2);
 }
@@ -679,10 +652,8 @@ uchar *do_ljnorm(uchar *opcode) {
 
 // light diff not near norm
 uchar *do_ldjnorm(uchar *opcode) {
-    fix temp;
-
     if (g3_check_normal_facing((g3s_vector *)(opcode + 16), (g3s_vector *)(opcode + 4))) {
-        temp = g3_vec_dotprod(&g3d_light_vec, (g3s_vector *)(opcode + 4));
+        fix temp = g3_vec_dotprod(&g3d_light_vec, (g3s_vector *)(opcode + 4));
         temp <<= 1;
         if (temp < 0)
             temp = 0;
