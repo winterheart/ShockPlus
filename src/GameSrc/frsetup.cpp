@@ -130,7 +130,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fr3d.h"
 #include "frtypes.h"
 #include "frintern.h"
-#include "frshipm.h"
 #include "frflags.h"
 #include "frparams.h"
 #include "player.h"
@@ -293,19 +292,21 @@ g3s_angvec viewer_orientation;
 
 // set the default view for NULL argument passing to the system
 int fr_set_view(frc *view) {
-    _chkNull(view);
     _sr = (fauxrend_context *)view;
 
     if (_sr == NULL) {
         printf("HOW IS _sr NULL?!\n");
     }
 
-    _fr_ret;
+    return FR_OK;
 }
 
 // free the memory (frame buffers+structures) associated with view view
 int fr_free_view(frc *view) {
-    _fr_top(view);
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
     if (_fr != NULL) {
         if (_fr == _sr)
             _sr = NULL; /* no longer a default rendering context */
@@ -316,13 +317,17 @@ int fr_free_view(frc *view) {
         }
         free(_fr);
     }
-    _fr_ret;
+    return FR_OK;
 }
 
 int fr_mod_cams(frc *fr, void *v_cam, int mod_fac) {
     cams *cam = (cams *)v_cam;
 
-    _fr_top(fr);
+    if ((fr) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
+
     _fr->viewer_zoom = fix_mul(_fr->viewer_zoom, mod_fac);
     if (_fr->viewer_zoom == 0)
         _fr->viewer_zoom = 1;
@@ -334,26 +339,32 @@ int fr_mod_cams(frc *fr, void *v_cam, int mod_fac) {
         else
             _fr->camptr = cam;
     }
-    _fr_ret;
+    return FR_OK;
 }
 // we put
 // eachother
 // down
-int fr_context_mod_flag(frc *fr, int pflags_on, int pflags_off) // change flags
-{
-    _fr_top(fr);
+// change flags
+int fr_context_mod_flag(frc *fr, int pflags_on, int pflags_off) {
+    if ((fr) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
     _fr->flags &= ~pflags_off;
     _fr->flags |= pflags_on;
-    _fr_ret;
+    return FR_OK;
 }
 
-#if _fr_defdbg(ALTCAM)
+#if 0
 extern int _fr_altcamx, _fr_altcamy;
 int fr_mod_xtracam(frc *fr, void *v_xtra_cam) {
     cams *xtra_cam = (cams *)v_xtra_cam;
-    _fr_top(fr);
+    if ((fr) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
     _fr->xtracam = xtra_cam;
-    _fr_ret;
+    return FR_OK;
 }
 #endif
 
@@ -361,7 +372,7 @@ int fr_mod_xtracam(frc *fr, void *v_xtra_cam) {
 int fr_global_mod_flag(int flags_on, int flags_off) {
     _fr_glob_flags &= ~flags_off;
     _fr_glob_flags |= flags_on;
-    _fr_ret;
+    return FR_OK;
 }
 
 // we are all bigots
@@ -370,23 +381,30 @@ int fr_global_mod_flag(int flags_on, int flags_off) {
 int fr_mod_size(frc *view, int xc, int yc, int wid, int hgt) // move us around
 {
     int detail;
-    _fr_top(view);
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
     // should leard to deal with built zoom and such, so on
     detail = _fr->detail;
     fr_place_view(_fr, _fr->camptr, NULL, _fr->flags, _fr->axis, _fr->fov, xc, yc, wid, hgt);
     _fr->detail = detail;
-    _fr_ret;
+    return FR_OK;
 }
 
 // like styrofoam
 int fr_set_callbacks(frc *view, int (*draw)(void *dstc, void *dstbm, int x, int y, int flg),
                      void (*horizon)(void *dstbm, int flg),
                      void (*render)(void *dstbm, int flg)) { // build local context setup for render
-    _fr_top(view);
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
+
     _fr->draw_call = draw;
     _fr->horizon_call = horizon;
     _fr->render_call = render;
-    _fr_ret;
+    return FR_OK;
 }
 
 // like styrofoam
@@ -396,7 +414,7 @@ int fr_set_global_callbacks(int (*draw)(void *dstc, void *dstbm, int x, int y, i
     _fr_glob_draw_call = draw;
     _fr_glob_horizon_call = horizon;
     _fr_glob_render_call = render;
-    _fr_ret;
+    return FR_OK;
 }
 
 //---------------------------------------------------------------------------------
@@ -479,7 +497,12 @@ void fr_use_global_detail(frc *view) {
 int fr_view_resize(frc *view, int wid, int hgt) {
     int nw, nh, nxt, nyt;
     int detail;
-    _fr_top(view);
+
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
+
     nw = _fr->xwid;
     nh = _fr->ywid;
     nxt = _fr->xtop;
@@ -503,20 +526,28 @@ int fr_view_resize(frc *view, int wid, int hgt) {
     detail = _fr->detail;
     fr_place_view(_fr, _fr->camptr, NULL, _fr->flags, _fr->axis, _fr->fov, nxt, nyt, nw, nh);
     _fr->detail = detail;
-    _fr_ret;
+    return FR_OK;
 }
 
 int fr_view_full(frc *view, int wid, int hgt) {
     int detail;
-    _fr_top(view);
+
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
+
     detail = _fr->detail;
     fr_place_view(_fr, _fr->camptr, NULL, _fr->flags, _fr->axis, _fr->fov, 0, 0, wid, hgt);
     _fr->detail = detail;
-    _fr_ret;
+    return FR_OK;
 }
 
 void *fr_get_canvas(frc *view) {
-    _fr_top_cast(view, (void *));
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
     return &_fr->draw_canvas;
 }
 
@@ -581,7 +612,10 @@ void _fr_change_detail(int det) {
  */
 int fr_prepare_view(frc *view) {
     int det;
-    _fr_top(view);
+    if ((view) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(view);
 
     if (_fr == NULL) {
         printf("ERROR DID NOT SET VIEW!\n");
@@ -596,7 +630,7 @@ int fr_prepare_view(frc *view) {
         _fr_change_detail(det);
     if (_fr->last_detail != det)
         _fr_update_context(det);
-    _fr_ret;
+    return FR_OK;
 }
 
 /* sets the 3d system up based upon the prepared context */
@@ -730,13 +764,13 @@ int fr_start_view(void) {
 
     // now have everything set up for 3d view
     // if wacky secondary camera mode, set up
-#if _fr_defdbg(ALTCAM)
-    _fr_sdbg(ALTCAM,
+#if 0
+    /*_fr_sdbg(ALTCAM,
              {
                  fr_camera_getpos(_fr->xtracam);
                  _fr_altcamx = coor(EYE_X) >> (16);
                  _fr_altcamy = coor(EYE_Y) >> (16);
-             })
+             })*/
 #endif
         return TRUE;
 }
@@ -776,7 +810,7 @@ int fr_send_view(void) {
     // then return here.
     if (_fr_curflags & FR_PICKUPM_MASK) {
         gr_set_canvas(grd_screen_canvas);
-        _fr_ret;
+        return FR_OK;
     }
 
     // Determine if it's okay to double (it's not okay when rendering the 360 view).
@@ -827,5 +861,5 @@ int fr_send_view(void) {
     } else
         gr_set_canvas(grd_screen_canvas);
 
-    _fr_ret;
+    return FR_OK;
 }

@@ -130,7 +130,10 @@ int fr_cspace_idx(void) {
 ushort fr_get_at(frc *fr, int x, int y, uchar transp) {
     int (*fr_ptr_idx)(void) = fr_get_idx, of = _fr_glob_flags;
 
-    _fr_top(fr);
+    if ((fr) == NULL)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
     _fr_glob_flags |= FR_PICKUPM_MASK;
     if (!transp)
         _fr_glob_flags |= FR_NOTRANS_MASK;
@@ -146,6 +149,9 @@ ushort fr_get_at(frc *fr, int x, int y, uchar transp) {
 }
 
 ushort fr_get_again(frc *fr, int x, int y) {
-    _fr_top(fr);
+    if ((fr) == nullptr)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
     return fr_get_real(_fr, x, y);
 }

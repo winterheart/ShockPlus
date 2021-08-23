@@ -51,7 +51,7 @@ uchar pick_best_ref(ObjRefID cRef) {
     if ((me_subclip(_fdt_mptr) != SUBCLIP_OUT_OF_CONE) && (me_tiletype(_fdt_mptr) != TILE_SOLID)) {
         bdist = cdist = _fdt_dist;
         BRef = cRef; // find correct version of object, initially, first guess is best
-        _fr_sdbg(OBJ_TALK, mprintf("First version ok %d at %d %d\n", bdist, _fdt_x, _fdt_y));
+        //_fr_sdbg(OBJ_TALK, mprintf("First version ok %d at %d %d\n", bdist, _fdt_x, _fdt_y));
     } else
         bdist = cdist = 0xffff;
     curLRef = objRefs[cRef].nextref; // init the examine others loop
@@ -64,7 +64,7 @@ uchar pick_best_ref(ObjRefID cRef) {
 
         mp = MAP_GET_XY(x, y);
 
-        _fr_sdbg(OBJ_TALK, mprintf("check %d %d..sc %x\n", x, y, me_subclip(mp)));
+        //_fr_sdbg(OBJ_TALK, mprintf("check %d %d..sc %x\n", x, y, me_subclip(mp)));
 
         if ((me_subclip(mp) != SUBCLIP_OUT_OF_CONE) && (me_tiletype(mp) != TILE_SOLID)) {
             // this is super gross, but what to do
@@ -73,7 +73,7 @@ uchar pick_best_ref(ObjRefID cRef) {
                 bdist = ldist;
                 BRef = curLRef;
             }
-            _fr_sdbg(OBJ_TALK, mprintf("tried it got %d bdist %d\n", ldist, bdist));
+            //_fr_sdbg(OBJ_TALK, mprintf("tried it got %d bdist %d\n", ldist, bdist));
         }
         curLRef = objRefs[curLRef].nextref; /* we are us */
     }
@@ -104,7 +104,7 @@ void render_parse_obj(void) {
             show_here = CitrefCheckDealt(curORef);
 
         if (show_here) {
-            _fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
+            //_fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
             sort_show_obj(cobjid);
         }
         //      else
@@ -115,7 +115,7 @@ void render_parse_obj(void) {
 #else
     ushort curORef;
     curORef = _fdt_mptr->objRef;
-    _fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
+    //_fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
     // perhaps draw a box or something
 #endif
 }
@@ -137,7 +137,7 @@ void facelet_parse_obj(void) {
 #else
     ushort curORef;
     curORef = _fdt_mptr->objRef;
-    _fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
+    //_fr_sdbg(OBJ_TALK, mprintf("Rendering %d at %d %d\n", curORef, _fdt_x, _fdt_y));
     // perhaps draw a box or something
 #endif
 }

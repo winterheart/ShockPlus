@@ -171,11 +171,11 @@ int fr_pipe_resize(int x, int y, int z, void *mptr) {
     fr_map_base = (MapElem *)mptr;
     for (i = 0; i < 4; i++)
         diag_map_moves[i] = diag_moves[i][0] + (fr_map_x * diag_moves[i][1]);
-    _fr_ret;
+    return FR_OK;
 }
 
 // currently all pipe memory is static, so this is easy
-int fr_pipe_freemem(void) { _fr_ret; }
+int fr_pipe_freemem(void) { return FR_OK; }
 
 /* called at the beginning of every frame, sets up 3d variables for the world
  * also sets up the globals used in the clippers
@@ -192,14 +192,14 @@ int fr_pipe_start(int rad) {
     ObjsClearDealt();
     CitrefsClearDealt();
 
-    _fr_ret;
+    return FR_OK;
 }
 
 /* cleanup any memory or variable space used by the pipeline */
 int fr_pipe_end(void) {
     fr_terr_frame_end();
     fr_clip_frame_end();
-    _fr_ret;
+    return FR_OK;
 }
 
 // claiming i stepped out of line
@@ -388,5 +388,5 @@ int fr_pipe_go_3() {
         span_count(j) = 0;
 #endif
 
-    _fr_ret;
+    return FR_OK;
 }

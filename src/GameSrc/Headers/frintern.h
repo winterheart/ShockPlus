@@ -41,7 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "frcamera.h"
 #include "frprotox.h"
-#include "frshipm.h"
 #include "frworld.h"
 
 //======== From frsetup.c

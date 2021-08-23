@@ -75,21 +75,21 @@ g3s_phandle *_fr_ptbase, *_fr_ptnext; /* global place to get points from */
 int fr_pts_frame_start(void) {
     memset(*(pt_rowv + 0), 0xffff, _fr_pt_wid * sizeof(ushort));
     memset(*(pt_rowv + 1), 0xffff, _fr_pt_wid * sizeof(ushort));
-    _fr_ret;
+    return FR_OK;
 }
 
 int fr_pts_freemem(void) {
 #ifdef MAP_RESIZING
     int i;
     if (_fr_pt_wid == 0)
-        _fr_ret_val(FR_NO_NEED);
+        return (FR_NO_NEED);
     for (i = 0; i < 2; i++) {
         free(*(pt_rowv + i));
         free(*(pt_lsts + i));
     }
     _fr_pt_wid = 0;
 #endif
-    _fr_ret;
+    return FR_OK;
 }
 
 int fr_pts_resize(int x, int y) // x, y
@@ -100,12 +100,12 @@ int fr_pts_resize(int x, int y) // x, y
     _fr_pt_wid = x + 1;
     for (i = 0; i < 2; i++) {
         if (((*(pt_rowv + i)) = Malloc(x * sizeof(ushort))) == NULL)
-            _fr_ret_val(FR_NOMEM);
+            return (FR_NOMEM);
         if (((*(pt_lsts + i)) = Malloc(x * sizeof(g3s_phandle))) == NULL)
-            _fr_ret_val(FR_NOMEM);
+            return (FR_NOMEM);
     }
 #endif
-    _fr_ret;
+    return FR_OK;
 }
 
 // something goofy used by renderer
@@ -116,7 +116,7 @@ void dumb_hack_for_now(int x, int y) {
     g3s_phandle *_cur_pt, *_fr_curb, *_fr_curn;
     g3s_vector _pt_vec;
 
-    _fr_sdbg(NEW_PTS, mprintf("dhon %d %d...", x, y));
+    //_fr_sdbg(NEW_PTS, mprintf("dhon %d %d...", x, y));
 
     if (pt_rowv[0][x] == y) // go from [0]
         tran_sv = TRUE;
@@ -128,15 +128,15 @@ void dumb_hack_for_now(int x, int y) {
         {
             pt_set_vec(x, 0, y);
             pt_mk_point(ptLstx(0, x));
-            _fr_sdbg(NEW_PTS, mprintf("New pt... "));
+            //_fr_sdbg(NEW_PTS, mprintf("New pt... "));
         } else {
             fix df = fix_make(y - *(pt_rowv[0] + x), 0);
             _cur_pt = ptLst(0) + x;
             g3_add_delta_z(*_cur_pt, df);
-            _fr_sdbg(NEW_PTS, mprintf("Move pt by %x at %d last %d ", df, x, *(pt_rowv[0] + x)));
+            //_fr_sdbg(NEW_PTS, mprintf("Move pt by %x at %d last %d ", df, x, *(pt_rowv[0] + x)));
         }
     }
-    _fr_sdbg(NEW_PTS, if (tran_sv) mprintf("Found %d...", d));
+    //_fr_sdbg(NEW_PTS, if (tran_sv) mprintf("Found %d...", d));
 
     _fr_ptbase = ptLst(d ? 0 : 1);
     _cur_rowv = ptRow(d ? 0 : 1) + x;
@@ -144,36 +144,36 @@ void dumb_hack_for_now(int x, int y) {
     _nxt_rowv = ptRow(d ? 1 : 0) + x;
     _fr_curb = _fr_ptbase + x;
     _fr_curn = _fr_ptnext + x;
-    _fr_sdbg(NEW_PTS, mprintf("rose %d %d %d %d...", *_cur_rowv, *(_cur_rowv + 1), *_nxt_rowv, *(_nxt_rowv + 1)));
+    //_fr_sdbg(NEW_PTS, mprintf("rose %d %d %d %d...", *_cur_rowv, *(_cur_rowv + 1), *_nxt_rowv, *(_nxt_rowv + 1)));
 
     // now *_fr_ptbase is at (x,y)
     if (*(_cur_rowv + 1) != y) {
         if (*(_cur_rowv + 1) != 0xffff) {
             g3_replace_add_delta_x(*_fr_curb, *(_fr_curb + 1), fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("x+1 replace"));
+            //_fr_sdbg(NEW_PTS, mprintf("x+1 replace"));
         } else {
             *(_fr_curb + 1) = g3_copy_add_delta_x(*_fr_curb, fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("x+1 copy"));
+            //_fr_sdbg(NEW_PTS, mprintf("x+1 copy"));
         }
     }
 
     if (*(_nxt_rowv) != y + 1) {
         if (*(_nxt_rowv) != 0xffff) {
             g3_replace_add_delta_z(*_fr_curb, *_fr_curn, fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("y replace"));
+            //_fr_sdbg(NEW_PTS, mprintf("y replace"));
         } else {
             *_fr_curn = g3_copy_add_delta_z(*_fr_curb, fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("y copy"));
+            //_fr_sdbg(NEW_PTS, mprintf("y copy"));
         }
     }
 
     if (*(_nxt_rowv + 1) != y + 1) {
         if (*(_nxt_rowv + 1) != 0xffff) {
             g3_replace_add_delta_x(*_fr_curn, *(_fr_curn + 1), fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("y+1 replace"));
+            //_fr_sdbg(NEW_PTS, mprintf("y+1 replace"));
         } else {
             *(_fr_curn + 1) = g3_copy_add_delta_x(*_fr_curn, fix_make(1, 0));
-            _fr_sdbg(NEW_PTS, mprintf("y+1 copy"));
+            //_fr_sdbg(NEW_PTS, mprintf("y+1 copy"));
         }
     }
 
@@ -182,5 +182,5 @@ void dumb_hack_for_now(int x, int y) {
     *_nxt_rowv = y + 1;
     *(_nxt_rowv + 1) = y + 1;
 
-    _fr_sdbg(NEW_PTS, mprintf("\n"));
+    //_fr_sdbg(NEW_PTS, mprintf("\n"));
 }
