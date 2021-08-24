@@ -38,23 +38,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // The overall object properties typedef
 typedef struct ObjProp {
-    int mass;
-    short hit_points;
-    ubyte armor;
-    ubyte render_type;
-    ubyte physics_model;
-    ubyte hardness;
-    ubyte pep;
-    ubyte physics_xr;
-    ubyte physics_y;
-    ubyte physics_z;
-    int resistances;
-    ubyte defense_value;
-    ubyte toughness;
-    short flags;
-    short mfd_id;
-    short bitmap_3d;
-    ubyte destroy_effect;
+    int32_t mass;
+    int16_t hit_points;
+    uint8_t armor;
+    uint8_t render_type;
+    uint8_t physics_model;
+    uint8_t hardness;
+    uint8_t pep;
+    uint8_t physics_xr;
+    uint8_t physics_y;
+    uint8_t physics_z;
+    int32_t resistances;
+    uint8_t defense_value;
+    uint8_t toughness;
+    int16_t flags;
+    int16_t mfd_id;
+    int16_t bitmap_3d;
+    uint8_t destroy_effect;
 } ObjProp;
 
 // Overall
@@ -90,33 +90,8 @@ typedef struct ObjProp {
         NUM_SC_BIGSTUFF + NUM_SC_SMALLSTUFF + NUM_SC_FIXTURE + NUM_SC_DOOR + NUM_SC_ANIMATING + NUM_SC_TRAP +      \
         NUM_SC_CONTAINER + NUM_SC_CRITTER
 
-#ifdef __OBJSIM_SRC
-uchar num_subclasses[NUM_CLASSES] = {
-    NUM_SC_GUN,
-    NUM_SC_AMMO,
-    NUM_SC_PHYSICS,
-    NUM_SC_GRENADE,
-    NUM_SC_DRUG,
-    NUM_SC_HARDWARE,
-    NUM_SC_SOFTWARE,
-    NUM_SC_BIGSTUFF,
-    NUM_SC_SMALLSTUFF,
-    NUM_SC_FIXTURE,
-    NUM_SC_DOOR,
-    NUM_SC_ANIMATING,
-    NUM_SC_TRAP,
-    NUM_SC_CONTAINER,
-    NUM_SC_CRITTER
-};
-#else
 extern uchar num_subclasses[NUM_CLASSES];
-#endif
-
-#ifdef __OBJSIM_SRC
-ObjProp ObjProps[NUM_OBJECT];
-#else
 extern ObjProp ObjProps[NUM_OBJECT];
-#endif
 
 #pragma pack(pop)
 

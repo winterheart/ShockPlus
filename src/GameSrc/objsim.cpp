@@ -135,6 +135,26 @@ LGPoint anchors_3d[NUM_OBJECT + EXTRA_FRAMES];
 grs_bitmap *bitmaps_2d[NUM_OBJECT];
 grs_bitmap *bitmaps_3d[NUM_OBJECT + EXTRA_FRAMES];
 
+// Globals from objprop.h
+uchar num_subclasses[NUM_CLASSES] = {
+    NUM_SC_GUN,
+    NUM_SC_AMMO,
+    NUM_SC_PHYSICS,
+    NUM_SC_GRENADE,
+    NUM_SC_DRUG,
+    NUM_SC_HARDWARE,
+    NUM_SC_SOFTWARE,
+    NUM_SC_BIGSTUFF,
+    NUM_SC_SMALLSTUFF,
+    NUM_SC_FIXTURE,
+    NUM_SC_DOOR,
+    NUM_SC_ANIMATING,
+    NUM_SC_TRAP,
+    NUM_SC_CONTAINER,
+    NUM_SC_CRITTER
+};
+ObjProp ObjProps[NUM_OBJECT];
+
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
 SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];
