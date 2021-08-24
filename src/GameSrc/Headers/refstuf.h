@@ -46,10 +46,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     } while (0)
 #define CitrefCheckHomeSq(orefid) (homesquare[(orefid) >> 3] & (1 << ((orefid)&0x7)))
 
-#ifdef __OBJSIM_SRC
-uchar homesquare[NUM_REF_OBJECTS / 8];
-uchar refdealt[NUM_REF_OBJECTS / 8];
-#else
 extern uchar homesquare[NUM_REF_OBJECTS / 8];
 extern uchar refdealt[NUM_REF_OBJECTS / 8];
-#endif

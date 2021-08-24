@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Object simulator code for Citadel
-#define __OBJSIM_SRC // FIXME: Get rid of this
 
 #include <cstring>
 #include <cstdlib>
@@ -206,6 +205,9 @@ ObjAmmo default_ammo;
 ObjPhysics default_physics;
 ObjGrenade default_grenade;
 
+// Globals from refstuf.h
+uchar homesquare[NUM_REF_OBJECTS / 8];
+uchar refdealt[NUM_REF_OBJECTS / 8];
 
 // global symbol for the player camera...
 cams player_cam;
