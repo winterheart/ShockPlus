@@ -130,6 +130,11 @@ ObjAnimating default_animating;
 ObjTrap default_trap;
 ObjContainer default_container;
 
+// Globals from objload.h
+LGPoint anchors_3d[NUM_OBJECT + EXTRA_FRAMES];
+grs_bitmap *bitmaps_2d[NUM_OBJECT];
+grs_bitmap *bitmaps_3d[NUM_OBJECT + EXTRA_FRAMES];
+
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
 SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];

@@ -57,15 +57,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern errtype obj_load_art(uchar flush_all);
 
-#ifdef __OBJSIM_SRC
-LGPoint anchors_3d[NUM_OBJECT + EXTRA_FRAMES];
-grs_bitmap *bitmaps_2d[NUM_OBJECT];
-grs_bitmap *bitmaps_3d[NUM_OBJECT + EXTRA_FRAMES];
-#else
 extern LGPoint anchors_3d[NUM_OBJECT + EXTRA_FRAMES];
 extern grs_bitmap *bitmaps_2d[NUM_OBJECT];
-extern grs_bitmap *bitmaps_3d[NUM_OBJECT];
-#endif
+extern grs_bitmap *bitmaps_3d[NUM_OBJECT + EXTRA_FRAMES];
 
 #pragma pack(pop)
 
