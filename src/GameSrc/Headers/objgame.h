@@ -34,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Instance Typedefs
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -44,15 +43,17 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    ubyte trap_type;
-    ubyte destroy_count;
-    uint comparator;
-    uint p1, p2, p3, p4;
-    short access_level;
+    uint8_t trap_type;
+    uint8_t destroy_count;
+    uint32_t comparator;
+    uint32_t p1;
+    uint32_t p2;
+    uint32_t p3;
+    uint32_t p4;
+    int16_t access_level;
 } ObjFixture;
 
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -62,16 +63,15 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    short locked;
-    ubyte stringnum;
-    ubyte cosmetic_value;
-    ubyte access_level;
-    ubyte autoclose_time;
+    int16_t locked;
+    uint8_t stringnum;
+    uint8_t cosmetic_value;
+    uint8_t access_level;
+    uint8_t autoclose_time;
     ObjID other_half;
 } ObjDoor;
 
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -81,13 +81,12 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    ubyte start_frame;
-    ubyte end_frame;
+    uint8_t start_frame;
+    uint8_t end_frame;
     ObjID owner;
 } ObjAnimating;
 
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -97,14 +96,16 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    ubyte trap_type;
-    ubyte destroy_count;
-    uint comparator;
-    uint p1, p2, p3, p4;
+    uint8_t trap_type;
+    uint8_t destroy_count;
+    uint32_t comparator;
+    uint32_t p1;
+    uint32_t p2;
+    uint32_t p3;
+    uint32_t p4;
 } ObjTrap;
 
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -114,21 +115,21 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    int contents1;
-    int contents2;
-    ubyte dim_x;
-    ubyte dim_y;
-    ubyte dim_z;
-    int data1;
+    int32_t contents1;
+    int32_t contents2;
+    uint8_t dim_x;
+    uint8_t dim_y;
+    uint8_t dim_z;
+    int32_t data1;
 } ObjContainer;
 
 // Class typedefs
 typedef struct FixtureProp {
-    ubyte characteristics;
+    uint8_t characteristics;
 } FixtureProp;
 
 typedef struct DoorProp {
-    ubyte security_level; // i.e difficulty to unlock
+    uint8_t security_level; // i.e difficulty to unlock
 } DoorProp;
 
 #define ANIM_FLAG_NONE 0
@@ -136,115 +137,19 @@ typedef struct DoorProp {
 #define ANIM_FLAG_REVERSE 2
 
 typedef struct AnimatingProp {
-    ubyte speed;
-    ubyte flags;
+    uint8_t speed;
+    uint8_t flags;
 } AnimatingProp;
-
-typedef struct TrapProp {
-    ubyte dummy;
-} TrapProp;
 
 typedef struct ContainerProp {
     ObjID contents; // obviously not the way to do it, but you get the idea
-    ubyte num_contents;
+    uint8_t num_contents;
 } ContainerProp;
 
 // Subclass typedefs
-typedef struct ControlFixtureProp {
-    ubyte dummy;
-} ControlFixtureProp;
-
-typedef struct ReceptacleFixtureProp {
-    ubyte dummy;
-} ReceptacleFixtureProp;
-
-typedef struct TerminalFixtureProp {
-    ubyte dummy;
-} TerminalFixtureProp;
-
-typedef struct PanelFixtureProp {
-    ubyte dummy;
-} PanelFixtureProp;
-
-typedef struct VendingFixtureProp {
-    ubyte dummy;
-} VendingFixtureProp;
-
-typedef struct CyberFixtureProp {
-    ubyte dummy;
-} CyberFixtureProp;
-
-typedef struct _NormalDoorProp {
-    ubyte dummy;
-} NormalDoorProp;
-
-typedef struct _DoorwaysDoorProp {
-    ubyte dummy;
-} DoorwaysDoorProp;
-
-typedef struct _ForceDoorProp {
-    ubyte dummy;
-} ForceDoorProp;
-
-typedef struct _ElevatorDoorProp {
-    ubyte dummy;
-} ElevatorDoorProp;
-
-typedef struct _SpecialDoorProp {
-    ubyte dummy;
-} SpecialDoorProp;
-
-typedef struct _ObjectsAnimatingProp {
-    ubyte dummy;
-} ObjectsAnimatingProp;
-
-typedef struct _TransitoryAnimatingProp {
-    ubyte dummy;
-} TransitoryAnimatingProp;
-
-typedef struct _ExplosionAnimatingProp {
-    ubyte frame_explode;
+typedef struct ExplosionAnimatingProp {
+    uint8_t frame_explode;
 } ExplosionAnimatingProp;
-
-typedef struct _TriggerTrapProp {
-    ubyte dummy;
-} TriggerTrapProp;
-
-typedef struct _FeedbacksTrapProp {
-    ubyte dummy;
-} FeedbacksTrapProp;
-
-typedef struct _SecretTrapProp {
-    ubyte dummy;
-} SecretTrapProp;
-
-typedef struct _ActualContainerProp {
-    ubyte dummy;
-} ActualContainerProp;
-
-typedef struct _WasteContainerProp {
-    ubyte dummy;
-} WasteContainerProp;
-
-typedef struct _LiquidContainerProp {
-    ubyte dummy;
-} LiquidContainerProp;
-
-typedef struct _MutantCorpseContainerProp {
-    ubyte dummy;
-} MutantCorpseContainerProp;
-
-typedef struct _RobotCorpseContainerProp {
-    ubyte dummy;
-} RobotCorpseContainerProp;
-
-typedef struct _CyborgCorpseContainerProp {
-    ubyte dummy;
-} CyborgCorpseContainerProp;
-
-typedef struct _OtherCorpseContainerProp {
-    ubyte dummy;
-} OtherCorpseContainerProp;
 
 // Quantity defines - subclasses
 // Fixture
@@ -326,88 +231,15 @@ typedef struct _OtherCorpseContainerProp {
 #define CONTAINER_SUBCLASS_CYBORG_CORPSE 5
 #define CONTAINER_SUBCLASS_OTHER_CORPSE  6
 
-#ifdef __OBJSIM_SRC
-FixtureProp FixtureProps[NUM_FIXTURE];
-ControlFixtureProp ControlFixtureProps[NUM_CONTROL_FIXTURE];
-ReceptacleFixtureProp ReceptacleFixtureProps[NUM_RECEPTACLE_FIXTURE];
-TerminalFixtureProp TerminalFixtureProps[NUM_TERMINAL_FIXTURE];
-PanelFixtureProp PanelFixtureProps[NUM_PANEL_FIXTURE];
-VendingFixtureProp VendingFixtureProps[NUM_VENDING_FIXTURE];
-CyberFixtureProp CyberFixtureProps[NUM_CYBER_FIXTURE];
-
-DoorProp DoorProps[NUM_DOOR];
-NormalDoorProp NormalDoorProps[NUM_NORMAL_DOOR];
-DoorwaysDoorProp DoorwaysDoorProps[NUM_DOORWAYS_DOOR];
-ForceDoorProp ForceDoorProps[NUM_FORCE_DOOR];
-ElevatorDoorProp ElevatorDoorProps[NUM_ELEVATOR_DOOR];
-SpecialDoorProp SpecialDoorProps[NUM_SPECIAL_DOOR];
-
-AnimatingProp AnimatingProps[NUM_ANIMATING];
-ObjectsAnimatingProp ObjectsAnimatingProps[NUM_OBJECT_ANIMATING];
-TransitoryAnimatingProp TransitoryAnimatingProps[NUM_TRANSITORY_ANIMATING];
-ExplosionAnimatingProp ExplosionAnimatingProps[NUM_EXPLOSION_ANIMATING];
-
-TrapProp TrapProps[NUM_TRAP];
-TriggerTrapProp TriggerTrapProps[NUM_TRIGGER_TRAP];
-FeedbacksTrapProp FeedbacksTrapProps[NUM_FEEDBACKS_TRAP];
-SecretTrapProp SecretTrapProps[NUM_SECRET_TRAP];
-
-ContainerProp ContainerProps[NUM_CONTAINER];
-ActualContainerProp ActualContainerProps[NUM_ACTUAL_CONTAINER];
-WasteContainerProp WasteContainerProps[NUM_WASTE_CONTAINER];
-LiquidContainerProp LiquidContainerProps[NUM_LIQUID_CONTAINER];
-MutantCorpseContainerProp MutantCorpseContainerProps[NUM_MUTANT_CORPSE_CONTAINER];
-RobotCorpseContainerProp RobotCorpseContainerProps[NUM_ROBOT_CORPSE_CONTAINER];
-CyborgCorpseContainerProp CyborgCorpseContainerProps[NUM_CYBORG_CORPSE_CONTAINER];
-OtherCorpseContainerProp OtherCorpseContainerProps[NUM_OTHER_CORPSE_CONTAINER];
-#else
 extern FixtureProp FixtureProps[NUM_FIXTURE];
-extern ControlFixtureProp ControlFixtureProps[NUM_CONTROL_FIXTURE];
-extern ReceptacleFixtureProp ReceptacleFixtureProps[NUM_RECEPTACLE_FIXTURE];
-extern TerminalFixtureProp TerminalFixtureProps[NUM_TERMINAL_FIXTURE];
-extern PanelFixtureProp PanelFixtureProps[NUM_PANEL_FIXTURE];
-extern VendingFixtureProp VendingFixtureProps[NUM_VENDING_FIXTURE];
-extern CyberFixtureProp CyberFixtureProps[NUM_CYBER_FIXTURE];
 
 extern DoorProp DoorProps[NUM_DOOR];
-extern NormalDoorProp NormalDoorProps[NUM_NORMAL_DOOR];
-extern DoorwaysDoorProp DoorwaysDoorProps[NUM_DOORWAYS_DOOR];
-extern ForceDoorProp ForceDoorProps[NUM_FORCE_DOOR];
-extern ElevatorDoorProp ElevatorDoorProps[NUM_ELEVATOR_DOOR];
-extern SpecialDoorProp SpecialDoorProps[NUM_SPECIAL_DOOR];
 
 extern AnimatingProp AnimatingProps[NUM_ANIMATING];
-extern ObjectsAnimatingProp ObjectsAnimatingProps[NUM_OBJECT_ANIMATING];
-extern TransitoryAnimatingProp TransitoryAnimatingProps[NUM_TRANSITORY_ANIMATING];
 extern ExplosionAnimatingProp ExplosionAnimatingProps[NUM_EXPLOSION_ANIMATING];
 
-extern TrapProp TrapProps[NUM_TRAP];
-extern TriggerTrapProp TriggerTrapProps[NUM_TRIGGER_TRAP];
-extern FeedbacksTrapProp FeedbacksTrapProps[NUM_FEEDBACKS_TRAP];
-extern SecretTrapProp SecretTrapProps[NUM_SECRET_TRAP];
-
 extern ContainerProp ContainerProps[NUM_CONTAINER];
-extern ActualContainerProp ActualContainerProps[NUM_ACTUAL_CONTAINER];
-extern WasteContainerProp WasteContainerProps[NUM_WASTE_CONTAINER];
-extern LiquidContainerProp LiquidContainerProps[NUM_LIQUID_CONTAINER];
-extern MutantCorpseContainerProp MutantCorpseContainerProps[NUM_MUTANT_CORPSE_CONTAINER];
-extern RobotCorpseContainerProp RobotCorpseContainerProps[NUM_ROBOT_CORPSE_CONTAINER];
-extern CyborgCorpseContainerProp CyborgCorpseContainerProps[NUM_CYBORG_CORPSE_CONTAINER];
-extern OtherCorpseContainerProp OtherCorpseContainerProps[NUM_OTHER_CORPSE_CONTAINER];
-#endif
 
-#ifdef __OBJSIM_SRC
-ObjFixture objFixtures[NUM_OBJECTS_FIXTURE];
-ObjDoor objDoors[NUM_OBJECTS_DOOR];
-ObjAnimating objAnimatings[NUM_OBJECTS_ANIMATING];
-ObjTrap objTraps[NUM_OBJECTS_TRAP];
-ObjContainer objContainers[NUM_OBJECTS_CONTAINER];
-ObjFixture default_fixture;
-ObjDoor default_door;
-ObjAnimating default_animating;
-ObjTrap default_trap;
-ObjContainer default_container;
-#else
 extern ObjFixture objFixtures[NUM_OBJECTS_FIXTURE];
 extern ObjDoor objDoors[NUM_OBJECTS_DOOR];
 extern ObjAnimating objAnimatings[NUM_OBJECTS_ANIMATING];
@@ -418,7 +250,6 @@ extern ObjDoor default_door;
 extern ObjAnimating default_animating;
 extern ObjTrap default_trap;
 extern ObjContainer default_container;
-#endif
 
 #pragma pack(pop)
 

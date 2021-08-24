@@ -109,6 +109,26 @@ CyberCritterProp CyberCritterProps[NUM_CYBER_CRITTER];
 ObjCritter objCritters[NUM_OBJECTS_CRITTER];
 ObjCritter default_critter;
 
+// Globals from objgame.h
+FixtureProp FixtureProps[NUM_FIXTURE];
+
+DoorProp DoorProps[NUM_DOOR];
+
+AnimatingProp AnimatingProps[NUM_ANIMATING];
+ExplosionAnimatingProp ExplosionAnimatingProps[NUM_EXPLOSION_ANIMATING];
+
+ContainerProp ContainerProps[NUM_CONTAINER];
+
+ObjFixture objFixtures[NUM_OBJECTS_FIXTURE];
+ObjDoor objDoors[NUM_OBJECTS_DOOR];
+ObjAnimating objAnimatings[NUM_OBJECTS_ANIMATING];
+ObjTrap objTraps[NUM_OBJECTS_TRAP];
+ObjContainer objContainers[NUM_OBJECTS_CONTAINER];
+ObjFixture default_fixture;
+ObjDoor default_door;
+ObjAnimating default_animating;
+ObjTrap default_trap;
+ObjContainer default_container;
 
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
