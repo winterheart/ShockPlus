@@ -155,6 +155,18 @@ uchar num_subclasses[NUM_CLASSES] = {
 };
 ObjProp ObjProps[NUM_OBJECT];
 
+// Globals from objstuff.h
+BigstuffProp BigstuffProps[NUM_BIGSTUFF];
+
+SmallstuffProp SmallstuffProps[NUM_SMALLSTUFF];
+CyberSmallstuffProp CyberSmallstuffProps[NUM_CYBER_SMALLSTUFF];
+PlotSmallstuffProp PlotSmallstuffProps[NUM_PLOT_SMALLSTUFF];
+
+ObjBigstuff objBigstuffs[NUM_OBJECTS_BIGSTUFF];
+ObjSmallstuff objSmallstuffs[NUM_OBJECTS_SMALLSTUFF];
+ObjBigstuff default_bigstuff;
+ObjSmallstuff default_smallstuff;
+
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
 SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];

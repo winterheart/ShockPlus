@@ -33,7 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Instance typedefs
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -43,13 +42,12 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    short cosmetic_value;
-    int data1;
-    int data2;
+    int16_t cosmetic_value;
+    int32_t data1;
+    int32_t data2;
 } ObjBigstuff;
 
 typedef struct {
-    //   COMMON_OBJSPEC_FIELDS;
     union {
         ObjID id;
         ObjSpecID headused;
@@ -59,83 +57,28 @@ typedef struct {
         ObjSpecID headfree;
     };
     ObjSpecID prev;
-    short cosmetic_value;
-    int data1;
-    int data2;
+    int16_t cosmetic_value;
+    int32_t data1;
+    int32_t data2;
 } ObjSmallstuff;
 
 // Class typedefs
-typedef struct _BigstuffProp {
-    int data;
+typedef struct BigstuffProp {
+    int32_t data;
 } BigstuffProp;
 
-typedef struct _SmallstuffProp {
-    short uses_flags;
+typedef struct SmallstuffProp {
+    int16_t uses_flags;
 } SmallstuffProp;
 
 // Subclass typedefs
-typedef struct _ElectronicBigstuffProp {
-    ubyte dummy;
-} ElectronicBigstuffProp;
-
-typedef struct _FurnishingBigstuffProp {
-    ubyte dummy;
-} FurnishingBigstuffProp;
-
-typedef struct _OnthewallBigstuffProp {
-    ubyte dummy;
-} OnthewallBigstuffProp;
-
-typedef struct _LightBigstuffProp {
-    ubyte dummy;
-} LightBigstuffProp;
-
-typedef struct _LabgearBigstuffProp {
-    ubyte dummy;
-} LabgearBigstuffProp;
-
-typedef struct _TechnoBigstuffProp {
-    ubyte dummy;
-} TechnoBigstuffProp;
-
-typedef struct _DecorBigstuffProp {
-    ubyte dummy;
-} DecorBigstuffProp;
-
-typedef struct _TerrainBigstuffProp {
-    ubyte dummy;
-} TerrainBigstuffProp;
-
-typedef struct _UselessSmallstuffProp {
-    ubyte dummy;
-} UselessSmallstuffProp;
-
-typedef struct _BrokenSmallstuffProp {
-    ubyte dummy;
-} BrokenSmallstuffProp;
-
-typedef struct _CorpselikeSmallstuffProp {
-    ubyte dummy;
-} CorpselikeSmallstuffProp;
-
-typedef struct _GearSmallstuffProp {
-    ubyte dummy;
-} GearSmallstuffProp;
-
-typedef struct _CardsSmallstuffProp {
-    ubyte dummy;
-} CardsSmallstuffProp;
 
 #define NUM_SMALLSTUFF_VCOLORS 6
-typedef struct _CyberSmallstuffProp {
-    uchar vcolors[NUM_SMALLSTUFF_VCOLORS];
+typedef struct CyberSmallstuffProp {
+    uint8_t vcolors[NUM_SMALLSTUFF_VCOLORS];
 } CyberSmallstuffProp;
 
-typedef struct _OnthewallSmallstuffProp {
-    ubyte dummy;
-} OnthewallSmallstuffProp;
-
-typedef struct _PlotSmallstuffProp {
+typedef struct PlotSmallstuffProp {
     ObjID target;
 } PlotSmallstuffProp;
 
@@ -188,60 +131,15 @@ typedef struct _PlotSmallstuffProp {
 #define SMALLSTUFF_SUBCLASS_ONTHEWALL 6
 #define SMALLSTUFF_SUBCLASS_PLOT 7
 
-#ifdef __OBJSIM_SRC
-
-BigstuffProp BigstuffProps[NUM_BIGSTUFF];
-ElectronicBigstuffProp ElectronicBigstuffProps[NUM_ELECTRONIC_BIGSTUFF];
-FurnishingBigstuffProp FurnishingBigstuffProps[NUM_FURNISHING_BIGSTUFF];
-OnthewallBigstuffProp OnthewallBigstuffProps[NUM_ONTHEWALL_BIGSTUFF];
-LightBigstuffProp LightBigstuffProps[NUM_LIGHT_BIGSTUFF];
-LabgearBigstuffProp LabgearBigstuffProps[NUM_LABGEAR_BIGSTUFF];
-TechnoBigstuffProp TechnoBigstuffProps[NUM_TECHNO_BIGSTUFF];
-DecorBigstuffProp DecorBigstuffProps[NUM_DECOR_BIGSTUFF];
-TerrainBigstuffProp TerrainBigstuffProps[NUM_TERRAIN_BIGSTUFF];
-
-SmallstuffProp SmallstuffProps[NUM_SMALLSTUFF];
-UselessSmallstuffProp UselessSmallstuffProps[NUM_USELESS_SMALLSTUFF];
-BrokenSmallstuffProp BrokenSmallstuffProps[NUM_BROKEN_SMALLSTUFF];
-CorpselikeSmallstuffProp CorpselikeSmallstuffProps[NUM_CORPSELIKE_SMALLSTUFF];
-GearSmallstuffProp GearSmallstuffProps[NUM_GEAR_SMALLSTUFF];
-CardsSmallstuffProp CardsSmallstuffProps[NUM_CARDS_SMALLSTUFF];
-CyberSmallstuffProp CyberSmallstuffProps[NUM_CYBER_SMALLSTUFF];
-OnthewallSmallstuffProp OnthewallSmallstuffProps[NUM_ONTHEWALL_SMALLSTUFF];
-PlotSmallstuffProp PlotSmallstuffProps[NUM_PLOT_SMALLSTUFF];
-#else
 extern BigstuffProp BigstuffProps[NUM_BIGSTUFF];
-extern ElectronicBigstuffProp ElectronicBigstuffProps[NUM_ELECTRONIC_BIGSTUFF];
-extern FurnishingBigstuffProp FurnishingBigstuffProps[NUM_FURNISHING_BIGSTUFF];
-extern OnthewallBigstuffProp OnthewallBigstuffProps[NUM_ONTHEWALL_BIGSTUFF];
-extern LightBigstuffProp LightBigstuffProps[NUM_LIGHT_BIGSTUFF];
-extern LabgearBigstuffProp LabgearBigstuffProps[NUM_LABGEAR_BIGSTUFF];
-extern TechnoBigstuffProp TechnoBigstuffProps[NUM_TECHNO_BIGSTUFF];
-extern DecorBigstuffProp DecorBigstuffProps[NUM_DECOR_BIGSTUFF];
-extern TerrainBigstuffProp TerrainBigstuffProps[NUM_TERRAIN_BIGSTUFF];
 
 extern SmallstuffProp SmallstuffProps[NUM_SMALLSTUFF];
-extern UselessSmallstuffProp UselessSmallstuffProps[NUM_USELESS_SMALLSTUFF];
-extern BrokenSmallstuffProp BrokenSmallstuffProps[NUM_BROKEN_SMALLSTUFF];
-extern CorpselikeSmallstuffProp CorpselikeSmallstuffProps[NUM_CORPSELIKE_SMALLSTUFF];
-extern GearSmallstuffProp GearSmallstuffProps[NUM_GEAR_SMALLSTUFF];
-extern CardsSmallstuffProp CardsSmallstuffProps[NUM_CARDS_SMALLSTUFF];
 extern CyberSmallstuffProp CyberSmallstuffProps[NUM_CYBER_SMALLSTUFF];
-extern OnthewallSmallstuffProp OnthewallSmallstuffProps[NUM_ONTHEWALL_SMALLSTUFF];
 extern PlotSmallstuffProp PlotSmallstuffProps[NUM_PLOT_SMALLSTUFF];
 
-#endif
-
-#ifdef __OBJSIM_SRC
-ObjBigstuff objBigstuffs[NUM_OBJECTS_BIGSTUFF];
-ObjSmallstuff objSmallstuffs[NUM_OBJECTS_SMALLSTUFF];
-ObjBigstuff default_bigstuff;
-ObjSmallstuff default_smallstuff;
-#else
 extern ObjBigstuff objBigstuffs[NUM_OBJECTS_BIGSTUFF];
 extern ObjSmallstuff objSmallstuffs[NUM_OBJECTS_SMALLSTUFF];
 extern ObjBigstuff default_bigstuff;
 extern ObjSmallstuff default_smallstuff;
-#endif
 
 #endif // __OBJSTUFF_H
