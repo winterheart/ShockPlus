@@ -100,6 +100,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define obj_inv_coor_y(oloc) ((OBJ_LOC_BIN_Y(oloc) << MAP_SH) + (OBJ_LOC_FINE_Y(oloc) >> MAP_MS))
 #define obj_inv_coor_z(oid) (inv_coor(fix_from_obj_height(oid)))
 
+// Globals from objwpn.h sources
+GunProp GunProps[NUM_GUN];
+SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];
+HandtohandGunProp HandtohandGunProps[NUM_HANDTOHAND_GUN];
+BeamGunProp BeamGunProps[NUM_BEAM_GUN];
+BeamprojGunProp BeamprojGunProps[NUM_BEAMPROJ_GUN];
+
+AmmoProp AmmoProps[NUM_AMMO];
+
+PhysicsProp PhysicsProps[NUM_PHYSICS];
+TracerPhysicsProp TracerPhysicsProps[NUM_TRACER_PHYSICS];
+SlowPhysicsProp SlowPhysicsProps[NUM_SLOW_PHYSICS];
+GrenadeProp GrenadeProps[NUM_GRENADE];
+TimedGrenadeProp TimedGrenadeProps[NUM_TIMED_GRENADE];
+
+ObjGun objGuns[NUM_OBJECTS_GUN];
+ObjAmmo objAmmos[NUM_OBJECTS_AMMO];
+ObjPhysics objPhysicss[NUM_OBJECTS_PHYSICS];
+ObjGrenade objGrenades[NUM_OBJECTS_GRENADE];
+ObjGun default_gun;
+ObjAmmo default_ammo;
+ObjPhysics default_physics;
+ObjGrenade default_grenade;
+
+
 // global symbol for the player camera...
 cams player_cam;
 
