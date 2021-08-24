@@ -320,7 +320,7 @@ errtype load_game(const char *fname) {
     obj_load_art(FALSE); // KLC - added here (removed from load_level_data)
     // KLC   string_message_info(REF_STR_LoadGameLoaded);
     dynmem_mask = DYNMEM_ALL;
-    chg_set_flg(_current_3d_flag);
+    chg_set_flg(current_3d_flag);
     old_ticks = *tmd_ticks;
     interpret_qvars();
     startup_game(FALSE);

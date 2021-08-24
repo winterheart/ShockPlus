@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bitmap.h"
 #include "chr.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "grdbm.h"
 

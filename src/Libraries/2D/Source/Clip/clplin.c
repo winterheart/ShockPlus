@@ -53,8 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * not fixed-point numbers.
  */
 
-#include "grs.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 
 /* Returns clip code for fixed-point coordinates for the Cohen-Sutherland

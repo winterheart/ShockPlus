@@ -239,7 +239,7 @@ void use_ware(int waretype, int num) {
             newe = lg_max(newe - ecost, 0);
         set_player_energy_spend((ubyte)newe);
     }
-    if (_current_loop <= FULLSCREEN_LOOP)
+    if (current_loop <= FULLSCREEN_LOOP)
         chg_set_flg(INVENTORY_UPDATE);
     mfd_notify_func(NOTIFY_ANY_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, TRUE);
 }
@@ -458,7 +458,7 @@ void infrared_turnon(uchar visible, uchar real_s) {
     if (visible) {
         gr_set_light_tab(bw_shading_table);
         curr_clut_table = 1;
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
         hud_set(HUD_INFRARED);
     }
 }
@@ -471,7 +471,7 @@ void infrared_turnon(uchar visible, uchar real_s) {
 void infrared_turnoff(uchar visible, uchar real_s) {
     if (visible) {
         gr_set_light_tab(shading_table);
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
         curr_clut_table = 0;
 
         hud_unset(HUD_INFRARED);
@@ -555,7 +555,7 @@ void lamp_set_vals_with_offset(byte offset) {
         _frp.lighting.rad[1] = (uchar)lspec->rad2;
     _frp.lighting.base[1] = (uchar)lspec->base2;
 
-    chg_set_flg(_current_3d_flag);
+    chg_set_flg(current_3d_flag);
     //   Warning(("New parms %x %x, %x %x, line %x %x from %x %x\n",
     //      _frp.lighting.rad[0], _frp.lighting.base[0],
     //      _frp.lighting.rad[1], _frp.lighting.base[1],
@@ -578,7 +578,7 @@ void lamp_change_setting(byte offset) {
 void lamp_turnoff(uchar visible, uchar real_stop) {
     if (visible) {
         _frp_light_bits_clear(LIGHT_BITS_CAM);
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
         if (real_stop)
             mfd_notify_func(MFD_LANTERN_FUNC, MFD_ITEM_SLOT, FALSE, MFD_ACTIVE, FALSE);
     }

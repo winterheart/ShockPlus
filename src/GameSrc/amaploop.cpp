@@ -407,19 +407,19 @@ void automap_loop(void) {
 
     // KLC - does nothing      loopLine(GL|0x1D,synchronous_update());
     if (music_on)
-        loopLine(GL | 0x1C, mlimbs_do_ai());
+        mlimbs_do_ai();
     if (localChanges) {
         if (_change_flag & AMAP_FULLEXPOSE) {
-            loopLine(AL | 0x1, fsmap_interface_draw());
+            fsmap_interface_draw();
         }
         if (_change_flag & AMAP_MAP_EV) {
-            loopLine(AL | 0x2, fsmap_draw_map());
+            fsmap_draw_map();
         }
         if (_change_flag & AMAP_BUTTON_EV) {
-            loopLine(AL | 0x3, fsmap_button_redraw());
+            fsmap_button_redraw();
         }
         if (_change_flag & AMAP_MESSAGE_EV) {
-            loopLine(AL | 0x4, fsmap_message_redraw());
+            fsmap_message_redraw();
         }
     }
     //   if (pal_fx_on) {

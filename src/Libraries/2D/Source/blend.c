@@ -35,7 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // points to blend_tabs-1 tables, each 64k
 uchar *grd_blend = NULL;
 uchar *grd_half_blend = NULL;
-int grd_log_blend_levels = 0;
 
 // blend fac is 0-256, where 0 is all 0, 256 is all 1
 void gri_build_blend(uchar *base_addr, int blend_fac) {
@@ -69,7 +68,6 @@ int gr_free_blend(void) {
         return 1;
     free(grd_blend); // was gr_free
     grd_blend = NULL;
-    grd_log_blend_levels = 0;
     return 0;
 }
 
@@ -88,7 +86,6 @@ uchar gr_init_blend(int log_blend_levels) {
             return FALSE; /* x 64k tables */
         for (i = 0; i < tab_cnt; i++)
             gri_build_blend(grd_blend + (i * GR_BLEND_TABLE_SIZE), fac * (i + 1));
-        grd_log_blend_levels = log_blend_levels;
         grd_half_blend = grd_blend + (tab_cnt >> 1) * GR_BLEND_TABLE_SIZE;
         return TRUE;
     } else

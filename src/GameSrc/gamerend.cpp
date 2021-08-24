@@ -423,7 +423,7 @@ void gamesys_render_effects(void) {
 
     // Redraw hud displays as appropriate
     // HOW ABOUT A FLAG HERE, NOT HARDCODED LOOP NUMBERS
-    if (!secret_render_fx && _current_loop <= FULLSCREEN_LOOP) {
+    if (!secret_render_fx && current_loop <= FULLSCREEN_LOOP) {
         hud_update(FALSE, _current_fr_context);
     }
 

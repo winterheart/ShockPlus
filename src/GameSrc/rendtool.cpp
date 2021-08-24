@@ -489,7 +489,11 @@ extern fauxrend_context *_sr;
 
 // Like fr_get_at, but takes real screen coordinates.
 ushort fr_get_at_raw(frc *fr, int x, int y, uchar again, uchar transp) {
-    _fr_top(fr);
+    if ((fr) == NULL)
+        _fr = _sr;
+    else
+        _fr = (fauxrend_context *)(fr);
+
     if (again)
         return fr_get_again(_fr, x - _fr->xtop, y - _fr->ytop);
     else

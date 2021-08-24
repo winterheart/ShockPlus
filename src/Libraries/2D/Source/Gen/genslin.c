@@ -53,9 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Initial revision
  */
 
-#include "ctxmac.h"
 #include "plytyp.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "clpltab.h"
 #include "grlin.h"
 
@@ -67,22 +66,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    correctness argument in note.txt.
 
 */
-
-/* This routine draws clipped goroud-shaded lines as specified by
-   intensities.  returns a clip value */
-
-int gen_fix_sline(fix x0, fix y0, fix i0, fix x1, fix y1, fix i1) {
-    grs_vertex v0, v1;
-
-    v0.x = x0;
-    v0.y = y0;
-    v0.i = i0;
-    v1.x = x1;
-    v1.y = y1;
-    v1.i = i1;
-
-    return grd_sline_clip_fill(gr_get_fcolor(), gr_get_fill_parm(), &v0, &v1);
-}
 
 int gri_sline_clip_fill(long c, long parm, grs_vertex *v0, grs_vertex *v1) {
     grs_vertex u0, u1;

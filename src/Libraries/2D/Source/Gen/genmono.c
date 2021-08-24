@@ -48,11 +48,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bit.h"
 #include "bitmap.h"
-#include "clpcon.h"
-#include "clpfcn.h"
-#include "cnvdat.h"
+#include "clip.h"
 #include "grdbm.h"
-#include "grpix.h"
 
 /* clip monochrome bitmap against cliprect and jump to unclipped drawer. */
 int gen_mono_bitmap(grs_bitmap *bm, short x, short y) {

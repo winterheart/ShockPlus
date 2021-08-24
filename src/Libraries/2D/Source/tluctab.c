@@ -74,12 +74,10 @@ therefore look red. Somewhere in the middle of all this,
 it will look brown, which is probably what you want.
 */
 
-#include <string.h>
 #include "fix.h"
 #include "grs.h"
 #include "scrdat.h"
 #include "rgb.h"
-#include "tlucdat.h"
 #include "lg.h"
 
 // convert red in a glomped rgb to a fixed point

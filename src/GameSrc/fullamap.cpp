@@ -81,7 +81,7 @@ void amap_start() {
                            * someone should probably go and figure it out
                            */
 #endif
-    _current_3d_flag = ANIM_UPDATE;
+    current_3d_flag = ANIM_UPDATE;
     _current_fr_context = NULL;
     _current_view = &amap_root_region;
     static_change_copy();

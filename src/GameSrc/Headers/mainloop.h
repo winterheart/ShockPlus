@@ -68,32 +68,29 @@ errtype static_change_copy();
 void loopmode_exit(short loopmode);
 void loopmode_enter(short loopmode);
 
-extern short _current_loop; // which loop we currently are
-extern short _current_3d_flag;
+extern int16_t current_loop; // which loop we currently are
+extern int16_t current_3d_flag;
 extern frc *_current_fr_context;
 #ifdef GADGET
 extern Gadget *_current_root;
 #endif
-extern uint _change_flag;   // change flags for loop
-extern uint _static_change; // current static changes
-extern short _new_mode;     // mode to change to, if any
-extern short _last_mode;    // last mode we were in, to switch back to
-extern uchar game_paused;   // are we "paused"
-extern uchar player_invulnerable;
-extern uchar player_immortal;
-extern uchar physics_running;
-extern uchar ai_on;
-extern uchar anim_on;
-extern uchar always_render;
-extern uchar saves_allowed;
-extern uchar time_passes;
-extern uchar pal_fx_on;
+extern uint32_t _change_flag;   // change flags for loop
+extern uint32_t _static_change; // current static changes
+extern int16_t _new_mode;     // mode to change to, if any
+extern int16_t _last_mode;    // last mode we were in, to switch back to
+extern bool game_paused;   // are we "paused"
+extern bool player_invulnerable;
+extern bool player_immortal;
+extern bool physics_running;
+extern bool ai_on;
+extern bool anim_on;
+extern bool always_render;
+extern bool saves_allowed;
+extern bool time_passes;
+extern bool pal_fx_on;
 extern LGRegion *_current_view;
 
-extern uchar cit_success;
-
-
-#define loopLine(num, code_line) code_line
+extern bool cit_success;
 
 #define localChanges  (_change_flag & LL_CHG_MASK)
 #define globalChanges (_change_flag & ML_CHG_MASK)

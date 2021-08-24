@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
 
     // Start in the Main Menu loop
 
-    _new_mode = _current_loop = SETUP_LOOP;
+    _new_mode = current_loop = SETUP_LOOP;
     loopmode_enter(SETUP_LOOP);
 
     // Start the main loop

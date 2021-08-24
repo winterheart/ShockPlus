@@ -531,5 +531,5 @@ int fr_tables_build(void) {
             else
                 face_baseobstruct[i][j] = face_obstruct[i][j];
         }
-    _fr_ret;
+    return FR_OK;
 }

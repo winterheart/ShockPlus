@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "fix.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "plytyp.h"
 #include "lintyp.h"
 #include "clpltyp.h"

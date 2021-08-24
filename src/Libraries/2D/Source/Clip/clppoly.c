@@ -51,7 +51,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * preserve sign in computing new coordinates.
  */
 
-#include "grs.h"
 #include "buffer.h"
 #include "cnvdat.h"
 

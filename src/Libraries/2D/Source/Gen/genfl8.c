@@ -62,12 +62,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "bitmap.h"
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "grdbm.h"
-#include "grpix.h"
-
-#include <stdio.h> // printf()
 
 /* clip flat8 bitmap against cliprect and jump to unclipped drawer. */
 int gen_flat8_bitmap(grs_bitmap *bm, short x, short y) {

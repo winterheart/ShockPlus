@@ -19,14 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __OBJAPP_H
 #define __OBJAPP_H
 
-#pragma pack(push,2)
+#pragma pack(push, 2)
 
 /*
 ** $Header: r:/prj/cit/src/inc/RCS/objapp.h 1.25 1994/08/30 07:15:21 xemu Exp $
 *
 */
 
-//////////////////////////////
 //
 // An ObjClass is an enum encompassing all the different classes
 // in the world.  Be sure to set NUM_CLASSES and CLASS_FIRST
@@ -72,11 +71,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //                          //
 //                          ////////////////////////////////
 
-//#include <map.h>
 
 #include "rect.h"
 
-// #define HASH_OBJECTS
 #define NO_OBJ_REF_STATE_INFO
 
 // enumeration of classes
@@ -85,44 +82,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // as defined constants than an enum, and gcc does not like to make enums
 // 8-bit values.
 typedef uint8_t ObjClass;
-#define CLASS_GUN        0
-#define CLASS_AMMO       1
-#define CLASS_PHYSICS    2
-#define CLASS_GRENADE    3
-#define CLASS_DRUG       4
-#define CLASS_HARDWARE   5
-#define CLASS_SOFTWARE   6
-#define CLASS_BIGSTUFF   7
+#define CLASS_GUN 0
+#define CLASS_AMMO 1
+#define CLASS_PHYSICS 2
+#define CLASS_GRENADE 3
+#define CLASS_DRUG 4
+#define CLASS_HARDWARE 5
+#define CLASS_SOFTWARE 6
+#define CLASS_BIGSTUFF 7
 #define CLASS_SMALLSTUFF 8
-#define CLASS_FIXTURE    9
-#define CLASS_DOOR      10
+#define CLASS_FIXTURE 9
+#define CLASS_DOOR 10
 #define CLASS_ANIMATING 11
-#define CLASS_TRAP      12
+#define CLASS_TRAP 12
 #define CLASS_CONTAINER 13
-#define CLASS_CRITTER   14
-#define NUM_CLASSES     15
+#define CLASS_CRITTER 14
+#define NUM_CLASSES 15
 #define CLASS_FIRST CLASS_GUN
 
 // The total number of objects in the game, and of each type
 // ## INSERT NEW CLASS HERE
-//
 
-#define NUM_OBJECTS            872
-#define NUM_OBJECTS_GUN         16
-#define NUM_OBJECTS_AMMO        32
-#define NUM_OBJECTS_PHYSICS     32
-#define NUM_OBJECTS_GRENADE     32
-#define NUM_OBJECTS_DRUG        32
-#define NUM_OBJECTS_HARDWARE     8
-#define NUM_OBJECTS_SOFTWARE    16
-#define NUM_OBJECTS_BIGSTUFF   176
+#define NUM_OBJECTS 872
+#define NUM_OBJECTS_GUN 16
+#define NUM_OBJECTS_AMMO 32
+#define NUM_OBJECTS_PHYSICS 32
+#define NUM_OBJECTS_GRENADE 32
+#define NUM_OBJECTS_DRUG 32
+#define NUM_OBJECTS_HARDWARE 8
+#define NUM_OBJECTS_SOFTWARE 16
+#define NUM_OBJECTS_BIGSTUFF 176
 #define NUM_OBJECTS_SMALLSTUFF 128
-#define NUM_OBJECTS_FIXTURE     64
-#define NUM_OBJECTS_DOOR        64
-#define NUM_OBJECTS_ANIMATING   32
-#define NUM_OBJECTS_TRAP       160
-#define NUM_OBJECTS_CONTAINER   64
-#define NUM_OBJECTS_CRITTER     64
+#define NUM_OBJECTS_FIXTURE 64
+#define NUM_OBJECTS_DOOR 64
+#define NUM_OBJECTS_ANIMATING 32
+#define NUM_OBJECTS_TRAP 160
+#define NUM_OBJECTS_CONTAINER 64
+#define NUM_OBJECTS_CRITTER 64
 
 // THe total number of references of objects
 #define NUM_REF_OBJECTS 1600
@@ -133,27 +129,28 @@ typedef struct {
     LGPoint sq;
 } ObjRefStateBin;
 
-#define OBJREF_SQ(ori) (objRefs[ori].state.bin.sq)
-
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJREFSTATEINFO 1
 typedef struct {
-    uchar flags;
+    uint8_t flags;
 } ObjRefStateInfo;
 
-#define ObjRefStateBinSetNull(bin)   PointSetNull((bin).sq)
+#define ObjRefStateBinSetNull(bin) PointSetNull((bin).sq)
 #define ObjRefStateBinCheckNull(bin) (PointCheckNull((bin).sq))
 
 // i hate cpp, no sizeof() in #if, so we have to do this
 #define SIZEOF_AN_OBJLOC 8
 typedef struct {
-    ushort x, y; // high 8 bits: what square      low 8 bits: where within square
-    ubyte z;
-    ubyte p, h, b;
+    uint16_t x; // x-coord, high 8 bits - what square, low 8 bits - where within square
+    uint16_t y; // y-coord, high 8 bits - what square, low 8 bits - where within square
+    uint8_t z;  // z-coord
+    uint8_t p;  // pitch
+    uint8_t h;  // heading
+    uint8_t b;  // bank
 } ObjLoc;
 
-#define OBJ_LOC_BIN_X(oloc)  ((oloc).x >> 8u)
-#define OBJ_LOC_BIN_Y(oloc)  ((oloc).y >> 8u)
+#define OBJ_LOC_BIN_X(oloc) ((oloc).x >> 8u)
+#define OBJ_LOC_BIN_Y(oloc) ((oloc).y >> 8u)
 #define OBJ_LOC_FINE_X(oloc) ((ushort)((oloc).x & 0xFF00u))
 #define OBJ_LOC_FINE_Y(oloc) ((ushort)((oloc).y & 0xFF00u))
 #ifdef SAFE_FIX
@@ -163,26 +160,14 @@ typedef struct {
 #endif
 
 typedef struct {
-    char ph;
-    byte type;
-    short current_hp;
-    ubyte make_info;      // maker, as in Zortech MK III laser rifle or whatever
-    ubyte current_frame;  // animdata
-    ubyte time_remainder; // animdata
-    uchar inst_flags;     //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
+    int8_t ph;
+    int8_t type;
+    int16_t current_hp;
+    uint8_t make_info;      // maker, as in Zortech MK III laser rifle or whatever
+    uint8_t current_frame;  // animdata
+    uint8_t time_remainder; // animdata
+    uint8_t inst_flags;     // flags for instance data. Right now 0x01 is used by Mahk's render tricks
 } ObjInfo;
-
-/*
-typedef struct {
-    int ph;
-    byte type;
-    short current_hp;
-    ubyte make_info;      // maker, as in Zortech MK III laser rifle or whatever
-    ubyte current_frame;  // animdata
-    ubyte time_remainder; // animdata
-    uchar inst_flags;     //  flags for instance data.  right now 0x01 is used by Mahk's render tricks
-} old_ObjInfo;
-*/
 
 #ifdef HASH_OBJECTS
 #define OBJ_HASH_ENTRIES 512
@@ -195,20 +180,11 @@ typedef struct {
 #define ObjRefHead(bin) (MAP_GET_XY((bin).sq.x, (bin).sq.y))->objRef
 #endif
 
-//                          ////////////////////////////////
-//                          //
-////////////////////////////// WASN'T THAT EASY?
+// WASN'T THAT EASY?
 
 typedef struct {
     ObjRefStateBin bin;
 } ObjRefState;
-
-/*
-typedef struct {
-    ObjRefStateBin bin;
-    ObjRefStateInfo info;
-} oldObjRefState;
-*/
 
 // The following macros perform simple comparing and copying operations.
 // If your structures are immensely complicated, you can turn them into
@@ -261,27 +237,6 @@ typedef struct {
         dstbin = srcbin;           \
     } while (0)
 
-////////////////////////////// MORE STUFF YOU MUST CHANGE
-//                          //
-//                          ////////////////////////////////
-//
-// You can turn some of the following macros into functions, if they get complicated.
-//
-// These are all for the use of the debugging system.  They should print
-// a user-friendly representation of the appropriate structure into str,
-// without a trailing newline.
-
-#define ObjRefStateSprint(str, refstate)
-#define ObjRefStateBinSprint(str, bin)
-#define ObjRefStateInfoSprint(str, info)
-#define ObjLocSprint(str, loc)
-#define ObjInfoSprint(str, info)
-
-//                          ////////////////////////////////
-//                          //
-////////////////////////////// END OF STUFF YOU MUST CHANGE
-
-////////////////////////////////////////////////////////////
 //
 // Here are prototypes of a few functions you should define in
 // objapp.c.  Any macros above that you decided to turn into functions
@@ -290,13 +245,10 @@ typedef struct {
 
 void ObjInfoInit(ObjInfo *info);
 
-//////////////////////////////
-//
 // This should initialize the following iterator.  Nice name, huh?
 
-void ObjRefStateBinIteratorInit(void);
+void ObjRefStateBinIteratorInit();
 
-//////////////////////////////
 //
 // After ObjRefStateBinIteratorInit () has been called, calling this
 // should put a new valid ObjRefStateBin in bin every time it is called.

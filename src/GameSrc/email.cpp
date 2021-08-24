@@ -941,7 +941,7 @@ void read_email(Id new_base, int num) {
         email_draw_text(current_email_base + current_email, current_email_base == EMAIL_BASE_ID);
 #ifdef AUDIOLOGS
     } else {
-        if (_current_loop <= FULLSCREEN_LOOP)
+        if (current_loop <= FULLSCREEN_LOOP)
             chg_set_flg(INVENTORY_UPDATE);
     }
 #endif

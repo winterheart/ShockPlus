@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * This file is part of the 2d library.
  */
 
-#include "clpcon.h"
+#include "clip.h"
 #include "cnvdat.h"
 #include "rgb.h"
 #include "scrdat.h"

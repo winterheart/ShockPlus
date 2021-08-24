@@ -83,11 +83,11 @@ void (*_fr_wall_func)(int, g3s_phandle *, grs_bitmap *);
 void (*_fr_lit_per_func)(int, g3s_phandle *, grs_bitmap *);
 void (*_fr_per_func)(int, g3s_phandle *, grs_bitmap *);
 
-#if _fr_defdbg(CURSOR)
+#if 0
 int _fr_cursorx, _fr_cursory;
 #endif
 
-#if _fr_defdbg(ALTCAM)
+#if 0
 int _fr_altcamx, _fr_altcamy;
 #endif
 
@@ -488,8 +488,8 @@ static void _fr_flat_int_wall(int wall_id) {
     _fr_figure_pt(_fdt_tmppts[1], wpt->ur);
     _fr_figure_pt(_fdt_tmppts[2], wpt->lr);
     _fr_figure_pt(_fdt_tmppts[3], wpt->ll);
-    _fr_ndbg(NO_REND, g3_draw_poly((*fr_get_idx)(), 4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    g3_draw_poly((*fr_get_idx)(), 4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 
 #ifdef FLAT_SUPPORT
@@ -509,8 +509,8 @@ static void _fr_flat_lit_int_wall(int wall_id) {
     _fr_pt_light(_fdt_tmppts[3]);
     _fdt_tmppts[3]->p3_flags |= PF_I;
     gr_set_fcolor((*fr_get_idx)());
-    _fr_ndbg(NO_REND, g3_draw_spoly(4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    g3_draw_spoly(4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 #else
 #define _fr_flat_lit_int_wall _fr_tmap_lit_int_wall
@@ -528,9 +528,9 @@ static void _fr_tmap_int_wall(int wall_id) {
     _fr_figure_pt(_fdt_tmppts[3], wpt->ll);
     wall_uv_l(_fdt_tmppts[3]);
     if (quik_draw_tmap_p(4)) {
-        _fr_ndbg(NO_REND, _fr_wall_func(4, _fdt_tmppts, (*fr_get_tmap)()));
+        _fr_wall_func(4, _fdt_tmppts, (*fr_get_tmap)());
     }
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 
 static void _fr_tmap_lit_int_wall(int wall_id) {
@@ -549,9 +549,9 @@ static void _fr_tmap_lit_int_wall(int wall_id) {
     wall_uv_l_i(_fdt_tmppts[3]);
     _fr_pt_light(_fdt_tmppts[3]);
     if (quik_draw_tmap_p(4)) {
-        _fr_ndbg(NO_REND, _fr_lit_wall_func(4, _fdt_tmppts, (*fr_get_tmap)()));
+        _fr_lit_wall_func(4, _fdt_tmppts, (*fr_get_tmap)());
     }
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 
 static void _fr_cspace_wire_int_wall(int wall_id) {
@@ -565,8 +565,8 @@ static void _fr_cspace_wire_int_wall(int wall_id) {
     _fr_pt_cspace(_fdt_tmppts[2]);
     _fr_figure_pt(_fdt_tmppts[3], wpt->ll);
     _fr_pt_cspace(_fdt_tmppts[3]);
-    _fr_ndbg(NO_REND, _fr_draw_wire_cpoly_4());
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    _fr_draw_wire_cpoly_4();
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 
 static void _fr_cspace_full_int_wall(int wall_id) {
@@ -580,8 +580,8 @@ static void _fr_cspace_full_int_wall(int wall_id) {
     _fr_pt_cspace(_fdt_tmppts[2]);
     _fr_figure_pt(_fdt_tmppts[3], wpt->ll);
     _fr_pt_cspace(_fdt_tmppts[3]);
-    _fr_ndbg(NO_REND, g3_draw_cpoly(4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.int_wall++);
+    g3_draw_cpoly(4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.int_wall++);
 }
 
 // tabs_ext_wall
@@ -597,8 +597,8 @@ static void _fr_flat_ext_wall(
     _fdt_pbase = _fdt_rbase;
     g3_replace_add_delta_y(*_fdt_rcore, _fdt_tmppts[1], -pt_list[1][1]);
     g3_replace_add_delta_y(*_fdt_rcore, _fdt_tmppts[2], -pt_list[2][1]);
-    _fr_ndbg(NO_REND, g3_draw_poly((*fr_get_idx)(), 4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    g3_draw_poly((*fr_get_idx)(), 4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 
 #ifdef FLAT_SUPPORT
@@ -621,8 +621,8 @@ static void _fr_flat_lit_ext_wall(fix pt_list[4][2]) {
     _fr_do_light(_fdt_tmppts[2], dlF);
     _fdt_tmppts[2]->p3_flags |= PF_I;
     gr_set_fcolor((*fr_get_idx)());
-    _fr_ndbg(NO_REND, g3_draw_spoly(4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    g3_draw_spoly(4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 #else
 #define _fr_flat_lit_ext_wall _fr_tmap_lit_ext_wall
@@ -639,9 +639,9 @@ static void _fr_tmap_ext_wall(fix pt_list[4][2]) {
     g3_replace_add_delta_y(*_fdt_rcore, _fdt_tmppts[2], -pt_list[2][1]);
     ext_wall_uv_r(_fdt_tmppts[2], pt_list[2]);
     if (quik_draw_tmap_p(4)) {
-        _fr_ndbg(NO_REND, _fr_wall_func(4, _fdt_tmppts, (*fr_get_tmap)()));
+        _fr_wall_func(4, _fdt_tmppts, (*fr_get_tmap)());
     }
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 
 static void _fr_tmap_lit_ext_wall(fix pt_list[4][2]) {
@@ -663,9 +663,9 @@ static void _fr_tmap_lit_ext_wall(fix pt_list[4][2]) {
     _fdt_hgt_val = pt_list[2][1];
     _fr_do_light(_fdt_tmppts[2], dlF);
     if (quik_draw_tmap_p(4)) {
-        _fr_ndbg(NO_REND, _fr_lit_wall_func(4, _fdt_tmppts, (*fr_get_tmap)()));
+        _fr_lit_wall_func(4, _fdt_tmppts, (*fr_get_tmap)());
     }
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 
 static void _fr_cspace_wire_ext_wall(fix pt_list[4][2]) {
@@ -678,8 +678,8 @@ static void _fr_cspace_wire_ext_wall(fix pt_list[4][2]) {
     _fr_do_cspace(_fdt_tmppts[1], dlC);
     g3_replace_add_delta_y(*_fdt_rcore, _fdt_tmppts[2], -pt_list[2][1]);
     _fr_do_cspace(_fdt_tmppts[2], dlF);
-    _fr_ndbg(NO_REND, _fr_draw_wire_cpoly_4());
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    _fr_draw_wire_cpoly_4();
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 
 static void _fr_cspace_full_ext_wall(fix pt_list[4][2]) {
@@ -692,8 +692,8 @@ static void _fr_cspace_full_ext_wall(fix pt_list[4][2]) {
     _fr_do_cspace(_fdt_tmppts[1], dlC);
     g3_replace_add_delta_y(*_fdt_rcore, _fdt_tmppts[2], -pt_list[2][1]);
     _fr_do_cspace(_fdt_tmppts[2], dlF);
-    _fr_ndbg(NO_REND, g3_draw_cpoly(4, _fdt_tmppts));
-    _fr_sdbg(STATS, _frp.stats.ext_wall++);
+    g3_draw_cpoly(4, _fdt_tmppts);
+    //_fr_sdbg(STATS, _frp.stats.ext_wall++);
 }
 
 // tabs_flr
@@ -742,9 +742,9 @@ static void _fr_flat_flr(void) {
             _fr_figure_pt(*pb++, pt_code);
         }
         //Â¥Â¥ bug??      _fr_ndbg(NO_REND,g3_draw_poly((*fr_get_idx)(),_fdt_ttf->ptsper,&_fdt_tmppts));
-        _fr_ndbg(NO_REND, g3_draw_poly((*fr_get_idx)(), _fdt_ttf->ptsper, _fdt_tmppts));
+        g3_draw_poly((*fr_get_idx)(), _fdt_ttf->ptsper, _fdt_tmppts);
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 
 #ifdef FLAT_SUPPORT
@@ -764,9 +764,9 @@ static void _fr_flat_lit_flr(void) {
             _fr_pt_light(*pb);
             (*pb++)->p3_flags |= PF_I;
         }
-        _fr_ndbg(NO_REND, g3_draw_spoly(_fdt_ttf->ptsper, &_fdt_tmppts));
+        g3_draw_spoly(_fdt_ttf->ptsper, &_fdt_tmppts);
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 #else
 #define _fr_flat_lit_flr _fr_tmap_lit_flr
@@ -792,13 +792,13 @@ static void _fr_tmap_flr(void) {
         }
         if (quik_draw_tmap_p(_fdt_ttf->ptsper)) {
             if ((nrm_mask & 0xf) == FRFNORM_VFULL) {
-                _fr_ndbg(NO_REND, _fr_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             } else {
-                _fr_ndbg(NO_REND, _fr_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             }
         }
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 
 static void _fr_tmap_lit_flr(void) {
@@ -821,13 +821,13 @@ static void _fr_tmap_lit_flr(void) {
         }
         if (quik_draw_tmap_p(_fdt_ttf->ptsper)) {
             if ((nrm_mask & 0xf) == FRFNORM_VFULL) {
-                _fr_ndbg(NO_REND, _fr_lit_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_lit_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             } else {
-                _fr_ndbg(NO_REND, _fr_lit_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_lit_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             }
         }
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 
 static void _fr_cspace_wire_flr(void) {
@@ -846,9 +846,9 @@ static void _fr_cspace_wire_flr(void) {
             _fr_pt_cspace(*pb);
             pb++;
         }
-        _fr_ndbg(NO_REND, _fr_draw_wire_cpoly_3or4(_fdt_ttf->ptsper));
+        _fr_draw_wire_cpoly_3or4(_fdt_ttf->ptsper);
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 
 static void _fr_cspace_full_flr(void) {
@@ -867,9 +867,9 @@ static void _fr_cspace_full_flr(void) {
             _fr_pt_cspace(*pb);
             pb++;
         }
-        _fr_ndbg(NO_REND, g3_draw_cpoly(_fdt_ttf->ptsper, _fdt_tmppts));
+        g3_draw_cpoly(_fdt_ttf->ptsper, _fdt_tmppts);
     } while (loopcnt-- > 0);
-    _fr_sdbg(STATS, _frp.stats.flr++);
+    //_fr_sdbg(STATS, _frp.stats.flr++);
 }
 
 // tabs_ceil
@@ -887,9 +887,9 @@ static void _fr_flat_ceil(void) {
             pt_code = (pt_code ^ pt_merge_mask[0]) & pt_merge_mask[1];
             _fr_figure_pt(*pb--, pt_code);
         }
-        _fr_ndbg(NO_REND, g3_draw_poly((*fr_get_idx)(), _fdt_ttf->ptsper, _fdt_tmppts));
+        g3_draw_poly((*fr_get_idx)(), _fdt_ttf->ptsper, _fdt_tmppts);
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
 #ifdef FLAT_SUPPORT
@@ -910,9 +910,9 @@ static void _fr_flat_lit_ceil(void) {
             (*pb--)->p3_flags |= PF_I;
         }
         gr_set_fcolor((*fr_get_idx)());
-        _fr_ndbg(NO_REND, g3_draw_spoly(_fdt_ttf->ptsper, _fdt_tmppts));
+        g3_draw_spoly(_fdt_ttf->ptsper, _fdt_tmppts);
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 #else
 #define _fr_flat_lit_ceil _fr_tmap_lit_ceil
@@ -939,13 +939,13 @@ static void _fr_tmap_ceil(void) {
         }
         if (quik_draw_tmap_p(_fdt_ttf->ptsper)) {
             if ((nrm_mask & 0xf) == FRFNORM_VFULL) {
-                _fr_ndbg(NO_REND, _fr_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             } else {
-                _fr_ndbg(NO_REND, _fr_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             }
         }
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
 static void _fr_tmap_lit_ceil(void) {
@@ -969,13 +969,13 @@ static void _fr_tmap_lit_ceil(void) {
         }
         if (quik_draw_tmap_p(_fdt_ttf->ptsper)) {
             if ((nrm_mask & 0xf) == FRFNORM_VFULL) {
-                _fr_ndbg(NO_REND, _fr_lit_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_lit_floor_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             } else {
-                _fr_ndbg(NO_REND, _fr_lit_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)()));
+                _fr_lit_per_func(_fdt_ttf->ptsper, _fdt_tmppts, (*fr_get_tmap)());
             }
         }
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
 static void _fr_cspace_wire_ceil(void) {
@@ -994,9 +994,9 @@ static void _fr_cspace_wire_ceil(void) {
             _fr_pt_cspace(*pb);
             pb--;
         }
-        _fr_ndbg(NO_REND, _fr_draw_wire_cpoly_3or4(_fdt_ttf->ptsper));
+        _fr_draw_wire_cpoly_3or4(_fdt_ttf->ptsper);
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
 static void _fr_cspace_full_ceil(void) {
@@ -1015,9 +1015,9 @@ static void _fr_cspace_full_ceil(void) {
             _fr_pt_cspace(*pb);
             pb--;
         }
-        _fr_ndbg(NO_REND, g3_draw_cpoly(_fdt_ttf->ptsper, _fdt_tmppts));
+        g3_draw_cpoly(_fdt_ttf->ptsper, _fdt_tmppts);
     } while ((_fdt_ttf->flags & FRFLRFLG_2ELEM) && (loopcnt-- > 0));
-    _fr_sdbg(STATS, _frp.stats.ceil++);
+    //_fr_sdbg(STATS, _frp.stats.ceil++);
 }
 
 // reoptimize these to _NOT_ do all the boneheaded stuff
@@ -1082,7 +1082,7 @@ int _fr_get_anti_gap(fix *face_l, uchar in_fo, uchar *hgts, uchar *mmptr) {
     // more importantly, we think face_l is starting 4 in, we fill normally which works
     // also note that if no height changes, it could mean we have half walls
     // so we check in that case, and if so, add it in place
-    _fr_sdbg(ANAL_CHK, if (in_fo == 0xff) mprintf("_fr_get_anti_gap: hey in_fo is 0xff\n"));
+    //_fr_sdbg(ANAL_CHK, if (in_fo == 0xff) mprintf("_fr_get_anti_gap: hey in_fo is 0xff\n"));
     fo_t = (in_fo ^ mmptr[2]) & mmptr[3];
     fo_b = (in_fo ^ mmptr[0]) & mmptr[1];
     if ((fo_t | fo_b) & FO_HT_MSK) { // these cant be at top, since they have parameter
@@ -1322,7 +1322,7 @@ static void _fr_parse_wall(int which) {
         _game_fr_tmap = _fdt_wmap;
 
     if (me_clearsolid(_fdt_mptr) & solid_chk[which]) {
-        _fr_sdbg(STATS, _frp.stats.hitsolid++);
+        //_fr_sdbg(STATS, _frp.stats.hitsolid++);
         are_solid = 2;
     } else {
         oth_fo = face_obstruct[me_tiletype(oth_mptr)][(which + 2) & 3];
@@ -1331,7 +1331,7 @@ static void _fr_parse_wall(int which) {
 
     if (are_solid) // totally solid on other side, just do us, baby baby
     {
-        _fr_sdbg(STATS, if ((me_clearsolid(_fdt_mptr) & solid_chk[which]) == 0) _frp.stats.setsolid++);
+        //_fr_sdbg(STATS, if ((me_clearsolid(_fdt_mptr) & solid_chk[which]) == 0) _frp.stats.setsolid++);
         _me_clearsolid(_fdt_mptr) |= solid_chk[which];
         // int walls doesnt know about parameters, so we lost
         //      if (_fdt_ttf->flags&FRFLRFLG_USEPR)
@@ -1340,7 +1340,7 @@ static void _fr_parse_wall(int which) {
                               (uchar *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
         if (fcnt == 0) {
             _me_clearsolid(_fdt_mptr) |= clear_chk[which];
-            _fr_sdbg(STATS, _frp.stats.setclear++);
+            //_fr_sdbg(STATS, _frp.stats.setclear++);
         } else
             (*_fr_render_walls)(which, fcnt);
         //      }
@@ -1348,7 +1348,7 @@ static void _fr_parse_wall(int which) {
         //	      _fr_terr_int_wall(FROUTERWALLS+which);
         return;
     }
-    _fr_sdbg(NO_RTF, return );
+    //_fr_sdbg(NO_RTF, return );
     // otherwise, grind away
     oth_hgts[FDT_PT_FLR] = me_height_flr(oth_mptr);
     oth_hgts[FDT_PT_CEIL] = MAX_HGT - me_height_ceil(oth_mptr);
@@ -1371,15 +1371,15 @@ static void _fr_parse_wall(int which) {
             use_outer_wall = &outer_wall[1][0][0];
             useocnt--;
         }
-        _fr_sdbg(SANITY, if (useocnt == 0) mprintf("_fr_parse_wall: have 0 usecnt, but didnt punt yet\n"));
-        _fr_sdbg(SANITY,
-                 if (_fdt_fo[which] == 0xff) mprint("_fr_parse_wall: local fo==0xff, wallbits should have been 0"));
+        //_fr_sdbg(SANITY, if (useocnt == 0) mprintf("_fr_parse_wall: have 0 usecnt, but didnt punt yet\n"));
+        //_fr_sdbg(SANITY,
+        //         if (_fdt_fo[which] == 0xff) mprint("_fr_parse_wall: local fo==0xff, wallbits should have been 0"));
         icnt = fr_get_ext_gap(&inner_wall[0][0][0], _fdt_fo[which], _fdt_hgts,
                               (uchar *)mmask_facelet[me_bits_mirror(_fdt_mptr)]);
 
         fcnt = merge_walls(&final_wall[0][0][0], &inner_wall[0][0][0], icnt, use_outer_wall, useocnt);
         if ((f_is_i) && (fcnt == icnt)) {
-            _fr_sdbg(STATS, _frp.stats.fisisolid++);
+            //_fr_sdbg(STATS, _frp.stats.fisisolid++);
             _me_clearsolid(_fdt_mptr) |= solid_chk[which];
         }
         (*_fr_render_walls)(which, fcnt);
@@ -1403,7 +1403,7 @@ static void _fr_parse_wall(int which) {
         fcnt = 0;
     if (fcnt == 0) {
         _me_clearsolid(_fdt_mptr) |= clear_chk[which]; // or just shift here? who can tell
-        _fr_sdbg(STATS, _frp.stats.setclear++);
+        //_fr_sdbg(STATS, _frp.stats.setclear++);
     }
 }
 
@@ -1412,13 +1412,13 @@ void parse_clip_tile() {}
 
     // so, ahh, should have wall bits for floor and ceiling, so we can start clipping
 
-#if _fr_defdbg(STATS)
+#if 0
 #define wall_check(wmask1, wmask2, w_id)                      \
     if ((_fdt_mask & wmask1) && (_fdt_ttw.wallbits & wmask2)) \
         if ((me_clearsolid(_fdt_mptr) & wmask1) != 0) {       \
-            _fr_sdbg(STATS, _frp.stats.hitclear++);           \
+            //_fr_sdbg(STATS, _frp.stats.hitclear++);           \
         } else if ((me_subclip(_fdt_mptr) & wmask1) != 0) {   \
-            _fr_sdbg(STATS, _frp.stats.hitsc++);              \
+            //_fr_sdbg(STATS, _frp.stats.hitsc++);              \
         } else                                                \
             _fr_parse_wall(w_id)
 #else // do wacky shit to make this work
@@ -1442,8 +1442,8 @@ void fr_draw_tile(void) {
         return;
     }
 
-    _fr_ndbg(NO_SUB_CLIP, parse_clip_tile());
-    _fr_sdbg(SHOW_BASE, if (_fr_terr_prim) _fr_terr_base(0); else _fr_terr_dumb_base(0));
+    parse_clip_tile();
+    //_fr_sdbg(SHOW_BASE, if (_fr_terr_prim) _fr_terr_base(0); else _fr_terr_dumb_base(0));
     _fdt_ttw = tile_walls[_fdt_tt];
     _fdt_ttf = &tile_floors[_fdt_tt];
     _fdt_hgts[FDT_PT_FLR] = me_height_flr(_fdt_mptr);
@@ -1615,7 +1615,7 @@ void fr_terr_frame_end(void) {
     g3_free_list(FDT_TMPPTCNT, _fdt_tmppts);
 }
 
-#if _fr_defdbg(CURSOR)
+#if 0
 // wrapped within the walkman with a halo of distortion
 // aural contraceptive aborting pregnant conversation
 void fr_set_cursor(int x, int y) {

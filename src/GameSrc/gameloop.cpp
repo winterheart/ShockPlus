@@ -95,71 +95,56 @@ void game_loop(void) {
             draw_pause_string();
             redraw_paused = FALSE;
         }
-        // KLC - does nothing!  loopLine(GL|0x1D,synchronous_update());
         if (music_on)
-            loopLine(GL|0x1C, mlimbs_do_ai());
-        /*if (pal_fx_on)
-            loopLine(GL|0x1E, palette_advance_all_fx(* (long *) 0x16a)); // TickCount()*/
-    }
-
-    // If we're not paused...
-
-    else {
-        loopLine(GL | 0x10, update_state(time_passes)); // move game time
+            mlimbs_do_ai();
+    } else {
+        // If we're not paused...
+        update_state(time_passes); // move game time
 
         if (time_passes) {
             TRACE("%s: ai_run", __FUNCTION__);
-            loopLine(GL | 0x12, ai_run());
+            ai_run();
 
             TRACE("%s: gamesys_run", __FUNCTION__);
-            loopLine(GL | 0x13, gamesys_run());
+            gamesys_run();
 
             TRACE("%s: advance_animations", __FUNCTION__);
-            loopLine(GL | 0x14, advance_animations());
+            advance_animations();
         }
         TRACE("%s: wares_update", __FUNCTION__);
-        loopLine(GL | 0x16, wares_update());
+        wares_update();
 
         TRACE("%s: message_clear_check", __FUNCTION__);
-        loopLine(GL | 0x1D, message_clear_check()); // This could be done more cleverly with change flags...
+        message_clear_check(); // This could be done more cleverly with change flags...
 
         if (localChanges) {
             TRACE("%s: render_run", __FUNCTION__);
-            loopLine(GL | 0x1A, render_run());
+            render_run();
 
             TRACE("%s: status_vitals_update", __FUNCTION__);
-            loopLine(GL | 0x17, if (!full_game_3d) status_vitals_update(FALSE));
-            /*KLC - no longer needed
-            if (_change_flag&ANIM_UPDATE)
-            {
-                    loopLine(GL|0x19, AnimRecur());
-                    chg_unset_flg(ANIM_UPDATE);
-            }
-            */
+            if (!full_game_3d)
+                status_vitals_update(FALSE);
 
             if (full_game_3d && ((_change_flag & INVENTORY_UPDATE) || (_change_flag & MFD_UPDATE)))
                 _change_flag |= DEMOVIEW_UPDATE;
             if (_change_flag & INVENTORY_UPDATE) {
                 TRACE("%s: INVENTORY_UPDATE", __FUNCTION__);
                 chg_unset_flg(INVENTORY_UPDATE);
-                loopLine(GL | 0x1B, inventory_draw());
+                inventory_draw();
             }
             if (_change_flag & MFD_UPDATE) {
                 TRACE("%s: MFD_UPDATE", __FUNCTION__);
                 chg_unset_flg(MFD_UPDATE);
-                loopLine(GL | 0x18, mfd_update());
+                mfd_update();
             }
 
             if (_change_flag & DEMOVIEW_UPDATE) {
-                // KLC - does nothing!
-                // if (sfx_on || music_on)
-                //     loopLine(GL|0x1D, synchronous_update());
                 chg_unset_flg(DEMOVIEW_UPDATE);
             }
         }
         if (!full_game_3d) {
             TRACE("%s: update_meters", __FUNCTION__);
-            loopLine(GL | 0x19, update_meters(FALSE));
+            update_meters(FALSE);
         }
         if (!full_game_3d && olh_overlay_on) {
             TRACE("%s: olh_overlay", __FUNCTION__);
@@ -167,28 +152,26 @@ void game_loop(void) {
         }
 
         TRACE("%s: physics_run", __FUNCTION__);
-        loopLine(GL | 0x15, physics_run());
+        physics_run();
         {
             if (!olh_overlay_on && ShockPlus::Options::showOnScreenHelp && !global_fullmap->cyber) {
                 TRACE("%s: olh_scan_objects", __FUNCTION__);
                 olh_scan_objects();
             }
         }
-        // KLC - does nothing!         loopLine(GL|0x1D,synchronous_update());
         if (ShockPlus::Options::enableSFX || music_on) {
             TRACE("%s: sound_frame_update", __FUNCTION__);
-            loopLine(GL | 0x1C, mlimbs_do_ai());
-            loopLine(GL | 0x1E, sound_frame_update());
+            mlimbs_do_ai();
+            sound_frame_update();
         }
 
         if (pal_fx_on) {
-            loopLine(GL | 0x1F, palette_advance_all_fx(*tmd_ticks));
-
-			gamma_dealfunc(ShockPlus::Options::gammaCorrection);
+            palette_advance_all_fx(*tmd_ticks);
+            gamma_dealfunc(ShockPlus::Options::gammaCorrection);
         }
 
         TRACE("%s: destroy_destroyed_objects", __FUNCTION__);
-        loopLine(GL | 0x20, destroy_destroyed_objects());
-        loopLine(GL | 0x21, check_cspace_death());
+        destroy_destroyed_objects();
+        check_cspace_death();
     }
 }

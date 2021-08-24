@@ -1444,7 +1444,7 @@ void setup_start(void) {
     // someone should probably go and figure it out
     _current_root = NULL;
 #endif
-    _current_3d_flag = ANIM_UPDATE;
+    current_3d_flag = ANIM_UPDATE;
     _current_fr_context = NULL;
     _current_view = &setup_root_region;
     static_change_copy();

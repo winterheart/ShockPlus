@@ -46,18 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 #include "grd.h"
 
-// MLA- took the v_table out, it doesn't appear to be referenced anymore
-#if 0
-#define VTAB_SIZE 100
-
-typedef struct {
-   uchar *p;        /* pointer to block. */
-   long  size;      /* size of block (address). */
-} v_block;
-
-v_block v_table[VTAB_SIZE];
-#endif
-
 // globals
 uchar grd_valloc_mode = 0;
 

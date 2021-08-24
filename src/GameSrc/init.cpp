@@ -378,7 +378,7 @@ void init_all(void) {
     else
         pause_time += MIN_WAIT_TIME;
 
-    if ((_current_loop != SETUP_LOOP) && (_current_loop != CUTSCENE_LOOP)) {
+    if ((current_loop != SETUP_LOOP) && (current_loop != CUTSCENE_LOOP)) {
         //Â¥Â¥ for now      object_data_load();
 
         // gr_clear(0xFF);
@@ -387,7 +387,7 @@ void init_all(void) {
 
     // perhaps shouldnt do this if we are going to go into editor...
     // fade down for last time
-    if (_current_loop != EDIT_LOOP) {
+    if (current_loop != EDIT_LOOP) {
         //	   pause_for_input(TickCount() + 10);
         //	   if (pal_fx_on)
         //	      palfx_fade_down();

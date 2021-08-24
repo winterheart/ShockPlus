@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-#include "cybmem.h"
 #include "frprotox.h"
 #include "frcamera.h"
 #include "frflags.h"
@@ -109,7 +108,7 @@ void view360_setup_mode(uchar mode) {
 }
 
 void view360_restore_inventory() {
-    if (_current_loop == GAME_LOOP) {
+    if (current_loop == GAME_LOOP) {
         chg_set_flg(INVENTORY_UPDATE);
         inv_change_fullscreen(full_game_3d);
         view360_message_obscured = FALSE;
@@ -120,19 +119,6 @@ void view360_restore_inventory() {
 }
 
 static uchar rendered_inv_fullscrn = FALSE;
-
-void shock_hflip_in_place(grs_bitmap *bm) {
-    grs_canvas big_canvas;
-    grs_canvas bm_canvas;
-    gr_init_canvas(&big_canvas, big_buffer, BMT_FLAT8, bm->w, bm->h);
-    gr_init_canvas(&bm_canvas, bm->bits, BMT_FLAT8, bm->w, bm->h);
-    gr_push_canvas(&big_canvas);
-    gr_hflip_bitmap(bm, 0, 0);
-    gr_pop_canvas();
-    gr_push_canvas(&bm_canvas);
-    ss_bitmap(&big_canvas.bm, 0, 0);
-    gr_pop_canvas();
-}
 
 
 int view360_fullscrn_draw_callback(void *v, void *vbm, int x, int y, int flg) {
@@ -312,7 +298,7 @@ void view360_turnon(uchar visible, uchar real_start) {
 
     if (visible) {
         view360_setup_mode(VIEW_MODE(s));
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
     }
     view360_render_on = TRUE;
 }

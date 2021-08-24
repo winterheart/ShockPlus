@@ -20,39 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "genel.h"
 
 /* This is rather lame, uses aspect ratio to determine parameters to
- * the elipse drawer.  That would be fine, except that it makes the
+ * the ellipse drawer.  That would be fine, except that it makes the
  * definition of r somewhat arbitrary, since it has to be in some unit
  * in some mode.  For compatibility (sort of), we say 320x200 x-pixel's.
  * This leads to some ugly rounding, but the circles are good enough.
  */
 
-void gen_int_ucircle(short x0, short y0, short r) {
-
-    fix a, b, ratio;
-
-    /* scale from 320x200 x-pixels */
-    ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
-    a = fix_mul((r << 16), ratio);
-
-    /* calculate equivalent b */
-    b = fix_div(a, (grd_cap->aspect));
-
-    gr_int_uelipse(x0, y0, fix_fint(a), fix_fint(b));
-}
-
 int gen_int_circle(short x0, short y0, short r) {
-    int c;
-
-    fix a, b, ratio;
-
     /* scale from 320x200 x-pixels */
-    ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
-    a = fix_mul((r << 16), ratio);
+    fix ratio = fix_div(((grd_cap->w) << 16), (320 << 16));
+    fix a = fix_mul((r << 16), ratio);
 
     /* calculate equivalent b */
-    b = fix_div(a, (grd_cap->aspect));
+    fix b = fix_div(a, (grd_cap->aspect));
 
-    c = gr_int_elipse(x0, y0, fix_fint(a), fix_fint(b));
-
-    return c;
+    return gr_int_elipse(x0, y0, fix_fint(a), fix_fint(b));
 }

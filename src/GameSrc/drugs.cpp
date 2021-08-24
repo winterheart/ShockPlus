@@ -144,7 +144,7 @@ void drug_use(int n) {
         Drugs[n].use();
 
     mfd_notify_func(MFD_BIOWARE_FUNC, MFD_INFO_SLOT, FALSE, MFD_ACTIVE, FALSE);
-    if (_current_loop <= FULLSCREEN_LOOP)
+    if (current_loop <= FULLSCREEN_LOOP)
         chg_set_flg(INVENTORY_UPDATE);
 }
 

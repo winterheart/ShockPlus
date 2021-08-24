@@ -1160,7 +1160,7 @@ uchar view3d_mouse_handler(uiEvent *ev, LGRegion *r, intptr_t data) {
             if (uiGrabFocus(r, UI_EVENT_MOUSE | UI_EVENT_MOUSE_MOVE) == OK)
                 got_focus = true;
         }
-        chg_set_flg(_current_3d_flag);
+        chg_set_flg(current_3d_flag);
         // view3d_constrain_mouse(r,LBUTTON_CONSTRAIN_BIT);
     }
     if (md->action & MOUSE_LUP || !(md->buttons & (1 << MOUSE_LBUTTON))) {

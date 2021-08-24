@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "blndat.h"
 #include "grs.h"
-#include "lg.h"
 
 // ------------------------------------------------------------------------
 // PowerPC routines

@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __SPNDAT
 
 extern uchar *tluc8tab[256];
-extern uchar *tluc8ltab[256];
 extern uchar *tluc8stab;
 extern int tluc8nstab;
 

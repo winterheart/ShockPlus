@@ -183,7 +183,6 @@ typedef struct _focus_link {
     int next;
 } focus_link;
 
-extern uiSlab *uiCurrentSlab;
 #define FocusChain (uiCurrentSlab->fchain.chain)
 #define CurFocus (uiCurrentSlab->fchain.curfocus)
 #define FCHAIN ((focus_link *)(uiCurrentSlab->fchain.chain.vec))
