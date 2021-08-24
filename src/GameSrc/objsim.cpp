@@ -167,6 +167,21 @@ ObjSmallstuff objSmallstuffs[NUM_OBJECTS_SMALLSTUFF];
 ObjBigstuff default_bigstuff;
 ObjSmallstuff default_smallstuff;
 
+// Globals from objwarez.h
+DrugProp DrugProps[NUM_DRUG];
+StatsDrugProp StatsDrugProps[NUM_STATS_DRUG];
+HardwareProp HardwareProps[NUM_HARDWARE];
+GoggleHardwareProp GoggleHardwareProps[NUM_GOGGLE_HARDWARE];
+HardwareHardwareProp HardwareHardwareProps[NUM_HARDWARE_HARDWARE];
+SoftwareProp SoftwareProps[NUM_SOFTWARE];
+
+ObjDrug objDrugs[NUM_OBJECTS_DRUG];
+ObjHardware objHardwares[NUM_OBJECTS_HARDWARE];
+ObjSoftware objSoftwares[NUM_OBJECTS_SOFTWARE];
+ObjDrug default_drug;
+ObjHardware default_hardware;
+ObjSoftware default_software;
+
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
 SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];
