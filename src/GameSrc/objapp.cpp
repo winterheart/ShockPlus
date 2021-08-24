@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objprop.h"
 #include "map.h"
 
-////////////////////////////// APPLICATION-SPECIFIC DATA
+// APPLICATION-SPECIFIC DATA
 //
 // Here we define the arrays for all the application-specific
 // classes defined in objapp.h.  Follow this example, and there
@@ -56,8 +56,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {NUM_OBJECTS_CRITTER,    sizeof(ObjCritter),    (char *)&objCritters},
 };
 
-// const ObjSpecHeader ObjPropHeader = {NUM_OBJECT, sizeof(ObjProp), &ObjProps}
-
+// WH: commenting this for a while (2021)
+/*
 const ObjSpecHeader ClassPropHeaders[NUM_CLASSES] = {
     {NUM_GUN,        sizeof(GunProp),        (char *)&GunProps},
     {NUM_AMMO,       sizeof(AmmoProp),       (char *)&AmmoProps},
@@ -73,7 +73,10 @@ const ObjSpecHeader ClassPropHeaders[NUM_CLASSES] = {
     {NUM_CONTAINER,  sizeof(ContainerProp),  (char *)&ContainerProps},
     {NUM_CRITTER,    sizeof(CritterProp),    (char *)&CritterProps},
 };
+*/
 
+// WH: commenting this for a while (2021)
+/*
 const ObjSpecHeader SubclassPropHeaders[NUM_SUBCLASSES] = {
     {NUM_PISTOL_GUN,              sizeof(PistolGunProp),             (char *)&PistolGunProps},
     {NUM_AUTO_GUN,                sizeof(AutoGunProp),               (char *)&AutoGunProps},
@@ -147,8 +150,9 @@ const ObjSpecHeader SubclassPropHeaders[NUM_SUBCLASSES] = {
     {NUM_CYBER_CRITTER,           sizeof(CyberCritterProp),          (char *)&CyberCritterProps},
     {NUM_ROBOBABE_CRITTER,        sizeof(RobobabeCritterProp),       (char *)&RobobabeCritterProps},
 };
+*/
 
-////////////////////////////// APPLICATION-SPECIFIC FUNCTIONS
+// APPLICATION-SPECIFIC FUNCTIONS
 
 static int map_x, map_y;
 
@@ -157,16 +161,16 @@ void ObjInfoInit(ObjInfo *info) {
     info->ph = -1;
 }
 
-void ObjRefStateBinIteratorInit(void) { map_x = map_y = 0; }
+void ObjRefStateBinIteratorInit() { map_x = map_y = 0; }
 
 uchar ObjRefStateBinIterator(ObjRefStateBin *bin) {
     if (map_y == MAP_YSIZE)
-        return FALSE;
+        return false;
     bin->sq.x = map_x;
     bin->sq.y = map_y;
     if (++map_x == MAP_XSIZE) {
         map_x = 0;
         map_y++;
     }
-    return TRUE;
+    return true;
 }

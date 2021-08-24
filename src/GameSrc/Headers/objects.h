@@ -87,28 +87,6 @@ typedef struct Obj {
     ObjInfo info; // extra, application-specific information
 } Obj;
 
-/*
-typedef struct old_Obj {
-    uchar active;         // does this object really exist?
-    ObjClass obclass;     // what class this is
-    ObjSubClass subclass; // subclass within that class
-    ObjSpecID specID;     // ID within that class
-    union {
-        ObjRefID ref; // what refers to this
-        ObjID headused;
-    };
-    union {
-        ObjID next; // next Obj in free chain or used chain
-        ObjID headfree;
-    };
-    ObjID prev;       // prev Obj in used chain
-    ObjLoc loc;       // location
-    old_ObjInfo info; // extra, application-specific information
-} old_Obj;
-*/
-
-//#define FORALLOBJS(pmo) for (pmo = (objs[OBJ_NULL]).headused; pmo != OBJ_NULL; pmo = objs[pmo].next)
-
 // The "next" field of object 0 is the ID of the first element of the chain
 // of "free" objects; objects that are not currently in the world.  The "next"
 // field of that object points to the next element in the free chain, and so
@@ -148,22 +126,12 @@ typedef struct ObjSpec {
     ObjSpecID prev; // prev struct in used chain
 } ObjSpec;
 
-// This macro permutes the ObjSpecID pmo through all of the ObjSpecs in the
-// used chain of objspec.  "tile" is set to whether it's a tiled object.
-// Note that the "tile =" line in the third part refers to the pmo that
-// has been set earlier that line.
-//
-#define FORALLOBJSPECS(pmo, tiled, objspec)                                                  \
-    for (pmo = (objspec[OBJ_SPEC_NULL]).id, tiled = objspec[pmo].tile; pmo != OBJ_SPEC_NULL; \
-         pmo = objspec[pmo].next, tiled = objspec[pmo].tile)
-
 // The master array of objects
 extern Obj objs[NUM_OBJECTS];
 
 // The array of class-specific headers.  Index into this array by an ObjClass.
 extern /*const*/ ObjSpecHeader objSpecHeaders[NUM_CLASSES];
 
-//////////////////////////////
 //
 // Now, we get to actual references of objects.  Since a given object can reside
 // in more than one map element (if it is large), we need different map elements to be
@@ -188,7 +156,6 @@ typedef struct ObjRef {
 
 extern ObjRef objRefs[NUM_REF_OBJECTS];
 
-//////////////////////////////
 //
 // Routines to make it easy to deal with objects only once
 
@@ -202,19 +169,13 @@ extern uchar objsDealt[NUM_OBJECTS / 8];
     do {                                       \
         objsDealt[(x) >> 3] |= (1 << ((x)&7)); \
     } while (0)
-#define ObjClearDealt(x)                        \
-    do {                                        \
-        objsDealt[(x) >> 3] &= ~(1 << ((x)&7)); \
-    } while (0)
 #define ObjCheckDealt(x) (objsDealt[(x) >> 3] & (1 << ((x)&7)))
 
-//////////////////////////////
 //
 // Here is a structure by which an object's location is specified.
 // Physics will use it to tell the object manager how to update the world.
 
-#define MAX_REFS_PER_OBJ 12  // set as appropriate
-#define MAX_OBJS_CHANGING 20 // ditto
+#define MAX_REFS_PER_OBJ 12 // set as appropriate
 
 typedef struct ObjLocState {
     ObjID obj; // which obj is this?
@@ -222,24 +183,6 @@ typedef struct ObjLocState {
     ObjRefState refs[MAX_REFS_PER_OBJ + 1]; // list of points extended into
 } ObjLocState;
 
-// refs is a list of map elements that the Obj extends into; i.e., the bins
-// that should have ObjRefs referring to that object, along with any
-// extra state.  The list is terminated by an ObjRefState with a null bin.
-
-// Physics puts information about objects that have moved in objLocStates.
-extern ObjLocState objLocStates[MAX_OBJS_CHANGING];
-
-// numObjLocStates contains the number of entries of objLocStates that are valid.
-extern uchar numObjLocStates;
-
-//////////////////////////////
-//
-// Here is a structure that we use to tell physics what objects are interacting
-// with a given object.
-
-#define MAX_REFS_COLLIDING 32
-
-//////////////////////////////
 //
 // Hashing stuff
 //
@@ -289,31 +232,19 @@ ObjHashElemID ObjGetHashElemFromChain(ObjRefStateBin bin, uchar create, ObjHashE
 
 #endif // HASH_OBJECTS
 
-//////////////////////////////
 //
 // Public functions
 //
 
-void ObjsInit(void);
+void ObjsInit();
 uchar ObjAndSpecGrab(ObjClass obclass, ObjID *id, ObjSpecID *specid);
 uchar ObjPlace(ObjID id, ObjLoc *loc);
 ObjID ObjRefDel(ObjRefID ref);
 ObjRefID ObjRefMake(ObjID obj, ObjRefState refstate);
 uchar ObjDel(ObjID obj);
-uchar ObjChangeClass(ObjID obj, ObjClass obclass);
 uchar ObjUpdateLocs(ObjLocState *olsp);
-uchar ObjsUpdateLocs(void);
-void ObjPossibleCollisions(ObjID obj, ObjID *colls);
 
-void ObjBinPrint(ObjRefStateBin bin);
-uchar ObjSysOkay(void);
-void ObjPrintRefs(ObjID obj);
-
-//////////////
-
-uchar ObjInstInit(ObjID id, ObjSpecID specid, ObjSubClass subclass);
-
-//////////////////////////////
+uchar ObjSysOkay();
 
 #pragma pack(pop)
 
