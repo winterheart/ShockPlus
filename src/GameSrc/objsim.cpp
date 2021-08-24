@@ -100,6 +100,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define obj_inv_coor_y(oloc) ((OBJ_LOC_BIN_Y(oloc) << MAP_SH) + (OBJ_LOC_FINE_Y(oloc) >> MAP_MS))
 #define obj_inv_coor_z(oid) (inv_coor(fix_from_obj_height(oid)))
 
+// Globals from objcrit.h
+CritterProp CritterProps[NUM_CRITTER];
+RobotCritterProp RobotCritterProps[NUM_ROBOT_CRITTER];
+CyborgCritterProp CyborgCritterProps[NUM_CYBORG_CRITTER];
+CyberCritterProp CyberCritterProps[NUM_CYBER_CRITTER];
+
+ObjCritter objCritters[NUM_OBJECTS_CRITTER];
+ObjCritter default_critter;
+
+
 // Globals from objwpn.h sources
 GunProp GunProps[NUM_GUN];
 SpecialGunProp SpecialGunProps[NUM_SPECIAL_GUN];
