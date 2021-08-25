@@ -41,7 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "grs.h"
 #include "bitmap.h"
 #include "rsd.h"
-#define _RSDCVT_C
 #include "rsdunpck.h"
 #include "lg.h"
 

@@ -60,7 +60,6 @@ set(2D_SRC
 	Source/Gen/genvpoly.c
 	Source/Gen/gencirc.c
 	Source/Gen/genfl8.c
-	Source/Gen/genf24.c
 	Source/Gen/gentl8.c
 	Source/Gen/genrect.c
 	Source/Gen/genvrect.c
@@ -101,8 +100,6 @@ set(2D_SRC
 	Source/Flat8/fl8sply.c
 	Source/Flat8/fl8gfl8.c
 	Source/Flat8/fl8tl8.c
-	Source/Flat8/fl8p24.c
-	Source/Flat8/fl8g24.c
 	Source/Flat8/fl8ctp.c
 	Source/Flat8/fl8mscl.c
 	Source/Flat8/fl8lop.c
@@ -118,7 +115,6 @@ set(2D_SRC
 	Source/Clip/clplin.c
 	Source/Clip/clpclin.c
 	Source/Clip/clpltab.c
-	Source/Clip/clpf24.c
 	Source/Clip/clplin2.c
 	Source/Clip/clppoly.c
 	Source/Clip/clpslin.c

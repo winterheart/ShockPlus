@@ -41,15 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define kSkipColor 0
 
-//ÊMLA - removed so we have the prototypes
-// #ifndef _RSDCVT_C
 extern uchar *grd_unpack_buf;
 extern int gr_rsd8_convert(grs_bitmap *sbm, grs_bitmap *dbm);
-// #endif
 
 uchar *gr_rsd8_unpack(uchar* src, uchar *dst);
-
-//#pragma aux gr_rsd8_unpack parm [esi] [edi] value [edi] modify [eax ecx edx esi edi]
 
 #define gr_set_unpack_buf(buf) grd_unpack_buf=buf
 #define gr_get_unpack_buf() grd_unpack_buf

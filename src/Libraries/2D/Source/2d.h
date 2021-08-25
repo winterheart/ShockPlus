@@ -40,7 +40,6 @@ extern "C" {
 #include "grdbm.h"
 #include "grgbm.h"
 #include "grlin.h"
-#include "grp24.h"
 #include "grpix.h"
 #include "grply.h"
 #include "grrect.h"
