@@ -28,9 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef SVGA_SUPPORT
 #include "fullscrn.h"
 #endif
-extern "C" {
-#include "frcursors.h"
-};
+
 #include "game_screen.h"
 #include "tools.h"
 #include "gamescr.h"
@@ -77,7 +75,6 @@ uchar *default_font_buf;
 LGRegion *mainview_region, *status_region, *inventory_region_game;
 LGRegion *pagebutton_region_game;
 LGCursor globcursor, wait_cursor, fire_cursor;
-frc *normal_game_fr_context;
 
 errtype _screen_init_mouse(LGRegion *r, uiSlab *slab, uchar do_init);
 errtype _screen_background(void);

@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 
-#include "frcursors.h"
 #include "lg.h"
 #include "mouse.h"
 #include "movekeys.h"

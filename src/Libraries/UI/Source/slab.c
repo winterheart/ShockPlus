@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include "cursors.h"
 #include "event_ui.h"
-#include "frcursors.h"
 #include "lg.h"
 #include "slab.h"
 

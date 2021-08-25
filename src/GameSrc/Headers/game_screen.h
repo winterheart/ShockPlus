@@ -33,8 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // C Library Includes
 
 // System Library Includes
+#include "cursors.h"
 #include "event_ui.h"
-#include "frprotox.h"
 
 // Master Game Includes
 
@@ -81,7 +81,6 @@ extern LGCursor globcursor;
 extern LGCursor wait_cursor;
 extern LGCursor fire_cursor;
 extern LGCursor vmail_cursor;
-extern frc *normal_game_fr_context;
 
 extern uiSlab main_slab;
 extern LGRect fscrn_rect;

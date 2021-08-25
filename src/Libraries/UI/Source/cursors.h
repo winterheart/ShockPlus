@@ -186,6 +186,14 @@ extern errtype uiUpdateScreenSize(LGPoint size);
 // redrawing the cursor.
 extern int CursorMoveTolerance;
 
+uchar cursor_get_callback(LGRegion* reg, LGRect* rect, void* vp);
+
+errtype ui_init_cursor_stack(uiSlab* slab, LGCursor* default_cursor);
+errtype ui_init_cursors(void);
+errtype ui_shutdown_cursors(void);
+uchar ui_set_current_cursor(LGPoint pos);
+void ui_update_cursor(LGPoint pos);
+
 // ----------------------
 // CURSOR-STACK-BASED API
 //
