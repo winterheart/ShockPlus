@@ -254,8 +254,6 @@ extern void gen_int_disk(short x0, short y0, short r);
 /* bitmap drawing functions. */
 extern int gen_mono_bitmap(grs_bitmap *bm, short x, short y);
 extern int gen_flat8_bitmap(grs_bitmap *bm, short x, short y);
-extern void gen_flat24_ubitmap(grs_bitmap *bm, short x0, short y0);
-extern int gen_flat24_bitmap(grs_bitmap *bm, short x0, short y0);
 extern void gri_gen_rsd8_ubitmap(grs_bitmap *bm, short x, short y);
 extern int gri_gen_rsd8_bitmap(grs_bitmap *bm, short x, short y);
 extern void unpack_rsd8_ubitmap(grs_bitmap *bm, short x, short y);

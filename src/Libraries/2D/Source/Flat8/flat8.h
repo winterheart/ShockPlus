@@ -192,12 +192,6 @@ extern void flat8_set_upixel(long color, short x, short y);
 extern long flat8_get_upixel(short x, short y);
 extern long flat8_get_pixel(short x, short y);
 
-/* 24-bit pixel prototypes. */
-extern void flat8_set_upixel24(long color, short x, short y);
-extern int flat8_set_pixel24(long color, short x, short y);
-extern long flat8_get_upixel24(short x, short y);
-extern long flat8_get_pixel24(short x, short y);
-
 /* straight, rectangular-type primitives. */
 extern void flat8_clear(int32_t color);
 

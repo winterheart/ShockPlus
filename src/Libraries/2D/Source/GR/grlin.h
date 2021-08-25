@@ -45,7 +45,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define grd_iline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_ILINE]))
 #define grd_hline_clip_fill ((grt_line_clip_fill_xy)(grd_line_clip_fill_vector[GR_HLINE]))
 #define grd_vline_clip_fill ((grt_line_clip_fill_xy)(grd_line_clip_fill_vector[GR_VLINE]))
-#define grd_sline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_SLINE]))
-#define grd_cline_clip_fill ((grt_line_clip_fill_v)(grd_line_clip_fill_vector[GR_CLINE]))
 
 #endif

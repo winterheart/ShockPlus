@@ -41,10 +41,10 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)flat8_get_upixel, // GET_UPIXEL8
     (ptr_type)flat8_get_pixel,  // GET_PIXEL8
     /* 24-bit pixel set/get */
-    (ptr_type)flat8_set_upixel24, // SET_UPIXEL24
-    (ptr_type)flat8_set_pixel24,  // SET_PIXEL24
-    (ptr_type)flat8_get_upixel24, // GET_UPIXEL24
-    (ptr_type)flat8_get_pixel24,  // GET_PIXEL24
+    gr_not_imp, // SET_UPIXEL24 // WH: was flat8_set_upixel24
+    gr_not_imp, // SET_PIXEL24 // WH: was flat8_set_pixel24
+    gr_not_imp, // GET_UPIXEL24 // WH: was flat8_get_upixel24
+    gr_not_imp, // GET_PIXEL24 // WH: was flat8_get_pixel24
     /* integral, straight primitives */
     (ptr_type)flat8_clear,             // DRAW_CLEAR
     (ptr_type)temp_upoint,             // DRAW_UPOINT
@@ -199,8 +199,8 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)gen_mono_bitmap,     // DRAW_MONO_BITMAP
     (ptr_type)temp_flat8_ubitmap,  // DRAW_FLAT8_UBITMAP
     (ptr_type)gen_flat8_bitmap,    // DRAW_FLAT8_BITMAP
-    (ptr_type)gen_flat24_ubitmap,  // DRAW_FLAT24_UBITMAP
-    (ptr_type)gen_flat24_bitmap,   // DRAW_FLAT24_BITMAP
+    gr_not_imp,                    // DRAW_FLAT24_UBITMAP   // WH: was gen_flat24_ubitmap
+    gr_not_imp,                    // DRAW_FLAT24_BITMAP    // WH: was gen_flat24_bitmap
     (ptr_type)temp_rsd8_ubitmap,   // DRAW_RSD8_UBITMAP
     (ptr_type)temp_rsd8_bitmap,    // DRAW_RSD8_BITMAP
     (ptr_type)temp_tluc8_ubitmap,  // DRAW_TLUC8_UBITMAP

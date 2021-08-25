@@ -81,7 +81,6 @@ extern int gr_clip_fix_line(fix *x0, fix *y0, fix *x1, fix *y1);
 extern int gr_clip_fix_poly(int n, fix *vlist, fix *clist);
 extern int gr_clip_rect(short *left, short *top, short *right, short *bot);
 extern int gr_clip_mono_bitmap(grs_bitmap *bm, short *x, short *y);
-extern int gr_clip_flat24_bitmap(grs_bitmap *bm, short *x, short *y);
 extern int gr_clip_poly(int n, int l, grs_vertex **vpl, grs_vertex ***pcplist);
 
 /* clip codes. */
