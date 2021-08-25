@@ -52,23 +52,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Game system data for each level.
 
-typedef struct _level_data {
-    short size; // size of this structure.
-    uchar mist;
-    uchar gravity;
+typedef struct level_data {
+    int16_t size; // size of this structure.
+    uint8_t mist;
+    uint8_t gravity;
     struct _hazard {
-        uchar rad;
-        uchar bio;      // post-exposure damage, or gravity level
-        uchar zerogbio; // if this is true, bio is interpreted as zero gravity
-        uchar bio_h;
-        uchar rad_h;
+        uint8_t rad;
+        uint8_t bio;      // post-exposure damage, or gravity level
+        uint8_t zerogbio; // if this is true, bio is interpreted as zero gravity
+        uint8_t bio_h;
+        uint8_t rad_h;
     } hazard;
-    ulong exit_time; // timestamp at which we exited the level
+    uint32_t exit_time; // timestamp at which we exited the level
     curAMap auto_maps[NUM_O_AMAP];
 } LevelData;
 
 extern LevelData level_gamedata;
 
-#define OLD_LEVEL_GAMEDATA_SIZE 5 // for misc_saveload versions less than 5
 
 #endif // __LVLDATA_H
