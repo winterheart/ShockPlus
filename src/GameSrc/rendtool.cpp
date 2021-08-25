@@ -35,7 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "textmaps.h"
 #include "gettmaps.h"
 
-#include "frcamera.h"
 #include "frterr.h"
 #include "frutils.h"
 #include "player.h"

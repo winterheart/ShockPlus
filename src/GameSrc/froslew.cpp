@@ -212,35 +212,3 @@ uchar fr_objslew_moveone(Obj *cobj, ObjID objnum, int which, int how, uchar conf
     obj_move_to(cobj - objs, &cobj->loc, TRUE);
     return valid_pos;
 }
-
-// to physics teleport or not
-uchar fr_objslew_setone(int which, int l_new) {
-    switch (which) {
-    case EYE_HEADH:
-        eye_mods[0] = l_new;
-        return TRUE;
-    case EYE_H:
-        break;
-    case EYE_RESET:
-        eye_mods[0] = eye_mods[1] = eye_mods[2] = 0;
-        return TRUE;
-    case EYE_P:
-        eye_mods[1] = l_new;
-        return TRUE;
-    case EYE_B:
-        eye_mods[2] = l_new;
-        return TRUE;
-    case EYE_Z:
-    case EYE_Y:
-    case EYE_X:
-        break;
-    }
-    return TRUE;
-}
-
-/* KLC - not used
-uchar fr_objslew_tele_to(Obj *, int , int )
-{
-   return TRUE;
-}
-*/

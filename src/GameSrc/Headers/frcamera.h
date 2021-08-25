@@ -64,14 +64,13 @@ typedef struct {
     fix args[CAM_ARGS_CNT]; // args interpreted based on type
 } cams;
 
-uchar fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args);
-uchar fr_camera_modtype(cams *cam, uchar type_on, uchar type_off);
+bool fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args);
+uint8_t fr_camera_modtype(cams *cam, uchar type_on, uchar type_off);
 int fr_camera_update(cams *cam, uintptr_t arg1, int whicharg, uintptr_t arg2);
 void fr_camera_slewone(cams *cam, int which, int how);
-void fr_camera_setone(cams *cam, int which, int newCam);
 fix *fr_camera_getpos(cams *cam);
 void fr_camera_slewcam(cams *cam, int which, int how);
-cams *fr_camera_getdef(void);
+cams *fr_camera_getdef();
 void fr_camera_setdef(cams *cam);
 void fr_camera_getobjloc(int oid, fix *store);
 
@@ -95,11 +94,6 @@ extern cams *_def_cam;
 #define CAMFLT_Z 1u
 #define CAMMOD_S (CAMFLT_S + CAMFLT_Z)
 #define CAMMOD_Z 1u
-
-//#define MakeCambit(x)   CAMBIT_##x## (((1<<CAM##x##_Z)-1)<<CAM##x##_S)
-//#define MakeCambit(OBJ)
-//#define MakeCambit(OFF)
-//#define MakeCambit(ANG)
 
 #define CAMBIT_OBJ (((1 << CAMOBJ_Z) - 1) << CAMOBJ_S)
 #define CAMBIT_OFF (((1 << CAMOFF_Z) - 1) << CAMOFF_S)

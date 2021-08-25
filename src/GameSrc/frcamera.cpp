@@ -82,8 +82,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string.h>
-#include <stdlib.h> // for abs, of course
+#include <cstring>
+#include <cstdlib> // for abs, of course
 
 #include "3d.h"
 #include "frcamera.h"
@@ -93,20 +93,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 fix fr_camera_last[CAM_COOR_CNT] = {0, 0, 0, 0, 0, 0};
 fix cam_slew_scale[CAM_COOR_CNT] = {fix_make(4, 0), fix_make(4, 0), fix_make(4, 0), 128, 128, 128};
-cams *_def_cam = NULL;
-
-#define _cam_top(cam)                            \
-    cams *_cam = (cam == NULL) ? _def_cam : cam; \
-    if (_cam == NULL)                            \
-    return
+cams *_def_cam = nullptr;
 
 void fr_camera_setdef(cams *cam) { _def_cam = cam; }
 
-cams *fr_camera_getdef(void) { return _def_cam; }
+cams *fr_camera_getdef() { return _def_cam; }
 
-uchar fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args) {
+bool fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args) {
     DEBUG("Creating camera");
-    _cam_top(cam) FALSE;
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return false;
     _cam->type = camtype;
 
     if (camtype & CAMBIT_OBJ)
@@ -114,16 +111,17 @@ uchar fr_camera_create(cams *cam, int camtype, ushort oid, fix *coor, fix *args)
     else
         memcpy(_cam->coor, coor, sizeof(fix) * CAM_COOR_CNT);
 
-    if (args != NULL)
+    if (args != nullptr)
         memcpy(_cam->args, args, sizeof(fix) * CAM_ARGS_CNT);
 
-    return TRUE;
+    return true;
 }
 
-uchar fr_camera_modtype(cams *cam, uchar type_on, uchar type_off) {
-    uchar ret;
-    _cam_top(cam) 0;
-    ret = _cam->type;
+uint8_t fr_camera_modtype(cams *cam, uchar type_on, uchar type_off) {
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return 0;
+    uint8_t ret = _cam->type;
     _cam->type &= ~type_off;
     _cam->type |= type_on;
     return ret;
@@ -131,32 +129,28 @@ uchar fr_camera_modtype(cams *cam, uchar type_on, uchar type_off) {
 
 // i'll give you fish, i'll give you candy, i'll give you, everything I have in my hand
 int fr_camera_update(cams *cam, uintptr_t arg1, int whicharg, uintptr_t arg2) {
-    _cam_top(cam) FALSE;
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return false;
     if (arg1 != 0) {
         if (_cam->type & CAMBIT_OBJ)
             _cam->obj_id = (unsigned int)arg1;
         else
-            memcpy(_cam->coor, (void*)arg1, sizeof(fix) * CAM_COOR_CNT);
+            memcpy(_cam->coor, (void *)arg1, sizeof(fix) * CAM_COOR_CNT);
     }
 
     if (whicharg == CAM_UPDATE_ALL)
-      memcpy(_cam->args, (void*)arg2, sizeof(fix) * CAM_ARGS_CNT);
+        memcpy(_cam->args, (void *)arg2, sizeof(fix) * CAM_ARGS_CNT);
     else if (whicharg < CAM_ARGS_CNT)
         _cam->args[whicharg] = (fix)arg2;
-    return TRUE;
-}
-
-void fr_camera_setone(cams *cam, int which, int newone) {
-    _cam_top(cam);
-    if (_cam->type & CAMBIT_OBJ)
-        fr_objslew_setone(which, newone);
-    else
-        _cam->coor[which] = newone;
+    return true;
 }
 
 void fr_camera_slewone(cams *cam, int which, int how) {
     uchar cv[3] = {0, 2, 1};
-    _cam_top(cam);
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return;
     if (which >= 3) /* angles */
     {
         if (which == EYE_RESET)
@@ -168,15 +162,13 @@ void fr_camera_slewone(cams *cam, int which, int how) {
         g3s_vector v[3];
         fix tot, _cammul;
 
-        // this just doesnt work, really
+        // this just doesn't work, really
 
         tot = how * cam_slew_scale[which];
         g3_get_slew_step(tot, v + 0, v + 1, v + 2);
-        //      if (which==2) how*=-1;
         if (_cam->type & CAMFLT_FLAT) {
             _cammul = fix_sqrt(fix_mul(tot, tot) - (fix_mul(v[cv[which]].gY, v[cv[which]].gY)));
             _cammul = fix_div(abs(tot), _cammul);
-            //       Warning(("mul %x from %x and %x\n",_cammul,tot,v[cv[which]]));
         } else {
             _cam->coor[2] -= fix_int((v[cv[which]].gY)) << 8;
             _cammul = fix_make(1, 0);
@@ -185,9 +177,6 @@ void fr_camera_slewone(cams *cam, int which, int how) {
         _cam->coor[1] += fix_mul(_cammul, ((v[cv[which]].gZ) >> 8));
     }
 }
-
-// also in init.c
-#define MAGIC_SELFRUN_OBJID 0xC3
 
 void fr_camera_getobjloc(int oid, fix *store) {
     Obj *cobj = &objs[oid];
@@ -205,9 +194,13 @@ void fr_camera_getobjloc(int oid, fix *store) {
 }
 
 fix *fr_camera_getpos(cams *cam) {
-    _cam_top(cam) NULL;
-    if (_cam->type & CAMBIT_OBJ) /* set fix x,y,z etc from the object positions */
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return nullptr;
+    if (_cam->type & CAMBIT_OBJ) {
+        /* set fix x,y,z etc from the object positions */
         fr_camera_getobjloc(_cam->obj_id, _cam->coor);
+    }
 
     memcpy(fr_camera_last, _cam->coor, sizeof(fix) * CAM_COOR_CNT);
     if (_cam->type & CAMBIT_MOD)
@@ -216,7 +209,7 @@ fix *fr_camera_getpos(cams *cam) {
         fr_camera_last[3] += (0x10000) - ((1 << (14 - CAMANG_S)) * (_cam->type & CAMBIT_ANG));
     } // for now 360 view will stay body flat....
     else if (_cam->type & CAMBIT_MOD) {
-        //	   fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
+        // fr_camera_last[3]=(fr_camera_last[3]+eye_mods[0])&0xffff;
         fr_camera_last[4] = (fr_camera_last[4] + eye_mods[1]) & 0xffff;
         fr_camera_last[5] = (fr_camera_last[5] + eye_mods[2]) & 0xffff;
     }
@@ -224,9 +217,11 @@ fix *fr_camera_getpos(cams *cam) {
 }
 
 void fr_camera_slewcam(cams *cam, int which, int how) {
-    _cam_top(cam);
+    cams *_cam = (cam == nullptr) ? _def_cam : cam;
+    if (_cam == nullptr)
+        return;
     if (_cam->type & CAMBIT_OBJ)
-        fr_objslew_moveone(NULL, _cam->obj_id, which, how, TRUE);
+        fr_objslew_moveone(nullptr, _cam->obj_id, which, how, true);
     else
         fr_camera_slewone(_cam, which, how);
 }

@@ -31,7 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gameobj.h"
 
 #include "fr3d.h"
-#include "frcamera.h"
 #include "frintern.h"
 #include "frtables.h"
 

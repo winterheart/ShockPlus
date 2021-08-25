@@ -64,7 +64,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "game_screen.h"
 #include "shodan.h"
 #include "fullscrn.h"
-#include "frcamera.h"
 #include "dynmem.h"
 #include "vitals.h"
 #include "view360.h"

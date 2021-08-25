@@ -126,7 +126,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Engine/Options.h"
 #include "3d.h"
-#include "frcamera.h"
 #include "fr3d.h"
 #include "frtypes.h"
 #include "frintern.h"
