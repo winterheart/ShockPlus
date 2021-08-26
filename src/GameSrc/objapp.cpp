@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "objstuff.h"
 #include "objgame.h"
 #include "objcrit.h"
-#include "objprop.h"
 #include "map.h"
 
 // APPLICATION-SPECIFIC DATA

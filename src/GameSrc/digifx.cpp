@@ -32,8 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "schedule.h"
 #include "sndcall.h"
 #include "tools.h"
-#include "trigger.h"
-#include "wrapper.h"
 #ifdef AUDIOLOGS
 #include "audiolog.h"
 #endif

@@ -57,7 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kbcook.h"
 #include "loops.h"
 #include "input.h"
-#include "keydefs.h"
 #include "mfdext.h"
 #include "objbit.h"
 #include "gr2ss.h"
@@ -75,8 +74,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "otrip.h"
 #include "gamescr.h"
 #include "amap.h"
-
-#include "game_screen.h" // was screen.h?
 
 /***************************************/
 /* INVENTORY DISPLAY MODULE            */
