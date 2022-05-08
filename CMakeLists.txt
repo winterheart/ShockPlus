@@ -49,7 +49,8 @@ if(ENABLE_OPENGL)
 	endif(MINGW)
 endif(ENABLE_OPENGL)
 
-find_package(yaml-cpp REQUIRED)
+find_package(PkgConfig)
+pkg_check_modules(YAML_CPP REQUIRED yaml-cpp)
 list(APPEND SHOCK_INCLUDES ${YAML_CPP_INCLUDE_DIR})
 list(APPEND SHOCK_LIBRARIES ${YAML_CPP_LIBRARIES})
 
