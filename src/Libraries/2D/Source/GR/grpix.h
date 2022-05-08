@@ -58,8 +58,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define gr_set_upixel ((void (*)(long color, short x, short y))grd_pixel_table[SET_UPIXEL8])
 #define gr_set_pixel ((int (*)(long color, short x, short y))grd_pixel_table[SET_PIXEL8])
 
-#define gr_set_upixel_interrupt ((void (*)(long color, short x, short y))grd_pixel_table[SET_UPIXEL8_INTERRUPT])
-
 extern int gen_fill_pixel(long color, short x, short y);
 
 #define gr_fill_upixel ((void (*)(long color, short x, short y))grd_function_table[GRC_PIXEL])

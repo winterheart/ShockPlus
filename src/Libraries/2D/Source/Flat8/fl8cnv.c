@@ -49,13 +49,13 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)flat8_clear,             // DRAW_CLEAR
     (ptr_type)temp_upoint,             // DRAW_UPOINT
     (ptr_type)temp_point,              // DRAW_POINT
-    (ptr_type)flat8_set_upixel,        // SET_UPIXEL8_INTERRUPT
-    (ptr_type)gen_set_pixel_interrupt, // SET_PIXEL8_INTERRUPT
+    gr_not_imp,                        // SET_UPIXEL8_INTERRUPT
+    gr_not_imp,                        // SET_PIXEL8_INTERRUPT
     gr_null,                           // DRAW_UVLINE
     gr_null,                           // DRAW_VLINE
     (ptr_type)gen_urect,               // DRAW_URECT
     (ptr_type)gen_rect,                // DRAW_RECT
-    (ptr_type)gen_ubox,                // DRAW_UBOX
+    gr_not_imp,                        // DRAW_UBOX
     (ptr_type)gen_box,                 // DRAW_BOX
     /* states */
     gr_null, // PUSH_STATE
@@ -68,31 +68,31 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     (ptr_type)temp_upoly,            // FIX_UPOLY
     (ptr_type)temp_poly,             // FIX_POLY
     (ptr_type)temp_uspoly,           // FIX_USPOLY
-    (ptr_type)temp_spoly,            // FIX_SPOLY
+    gr_not_imp,                      // FIX_SPOLY
     (ptr_type)temp_ucpoly,           // FIX_UCPOLY
-    (ptr_type)temp_cpoly,            // FIX_CPOLY
+    gr_not_imp,                      // FIX_CPOLY
     (ptr_type)temp_utpoly,           // FIX_TLUC8_UPOLY
-    (ptr_type)temp_tpoly,            // FIX_TLUC8_POLY
-    (ptr_type)temp_ustpoly,          // FIX_TLUC8_USPOLY
+    gr_not_imp,                      // FIX_TLUC8_POLY
+    gr_not_imp,                      // FIX_TLUC8_USPOLY
     (ptr_type)temp_stpoly,           // FIX_TLUC8_SPOLY
-    (ptr_type)gen_vox_rect,          // VOX_RECT
-    (ptr_type)gen_vox_poly,          // VOX_POLY
-    (ptr_type)gen_vox_cpoly,         // VOX_CPOLY
-    (ptr_type)flat8_interp2_ubitmap, // INTERP2_UBITMAP
-    (ptr_type)flat8_filter2_ubitmap, // FILTER2_UBITMAP
+    gr_not_imp,                      // VOX_RECT
+    gr_not_imp,                      // VOX_POLY
+    gr_not_imp,                      // VOX_CPOLY
+    gr_not_imp,                      // INTERP2_UBITMAP
+    gr_not_imp,                      // FILTER2_UBITMAP
     gr_not_imp,                      // ROLL_UBITMAP // (ptr_type) gen_roll_ubitmap,  MLA - not used?
     gr_not_imp,                      // ROLL_BITMAP  //   (ptr_type) gen_roll_bitmap,   MLA - not used?
-    (ptr_type)temp_wall_umap,        // FLAT8_WALL_UMAP
+    gr_not_imp,                      // FLAT8_WALL_UMAP
     gr_null,                         // FLAT8_WALL_MAP
-    (ptr_type)temp_lit_wall_umap,    // FLAT8_LIT_WALL_UMAP
+    gr_not_imp,                      // FLAT8_LIT_WALL_UMAP
     gr_null,                         // FLAT8_LIT_WALL_MAP
-    (ptr_type)temp_clut_wall_umap,   // FLAT8_CLUT_WALL_UMAP
+    gr_not_imp,                      // FLAT8_CLUT_WALL_UMAP
     gr_null,                         // FLAT8_CLUT_WALL_MAP
-    (ptr_type)temp_floor_umap,       // FLAT8_FLOOR_UMAP
+    gr_not_imp,                      // FLAT8_FLOOR_UMAP
     gr_null,                         // FLAT8_FLOOR_MAP
-    (ptr_type)temp_lit_floor_umap,   // FLAT8_LIT_FLOOR_UMAP
+    gr_not_imp,                      // FLAT8_LIT_FLOOR_UMAP
     gr_null,                         // FLAT8_LIT_FLOOR_MAP
-    (ptr_type)temp_clut_floor_umap,  // FLAT8_CLUT_FLOOR_UMAP
+    gr_not_imp,                      // FLAT8_CLUT_FLOOR_UMAP
     gr_null,                         // FLAT8_CLUT_FLOOR_MAP
     /* linear texture mappers */
     gr_null,    // DEVICE_ULMAP
@@ -193,29 +193,29 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                  // FIX_ROD
     /* bitmap drawing functions. */
     // MLA - added these two for the device functions
-    (ptr_type)flat8_flat8_ubitmap, // DRAW_DEVICE_UBITMAP
-    (ptr_type)gen_flat8_bitmap,    // DRAW_DEVICE_BITMAP
-    (ptr_type)flat8_mono_ubitmap,  // DRAW_MONO_UBITMAP
-    (ptr_type)gen_mono_bitmap,     // DRAW_MONO_BITMAP
-    (ptr_type)temp_flat8_ubitmap,  // DRAW_FLAT8_UBITMAP
+    (ptr_type)flat8_flat8_ubitmap, // DRAW_DEVICE_UBITMAP               // can be used by gr_ubitmap macro
+    (ptr_type)gen_flat8_bitmap,    // DRAW_DEVICE_BITMAP                // can be used by gr_bitmap macro
+    (ptr_type)flat8_mono_ubitmap,  // DRAW_MONO_UBITMAP                 // can be used by gr_ubitmap macro
+    (ptr_type)gen_mono_bitmap,     // DRAW_MONO_BITMAP                  // can be used by gr_bitmap macro
+    (ptr_type)temp_flat8_ubitmap,  // DRAW_FLAT8_UBITMAP                // can be used by gr_ubitmap macro
     (ptr_type)gen_flat8_bitmap,    // DRAW_FLAT8_BITMAP
     gr_not_imp,                    // DRAW_FLAT24_UBITMAP   // WH: was gen_flat24_ubitmap
     gr_not_imp,                    // DRAW_FLAT24_BITMAP    // WH: was gen_flat24_bitmap
-    (ptr_type)temp_rsd8_ubitmap,   // DRAW_RSD8_UBITMAP
-    (ptr_type)temp_rsd8_bitmap,    // DRAW_RSD8_BITMAP
-    (ptr_type)temp_tluc8_ubitmap,  // DRAW_TLUC8_UBITMAP
-    (ptr_type)gen_tluc8_bitmap,    // DRAW_TLUC8_BITMAP
+    (ptr_type)temp_rsd8_ubitmap,   // DRAW_RSD8_UBITMAP                 // can be used by gr_ubitmap macro
+    (ptr_type)temp_rsd8_bitmap,    // DRAW_RSD8_BITMAP                  // can be used by gr_bitmap macro
+    (ptr_type)temp_tluc8_ubitmap,  // DRAW_TLUC8_UBITMAP                // can be used by gr_ubitmap macro
+    (ptr_type)gen_tluc8_bitmap,    // DRAW_TLUC8_BITMAP                 // can be used by gr_bitmap macro
     /* bitmap drawing functions through a clut. */
     gr_null,                            // CLUT_DRAW_DEVICE_UBITMAP
     gr_null,                            // CLUT_DRAW_DEVICE_BITMAP
     gr_null,                            // CLUT_DRAW_MONO_UBITMAP
     gr_null,                            // CLUT_DRAW_MONO_BITMAP
-    (ptr_type)temp_flat8_clut_ubitmap,  // CLUT_DRAW_FLAT8_UBITMAP
-    (ptr_type)gen_flat8_clut_bitmap,    // CLUT_DRAW_FLAT8_BITMAP
+    (ptr_type)temp_flat8_clut_ubitmap,  // CLUT_DRAW_FLAT8_UBITMAP      // can be used by gr_clut_ubitmap macro
+    (ptr_type)gen_flat8_clut_bitmap,    // CLUT_DRAW_FLAT8_BITMAP       // can be used by gr_clut_bitmap macro
     gr_null,                            // CLUT_DRAW_FLAT24_UBITMAP
     gr_null,                            // CLUT_DRAW_FLAT24_BITMAP
-    (ptr_type)unpack_rsd8_clut_ubitmap, // CLUT_DRAW_RSD8_UBITMAP
-    (ptr_type)unpack_rsd8_clut_bitmap,  // CLUT_DRAW_RSD8_BITMAP
+    (ptr_type)unpack_rsd8_clut_ubitmap, // CLUT_DRAW_RSD8_UBITMAP       // can be used by gr_clut_ubitmap macro
+    (ptr_type)unpack_rsd8_clut_bitmap,  // CLUT_DRAW_RSD8_BITMAP        // can be used by gr_clut_bitmap macro
     gr_null,                            // CLUT_DRAW_TLUC8_UBITMAP
     gr_null,                            // CLUT_DRAW_TLUC8_BITMAP
     /* rsd8 solid bitmap functions.  No longer used. */
@@ -226,14 +226,14 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                            // SCALE_DEVICE_BITMAP
     (ptr_type)flat8_mono_scale_ubitmap, // SCALE_MONO_UBITMAP
     (ptr_type)flat8_mono_scale_bitmap,  // SCALE_MONO_BITMAP
-    (ptr_type)temp_scale_umap,          // SCALE_FLAT8_UBITMAP
-    (ptr_type)temp_scale_map,           // SCALE_FLAT8_BITMAP
+    (ptr_type)temp_scale_umap,          // SCALE_FLAT8_UBITMAP      // may be used by gr_scale_ubitmap macro
+    (ptr_type)temp_scale_map,           // SCALE_FLAT8_BITMAP       // may be used by gr_scale_bitmap macro
     gr_null,                            // SCALE_FLAT24_UBITMAP
     gr_null,                            // SCALE_FLAT24_BITMAP
-    (ptr_type)temp_scale_umap,          // SCALE_RSD8_UBITMAP
-    (ptr_type)temp_scale_map,           // SCALE_RSD8_BITMAP
-    (ptr_type)temp_scale_umap,          // SCALE_TLUC8_UBITMAP
-    (ptr_type)temp_scale_map,           // SCALE_TLUC8_BITMAP
+    (ptr_type)temp_scale_umap,          // SCALE_RSD8_UBITMAP       // may be used by gr_scale_ubitmap macro
+    (ptr_type)temp_scale_map,           // SCALE_RSD8_BITMAP        // may be used by gr_scale_bitmap macro
+    (ptr_type)temp_scale_umap,          // SCALE_TLUC8_UBITMAP      // may be used by gr_scale_ubitmap macro
+    (ptr_type)temp_scale_map,           // SCALE_TLUC8_BITMAP       // may be used by gr_scale_bitmap macro
     /* rsd8 solid scale functions.  No longer used. */
     gr_null, // SOLID_SCALE_RSD8_UBITMAP
     gr_null, // SOLID_SCALE_RSD8_BITMAP
@@ -242,14 +242,14 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                        // CLUT_SCALE_DEVICE_BITMAP
     gr_null,                        // CLUT_SCALE_MONO_UBITMAP
     gr_null,                        // CLUT_SCALE_MONO_BITMAP
-    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_FLAT8_UBITMAP
-    (ptr_type)temp_clut_scale_map,  // CLUT_SCALE_FLAT8_BITMAP
+    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_FLAT8_UBITMAP     // may be used by gr_clut_scale_ubitmap macro
+    gr_not_imp,                     // CLUT_SCALE_FLAT8_BITMAP
     gr_null,                        // CLUT_SCALE_FLAT24_UBITMAP
     gr_null,                        // CLUT_SCALE_FLAT24_BITMAP
-    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_RSD8_UBITMAP
-    (ptr_type)temp_clut_scale_map,  // CLUT_SCALE_RSD8_BITMAP
-    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_TLUC8_UBITMAP
-    (ptr_type)temp_clut_scale_map,  // CLUT_SCALE_TLUC8_BITMAP
+    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_RSD8_UBITMAP      // may be used by gr_clut_scale_ubitmap macro
+    gr_not_imp,                     // CLUT_SCALE_RSD8_BITMAP
+    (ptr_type)temp_clut_scale_umap, // CLUT_SCALE_TLUC8_UBITMAP     // may be used by gr_clut_scale_ubitmap macro
+    gr_not_imp,                     // CLUT_SCALE_TLUC8_BITMAP
     /* bitmap mask draw functions. */
     gr_null,    // MASK_DEVICE_UBITMAP
     gr_null,    // MASK_DEVICE_BITMAP
@@ -268,8 +268,8 @@ void (*flat8_canvas_table[GRD_CANVAS_FUNCS])() = {
     gr_null,                           // GET_DEVICE_BITMAP
     gr_null,                           // GET_MONO_UBITMAP
     gr_null,                           // GET_MONO_BITMAP
-    (ptr_type)flat8_get_flat8_ubitmap, // GET_FLAT8_UBITMAP
-    (ptr_type)gen_get_flat8_bitmap,    // GET_FLAT8_BITMAP
+    (ptr_type)flat8_get_flat8_ubitmap, // GET_FLAT8_UBITMAP     // used by gr_get_ubitmap macro
+    (ptr_type)gen_get_flat8_bitmap,    // GET_FLAT8_BITMAP      // used by gr_get_bitmap macro
     gr_null,                           // GET_FLAT24_UBITMAP
     gr_null,                           // GET_FLAT24_BITMAP
     gr_null,                           // GET_RSD8_UBITMAP

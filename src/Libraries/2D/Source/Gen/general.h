@@ -196,22 +196,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    functions must be defined; they are the minimal components of a driver. */
 
 extern int gen_set_pixel(long color, short x, short y);
-extern int gen_set_pixel_interrupt(long color, short x, short y);
 extern int gen_fill_pixel(long color, short x, short y);
 
 extern int gen_hline(short x0, short y0, short x1);
 extern int gen_vline(short x0, short y0, short y1);
 extern void gen_urect(short left, short top, short right, short bot);
 extern int gen_rect(short left, short top, short right, short bot);
-extern void gen_ubox(short left, short top, short right, short bot);
 extern int gen_box(short left, short top, short right, short bot);
 
 extern int gen_fix_line(fix x0, fix y0, fix x1, fix y1);
-
-extern void gen_vox_rect(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap *col, grs_bitmap *ht, int dotw,
-                         int doth);
-extern void gen_vox_poly(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap *col, grs_bitmap *ht);
-extern void gen_vox_cpoly(fix x[4], fix y[4], fix dz[3], int near_ver, grs_bitmap *col, grs_bitmap *ht);
 
 extern void temp_point(short x, short y);
 extern void temp_upoint(short x, short y);
@@ -226,27 +219,14 @@ extern void temp_tluc8_ubitmap(grs_bitmap *bm, int x, int y);
 
 extern int temp_poly(long c, int n, grs_vertex **vpl);
 extern void temp_upoly(long c, int n, grs_vertex **vpl);
-extern int temp_spoly(long c, int n, grs_vertex **vpl);
 extern void temp_uspoly(long c, int n, grs_vertex **vpl);
-extern int temp_cpoly(long c, int n, grs_vertex **vpl);
 extern void temp_ucpoly(long c, int n, grs_vertex **vpl);
-extern int temp_tpoly(long c, int n, grs_vertex **vpl);
 extern void temp_utpoly(long c, int n, grs_vertex **vpl);
 extern int temp_stpoly(long c, int n, grs_vertex **vpl);
-extern void temp_ustpoly(long c, int n, grs_vertex **vpl);
-
-extern void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
-
-extern void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl);
-extern void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl);
 
 extern void temp_scale_umap(grs_bitmap *bm, short x, short y, short w, short h);
 extern int temp_scale_map(grs_bitmap *bm, short x, short y, short w, short h);
 extern void temp_clut_scale_umap(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
-extern int temp_clut_scale_map(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl);
 
 extern int gen_int_circle(short x0, short y0, short r);
 extern void gen_int_disk(short x0, short y0, short r);

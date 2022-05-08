@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum { POLY, SPOLY, CPOLY, TPOLY, STPOLY };
 
 // prototypes
-int gri_scale_clip(grs_vertex *v0, grs_vertex *v1);
 
 void temp_upoint(short x, short y) { gr_fill_upixel(grd_gc.fcolor, x, y); }
 
@@ -91,18 +90,6 @@ void temp_upoly(long c, int n, grs_vertex **vpl) {
     h_umap(&bm, n, vpl, &ti);
 }
 
-int temp_spoly(long c, int n, grs_vertex **vpl) {
-    grs_tmap_info ti;
-    grs_bitmap bm;
-
-    ti.tmap_type = GRC_POLY;
-    ti.flags = 0;
-    bm.bits = (uchar *)c;
-    bm.type = SPOLY;
-    bm.flags = 0;
-    return h_map(&bm, n, vpl, &ti);
-}
-
 void temp_uspoly(long c, int n, grs_vertex **vpl) {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -115,18 +102,6 @@ void temp_uspoly(long c, int n, grs_vertex **vpl) {
     h_umap(&bm, n, vpl, &ti);
 }
 
-int temp_cpoly(long c, int n, grs_vertex **vpl) {
-    grs_tmap_info ti;
-    grs_bitmap bm;
-
-    ti.tmap_type = GRC_POLY;
-    ti.flags = 0;
-    bm.bits = (uchar *)c;
-    bm.type = CPOLY;
-    bm.flags = 0;
-    return h_map(&bm, n, vpl, &ti);
-}
-
 void temp_ucpoly(long c, int n, grs_vertex **vpl) {
     grs_tmap_info ti;
     grs_bitmap bm;
@@ -137,19 +112,6 @@ void temp_ucpoly(long c, int n, grs_vertex **vpl) {
     bm.type = CPOLY;
     bm.flags = 0;
     h_umap(&bm, n, vpl, &ti);
-}
-
-int temp_tpoly(long c, int n, grs_vertex **vpl) {
-    grs_tmap_info ti;
-    grs_bitmap bm;
-
-    ti.tmap_type = GRC_POLY;
-    bm.bits = (uchar *)c;
-    ti.flags = 0;
-    bm.bits = (uchar *)c;
-    bm.type = TPOLY;
-    bm.flags = 0;
-    return h_map(&bm, n, vpl, &ti);
 }
 
 void temp_utpoly(long c, int n, grs_vertex **vpl) {
@@ -174,74 +136,6 @@ int temp_stpoly(long c, int n, grs_vertex **vpl) {
     bm.type = STPOLY;
     bm.flags = 0;
     return h_map(&bm, n, vpl, &ti);
-}
-
-void temp_ustpoly(long c, int n, grs_vertex **vpl) {
-    grs_tmap_info ti;
-    grs_bitmap bm;
-
-    ti.tmap_type = GRC_POLY;
-    ti.flags = 0;
-    bm.bits = (uchar *)c;
-    bm.type = STPOLY;
-    bm.flags = 0;
-    h_umap(&bm, n, vpl, &ti);
-}
-
-void temp_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_FLOOR;
-        ti.flags = TMF_FLOOR;
-        h_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_clut_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_CLUT_FLOOR;
-        ti.flags = TMF_CLUT | TMF_FLOOR;
-        ti.clut = cl;
-        h_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lit_floor_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_LIT_FLOOR;
-        ti.flags = TMF_FLOOR;
-        h_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_WALL2D;
-        ti.flags = TMF_WALL;
-        v_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_clut_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl, uchar *cl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_CLUT_WALL2D;
-        ti.flags = TMF_CLUT | TMF_WALL;
-        ti.clut = cl;
-        v_umap(bm, n, vpl, &ti);
-    }
-}
-
-void temp_lit_wall_umap(grs_bitmap *bm, int n, grs_vertex **vpl) {
-    if (bm->row == 1 << (bm->wlog)) {
-        grs_tmap_info ti;
-        ti.tmap_type = GRC_LIT_WALL2D;
-        ti.flags = TMF_WALL;
-        v_umap(bm, n, vpl, &ti);
-    }
 }
 
 /* take int _x,_y; fix _u,_v; stuff them into grs_vertex _vertex */
@@ -335,26 +229,4 @@ int temp_scale_map(grs_bitmap *bm, short x, short y, short w, short h) {
     ti.flags = 0;
     h_umap(bm, 2, vpl, &ti);
     return code;
-}
-
-int temp_clut_scale_map(grs_bitmap *bm, short x, short y, short w, short h, uchar *cl) {
-    grs_tmap_info ti;
-    grs_vertex *vpl[2];
-    grs_vertex v0, v1;
-    int code;
-
-    vpl[0] = &v0;
-    vpl[1] = &v1;
-    make_vertex(v0, x, y, 0, 0);
-    make_vertex(v1, x + w, y + h, fix_make(bm->w, 0), fix_make(bm->h, 0));
-
-    code = gri_scale_clip(&v0, &v1);
-    if (code == CLIP_ALL)
-        return code;
-
-    ti.tmap_type = GRC_CLUT_SCALE;
-    ti.flags = TMF_CLUT;
-    ti.clut = cl;
-    h_umap(bm, 2, vpl, &ti);
-    return CLIP_NONE;
 }
