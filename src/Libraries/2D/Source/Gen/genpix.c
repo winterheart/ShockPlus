@@ -49,11 +49,3 @@ int gen_set_pixel(long color, short x, short y) {
     gr_set_upixel(color, x, y);
     return CLIP_NONE;
 }
-
-int gen_set_pixel_interrupt(long color, short x, short y) {
-    if (x < grd_clip.left || x >= grd_clip.right || y < grd_clip.top || y >= grd_clip.bot)
-        return CLIP_ALL;
-
-    gr_set_upixel_interrupt(color, x, y);
-    return CLIP_NONE;
-}

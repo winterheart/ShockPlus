@@ -195,10 +195,6 @@ extern long flat8_get_pixel(short x, short y);
 /* straight, rectangular-type primitives. */
 extern void flat8_clear(int32_t color);
 
-/* fixed-point rendering-type primitives. */
-extern void flat8_interp2_ubitmap(grs_bitmap *bm);
-extern void flat8_filter2_ubitmap(grs_bitmap *bm);
-
 extern void flat8_mono_scale_ubitmap(grs_bitmap *bm, short x, short y, short w, short h);
 extern int flat8_mono_scale_bitmap(grs_bitmap *bm, short x, short y, short w, short h);
 

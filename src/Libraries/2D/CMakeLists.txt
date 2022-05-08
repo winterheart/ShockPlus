@@ -40,7 +40,6 @@ set(2D_SRC
 	Source/Gen/genhlin.c
 	Source/Gen/genrsdbm.c
 	Source/Gen/genvlin.c
-	Source/Gen/genvcply.c
 	Source/Gen/genclin.c
 	Source/Gen/genfl8c.c
 	Source/Gen/genrsdtm.c
@@ -57,12 +56,10 @@ set(2D_SRC
 	Source/Gen/genmono.c
 	Source/Gen/genulin.c
 	Source/Gen/genuslin.c
-	Source/Gen/genvpoly.c
 	Source/Gen/gencirc.c
 	Source/Gen/genfl8.c
 	Source/Gen/gentl8.c
 	Source/Gen/genrect.c
-	Source/Gen/genvrect.c
 	Source/Gen/genslin.c
 	Source/Flat8/fl8vlin.c
 	Source/Flat8/fl8opl.c
@@ -103,12 +100,10 @@ set(2D_SRC
 	Source/Flat8/fl8ctp.c
 	Source/Flat8/fl8mscl.c
 	Source/Flat8/fl8lop.c
-	Source/Flat8/fl8ntrp2.c
 	Source/Flat8/fl8sub.c
 	Source/Flat8/fl8tpl.c
 	Source/Flat8/fl8wclin.h
 	Source/Flat8/fl8nl.c
-	Source/Flat8/fl8fltr2.c
 	Source/Flat8/fl8mono.c
 	Source/Flat8/fl8fl8.c
 	Source/Clip/clpply.c
